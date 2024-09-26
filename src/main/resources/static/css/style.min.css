@@ -6758,15 +6758,6 @@ a.axil-btn.btn-size-md i, button.axil-btn.btn-size-md i {
     display: none
 }
 
-.header-top-campaign {
-    background-image: url("../images/others/campaign-bg2.png");
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    padding: 8px 0;
-    position: relative
-}
-
 .header-top-campaign .campaign-content {
     text-align: center;
     display: flex;
@@ -6992,25 +6983,6 @@ a.axil-btn.btn-size-md i, button.axil-btn.btn-size-md i {
     color: var(--color-primary)
 }
 
-.header-style-1 .header-top-campaign {
-    background-image: url("../images/others/campaign-bg.png")
-}
-
-.header-style-1 .header-top-campaign .campaign-content p {
-    color: var(--color-white)
-}
-
-.header-style-2 .axil-header-top {
-    padding: 25px 0
-}
-
-.header-style-2 .axil-header-top .axil-search {
-    flex: 1;
-    position: relative;
-    margin-left: 70px;
-    margin-right: 20px
-}
-
 @media only screen and (max-width: 991px) {
     .header-style-2 .axil-header-top .axil-search {
         margin-left: 0
@@ -7092,42 +7064,6 @@ a.axil-btn.btn-size-md i, button.axil-btn.btn-size-md i {
         padding-bottom: 15px;
         margin-bottom: 15px
     }
-}
-
-.header-style-5 .axil-header-top {
-    background-color: var(--color-heading);
-    padding: 6px 0
-}
-
-.header-style-5 .header-top-dropdown .dropdown .dropdown-toggle {
-    color: #c2c2cc
-}
-
-.header-style-5 .header-top-dropdown .dropdown .dropdown-toggle:hover {
-    color: var(--color-white)
-}
-
-.header-style-5 .header-top-link .quick-link li a {
-    color: #c2c2cc
-}
-
-.header-style-5 .header-top-link .quick-link li a:hover {
-    color: var(--color-primary)
-}
-
-.header-style-5 .header-top-campaign {
-    background-image: url("../images/others/campaign-bg3.png");
-    padding: 20px 0 18px
-}
-
-.header-style-5 .header-top-campaign .campaign-content p {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--color-white)
-}
-
-.header-style-5 .header-top-campaign .campaign-content p a i {
-    margin-left: 15px
 }
 
 @media only screen and (max-width: 479px) {
@@ -15042,7 +14978,6 @@ body.open .closeMask {
     display: flex;
     flex-direction: column;
     overflow: auto;
-    background-image: url("../images/others/popup-bg.png");
     background-repeat: no-repeat;
     background-position: center right
 }
