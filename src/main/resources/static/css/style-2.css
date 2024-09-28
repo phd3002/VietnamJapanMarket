@@ -75,29 +75,36 @@
     font-size: medium;
 }
 
+/*order detail*/
 .order-progress {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin: 30px 0;
+    margin: 20px 0;
+    padding: 10px;
 }
 
 .order-progress-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 20%;
+    text-align: center;
+    flex: 1;
+    position: relative;
 }
 
 .order-progress-step i {
     font-size: 24px;
-    color: #4CAF50;
-    margin-bottom: 10px;
+    color: #888; /* Default icon color */
 }
 
-.order-progress-step p {
-    margin: 0;
-    font-weight: bold;
+.order-progress-step p, .order-progress-step small {
+    margin: 5px 0;
+    color: #fff;
+}
+
+.order-progress-step.active i {
+    color: #4CAF50; /* Green for active step */
+}
+
+.order-progress-step.completed i {
+    color: #00C853; /* Darker green for completed steps */
 }
 
 .order-progress-step small {
@@ -200,85 +207,222 @@
     color: #007bff;
     text-decoration: none;
 }
-/*chat*/
-/* Chat Icon */
-.chat-icon {
-    position: fixed;
-    bottom: 10px; /* Adjust as needed */
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background-color: #ff5722;
-    border-radius: 50%;
+
+/*order detail */
+.product-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.product-info {
+    flex-grow: 1;
+}
+
+.product-name {
+    color: #0066cc;
+    font-size: 18px;
+    margin: 0 0 5px 0;
+}
+
+.product-brand, .product-category {
+    color: #666;
+    font-size: 14px;
+    margin: 0 0 5px 0;
+}
+
+.product-price {
+    font-size: 18px;
+    color: #ee4d2d;
+    font-weight: bold;
+}
+
+.original-price {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.product-policies {
+    font-size: 14px;
+    color: #00a65a;
+    margin-top: 5px;
+}
+
+.shop-rating {
+    color: #ee4d2d;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.summary {
+    margin-top: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.summary-label {
+    color: #888;
+}
+
+.summary-value {
+    font-weight: bold;
+}
+
+.total {
+    color: #ee4d2d;
+    font-size: 18px;
+}
+
+.payment-method {
+    margin-top: 20px;
+    color: #888;
+}
+/*View pass*/
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+.form-group input {
+    padding-right: 40px;
+}
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    color: #888;
+}
+.toggle-password:hover {
+    color: #000;
+}
+/*Address*/
+/* Container tổng thể */
+.address-container {
+    padding: 20px;
+    color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.chat-icon img {
-    width: 35px;
-    height: 35px;
-}
-
-/* Chatbox Modal (Positioned exactly where the chat icon is) */
-.chatbox-modal {
-    display: none; /* Initially hidden */
-    position: fixed;
-    bottom: 10px; /* Match the icon's position */
-    right: 20px;
-    width: 350px;
-    height: 500px;
-    background-color: #ffffff;
-    z-index: 1001;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Hide icon when the chatbox is shown */
-.hidden {
-    display: none;
-}
-
-/* Chatbox Sidebar */
-.chatbox-sidebar {
-    width: 100%;
-    background-color: #f5f5f5;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-}
-
-/* Chatbox Messages Panel */
-.chatbox-messages {
-    flex: 1;
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    color: #333;
-}
-
-.chatbox-header {
-    background-color: #ff5722;
-    padding: 10px;
+.header-address {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    margin-bottom: 20px;
 }
 
-.close-chatbox {
-    background: none;
-    border: none;
+.header-address h3 {
+    margin: 0;
+}
+
+.new-address-btn {
+    background-color: #d32f2f;
     color: white;
-    font-size: 18px;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
     cursor: pointer;
+    max-width: fit-content;
+}
+
+.new-address-btn:hover {
+    background-color: #b71c1c;
+}
+
+.address-list {
+    border-top: 1px solid #555;
+    padding-top: 10px;
+}
+
+.address-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #555;
+}
+
+.address-info h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.address-info h4 span {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.address-info p {
+    margin: 5px 0 10px;
+    font-size: 14px;
+}
+
+.address-labels {
+    display: flex;
+    gap: 10px;
+}
+
+.label-default {
+    background-color: #d32f2f;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.label-pickup {
+    background-color: #555;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.address-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.address-actions a {
+    color: #4CAF50;
+    margin-bottom: 5px;
+    text-decoration: none;
+}
+
+.address-actions a:hover {
+    text-decoration: underline;
+}
+
+.set-default-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.set-default-btn:hover {
+    background-color: #444;
 }
 
 

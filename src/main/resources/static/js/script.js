@@ -79,11 +79,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Function to show a specific tab
     function showTab(tabId) {
         // Hide all tab panes
-        document.querySelectorAll('.tab-pane').forEach(function(pane) {
+        document.querySelectorAll('.tab-pane').forEach(function (pane) {
             pane.classList.remove('active', 'show');
         });
         // Show the selected tab pane
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Update nav tabs
-        document.querySelectorAll('.nav-link').forEach(function(link) {
+        document.querySelectorAll('.nav-link').forEach(function (link) {
             link.classList.remove('active');
             if (link.getAttribute('href') === tabId) {
                 link.classList.add('active');
@@ -108,14 +108,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Listen for hash changes (if user manually changes hash or clicks anchor links)
-    window.addEventListener('hashchange', function() {
+    window.addEventListener('hashchange', function () {
         const tabId = window.location.hash;
         showTab(tabId);
     });
 
     // Event listener for "View Details" in Notifications
-    document.querySelectorAll('.view-order').forEach(function(link) {
-        link.addEventListener('click', function(e) {
+    document.querySelectorAll('.view-order').forEach(function (link) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             var orderId = this.getAttribute('data-order-id');
 
@@ -132,24 +132,65 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-// chatbox
-document.addEventListener('DOMContentLoaded', function() {
-    var chatIcon = document.getElementById('chat-icon');
-    var chatboxModal = document.getElementById('chatbox-modal');
-    var closeChatboxBtn = document.getElementById('close-chatbox');
 
-    // Show chatbox and hide the chat icon when the icon is clicked
-    chatIcon.addEventListener('click', function() {
-        chatboxModal.style.display = 'flex';  // Show chatbox modal
-        chatIcon.classList.add('hidden');     // Hide chat icon
+//order detail progress
+function updateOrderProgress(currentStep) {
+    const steps = document.querySelectorAll('.order-progress-step');
+
+    steps.forEach((step, index) => {
+        if (index < currentStep) {
+            step.classList.add('completed');
+            step.classList.remove('active');
+        } else if (index === currentStep) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('completed', 'active');
+        }
     });
+}
 
-    // Hide chatbox and show the chat icon when the close button is clicked
-    closeChatboxBtn.addEventListener('click', function() {
-        chatboxModal.style.display = 'none';  // Hide chatbox modal
-        chatIcon.classList.remove('hidden');  // Show chat icon
+updateOrderProgress(2);
+// Toggle password visibility
+document.querySelectorAll('.toggle-password').forEach(item => {
+    item.addEventListener('click', function () {
+        const input = document.querySelector(this.getAttribute('toggle'));
+        const icon = this.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text'; // Show password
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password'; // Hide password
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
     });
 });
+//popup save change
+document.getElementById('saveChangesBtn').addEventListener('click', function (e) {
+    e.preventDefault(); // Ngăn không cho form submit mặc định
 
+    // Hiển thị popup thành công và overlay
+    document.getElementById('successPopup').style.display = 'block';
+    document.getElementById('popupOverlay').style.display = 'block';
+});
+
+document.getElementById('saveChangesShop').addEventListener('click', function (e) {
+    e.preventDefault(); // Ngăn không cho form submit mặc định
+
+    // Hiển thị popup thành công và overlay
+    document.getElementById('successPopup').style.display = 'block';
+    document.getElementById('popupOverlay').style.display = 'block';
+});
+
+document.getElementById('popupOkBtn').addEventListener('click', function () {
+    // Ẩn popup và overlay
+    document.getElementById('successPopup').style.display = 'none';
+    document.getElementById('popupOverlay').style.display = 'none';
+
+    // Reload lại trang
+    location.reload();
+});
 
 
