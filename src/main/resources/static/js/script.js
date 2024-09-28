@@ -192,5 +192,36 @@ document.getElementById('popupOkBtn').addEventListener('click', function () {
     // Reload lại trang
     location.reload();
 });
+//popup add address
+document.querySelector('.new-address-btn').addEventListener('click', function() {
+    document.getElementById('newAddressPopup').style.display = 'block';
+    document.getElementById('popupOverlay').style.display = 'block';
+});
+
+// Sự kiện khi nhấn "ADD" trong popup thêm địa chỉ mới
+document.getElementById('addAddressBtn').addEventListener('click', function() {
+    // Ẩn popup thêm địa chỉ mới
+    document.getElementById('newAddressPopup').style.display = 'none';
+    document.getElementById('popupOverlay').style.display = 'none';
+
+    // Hiển thị popup thành công
+    document.getElementById('successPopup').style.display = 'block';
+});
+
+// Sự kiện Cancel trong popup
+document.getElementById('cancelBtn').addEventListener('click', function() {
+    document.getElementById('newAddressPopup').style.display = 'none';
+    document.getElementById('popupOverlay').style.display = 'none';
+});
+
+// Sự kiện khi nhấn Update (tương tự thêm mới, bạn có thể điều chỉnh theo yêu cầu)
+document.querySelectorAll('.address-actions a').forEach(function(element) {
+    if (element.textContent === 'Cập nhật' || element.textContent === 'Update') {
+        element.addEventListener('click', function() {
+            document.getElementById('newAddressPopup').style.display = 'block';
+            document.getElementById('popupOverlay').style.display = 'block';
+        });
+    }
+});
 
 
