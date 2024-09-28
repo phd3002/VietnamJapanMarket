@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+
+<h1>Welcome to Vietnam-Japan Market</h1>
+
+<h2>Categories</h2>
+<ul>
+    <li th:each="category : ${categories}">
+        <!-- Hiển thị tên danh mục -->
+        <h3 th:text="${category.categoryName}"></h3>
+        <!-- Hiển thị hình ảnh của danh mục -->
+        <img th:src="@{${category.categoriesImage}}" alt="Category Image" style="width:100px;height:100px;">
+    </li>
+</ul>
+
+<h2>Latest Products</h2>
+<ul>
+    <li th:each="product : ${latestProducts}">
+        <h3 th:text="${product.productName}"></h3>
+        <p th:text="${product.productDescription}"></p>
+        <p>Price: <span th:text="${product.price}"></span></p>
+    </li>
+</ul>
+
+</body>
+</html>
