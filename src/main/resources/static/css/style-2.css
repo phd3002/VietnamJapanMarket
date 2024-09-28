@@ -293,6 +293,138 @@
     margin-top: 20px;
     color: #888;
 }
+/*View pass*/
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+.form-group input {
+    padding-right: 40px;
+}
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+}
+.toggle-password:hover {
+    color: #000;
+}
+/*Address*/
+/* Container tổng thể */
+.address-container {
+    padding: 20px;
+    color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header-address {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-address h3 {
+    margin: 0;
+}
+
+.new-address-btn {
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    max-width: fit-content;
+}
+
+.new-address-btn:hover {
+    background-color: #b71c1c;
+}
+
+.address-list {
+    border-top: 1px solid #555;
+    padding-top: 10px;
+}
+
+.address-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #555;
+}
+
+.address-info h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.address-info h4 span {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.address-info p {
+    margin: 5px 0 10px;
+    font-size: 14px;
+}
+
+.address-labels {
+    display: flex;
+    gap: 10px;
+}
+
+.label-default {
+    background-color: #d32f2f;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.label-pickup {
+    background-color: #555;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.address-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.address-actions a {
+    color: #4CAF50;
+    margin-bottom: 5px;
+    text-decoration: none;
+}
+
+.address-actions a:hover {
+    text-decoration: underline;
+}
+
+.set-default-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.set-default-btn:hover {
+    background-color: #444;
+}
+
 
 
 

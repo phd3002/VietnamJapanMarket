@@ -477,7 +477,7 @@
                                                     </div>
                                                     <br>
                                                     <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Save Changes">
+                                                        <input type="submit" class="axil-btn" value="Save Changes" id="saveChangesShop">
                                                     </div>
                                                 </div>
                                             </div>
@@ -669,39 +669,37 @@
                             <!-- Addresses Tab -->
                             <div class="tab-pane fade" id="nav-address" role="tabpanel">
                                 <div class="axil-dashboard-address">
-                                    <p class="notice-text">The following addresses will be used on the checkout page by
-                                        default.</p>
-                                    <div class="row row--30">
-                                        <div class="col-lg-6">
-                                            <div class="address-info mb--40">
-                                                <div class="addrss-header d-flex align-items-center justify-content-between">
-                                                    <h4 class="title mb-0">Shipping Address</h4>
-                                                    <a href="#" class="address-edit"><i class="far fa-edit"></i></a>
-                                                </div>
-                                                <ul class="address-details">
-                                                    <li>Name: Annie Mario</li>
-                                                    <li>Email: annie@example.com</li>
-                                                    <li>Phone: 1234 567890</li>
-                                                    <li class="mt--30">7398 Smoke Ranch Road <br> Las Vegas, Nevada
-                                                        89128
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                    <div class="address-container">
+                                        <div class="header-address">
+                                            <h3>My Address</h3>
+                                            <button class="new-address-btn">+ New Address</button>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <div class="address-info">
-                                                <div class="addrss-header d-flex align-items-center justify-content-between">
-                                                    <h4 class="title mb-0">Billing Address</h4>
-                                                    <a href="#" class="address-edit"><i class="far fa-edit"></i></a>
+                                        <div class="address-list">
+                                            <div class="address-item">
+                                                <div class="address-info">
+                                                    <h4>Meo Meo</h4>
+                                                    <p>Viet Nam</p>
+                                                    <div class="address-labels">
+                                                        <span class="label-default">Default</span>
+                                                        <span class="label-pickup">Pick up address</span>
+                                                    </div>
                                                 </div>
-                                                <ul class="address-details">
-                                                    <li>Name: Annie Mario</li>
-                                                    <li>Email: annie@example.com</li>
-                                                    <li>Phone: 1234 567890</li>
-                                                    <li class="mt--30">7398 Smoke Ranch Road <br> Las Vegas, Nevada
-                                                        89128
-                                                    </li>
-                                                </ul>
+                                                <div class="address-actions">
+                                                    <a href="#">Cập nhật</a>
+                                                    <button class="set-default-btn">Default settings</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="address-item">
+                                                <div class="address-info">
+                                                    <h4>Meo Meo</h4>
+                                                    <p>Ha Noi</p>
+                                                </div>
+                                                <div class="address-actions">
+                                                    <a href="#">Update</a>
+                                                    <a href="#">Delete</a>
+                                                    <button class="set-default-btn">Default settings</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -761,7 +759,7 @@
                                                         <input type="password" class="form-control">
                                                     </div>
                                                     <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Save Changes">
+                                                        <input type="submit" class="axil-btn" value="Save Changes" id="saveChangesBtn">
                                                     </div>
                                                 </div>
                                             </div>
@@ -776,6 +774,14 @@
         </div>
     </div>
     <!-- End My Account Area  -->
+    <!-- Popup Success Message -->
+    <div id="successPopup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid #ccc; z-index:1000;">
+        <p>Changes saved successfully!</p>
+        <button id="popupOkBtn" class="axil-btn">OK</button>
+    </div>
+
+    <!-- Popup Overlay -->
+    <div id="popupOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:999;"></div>
 
 </main>
 

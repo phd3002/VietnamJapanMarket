@@ -72,10 +72,16 @@
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" class="form-control" name="password" value="123456789">
+                            <input type="password" class="form-control" name="password" id="password" value="123456789">
+                            <span class="toggle-password" toggle="#password"><i class="fas fa-eye"></i></span>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="axil-btn btn-bg-primary submit-btn">Create Account</button>
+                            <label>Confirm Password</label>
+                            <input type="password" class="form-control" name="confirm-password" id="confirm-password" value="123456789">
+                            <span class="toggle-password" toggle="#confirm-password"><i class="fas fa-eye"></i></span>
+                        </div>
+                        <div class="form-group">
+                            <a href="confirm-code.html" class="axil-btn btn-bg-primary submit-btn">Create Account</a>
                         </div>
                     </form>
                 </div>
