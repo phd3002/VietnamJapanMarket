@@ -80,7 +80,7 @@
                         <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
                         <div class="mobile-nav-brand">
                             <a href="homepage.html" class="logo">
-                                <img src="../static/images/logo/logo.png" alt="Site Logo">
+                                <img src="../static/images/logo/vj-market.png" alt="Site Logo">
                             </a>
                         </div>
                         <ul class="mainmenu">
@@ -119,7 +119,8 @@
                                         <!-- Notification Item -->
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img src="../static/images/product/electric/product-01.png"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -129,7 +130,8 @@
                                         </div>
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img src="../static/images/product/electric/product-01.png"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -363,31 +365,6 @@
 <!-- End Header -->
 
 <main class="main-wrapper">
-    <!-- Start Breadcrumb Area  -->
-    <div class="axil-breadcrumb-area">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-8">
-                    <div class="inner">
-                        <ul class="axil-breadcrumb">
-                            <li class="axil-breadcrumb-item"><a href="homepage.html">Home</a></li>
-                            <li class="separator"></li>
-                            <li class="axil-breadcrumb-item active" aria-current="page">My Account</li>
-                        </ul>
-                        <h1 class="title">Explore All Products</h1>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-4">
-                    <div class="inner">
-                        <div class="bradcrumb-thumb">
-                            <img src="../static/images/product/product-45.png" alt="Image">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Breadcrumb Area  -->
 
     <!-- Start My Account Area  -->
     <div class="axil-dashboard-area axil-section-gap">
@@ -410,17 +387,18 @@
                         <aside class="axil-dashboard-aside">
                             <nav class="axil-dashboard-nav">
                                 <div class="nav nav-tabs" role="tablist">
-                                    <a class="nav-item nav-link active" data-bs-toggle="tab" href="#nav-dashboard"
-                                       role="tab" aria-selected="true"><i class="fas fa-th-large"></i>Dashboard</a>
+                                    <a class="nav-item nav-link  active" data-bs-toggle="tab" href="#nav-account"
+                                       role="tab"
+                                       aria-selected="true"><i class="fas fa-user"></i>Account Details</a>
+                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-dashboard"
+                                       role="tab" aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
                                     <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-orders" role="tab"
                                        aria-selected="false"><i class="fas fa-shopping-basket"></i>Orders</a>
                                     <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-address" role="tab"
                                        aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
-                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-notification" role="tab"
+                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-notification"
+                                       role="tab"
                                        aria-selected="false"><i class="fas fa-bell"></i>Notification</a>
-                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-account" role="tab"
-                                       aria-selected="false"><i class="fas fa-user"></i>Account Details</a>
-                                    <a class="nav-item nav-link" href="sign-in.html"><i class="fal fa-sign-out"></i>Logout</a>
                                 </div>
                             </nav>
                         </aside>
@@ -429,10 +407,79 @@
                     <div class="col-xl-9 col-md-8">
                         <div class="tab-content">
                             <!-- Dashboard Overview -->
-                            <div class="tab-pane fade show active" id="nav-dashboard" role="tabpanel">
+                            <div class="tab-pane fade" id="nav-dashboard" role="tabpanel">
                                 <div class="axil-dashboard-overview">
-                                    <div class="welcome-text">Hello .... (You are not registered to become a <span>Seller?</span> <a
-                                            href="sign-in.html">Sign up to become a seller now</a>)
+                                    <!-- If unregistered -->
+                                    <div class="welcome-text">Hello .... (You are not registered to become a <span>Seller?</span>
+                                        <a
+                                                href="sign-in.html">Sign up to become a seller now</a>)
+                                    </div>
+                                    <div style="text-align: center">
+                                        <input type="submit" class="axil-btn" value="Go To Dashboard">
+                                    </div>
+                                    <br>
+                                    <!-- If registered -->
+                                    <div class="axil-dashboard-account">
+                                        <form class="account-details-form">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label>Name Shop</label>
+                                                        <input type="text" class="form-control" value="Shop Vippro">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label>Product Categories You Sale</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6" style="margin-left: 20%">
+                                                    <!-- Adjust the margin for indentation -->
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="electronics">
+                                                        <label class="form-check-label"
+                                                               for="electronics">Electronics</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="fashion">
+                                                        <label class="form-check-label"
+                                                               for="fashion">Fashion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="beauty">
+                                                        <label class="form-check-label"
+                                                               for="beauty">Beauty</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="toys">
+                                                        <label class="form-check-label"
+                                                               for="toys">Toys</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="secondhand">
+                                                        <label class="form-check-label"
+                                                               for="secondhand">Second Hands</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                               id="limitproduct">
+                                                        <label class="form-check-label"
+                                                               for="limitproduct">Limit Products</label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="form-group mb--0">
+                                                        <input type="submit" class="axil-btn" value="Save Changes">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -468,7 +515,8 @@
                             <!-- Order Details Tab -->
                             <div id="nav-order-detail" class="tab-pane fade" role="tabpanel">
                                 <div class="order-detail axil-dashboard-order">
-                                    <h2>Order #<span id="order-id"></span></h2>
+                                    <h4 style="text-align: center">Code: 1231xzxc | Status: Done<span
+                                            id="order-id"></span></h4>
                                     <div class="order-progress">
                                         <div class="order-progress-step">
                                             <i class="fas fa-file-alt"></i>
@@ -496,16 +544,90 @@
                                             <small id="completed-date">15:23 09-05-2022</small>
                                         </div>
                                     </div>
-                                    <div class="order-actions">
-                                        <button id="buy-again" class="axil-btn btn-bg-primary">Buy Again</button>
-                                        <button id="contact-seller" class="axil-btn btn-bg-secondary">Contact Seller
-                                        </button>
-                                        <button id="view-shop-rating" class="axil-btn btn-bg-secondary">View Shop
-                                            Rating
-                                        </button>
-                                        <button id="view-buyer-rating" class="axil-btn btn-bg-secondary">View Buyer
-                                            Rating
-                                        </button>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="order-info">
+                                                <p class="text-left">Address: Viet Nam</p>
+                                                <!-- Align text to the left -->
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="order-actions text-right"> <!-- Align buttons to the right -->
+                                                <button id="buy-again" class="axil-btn btn-bg-primary btn-sm">Buy
+                                                    Again
+                                                </button>
+                                                <button id="contact-seller" class="axil-btn btn-bg-secondary btn-sm">
+                                                    Contact Seller
+                                                </button>
+                                                <button id="view-buyer-rating" class="axil-btn btn-bg-secondary btn-sm">
+                                                    View Buyer Rating
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="container">
+                                        <div class="axil-dashboard-author">
+                                            <div class="media">
+                                                <div class="thumbnail">
+                                                    <a href="#"><img src="../static/images/product/author1.png"
+                                                                     alt="Hello Annie"
+                                                                     class="author-image"></a>
+                                                </div>
+                                                <div class="media-body-1">
+                                                    <div class="info-row">
+                                                        <span class="name"><h3>Shop Vippro</h3></span>
+                                                        <span class="joining-date">Register Since Sep 2020</span>
+                                                        <span class="email">Email: annie@example.com</span>
+                                                    </div>
+                                                    <div class="info-row">
+                                                        <a href="#"><i class="flaticon-chat hover-flip-item"> Chat
+                                                            with shop</i></a>
+                                                        <span class="address">Address: 123 Street Name</span>
+                                                        <a href="#"><i class="flaticon-shop hover-flip-item"> View
+                                                            Shop</i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-card">
+                                        <img src="/api/placeholder/100/100" alt="Áo thun unisex" class="product-image">
+                                        <div class="product-info">
+                                            <h2 class="product-name">T-shirt </h2>
+                                            <p class="product-brand">Local Brand</p>
+                                            <p class="product-category">Product Classification: White, M</p>
+                                            <span class="product-price">100$</span>
+                                            <span class="original-price">80$</span><br>
+                                            <span class="product-policies">15 Days Returns | 15 Days Free Returns</span><br>
+                                            <span class="shop-rating">Rating ★★★★★</span>
+                                        </div>
+                                    </div>
+                                    <div class="summary">
+                                        <div class="summary-row">
+                                            <span class="summary-label">Total cost</span>
+                                            <span class="summary-value">100$</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label">Shipping fee</span>
+                                            <span class="summary-value">15$</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label">Discount shipping fee</span>
+                                            <span class="summary-value">-10$</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label">Voucher from Shop</span>
+                                            <span class="summary-value">-5$</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label total">Total amount</span>
+                                            <span class="summary-value total">100$</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="payment-method">
+                                        <p>Online payment</p>
                                     </div>
                                 </div>
                             </div>
@@ -516,20 +638,24 @@
                                     <div class="notification-list">
                                         <!-- Order Notification Example -->
                                         <div class="notification-item order-notification">
-                                            <img src="path/to/order-image.jpg" alt="Order Notification" class="notification-image">
+                                            <img src="path/to/order-image.jpg" alt="Order Notification"
+                                                 class="notification-image">
                                             <div class="notification-content">
                                                 <h4 class="notification-title">Order Update</h4>
                                                 <p class="notification-message">Your order #12345 has been shipped.</p>
-                                                <a href="#nav-order-detail" class="notification-action view-order" data-order-id="12345">View Details</a>
+                                                <a href="#nav-order-detail" class="notification-action view-order"
+                                                   data-order-id="12345">View Details</a>
                                             </div>
                                         </div>
 
                                         <!-- Discount Notification Example -->
                                         <div class="notification-item discount-notification">
-                                            <img src="path/to/discount-image.jpg" alt="Discount Notification" class="notification-image">
+                                            <img src="path/to/discount-image.jpg" alt="Discount Notification"
+                                                 class="notification-image">
                                             <div class="notification-content">
                                                 <h4 class="notification-title">Special Offer</h4>
-                                                <p class="notification-message">Get 20% off on all electronics this weekend!</p>
+                                                <p class="notification-message">Get 20% off on all electronics this
+                                                    weekend!</p>
                                                 <a href="#" class="notification-action view-offer">View Detail</a>
                                             </div>
                                         </div>
@@ -580,7 +706,7 @@
                                 </div>
                             </div>
                             <!-- Account Details Tab -->
-                            <div class="tab-pane fade" id="nav-account" role="tabpanel">
+                            <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
                                 <div class="col-lg-9">
                                     <div class="axil-dashboard-account">
                                         <form class="account-details-form">
@@ -588,26 +714,33 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label>First Name</label>
-                                                        <input type="text" class="form-control" value="Annie">
+                                                        <input type="text" class="form-control" value="ABC">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label>Last Name</label>
-                                                        <input type="text" class="form-control" value="Mario">
+                                                        <input type="text" class="form-control" value="DEF">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group mb--40">
                                                         <label>Country/ Region</label>
-                                                        <select class="select2">
-                                                            <option value="1">United Kindom (UK)</option>
-                                                            <option value="1">United States (USA)</option>
-                                                            <option value="1">United Arab Emirates (UAE)</option>
-                                                            <option value="1">Australia</option>
-                                                        </select>
-                                                        <p class="b3 mt--10">This will be how your name will be
-                                                            displayed in the account section and in reviews</p>
+                                                        <input type="text" class="form-control"
+                                                               value="United States (USA)">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group mb--40">
+                                                        <label>Email</label>
+                                                        <input type="text" class="form-control"
+                                                               value="abcdef@gmail.com">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group mb--40">
+                                                        <label>Phone</label>
+                                                        <input type="text" class="form-control" value="0123456789">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">

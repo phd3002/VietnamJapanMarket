@@ -132,24 +132,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-// chatbox
-document.addEventListener('DOMContentLoaded', function() {
-    var chatIcon = document.getElementById('chat-icon');
-    var chatboxModal = document.getElementById('chatbox-modal');
-    var closeChatboxBtn = document.getElementById('close-chatbox');
+//order detail progress
+function updateOrderProgress(currentStep) {
+    const steps = document.querySelectorAll('.order-progress-step');
 
-    // Show chatbox and hide the chat icon when the icon is clicked
-    chatIcon.addEventListener('click', function() {
-        chatboxModal.style.display = 'flex';  // Show chatbox modal
-        chatIcon.classList.add('hidden');     // Hide chat icon
+    steps.forEach((step, index) => {
+        if (index < currentStep) {
+            step.classList.add('completed');
+            step.classList.remove('active');
+        } else if (index === currentStep) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('completed', 'active');
+        }
     });
-
-    // Hide chatbox and show the chat icon when the close button is clicked
-    closeChatboxBtn.addEventListener('click', function() {
-        chatboxModal.style.display = 'none';  // Hide chatbox modal
-        chatIcon.classList.remove('hidden');  // Show chat icon
-    });
-});
+}
+updateOrderProgress(2);
 
 
 
