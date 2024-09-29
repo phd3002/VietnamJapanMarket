@@ -14,10 +14,10 @@ public class HomeController {
     @Autowired
     private CategoriesService categoriesService;
 
-    @GetMapping("/")
+    @GetMapping({"/","/homepage"})
     public String showHomePage(Model model) {
         model.addAttribute("latestProducts", productService.getLatest5Products());
         model.addAttribute("categories", categoriesService.getAllCategories());
-        return "homepageTest";
+        return "homepage";
     }
 }

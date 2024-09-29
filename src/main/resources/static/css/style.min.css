@@ -2659,6 +2659,20 @@ a.axil-btn.btn-size-md i, button.axil-btn.btn-size-md i {
     margin-top: 30px
 }
 
+.categories-list {
+    display: flex;
+    flex-wrap: wrap; /* Để mục xuống dòng nếu không đủ chỗ */
+    justify-content: space-between; /* Tạo khoảng cách giữa các mục */
+    padding: 0;
+    list-style: none; /* Xóa dấu chấm trước các mục */
+}
+
+.category-item {
+    flex: 0 1 15%; /* Cài đặt kích thước của mỗi mục (có thể điều chỉnh) */
+    margin: 10px;
+    text-align: center; /* Căn giữa nội dung */
+}
+
 .categrie-product:before {
     content: "";
     height: 100%;
