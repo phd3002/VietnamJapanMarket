@@ -19,6 +19,6 @@ public class Categories {
     @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @Column(name = "categories_image")
-    private String categoriesImage;
+    @Column(name = "category_image")
+    private String categoryImage;
 }
