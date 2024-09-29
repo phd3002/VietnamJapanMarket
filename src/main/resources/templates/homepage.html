@@ -370,21 +370,23 @@
                 <span class="title-highlighter highlighter-secondary"> <i class="far fa-tags"></i> Categories</span>
                 <h2 class="title">Browse by Category</h2>
             </div>
-            <li th:each="category : ${categories}">
+            <ul class="categories-list">
+                <li th:each="category : ${categories}" class="category-item">
+                    <div class="categrie-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
+                        <div class="slick-single-layout">
+                            <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500">
+                                <a href="#">
+                                    <img class="img-fluid" th:src="@{${category.categoryImage}}" alt="product category">
+                                    <h6 class="cat-title" th:text="${category.categoryName}"></h6>
+                                </a>
+                            </div> <!-- Đóng div này -->
+                        </div> <!-- Đóng div này -->
+                    </div> <!-- Đóng div này -->
+                </li> <!-- Đóng thẻ li -->
+            </ul>
 
-                <div class="categrie-product-activation slick-layout-wrapper--15 axil-slick-arrow  arrow-top-slide">
-                    <div class="slick-single-layout">
-                        <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500">
-                            <a href="#">
-                                <img th:src="@{${category.categoryImage}}" alt="Category Image" style="width:100px;height:100px;">
-                                <h3 th:text="${category.categoryName}"></h3>
-<!--                                <h6 class="cat-title">${category.categoryName}</h6>-->
-                            </a>
-                        </div>
-                        <!-- End .categrie-product -->
-                </div>
-            </li>
-<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+
+            <!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
 <!--                <div class="slick-single-layout">-->
 <!--                    <div class="categrie-product" data-sal="zoom-out" data-sal-delay="300" data-sal-duration="500">-->
 <!--                        <a href="#">-->
