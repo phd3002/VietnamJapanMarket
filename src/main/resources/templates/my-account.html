@@ -394,6 +394,8 @@
                                        role="tab" aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
                                     <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-orders" role="tab"
                                        aria-selected="false"><i class="fas fa-shopping-basket"></i>Orders</a>
+                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-wallet" role="tab"
+                                       aria-selected="false"><i class="fas fa-wallet"></i>Wallet</a>
                                     <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-address" role="tab"
                                        aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
                                     <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-notification"
@@ -477,7 +479,8 @@
                                                     </div>
                                                     <br>
                                                     <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Save Changes" id="saveChangesShop">
+                                                        <input type="submit" class="axil-btn" value="Save Changes"
+                                                               id="saveChangesShop">
                                                     </div>
                                                 </div>
                                             </div>
@@ -633,6 +636,46 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Wallet Tab -->
+                            <div id="nav-wallet" class="tab-pane fade" role="tabpanel">
+                                <div class="wallet-section axil-dashboard-order">
+                                    <h3>Wallet</h3>
+                                    <p>Số dư: <span id="wallet-balance">1,000,000 VND</span></p>
+                                    <button class="axil-btn" id="withdraw-btn"
+                                            style="background: red; max-width: fit-content">Rút tiền
+                                    </button>
+                                    <button class="axil-btn" id="deposit-btn"
+                                            style="background: green; max-width: fit-content">Nạp tiền
+                                    </button>
+                                    <!-- Transaction History -->
+                                    <h4>Lịch sử giao dịch</h4>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Ngày</th>
+                                            <th>Loại giao dịch</th>
+                                            <th>Số tiền</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="transaction-history">
+                                        <tr>
+                                            <td>01/10/2024</td>
+                                            <td>Nạp tiền</td>
+                                            <td>500,000 VND</td>
+                                            <td>Thành công</td>
+                                        </tr>
+                                        <tr>
+                                            <td>25/09/2024</td>
+                                            <td>Rút tiền</td>
+                                            <td>300,000 VND</td>
+                                            <td>Thành công</td>
+                                        </tr>
+                                        <!-- More transactions -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             <!-- Notification Tab -->
                             <div id="nav-notification" class="tab-pane fade" role="tabpanel">
                                 <div class="axil-dashboard-notification">
@@ -758,7 +801,8 @@
                                                         <input type="password" class="form-control">
                                                     </div>
                                                     <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Save Changes" id="saveChangesBtn">
+                                                        <input type="submit" class="axil-btn" value="Save Changes"
+                                                               id="saveChangesBtn">
                                                     </div>
                                                 </div>
                                             </div>
@@ -774,12 +818,14 @@
     </div>
     <!-- End My Account Area  -->
     <!-- Popup Success Message -->
-    <div id="successPopup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid #ccc; z-index:1000;">
+    <div id="successPopup"
+         style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid #ccc; z-index:1000;">
         <p>Changes saved successfully!</p>
         <button id="popupOkBtn" class="axil-btn">OK</button>
     </div>
     <!-- Popup add new address -->
-    <div id="newAddressPopup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid #ccc; z-index:1000;">
+    <div id="newAddressPopup"
+         style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid #ccc; z-index:1000;">
         <h4>New Address</h4>
         <input type="text" id="newAddress" placeholder="New Address">
         <div style="margin-top:10px;">
@@ -787,9 +833,41 @@
             <button id="cancelBtn" class="axil-btn">Cancel</button>
         </div>
     </div>
-    <!-- Popup Overlay -->
-    <div id="popupOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:999;"></div>
+    <!-- Withdraw Popup -->
+    <div id="withdraw-popup" class="popup-modal" style="display:none;">
+        <h4>Rút tiền</h4>
+        <form id="withdraw-form">
+            <label for="withdraw-amount">Số tiền:</label>
+            <input type="number" id="withdraw-amount" placeholder="Nhập số tiền">
+            <label for="withdraw-bank-details">Thông tin ngân hàng:</label>
+            <input type="text" id="withdraw-bank-details" placeholder="Nhập thông tin ngân hàng">
+            <button type="submit" class="axil-btn">Rút tiền</button>
+            <button type="button" class="axil-btn" id="cancel-withdraw">Hủy</button>
+        </form>
+    </div>
 
+    <!-- Deposit Popup -->
+    <div id="deposit-popup" class="popup-modal" style="display:none;">
+        <h4>Nạp tiền</h4>
+        <form id="deposit-form">
+            <label for="deposit-amount">Số tiền:</label>
+            <input type="number" id="deposit-amount" placeholder="Nhập số tiền">
+            <label for="deposit-bank-details">Thông tin ngân hàng:</label>
+            <input type="text" id="deposit-bank-details" placeholder="Nhập thông tin ngân hàng">
+            <button type="submit" class="axil-btn">Nạp tiền</button>
+            <button type="button" class="axil-btn" id="cancel-deposit">Hủy</button>
+        </form>
+    </div>
+    <!-- Success Popup -->
+    <div id="success-popup" class="popup-modal" style="display:none;">
+        <p>Giao dịch thành công!</p>
+        <button id="popup-ok-btn" class="axil-btn">OK</button>
+    </div>
+
+    <!-- Popup Overlay -->
+    <div id="popupOverlay"
+         style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:999;"></div>
+    <!-- Transit successfull -->
 </main>
 
 

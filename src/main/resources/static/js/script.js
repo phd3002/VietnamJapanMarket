@@ -224,4 +224,51 @@ document.querySelectorAll('.address-actions a').forEach(function(element) {
     }
 });
 
+// Show withdraw popup
+document.getElementById('withdraw-btn').addEventListener('click', function() {
+    document.getElementById('withdraw-popup').style.display = 'block';
+    document.getElementById('popupOverlay').style.display = 'block';
+});
+
+// Show deposit popup
+document.getElementById('deposit-btn').addEventListener('click', function() {
+    document.getElementById('deposit-popup').style.display = 'block';
+    document.getElementById('popupOverlay').style.display = 'block';
+});
+
+// Handle cancel for withdraw popup
+document.getElementById('cancel-withdraw').addEventListener('click', function() {
+    document.getElementById('withdraw-popup').style.display = 'none';
+    document.getElementById('popupOverlay').style.display = 'none';
+});
+
+// Handle cancel for deposit popup
+document.getElementById('cancel-deposit').addEventListener('click', function() {
+    document.getElementById('deposit-popup').style.display = 'none';
+    document.getElementById('popupOverlay').style.display = 'none';
+});
+
+// Handle success popup
+document.getElementById('popup-ok-btn').addEventListener('click', function() {
+    document.getElementById('success-popup').style.display = 'none';
+    document.getElementById('popupOverlay').style.display = 'none';
+});
+
+// Handle deposit submission
+document.getElementById('deposit-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // Perform deposit logic here (e.g., API call)
+    document.getElementById('deposit-popup').style.display = 'none';
+    document.getElementById('success-popup').style.display = 'block';
+});
+
+// Handle withdraw submission
+document.getElementById('withdraw-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // Perform withdraw logic here (e.g., API call)
+    document.getElementById('withdraw-popup').style.display = 'none';
+    document.getElementById('success-popup').style.display = 'block';
+});
+
+
 

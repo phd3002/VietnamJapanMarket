@@ -293,14 +293,17 @@
     margin-top: 20px;
     color: #888;
 }
+
 /*View pass*/
 .form-group {
     position: relative;
     margin-bottom: 20px;
 }
+
 .form-group input {
     padding-right: 40px;
 }
+
 .toggle-password {
     position: absolute;
     top: 50%;
@@ -309,9 +312,11 @@
     cursor: pointer;
     color: #888;
 }
+
 .toggle-password:hover {
     color: #000;
 }
+
 /*Address*/
 /* Container tổng thể */
 .address-container {
@@ -424,6 +429,7 @@
 .set-default-btn:hover {
     background-color: #444;
 }
+
 /*Add address*/
 #newAddressPopup, #successPopup {
     width: 300px;
@@ -440,5 +446,16 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.popup-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    z-index: 1000;
+}
 
 
