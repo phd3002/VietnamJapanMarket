@@ -12,34 +12,40 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "products")
-public class Product {
+public class Products {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Integer productId;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
-    private Stores store;
+    private Stores storeId;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Categories categories;
+    private Categories categoryId;
 
-    @Column(nullable = false)
+    @Column(name = "product_name", nullable = false)
     private String productName;
 
+    @Column(name = "product_description")
     private String productDescription;
 
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
     @Column(nullable = false)
     private int stock;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "weight")
+    private float weight;
+
+    @Column(name = "product_type", nullable = false)
+    private String productType;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // getters and setters
 }
 
