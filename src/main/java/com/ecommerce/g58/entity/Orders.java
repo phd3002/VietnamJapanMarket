@@ -1,30 +1,60 @@
 package com.ecommerce.g58.entity;
 
+import lombok.*;
 import jakarta.persistence.*;
-
-import java.sql.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "orders")
 public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    @Column(name = "order_id")
+    private Integer orderId;
 
-    private Date date;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users userId;
 
-    private String status;
+    @Column(name = "order_date", nullable = false)
+    private LocalDateTime orderDate = LocalDateTime.now();
 
-    private Double totalPrice;
+    @Column(name = "total_price", nullable = false)
+    private BigDecimal totalPrice;
 
-    private Double additionalFee;
+    @Column(name = "shipping_address", nullable = false)
+    private String shippingAddress;
 
-    private Double commissionFee;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderDetails> orderDetails;
+    @Column(name = "commission_fee")
+    private BigDecimal commissionFee;
 
-    // Getters and Setters
+    @Column(name = "additional_fee")
+    private BigDecimal additionalFee;
+
+    @Column(name = "deposit")
+    private BigDecimal deposit;
+
+    @Column(name = "remaining_balance")
+    private BigDecimal remainingBalance;
+
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Countries countryId;
+
+    @ManyToOne
+    @JoinColumn(name = "rate_id")
+    private ShippingRate rateId;
+
+    @ManyToOne
+    @JoinColumn(name = "unit_id")
+    private ShippingUnit unitId;
 }

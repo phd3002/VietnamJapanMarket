@@ -2,10 +2,8 @@ package com.ecommerce.g58.entity;
 
 import lombok.*;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
-
-import javax.management.relation.Role;
-import java.time.LocalDateTime;
 @Entity
 @Data
 @Builder
@@ -13,17 +11,26 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "stores")
 public class Stores {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")
-    private Long storeId;
+    private Integer storeId;
 
-    @Column(nullable = false)
+    @Column(name = "store_name", nullable = false)
     private String storeName;
 
+    @Column(name = "store_description")
     private String storeDescription;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private Users owner;
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private Users ownerId;
+
+    @Column(name = "store_revenue", nullable = false)
+    private BigDecimal storeRevenue;
+
+    @OneToOne
+    @JoinColumn(name = "country_id")
+    private Countries country;
 }

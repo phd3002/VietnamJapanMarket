@@ -8,14 +8,14 @@ import jakarta.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "roles")
-public class Roles {
+@Table(name = "color")
+public class Color {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private Integer roleId;
+    @Column(name = "color_id")
+    private Integer colorId;
 
-    @Column(name = "role_name", nullable = false, unique = true)
-    private String roleName;
+    @Column(name = "color_name", nullable = false)
+    private String colorName;
 }

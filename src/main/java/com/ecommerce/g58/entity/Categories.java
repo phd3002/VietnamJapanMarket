@@ -3,7 +3,6 @@ package com.ecommerce.g58.entity;
 import lombok.*;
 import jakarta.persistence.*;
 
-
 @Entity
 @Data
 @Builder
@@ -11,10 +10,11 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @Table(name = "categories")
 public class Categories {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private Long categoryId;
+    private Integer categoryId;
 
     @Column(name = "category_name", nullable = false)
     private String categoryName;
