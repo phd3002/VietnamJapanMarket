@@ -318,7 +318,6 @@
 }
 
 /*Address*/
-/* Container tổng thể */
 .address-container {
     padding: 20px;
     color: #fff;
@@ -429,33 +428,3 @@
 .set-default-btn:hover {
     background-color: #444;
 }
-
-/*Add address*/
-#newAddressPopup, #successPopup {
-    width: 300px;
-    text-align: center;
-    border-radius: 5px;
-}
-
-#popupOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.popup-modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    z-index: 1000;
-}
-
-

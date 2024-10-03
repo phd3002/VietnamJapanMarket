@@ -164,7 +164,7 @@
                                         <a href="my-account.html">My Account</a>
                                     </li>
                                     <li>
-                                        <a href="my-account.html#nav-orders">My Orders</a>
+                                        <a href="order.html">My Orders</a>
                                     </li>
                                 </ul>
                                 <div class="login-btn">
@@ -387,19 +387,17 @@
                         <aside class="axil-dashboard-aside">
                             <nav class="axil-dashboard-nav">
                                 <div class="nav nav-tabs" role="tablist">
-                                    <a class="nav-item nav-link  active" data-bs-toggle="tab" href="#nav-account"
-                                       role="tab"
+                                    <a class="nav-item nav-link active" href="my-account.html"
                                        aria-selected="true"><i class="fas fa-user"></i>Account Details</a>
-                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-dashboard"
-                                       role="tab" aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
-                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-orders" role="tab"
+                                    <a class="nav-item nav-link" href="my-shop.html"
+                                       aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
+                                    <a class="nav-item nav-link" href="order.html"
                                        aria-selected="false"><i class="fas fa-shopping-basket"></i>Orders</a>
-                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-wallet" role="tab"
+                                    <a class="nav-item nav-link" href="wallet.html"
                                        aria-selected="false"><i class="fas fa-wallet"></i>Wallet</a>
-                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-address" role="tab"
+                                    <a class="nav-item nav-link" href="address.html"
                                        aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
-                                    <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-notification"
-                                       role="tab"
+                                    <a class="nav-item nav-link" href="notification.html"
                                        aria-selected="false"><i class="fas fa-bell"></i>Notification</a>
                                 </div>
                             </nav>
@@ -408,333 +406,6 @@
                     <!-- Dashboard Content -->
                     <div class="col-xl-9 col-md-8">
                         <div class="tab-content">
-                            <!-- Dashboard Overview -->
-                            <div class="tab-pane fade" id="nav-dashboard" role="tabpanel">
-                                <div class="axil-dashboard-overview">
-                                    <!-- If unregistered -->
-                                    <div class="welcome-text">Hello .... (You are not registered to become a <span>Seller?</span>
-                                        <a
-                                                href="sign-up-seller.html">Sign up to become a seller now</a>)
-                                    </div>
-                                    <div style="text-align: center">
-                                        <input type="submit" class="axil-btn" value="Go To Dashboard">
-                                    </div>
-                                    <br>
-                                    <!-- waiting for admin oke -->
-                                    <div class="welcome-text">Your shop is waiting for admin approval</div>
-                                    <!-- If registered -->
-                                    <div class="axil-dashboard-account">
-                                        <form class="account-details-form">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label>Name Shop</label>
-                                                        <input type="text" class="form-control" value="Shop Vippro">
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label>Shop Address</label>
-                                                        <input type="text" class="form-control" value="Viet Nam">
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label>Phone</label>
-                                                        <input type="text" class="form-control" value="012313123">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label>Logistic</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6" style="margin-left: 20%">
-                                                    <!-- Adjust the margin for indentation -->
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input"
-                                                               id="shipnhanh">
-                                                        <label class="form-check-label"
-                                                               for="shipnhanh">Ship Nhanh</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input"
-                                                               id="shipcham">
-                                                        <label class="form-check-label"
-                                                               for="shipcham">Ship Cham</label>
-                                                    </div>
-                                                    <br>
-                                                    <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Save Changes"
-                                                               id="saveChangesShop">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Orders Tab -->
-                            <div class="tab-pane fade" id="nav-orders" role="tabpanel">
-                                <div class="axil-dashboard-order">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">Order</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Total</th>
-                                                <th scope="col">Actions</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <th scope="row">#6523</th>
-                                                <td>September 10, 2020</td>
-                                                <td>Processing</td>
-                                                <td>3 items</td>
-                                                <td>$326.63</td>
-                                                <td><a href="#" class="axil-btn view-btn">View</a></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Order Details Tab -->
-                            <div id="nav-order-detail" class="tab-pane fade" role="tabpanel">
-                                <div class="order-detail axil-dashboard-order">
-                                    <h4 style="text-align: center">Code: 1231xzxc | Status: Done<span
-                                            id="order-id"></span></h4>
-                                    <div class="order-progress">
-                                        <div class="order-progress-step">
-                                            <i class="fas fa-file-alt"></i>
-                                            <p>Order Placed</p>
-                                            <small id="order-placed-date">00:13 05-05-2022</small>
-                                        </div>
-                                        <div class="order-progress-step">
-                                            <i class="fas fa-credit-card"></i>
-                                            <p>Payment Confirmed</p>
-                                            <small id="payment-confirmed-date">00:43 05-05-2022</small>
-                                        </div>
-                                        <div class="order-progress-step">
-                                            <i class="fas fa-truck"></i>
-                                            <p>Shipped</p>
-                                            <small id="shipped-date">11:03 05-05-2022</small>
-                                        </div>
-                                        <div class="order-progress-step">
-                                            <i class="fas fa-box"></i>
-                                            <p>Delivered</p>
-                                            <small id="delivered-date">15:22 09-05-2022</small>
-                                        </div>
-                                        <div class="order-progress-step">
-                                            <i class="fas fa-star"></i>
-                                            <p>Order Completed</p>
-                                            <small id="completed-date">15:23 09-05-2022</small>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="order-info">
-                                                <p class="text-left">Address: Viet Nam</p>
-                                                <!-- Align text to the left -->
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="order-actions text-right"> <!-- Align buttons to the right -->
-                                                <button id="buy-again" class="axil-btn btn-bg-primary btn-sm">Buy
-                                                    Again
-                                                </button>
-                                                <button id="contact-seller" class="axil-btn btn-bg-secondary btn-sm">
-                                                    Contact Seller
-                                                </button>
-                                                <button id="view-buyer-rating" class="axil-btn btn-bg-secondary btn-sm">
-                                                    View Buyer Rating
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="container">
-                                        <div class="axil-dashboard-author">
-                                            <div class="media">
-                                                <div class="thumbnail">
-                                                    <a href="#"><img src="../static/images/product/author1.png"
-                                                                     alt="Hello Annie"
-                                                                     class="author-image"></a>
-                                                </div>
-                                                <div class="media-body-1">
-                                                    <div class="info-row">
-                                                        <span class="name"><h3>Shop Vippro</h3></span>
-                                                        <span class="joining-date">Register Since Sep 2020</span>
-                                                        <span class="email">Email: annie@example.com</span>
-                                                    </div>
-                                                    <div class="info-row">
-                                                        <a href="#"><i class="flaticon-chat hover-flip-item"> Chat
-                                                            with shop</i></a>
-                                                        <span class="address">Address: 123 Street Name</span>
-                                                        <a href="#"><i class="flaticon-shop hover-flip-item"> View
-                                                            Shop</i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-card">
-                                        <img src="/api/placeholder/100/100" alt="Áo thun unisex" class="product-image">
-                                        <div class="product-info">
-                                            <h2 class="product-name">T-shirt </h2>
-                                            <p class="product-brand">Local Brand</p>
-                                            <p class="product-category">Product Classification: White, M</p>
-                                            <span class="product-price">100$</span>
-                                            <span class="original-price">80$</span><br>
-                                            <span class="product-policies">15 Days Returns | 15 Days Free Returns</span><br>
-                                            <span class="shop-rating">Rating ★★★★★</span>
-                                        </div>
-                                    </div>
-                                    <div class="summary">
-                                        <div class="summary-row">
-                                            <span class="summary-label">Total cost</span>
-                                            <span class="summary-value">100$</span>
-                                        </div>
-                                        <div class="summary-row">
-                                            <span class="summary-label">Shipping fee</span>
-                                            <span class="summary-value">15$</span>
-                                        </div>
-                                        <div class="summary-row">
-                                            <span class="summary-label">Discount shipping fee</span>
-                                            <span class="summary-value">-10$</span>
-                                        </div>
-                                        <div class="summary-row">
-                                            <span class="summary-label">Voucher from Shop</span>
-                                            <span class="summary-value">-5$</span>
-                                        </div>
-                                        <div class="summary-row">
-                                            <span class="summary-label total">Total amount</span>
-                                            <span class="summary-value total">100$</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="payment-method">
-                                        <p>Online payment</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Wallet Tab -->
-                            <div id="nav-wallet" class="tab-pane fade" role="tabpanel">
-                                <div class="wallet-section axil-dashboard-order">
-                                    <h3>Wallet</h3>
-                                    <p>Số dư: <span id="wallet-balance">1,000,000 VND</span></p>
-                                    <button class="axil-btn" id="withdraw-btn"
-                                            style="background: red; max-width: fit-content">Rút tiền
-                                    </button>
-                                    <button class="axil-btn" id="deposit-btn"
-                                            style="background: green; max-width: fit-content">Nạp tiền
-                                    </button>
-                                    <!-- Transaction History -->
-                                    <h4>Lịch sử giao dịch</h4>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Ngày</th>
-                                            <th>Loại giao dịch</th>
-                                            <th>Số tiền</th>
-                                            <th>Trạng thái</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="transaction-history">
-                                        <tr>
-                                            <td>01/10/2024</td>
-                                            <td>Nạp tiền</td>
-                                            <td>500,000 VND</td>
-                                            <td>Thành công</td>
-                                        </tr>
-                                        <tr>
-                                            <td>25/09/2024</td>
-                                            <td>Rút tiền</td>
-                                            <td>300,000 VND</td>
-                                            <td>Thành công</td>
-                                        </tr>
-                                        <!-- More transactions -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- Notification Tab -->
-                            <div id="nav-notification" class="tab-pane fade" role="tabpanel">
-                                <div class="axil-dashboard-notification">
-                                    <h3>Notifications</h3>
-                                    <div class="notification-list">
-                                        <!-- Order Notification Example -->
-                                        <div class="notification-item order-notification">
-                                            <img src="path/to/order-image.jpg" alt="Order Notification"
-                                                 class="notification-image">
-                                            <div class="notification-content">
-                                                <h4 class="notification-title">Order Update</h4>
-                                                <p class="notification-message">Your order #12345 has been shipped.</p>
-                                                <a href="#nav-order-detail" class="notification-action view-order"
-                                                   data-order-id="12345">View Details</a>
-                                            </div>
-                                        </div>
-
-                                        <!-- Discount Notification Example -->
-                                        <div class="notification-item discount-notification">
-                                            <img src="path/to/discount-image.jpg" alt="Discount Notification"
-                                                 class="notification-image">
-                                            <div class="notification-content">
-                                                <h4 class="notification-title">Special Offer</h4>
-                                                <p class="notification-message">Get 20% off on all electronics this
-                                                    weekend!</p>
-                                                <a href="#" class="notification-action view-offer">View Detail</a>
-                                            </div>
-                                        </div>
-
-                                        <!-- Add more notification items as needed -->
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Addresses Tab -->
-                            <div class="tab-pane fade" id="nav-address" role="tabpanel">
-                                <div class="axil-dashboard-address">
-                                    <div class="address-container">
-                                        <div class="header-address">
-                                            <h3>My Address</h3>
-                                            <button class="new-address-btn">+ New Address</button>
-                                        </div>
-                                        <div class="address-list">
-                                            <div class="address-item">
-                                                <div class="address-info">
-                                                    <h4>Meo Meo</h4>
-                                                    <p>Viet Nam</p>
-                                                    <div class="address-labels">
-                                                        <span class="label-default">Default</span>
-                                                        <span class="label-pickup">Pick up address</span>
-                                                    </div>
-                                                </div>
-                                                <div class="address-actions">
-                                                    <a href="#">Update</a>
-                                                    <button class="set-default-btn">Default settings</button>
-                                                </div>
-                                            </div>
-                                            <div class="address-item">
-                                                <div class="address-info">
-                                                    <h4>Meo Meo</h4>
-                                                    <p>Ha Noi</p>
-                                                </div>
-                                                <div class="address-actions">
-                                                    <a href="#">Update</a>
-                                                    <a href="#">Delete</a>
-                                                    <button class="set-default-btn">Default settings</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <!-- Account Details Tab -->
                             <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
                                 <div class="col-lg-9">
@@ -805,57 +476,17 @@
         </div>
     </div>
     <!-- End My Account Area  -->
-    <!-- Popup Success Message -->
-    <div id="successPopup"
-         style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid #ccc; z-index:1000;">
-        <p>Changes saved successfully!</p>
-        <button id="popupOkBtn" class="axil-btn">OK</button>
-    </div>
-    <!-- Popup add new address -->
-    <div id="newAddressPopup"
-         style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid #ccc; z-index:1000;">
-        <h4>New Address</h4>
-        <input type="text" id="newAddress" placeholder="New Address">
-        <div style="margin-top:10px;">
-            <button id="addAddressBtn" class="axil-btn">ADD</button>
-            <button id="cancelBtn" class="axil-btn">Cancel</button>
-        </div>
-    </div>
-    <!-- Withdraw Popup -->
-    <div id="withdraw-popup" class="popup-modal" style="display:none;">
-        <h4>Rút tiền</h4>
-        <form id="withdraw-form">
-            <label for="withdraw-amount">Số tiền:</label>
-            <input type="number" id="withdraw-amount" placeholder="Nhập số tiền">
-            <label for="withdraw-bank-details">Thông tin ngân hàng:</label>
-            <input type="text" id="withdraw-bank-details" placeholder="Nhập thông tin ngân hàng">
-            <button type="submit" class="axil-btn">Rút tiền</button>
-            <button type="button" class="axil-btn" id="cancel-withdraw">Hủy</button>
-        </form>
-    </div>
-
-    <!-- Deposit Popup -->
-    <div id="deposit-popup" class="popup-modal" style="display:none;">
-        <h4>Nạp tiền</h4>
-        <form id="deposit-form">
-            <label for="deposit-amount">Số tiền:</label>
-            <input type="number" id="deposit-amount" placeholder="Nhập số tiền">
-            <label for="deposit-bank-details">Thông tin ngân hàng:</label>
-            <input type="text" id="deposit-bank-details" placeholder="Nhập thông tin ngân hàng">
-            <button type="submit" class="axil-btn">Nạp tiền</button>
-            <button type="button" class="axil-btn" id="cancel-deposit">Hủy</button>
-        </form>
+    <!-- Confirmation Popup -->
+    <div id="confirmationPopup" style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
+        <p>Bạn có muốn thay đổi?</p>
+        <button id="confirmYesBtn">Yes</button>
+        <button id="confirmCancelBtn">Cancel</button>
     </div>
     <!-- Success Popup -->
-    <div id="success-popup" class="popup-modal" style="display:none;">
-        <p>Giao dịch thành công!</p>
-        <button id="popup-ok-btn" class="axil-btn">OK</button>
+    <div id="successPopup" style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
+        <p>Thay đổi thành công!</p>
+        <button id="successOkBtn">OK</button>
     </div>
-
-    <!-- Popup Overlay -->
-    <div id="popupOverlay"
-         style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:999;"></div>
-    <!-- Transit successfull -->
 </main>
 
 
