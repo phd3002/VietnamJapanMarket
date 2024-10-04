@@ -16,6 +16,7 @@ public class Products {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Integer productId;
 
     @ManyToOne
@@ -34,9 +35,6 @@ public class Products {
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
-
-    @Column(nullable = false)
-    private int stock;
 
     @Column(name = "weight")
     private float weight;

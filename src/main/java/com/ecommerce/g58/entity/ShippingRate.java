@@ -25,11 +25,11 @@ public class ShippingRate {
     private float weight;
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_from")
     private Countries countryFrom;
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_to")
     private Countries countryTo;
 
     @Column(name = "rate", nullable = false)
