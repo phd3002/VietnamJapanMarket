@@ -451,17 +451,17 @@
                                                 <!-- Khi hang da giao muon danh gia(khi da nhan duoc hang va xac nhan) -->
                                                 <input type="submit" id="rate-product"
                                                        class="axil-btn btn-bg-secondary btn-sm"
-                                                       value="Da giao hang"></input>
+                                                       value="Da giao hang">
                                                 <!-- Huy don hang(chi hien thi khi chua nhan hang) -->
                                                 <input type="submit" id="cancel-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        style="background-color: red; border: none"
-                                                       value="Huy don hang"></input>
+                                                       value="Huy don hang">
                                                 <!-- yeu cau hoan tra tien(khi da nhan hang) -->
                                                 <input type="submit" id="refund-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        style="background-color: red; border: none"
-                                                       value="Yeu cau hoan tra tien"></input>
+                                                       value="Yeu cau hoan tra tien">
                                             </div>
                                         </div>
                                     </div>
@@ -528,7 +528,6 @@
                                             <span class="summary-value total">100$</span>
                                         </div>
                                     </div>
-
                                     <div class="payment-method">
                                         <p>Online payment</p>
                                     </div>
@@ -538,6 +537,63 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Confirm Delivery Modal -->
+    <div id="confirmDeliveryModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Bạn đã nhận được hàng?</h2>
+            <form>
+                <button type="submit">Xác nhận</button>
+            </form>
+        </div>
+    </div>
+    <!-- Rating Modal -->
+    <div id="rateProductModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Đánh giá của bạn</h2>
+            <form id="rateForm">
+                <label for="feedback-text">Nhập đánh giá của bạn:</label>
+                <input type="text" id="feedback-text" name="feedback-text" required><br><br>
+                <label for="rating">Đánh giá:</label>
+                <select id="rating" class="form-select">
+                    <option value="5">★★★★★</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="1">★☆☆☆☆</option>
+                </select>
+                <button type="submit">Xác nhận</button>
+            </form>
+        </div>
+    </div>
+    <!-- Pending Modal -->
+    <div id="pendingConfirmationModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Xác nhận thông tin</h2>
+            <form id="pendingForm">
+                <label for="reason-name">Lý do mà bạn gửi yêu cầu:</label>
+                <input type="text" id="reason-name" name="reason-name" required><br><br>
+                <button type="submit">Gửi</button>
+            </form>
+        </div>
+    </div>
+    <!-- Success Modal -->
+    <div id="successModal-rating" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Đánh Giá Thành Công!</h2>
+        </div>
+    </div>
+    <!-- Success pending Modal -->
+    <div id="successModal-pending" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Thành Công!</h2>
+            <p>Yêu cầu của bạn đã được gửi tới người bán.</p>
         </div>
     </div>
 </main>
@@ -665,7 +721,72 @@
 <!-- Main JS -->
 <script src="../static/js/main.js"></script>
 <script src="../static/js/script.js"></script>
-<script src="../static/js/script.js"></script>
+<script>
+    // Đóng tất cả các modal
+    function closeAllModals() {
+        document.getElementById('confirmDeliveryModal').style.display = "none";
+        document.getElementById('rateProductModal').style.display = "none";
+        document.getElementById('pendingConfirmationModal').style.display = "none";
+        document.getElementById('successModal-rating').style.display = "none";
+        document.getElementById('successModal-pending').style.display = "none";
+    }
+
+    // Hiển thị modal xác nhận đã nhận hàng
+    document.getElementById('rate-product').addEventListener('click', function() {
+        closeAllModals();
+        document.getElementById('confirmDeliveryModal').style.display = "block";
+    });
+
+    // Khi xác nhận đã nhận hàng, mở modal đánh giá
+    document.querySelector('#confirmDeliveryModal button[type="submit"]').addEventListener('click', function(event) {
+        event.preventDefault(); // Ngăn không tải lại trang khi submit form
+        closeAllModals();
+        document.getElementById('rateProductModal').style.display = "block";
+    });
+
+    // Khi người dùng xác nhận đánh giá, mở modal thành công và reload trang
+    document.getElementById('rateForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn không tải lại trang khi submit form
+        closeAllModals();
+        document.getElementById('successModal-rating').style.display = "block";
+
+        // Sau 2 giây reload lại trang
+        setTimeout(function() {
+            location.reload();
+        }, 2000);
+    });
+
+    // Khi nhấn "Hủy đơn hàng" hoặc "Yêu cầu hoàn trả", mở modal yêu cầu lý do
+    document.getElementById('cancel-order').addEventListener('click', function() {
+        closeAllModals();
+        document.getElementById('pendingConfirmationModal').style.display = "block";
+    });
+
+    document.getElementById('refund-order').addEventListener('click', function() {
+        closeAllModals();
+        document.getElementById('pendingConfirmationModal').style.display = "block";
+    });
+
+    // Sau khi nhập lý do và gửi yêu cầu, hiển thị modal thành công và reload trang
+    document.getElementById('pendingForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn không tải lại trang khi submit form
+        closeAllModals();
+        document.getElementById('successModal-pending').style.display = "block";
+
+        // Sau 2 giây reload lại trang
+        setTimeout(function() {
+            location.reload();
+        }, 2000);
+    });
+
+    // Đóng modal khi nhấn nút close (dấu "x")
+    var closeButtons = document.getElementsByClassName('close');
+    for (var i = 0; i < closeButtons.length; i++) {
+        closeButtons[i].onclick = function() {
+            closeAllModals();
+        };
+    }
+</script>
 </body>
 
 

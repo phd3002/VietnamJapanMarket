@@ -406,44 +406,34 @@
                     <!-- Dashboard Content -->
                     <div class="col-xl-9 col-md-8">
                         <div class="tab-content">
-                            <!-- Wallet Tab -->
-                            <div id="nav-wallet" class="tab-pane fade show active" role="tabpanel">
-                                <div class="wallet-section axil-dashboard-order">
-                                    <h3>Wallet</h3>
-                                    <p>Số dư: <span id="wallet-balance">1,000,000 VND</span></p>
-                                    <button class="axil-btn" id="withdraw-btn"
-                                            style="background: red; max-width: fit-content">Rút tiền
-                                    </button>
-                                    <button class="axil-btn" id="deposit-btn"
-                                            style="background: green; max-width: fit-content">Nạp tiền
-                                    </button>
-                                    <!-- Transaction History -->
-                                    <h4>Lịch sử giao dịch</h4>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Ngày</th>
-                                            <th>Loại giao dịch</th>
-                                            <th>Số tiền</th>
-                                            <th>Trạng thái</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="transaction-history">
-                                        <tr>
-                                            <td>01/10/2024</td>
-                                            <td>Nạp tiền</td>
-                                            <td>500,000 VND</td>
-                                            <td>Thành công</td>
-                                        </tr>
-                                        <tr>
-                                            <td>25/09/2024</td>
-                                            <td>Rút tiền</td>
-                                            <td>300,000 VND</td>
-                                            <td>Thành công</td>
-                                        </tr>
-                                        <!-- More transactions -->
-                                        </tbody>
-                                    </table>
+                            <div id="nav-notification" class="tab-pane fade show active" role="tabpanel">
+                                <div class="axil-dashboard-notification">
+                                    <h3>Notifications</h3>
+                                    <div class="notification-list">
+                                        <!-- Order Notification Example -->
+                                        <div class="notification-item order-notification">
+                                            <img src="path/to/order-image.jpg" alt="Order Notification"
+                                                 class="notification-image">
+                                            <div class="notification-content">
+                                                <h4 class="notification-title">Order Update</h4>
+                                                <p class="notification-message">Your order #12345 has been shipped.</p>
+                                                <a href="order-detail.html" class="notification-action view-order"
+                                                   data-order-id="12345">View Details</a>
+                                            </div>
+                                        </div>
+                                        <!-- Discount Notification Example -->
+                                        <div class="notification-item discount-notification">
+                                            <img src="path/to/discount-image.jpg" alt="Discount Notification"
+                                                 class="notification-image">
+                                            <div class="notification-content">
+                                                <h4 class="notification-title">Special Offer</h4>
+                                                <p class="notification-message">Get 20% off on all electronics this
+                                                    weekend!</p>
+                                                <a href="#" class="notification-action view-offer">View Detail</a>
+                                            </div>
+                                        </div>
+                                        <!-- Add more notification items as needed -->
+                                    </div>
                                 </div>
                             </div>
                         </div> <!-- End of tab-content -->

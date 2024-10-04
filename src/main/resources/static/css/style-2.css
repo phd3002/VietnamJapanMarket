@@ -428,3 +428,79 @@
 .set-default-btn:hover {
     background-color: #444;
 }
+
+/*wallet*/
+/* Modal background overlay */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    overflow: hidden; /* Prevent scroll */
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+}
+
+/* Modal content box */
+.modal-content {
+    background-color: #fff;
+    margin: auto; /* Centered horizontally */
+    position: absolute; /* To make the positioning easier */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center it vertically and horizontally */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 400px; /* Small fixed width */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
+}
+
+/* Close button style */
+.close {
+    color: #aaa;
+    float: right;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Input fields style */
+.modal-content input[type="text"],
+.modal-content input[type="number"] {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Submit button style */
+.modal-content button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Success modal specific styles */
+#successModal .modal-content {
+    text-align: center;
+    padding: 20px;
+}
+
+#successModal h2 {
+    color: #4CAF50;
+}
+
+#successModal p {
+    font-size: 16px;
+}
+

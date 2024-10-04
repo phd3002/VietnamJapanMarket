@@ -412,7 +412,9 @@
                                     <div class="address-container">
                                         <div class="header-address">
                                             <h3>My Address</h3>
-                                            <button class="new-address-btn">+ New Address</button>
+                                            <button type="submit" id="addnew-address"
+                                                    class="new-address-btn">+ New Address
+                                            </button>
                                         </div>
                                         <div class="address-list">
                                             <div class="address-item">
@@ -425,7 +427,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="address-actions">
-                                                    <a href="#">Update</a>
+                                                    <button type="submit" id="update-address"
+                                                            class="set-default-btn" style="background-color: green">
+                                                        Update Address
+                                                    </button>
                                                     <button class="set-default-btn">Default settings</button>
                                                 </div>
                                             </div>
@@ -435,8 +440,14 @@
                                                     <p>Ha Noi</p>
                                                 </div>
                                                 <div class="address-actions">
-                                                    <a href="#">Update</a>
-                                                    <a href="#">Delete</a>
+                                                    <button type="submit" id="update-address"
+                                                            class="set-default-btn" style="background-color: green">
+                                                        Update Address
+                                                    </button>
+                                                    <button type="submit" id="delete-address"
+                                                            class="set-default-btn" style="background-color: red">Delete
+                                                        Address
+                                                    </button>
                                                     <button class="set-default-btn">Default settings</button>
                                                 </div>
                                             </div>
@@ -448,6 +459,64 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Add New Address Modal -->
+    <div id="cf-add-address" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Thêm địa chỉ</h2>
+            <form id="add-address-Form">
+                <label for="add-address">Nhập địa mới:</label>
+                <input type="text" id="add-address" name="address" required>
+                <button type="submit">Xác nhận</button>
+            </form>
+        </div>
+    </div>
+    <!-- Update Address Modal -->
+    <div id="cf-up-address" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Cập nhật địa chỉ</h2>
+            <form id="up-address-Form">
+                <label for="up-address">Địa chỉ:</label>
+                <input type="text" id="up-address" name="address" value="Việt Nam">
+                <button type="submit">Xác nhận</button>
+            </form>
+        </div>
+    </div>
+    <!-- Delete Address Modal -->
+    <div id="cf-dl-address" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Bạn có muốn xóa địa chỉ này?</h2>
+            <form id="dl-address-Form">
+                <button type="submit">Xác nhận</button>
+            </form>
+        </div>
+    </div>
+    <!-- Success Modal 1 -->
+    <div id="successModal1" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Thêm Thành Công!</h2>
+            <p>Địa chỉ mới đã được thêm.</p>
+        </div>
+    </div>
+    <!-- Success Modal 2-->
+    <div id="successModal2" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Cập Nhật Công!</h2>
+            <p>Địa chỉ đã được cập nhật.</p>
+        </div>
+    </div>
+    <!-- Success Modal 3-->
+    <div id="successModal3" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Xóa Thành Công!</h2>
+            <p>Địa chỉ đã được xóa.</p>
         </div>
     </div>
 </main>
@@ -575,7 +644,83 @@
 <!-- Main JS -->
 <script src="../static/js/main.js"></script>
 <script src="../static/js/script.js"></script>
-<script src="../static/js/script.js"></script>
+<script>
+    // Đóng tất cả các modal
+    function closeAllModals() {
+        document.getElementById('cf-add-address').style.display = "none";
+        document.getElementById('cf-up-address').style.display = "none";
+        document.getElementById('cf-dl-address').style.display = "none";
+        document.getElementById('successModal1').style.display = "none";
+        document.getElementById('successModal2').style.display = "none";
+        document.getElementById('successModal3').style.display = "none";
+    }
+
+    // Khi click vào "New Address" hiển thị modal thêm địa chỉ
+    document.getElementById('addnew-address').addEventListener('click', function () {
+        closeAllModals();
+        document.getElementById('cf-add-address').style.display = "block";
+    });
+
+    // Khi click "Xác nhận" trong modal thêm địa chỉ, hiển thị modal thành công
+    document.getElementById('add-address-Form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn không tải lại trang
+        closeAllModals();
+        document.getElementById('successModal1').style.display = "block";
+
+        // Sau 2 giây, reload lại trang
+        setTimeout(function () {
+            location.reload();
+        }, 2000);
+    });
+
+    // Khi click vào "Update Address" hiển thị modal cập nhật địa chỉ
+    document.querySelectorAll('#update-address').forEach(function (updateBtn) {
+        updateBtn.addEventListener('click', function () {
+            closeAllModals();
+            document.getElementById('cf-up-address').style.display = "block";
+        });
+    });
+
+    // Khi click "Xác nhận" trong modal cập nhật địa chỉ, hiển thị modal thành công
+    document.getElementById('up-address-Form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn không tải lại trang
+        closeAllModals();
+        document.getElementById('successModal2').style.display = "block";
+
+        // Sau 2 giây, reload lại trang
+        setTimeout(function () {
+            location.reload();
+        }, 2000);
+    });
+
+    // Khi click vào "Delete Address" hiển thị modal xóa địa chỉ
+    document.querySelectorAll('#delete-address').forEach(function (deleteBtn) {
+        deleteBtn.addEventListener('click', function () {
+            closeAllModals();
+            document.getElementById('cf-dl-address').style.display = "block";
+        });
+    });
+
+    // Khi click "Xác nhận" trong modal xóa địa chỉ, hiển thị modal thành công
+    document.getElementById('dl-address-Form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn không tải lại trang
+        closeAllModals();
+        document.getElementById('successModal3').style.display = "block";
+
+        // Sau 2 giây, reload lại trang
+        setTimeout(function () {
+            location.reload();
+        }, 2000);
+    });
+
+    // Đóng modal khi nhấn dấu "x"
+    var closeButtons = document.getElementsByClassName('close');
+    for (var i = 0; i < closeButtons.length; i++) {
+        closeButtons[i].onclick = function () {
+            closeAllModals();
+        };
+    }
+</script>
 </body>
 
 

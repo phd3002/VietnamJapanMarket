@@ -411,12 +411,10 @@
                                 <div class="wallet-section axil-dashboard-order">
                                     <h3>Wallet</h3>
                                     <p>Số dư: <span id="wallet-balance">1,000,000 VND</span></p>
-                                    <button class="axil-btn" id="withdraw-btn"
-                                            style="background: red; max-width: fit-content">Rút tiền
-                                    </button>
-                                    <button class="axil-btn" id="deposit-btn"
-                                            style="background: green; max-width: fit-content">Nạp tiền
-                                    </button>
+                                    <input type="submit" class="axil-btn" value="Rút tiền"
+                                           style="background: red; border: none" id="withdraw">
+                                    <input type="submit" class="axil-btn" id="deposit"
+                                           style="background: green; border: none" value="Nạp tiền">
                                     <!-- Transaction History -->
                                     <h4>Lịch sử giao dịch</h4>
                                     <table class="table">
@@ -450,6 +448,46 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Modal for Rút Tiền -->
+    <div id="withdrawModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Rút Tiền</h2>
+            <form id="withdrawForm">
+                <label for="bank-name">Tên Ngân Hàng:</label>
+                <input type="text" id="bank-name" name="bank-name" required><br><br>
+                <label for="account-number">Số Tài Khoản:</label>
+                <input type="text" id="account-number" name="account-number" required><br><br>
+                <button type="submit">Xác nhận</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Nạp Tiền -->
+    <div id="depositModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Nạp Tiền</h2>
+            <form id="depositForm">
+                <label for="bank-name">Tên Ngân Hàng:</label>
+                <input type="text" id="bank-name" name="bank-name" required><br><br>
+                <label for="account-number">Số Tài Khoản:</label>
+                <input type="text" id="account-number" name="account-number" required><br><br>
+                <label for="amount">Số Tiền Nạp:</label>
+                <input type="number" id="amount" name="amount" required><br><br>
+                <button type="submit">Xác nhận</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Thành Công!</h2>
+            <p>Giao dịch đã được thực hiện thành công.</p>
         </div>
     </div>
 </main>
@@ -577,7 +615,68 @@
 <!-- Main JS -->
 <script src="../static/js/main.js"></script>
 <script src="../static/js/script.js"></script>
-<script src="../static/js/script.js"></script>
+<script>
+    // Get the modal elements
+    var withdrawModal = document.getElementById("withdrawModal");
+    var depositModal = document.getElementById("depositModal");
+    var successModal = document.getElementById("successModal");
+
+    // Get the buttons that open the modal
+    var withdrawBtn = document.getElementById("withdraw");
+    var depositBtn = document.getElementById("deposit");
+
+    // Get the close buttons
+    var closeBtns = document.getElementsByClassName("close");
+
+    // When the user clicks on the withdraw button, open the withdraw modal
+    withdrawBtn.onclick = function () {
+        withdrawModal.style.display = "block";
+    }
+
+    // When the user clicks on the deposit button, open the deposit modal
+    depositBtn.onclick = function () {
+        depositModal.style.display = "block";
+    }
+
+    // When the user clicks on any of the close buttons, close the modal
+    for (var i = 0; i < closeBtns.length; i++) {
+        closeBtns[i].onclick = function () {
+            withdrawModal.style.display = "none";
+            depositModal.style.display = "none";
+            successModal.style.display = "none";
+        }
+    }
+
+    // Close the modal when user clicks outside of it
+    window.onclick = function (event) {
+        if (event.target == withdrawModal || event.target == depositModal || event.target == successModal) {
+            withdrawModal.style.display = "none";
+            depositModal.style.display = "none";
+            successModal.style.display = "none";
+        }
+    }
+
+    // Simulate a successful transaction and show the success modal
+    function showSuccessModal() {
+        withdrawModal.style.display = "none";
+        depositModal.style.display = "none";
+        successModal.style.display = "block";
+        setTimeout(function () {
+            location.reload(); // Reload page after success modal is closed
+        }, 2000); // Adjust delay as needed
+    }
+
+    // Handle form submission for withdraw and deposit
+    document.getElementById("withdrawForm").onsubmit = function (event) {
+        event.preventDefault();
+        showSuccessModal(); // Show success modal on submit
+    }
+
+    document.getElementById("depositForm").onsubmit = function (event) {
+        event.preventDefault();
+        showSuccessModal(); // Show success modal on submit
+    }
+</script>
 </body>
 
 

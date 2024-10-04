@@ -51,6 +51,5 @@ window.addEventListener('click', function (event) {
     }
 });
 
-//order details
 
 
