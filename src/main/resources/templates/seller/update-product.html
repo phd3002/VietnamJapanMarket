@@ -181,23 +181,23 @@
                     <form class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">Mã sản phẩm </label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" value="abc">
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên sản phẩm</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" value="abc">
                         </div>
 
 
                         <div class="form-group  col-md-3">
                             <label class="control-label">Số lượng</label>
-                            <input class="form-control" type="number">
+                            <input class="form-control" type="number" value="12">
                         </div>
                         <div class="form-group col-md-3 ">
                             <label for="status-products" class="control-label">Tình trạng</label>
                             <select class="form-control" id="status-products">
                                 <option>-- Chọn tình trạng --</option>
-                                <option>Còn hàng</option>
+                                <option selected>Còn hàng</option>
                                 <option>Hết hàng</option>
                             </select>
                         </div>
@@ -205,7 +205,7 @@
                             <label for="categories-product" class="control-label">Danh mục</label>
                             <select class="form-control" id="categories-product">
                                 <option>-- Chọn danh mục --</option>
-                                <option>Electronic</option>
+                                <option selected>Electronic</option>
                                 <option>Beauty</option>
                                 <option>Gaming</option>
                             </select>
@@ -216,19 +216,19 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Giá bán(VND)</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" value="120.000">
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Giảm giá(%)</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" value="20">
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Khối lượng(gram)</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" value="100">
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Nhóm sản phẩm</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" value="1">
                         </div>
                         <div class="form-group col-md-12">
                             <!-- Main Image Upload -->
@@ -241,19 +241,18 @@
                                 <!-- Main image thumbnail will be displayed here -->
                             </div>
 
-<!--                            &lt;!&ndash; Additional Images Upload (4 max) &ndash;&gt;-->
-<!--                            <label class="control-label">Ảnh phụ (tối đa 4 ảnh)</label>-->
-<!--                            <div id="additionalImageUpload">-->
-<!--                                <input type="file" id="additionalImages" name="additionalImages[]" accept="image/*"-->
-<!--                                       multiple onchange="readAdditionalImages(this);"/>-->
-<!--                            </div>-->
-<!--                            <div id="additionalThumbbox" style="display: flex; flex-wrap: wrap;">-->
-<!--                                &lt;!&ndash; Additional image thumbnails will be displayed here &ndash;&gt;-->
-<!--                            </div>-->
+                            <!--                            &lt;!&ndash; Additional Images Upload (4 max) &ndash;&gt;-->
+                            <!--                            <label class="control-label">Ảnh phụ (tối đa 4 ảnh)</label>-->
+                            <!--                            <div id="additionalImageUpload">-->
+                            <!--                                <input type="file" id="additionalImages" name="additionalImages[]" accept="image/*"-->
+                            <!--                                       multiple onchange="readAdditionalImages(this);"/>-->
+                            <!--                            </div>-->
+                            <!--                            <div id="additionalThumbbox" style="display: flex; flex-wrap: wrap;">-->
+                            <!--                                &lt;!&ndash; Additional image thumbnails will be displayed here &ndash;&gt;-->
+                            <!--                            </div>-->
                         </div>
                         <div class="col-12 mt-4">
                             <h4>Biến thể sản phẩm</h4>
-                            <button type="button" class="btn btn-primary" id="add-variant">Thêm biến thể</button>
                         </div>
 
                         <div id="variants-container" class="col-12 mt-4">
@@ -263,7 +262,7 @@
                                     <label for="size-product" class="control-label">Kích thước</label>
                                     <select class="form-control" id="size-product">
                                         <option>-- Chọn kích thước --</option>
-                                        <option>S</option>
+                                        <option selected>S</option>
                                         <option>M</option>
                                         <option>L</option>
                                         <option>XL</option>
@@ -274,7 +273,7 @@
                                     <label for="color-product" class="control-label">Màu sắc</label>
                                     <select class="form-control" id="color-product">
                                         <option>-- Chọn kích thước --</option>
-                                        <option>Xanh</option>
+                                        <option selected>Xanh</option>
                                         <option>Đỏ</option>
                                         <option>Vàng</option>
                                     </select>
@@ -296,7 +295,7 @@
                         </div>
                     </form>
                 </div>
-                <button class="btn btn-save" type="button" id="saveButton">Tạo</button>
+                <button class="btn btn-save" type="button" id="saveButton">Cập nhật</button>
                 <a class="btn btn-cancel" href="table-data-product.html">Hủy bỏ</a>
             </div>
         </div>
@@ -470,12 +469,12 @@
         // Display a confirmation popup similar to the delete confirmation
         swal({
             title: "Xác nhận",
-            text: "Bạn có chắc chắn muốn tạo phẩm này?",
+            text: "Bạn có chắc chắn muốn cập nhật thông tin phẩm này?",
             buttons: ["Hủy bỏ", "Đồng ý"],
         }).then((willSave) => {
             if (willSave) {
                 // After confirmation, display success message
-                swal("Sản phẩm đã được tạo thành công!", {
+                swal("Sản phẩm đã được cập nhật thành công!", {
                     icon: "success",
                 }).then(() => {
                     // After success message, redirect to another page (e.g., back to the order list)
