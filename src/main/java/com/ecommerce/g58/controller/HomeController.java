@@ -1,6 +1,8 @@
 package com.ecommerce.g58.controller;
 
 
+import com.ecommerce.g58.dto.ProductDTO;
+import com.ecommerce.g58.entity.Categories;
 import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.ProductImage;
 import com.ecommerce.g58.entity.ProductVariation;
@@ -23,19 +25,12 @@ public class HomeController {
 
     @GetMapping({"/","/homepage"})
     public String showHomePage(Model model) {
-        List<Products> products = productService.getAllProducts();
-
-        // For each product, fetch associated images and variations
-        for (Products product : products) {
-            List<ProductImage> images = productService.getProductImagesByProductId(product.getProductId());
-            List<ProductVariation> variations = productService.getProductVariationsByProductId(product.getProductId());
-            model.addAttribute("images_" + product.getProductId(), images);
-            model.addAttribute("variations_" + product.getProductId(), variations);
-        }
-
-        model.addAttribute("products", products);
-        model.addAttribute("latestProducts", productService.getLatest5Products());
+//        List<Products> products = productService.getAllProducts();
+//        List<Categories> categories = categoriesService.getAllCategories();
+        List<ProductDTO> productDetails = productService.getProductDetails();
+        model.addAttribute("productDetails", productDetails);
         model.addAttribute("categories", categoriesService.getAllCategories());
+
         return "homepage";
     }
 }
