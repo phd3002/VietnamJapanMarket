@@ -34,9 +34,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return userRepository.findByEmail(email) != null;
     }
     @Override
-    public Users registerUser(Users users) {
-        // Kiểm tra xem email đã tồn tại chư
-
+    public void registerUser(Users users) {
         // Mã hóa mật khẩu
         users.setUsername(users.getUsername());
         users.setEmail(users.getEmail());
@@ -48,22 +46,19 @@ public class UserServiceImp implements UserService, UserDetailsService {
         if (role == null) {
             throw new IllegalArgumentException("Invalid role");
         } else {
-            users.setRole(role);
+            users.setRoleId(role);
         }
-
-        return userRepository.save(users);
+        userRepository.save(users);
     }
 
-@Override
-public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    Users user = userRepository.findByEmail(email);
-    if (user == null) {
-        throw new UsernameNotFoundException("User not found");
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Users user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRoleId().getRoleName())));
     }
-
-    return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-            Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getRoleName())));
-}
 
 //    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Roles> roles) {
 //        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());

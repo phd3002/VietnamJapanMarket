@@ -39,7 +39,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         http
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()  // Tài nguyên công cộng
-                        .requestMatchers("/login", "/register", "/homepage/**").permitAll()  // Cho phép truy cập ẩn danh vào trang chính
+                        .requestMatchers("/login", "/register", "/homepage/**", "/sign-up/confirm-code").permitAll()  // Cho phép truy cập ẩn danh vào trang chính
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/sign-up", "/sign-in").permitAll()  // Cho phép công khai truy cập trang sign-up và sign-in
@@ -133,4 +133,10 @@ public class SecurityConfig implements WebMvcConfigurer {
     public AccessDeniedHandler accessDeniedHandler() {
         return (request, response, accessDeniedException) -> response.sendRedirect("/403");
     }
+
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("user").password("{noop}password").roles("Customer");
+//    }
 }

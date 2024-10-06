@@ -55,6 +55,43 @@ public class UserController {
     }
 
     // Handle form submission
+//    @PostMapping("/sign-up")
+//    public String registerUser(@ModelAttribute("users") Users users,
+//                               @RequestParam("confirmPassword") String confirmPassword,  // Nhận mật khẩu xác nhận từ form
+//                               Model model,
+//                               RedirectAttributes redirectAttributes,
+//                               HttpServletRequest request) throws Exception {
+//
+//        // Kiểm tra xem mật khẩu và confirmPassword có khớp không
+//        if (!users.getPassword().equals(confirmPassword)) {
+//            model.addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
+//            return "sign-up";
+//        }
+//
+//        // Kiểm tra email đã tồn tại chưa
+//        if (userService.isEmailExist(users.getEmail())) {
+//            model.addAttribute("errorMessage", "Email đã tồn tại.");
+//            return "sign-up";
+//        }
+//
+//        // Đăng ký người dùng mới
+//        userService.registerUser(users);
+//        model.addAttribute("successMessage", "Đăng ký thành công!");
+//
+//        // Tạo OTP và lưu vào session
+//        String otp = generateOTP(6); // Tạo mã OTP
+//        temporaryUsers.put(otp, users); // Lưu người dùng và OTP vào bản đồ tạm thời
+//
+//        try {
+//            sendOTPByEmail(users.getEmail(), otp); // Gửi OTP qua email
+//            request.getSession().setAttribute("otp", otp); // Lưu OTP vào session
+//            users.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian tạo cho người dùng
+//            return "redirect:/sign-up/confirm-code"; // Chuyển hướng đến trang xác nhận OTP
+//        } catch (Exception e) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Không gửi được OTP. Vui lòng thử lại.");
+//            return "redirect:/sign-up"; // Chuyển hướng lại trang đăng ký nếu lỗi
+//        }
+//    }
     @PostMapping("/sign-up")
     public String registerUser(@ModelAttribute("users") Users users,
                                @RequestParam("confirmPassword") String confirmPassword,  // Nhận mật khẩu xác nhận từ form
@@ -62,36 +99,39 @@ public class UserController {
                                RedirectAttributes redirectAttributes,
                                HttpServletRequest request) throws Exception {
 
-        // Kiểm tra xem mật khẩu và confirmPassword có khớp không
-        if (!users.getPassword().equals(confirmPassword)) {
-            model.addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
-            return "sign-up";
-        }
-
-        // Kiểm tra email đã tồn tại chưa
-        if (userService.isEmailExist(users.getEmail())) {
-            model.addAttribute("errorMessage", "Email đã tồn tại.");
-            return "sign-up";
-        }
-
-        // Đăng ký người dùng mới
-        Users newUser = userService.registerUser(users);
-        model.addAttribute("successMessage", "Đăng ký thành công!");
-
-        // Tạo OTP và lưu vào session
-        String otp = generateOTP(6); // Tạo mã OTP
-        temporaryUsers.put(otp, users); // Lưu người dùng và OTP vào bản đồ tạm thời
-
         try {
+            // Kiểm tra xem mật khẩu và confirmPassword có khớp không
+            if (!users.getPassword().equals(confirmPassword)) {
+                model.addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
+                return "sign-up";
+            }
+
+            // Kiểm tra email đã tồn tại chưa
+            if (userService.isEmailExist(users.getEmail())) {
+                model.addAttribute("errorMessage", "Email đã tồn tại.");
+                return "sign-up";
+            }
+
+            // Đăng ký người dùng mới
+//            userService.registerUser(users);
+//            model.addAttribute("successMessage", "Đăng ký thành công!");
+
+            // Tạo OTP và lưu vào session
+            String otp = generateOTP(6); // Tạo mã OTP
+            temporaryUsers.put(otp, users); // Lưu người dùng và OTP vào bản đồ tạm thời
+
             sendOTPByEmail(users.getEmail(), otp); // Gửi OTP qua email
             request.getSession().setAttribute("otp", otp); // Lưu OTP vào session
             users.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian tạo cho người dùng
             return "redirect:/sign-up/confirm-code"; // Chuyển hướng đến trang xác nhận OTP
+
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Không gửi được OTP. Vui lòng thử lại.");
+            e.printStackTrace(); // Thêm dòng in ra lỗi để kiểm tra
+            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại.");
             return "redirect:/sign-up"; // Chuyển hướng lại trang đăng ký nếu lỗi
         }
     }
+
 
 
 
@@ -105,9 +145,9 @@ public class UserController {
         return otp.toString(); // Trả về OTP dưới dạng chuỗi
     }
 
-    @GetMapping("/sign-up/confirm-code") // Xử lý yêu cầu GET tới /sign-up/verify
+    @GetMapping("/sign-up/confirm-code") // Xử lý yêu cầu GET
     public String showVerifyOtpForm() {
-        return "confirm-code"; // Trả về view verify-otp
+        return "confirm-code";
     }
 
     @PostMapping("/sign-up/confirm-code") // Xử lý yêu cầu POST tới /sign-up/verify
@@ -121,7 +161,7 @@ public class UserController {
             temporaryUsers.remove(otpFromSession); // Xóa người dùng khỏi bản đồ tạm thời
             session.setAttribute("verificationSuccessMessage", "Xác minh OTP thành công!"); // Thêm thông báo thành công vào session
             session.removeAttribute("otp"); // Xóa OTP khỏi session
-            return "redirect:/sign-in"; // Chuyển hướng đến trang đăng nhập
+            return "/sign-in"; // Chuyển hướng đến trang đăng nhập
         } else {
             redirectAttributes.addFlashAttribute("error", "OTP không hợp lệ. Vui lòng thử lại!"); // Thêm thông báo lỗi OTP vào redirectAttributes
             return "redirect:/sign-up/confirm-code"; // Chuyển hướng lại trang xác minh OTP
@@ -129,23 +169,49 @@ public class UserController {
     }
 
     public void sendOTPByEmail(String email, String otp) throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage(); // Tạo một đối tượng MimeMessage
+        MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("G58@gmail.com", "G58 Support"); // Đặt địa chỉ email gửi và tên
-        helper.setTo(email); // Đặt địa chỉ email nhận
+        try {
+            helper.setFrom("G58@gmail.com", "G58 Support");
+            helper.setTo(email);
 
-        String subject = "OTP for Registration"; // Đặt tiêu đề email
+            String subject = "OTP for Registration";
 
-        String content = "<p>Xin chào,</p>"
-                + "<p>OTP của bạn để đăng ký là: <strong>" + otp + "</strong></p>"
-                + "<p>Vui lòng sử dụng OTP này để hoàn tất đăng ký của bạn.</p>";
+            String content = "<p>Xin chào,</p>"
+                    + "<p>OTP của bạn để đăng ký là: <strong>" + otp + "</strong></p>"
+                    + "<p>Vui lòng sử dụng OTP này để hoàn tất đăng ký của bạn.</p>";
 
-        helper.setSubject(subject); // Đặt tiêu đề email
-        helper.setText(content, true); // Đặt nội dung email
+            helper.setSubject(subject);
+            helper.setText(content, true);
 
-        mailSender.send(message); // Gửi email
+            mailSender.send(message);  // Gửi email
+
+        } catch (Exception e) {
+            e.printStackTrace();  // Thêm log để kiểm tra lỗi
+            throw new RuntimeException("Không thể gửi OTP qua email");
+        }
     }
+
+
+//    public void sendOTPByEmail(String email, String otp) throws MessagingException, UnsupportedEncodingException {
+//        MimeMessage message = mailSender.createMimeMessage(); // Tạo một đối tượng MimeMessage
+//        MimeMessageHelper helper = new MimeMessageHelper(message);
+//
+//        helper.setFrom("G58@gmail.com", "G58 Support"); // Đặt địa chỉ email gửi và tên
+//        helper.setTo(email); // Đặt địa chỉ email nhận
+//
+//        String subject = "OTP for Registration"; // Đặt tiêu đề email
+//
+//        String content = "<p>Xin chào,</p>"
+//                + "<p>OTP của bạn để đăng ký là: <strong>" + otp + "</strong></p>"
+//                + "<p>Vui lòng sử dụng OTP này để hoàn tất đăng ký của bạn.</p>";
+//
+//        helper.setSubject(subject); // Đặt tiêu đề email
+//        helper.setText(content, true); // Đặt nội dung email
+//
+//        mailSender.send(message); // Gửi email
+//    }
 
     // Login form page
     @GetMapping("/sign-in")
