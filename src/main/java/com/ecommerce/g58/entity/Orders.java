@@ -4,6 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -57,4 +58,7 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private ShippingUnit unitId;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderDetails> orderDetails;
 }
