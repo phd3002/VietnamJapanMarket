@@ -55,6 +55,18 @@ public class Users {
     @Column(name = "status")
     private String status;
 
+    @Transient // This ensures the field is not persisted to the database
+    private String confirmPassword;
+
+    // Getters and setters for confirmPassword
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
 //    @ManyToMany(fetch = FetchType.EAGER)
 //    @JoinTable(
 //            name = "user_roles",
