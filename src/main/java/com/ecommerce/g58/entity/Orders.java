@@ -59,6 +59,4 @@ public class Orders {
     @JoinColumn(name = "unit_id")
     private ShippingUnit unitId;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetails> orderDetails;
 }

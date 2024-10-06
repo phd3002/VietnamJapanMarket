@@ -1,6 +1,5 @@
 package com.ecommerce.g58.controller;
 
-import com.ecommerce.g58.dto.UserDTO;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.UserService;
 import jakarta.mail.MessagingException;
@@ -39,6 +38,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -178,50 +178,4 @@ public class UserController {
             return "sign-in";
         }
     }
-
-    //    @GetMapping("/sign-in")
-//    public String loginForm(Authentication authentication,
-//                            Model model,
-//                            HttpSession session) {
-//        if (authentication != null && authentication.isAuthenticated()) {
-//            return "redirect:/homepage";
-//        } else {
-//            if (session.getAttribute("verificationSuccessMessage") != null) {
-//                model.addAttribute("successMessage", session.getAttribute("verificationSuccessMessage"));
-//                session.removeAttribute("verificationSuccessMessage");
-//            }
-//            return "sign-in";
-//        }
-//    }
-//
-//    @PostMapping("/sign-in")
-//    public String loginSubmit(@RequestParam("email") String email,
-//                              @RequestParam("password") String password,
-//                              HttpSession session,
-//                              Model model) {
-//        try {
-//            UserDetails userDetails = userService.loadUserByUsername(email);
-//
-//            if (userDetails == null) {
-//                model.addAttribute("errorMessage", "Email không tồn tại");
-//                return "sign-in";
-//            }
-//
-//            UsernamePasswordAuthenticationToken authentication =
-//                    new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-//
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            return "redirect:/homepage";
-//
-//        } catch (BadCredentialsException e) {
-//            model.addAttribute("errorMessage", "Mật khẩu không đúng");
-//            return "sign-in";
-//        } catch (Exception e) {
-//            model.addAttribute("errorMessage", "Đã xảy ra lỗi. Vui lòng thử lại.");
-//            return "sign-in";
-//        }
-//    }
-
-
 }

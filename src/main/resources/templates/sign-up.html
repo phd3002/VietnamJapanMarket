@@ -101,7 +101,7 @@
                     <h3 class="title">I'm New Here</h3>
                     <p class="b2 mb--55">Enter your detail below</p>
 
-                    <form th:action="@{/sign-up}" th:object="${userDTO}" method="post" class="singin-form">
+                    <form th:action="@{/sign-up}" th:object="${users}" method="post" class="singin-form">
                         <!-- CSRF Token -->
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 

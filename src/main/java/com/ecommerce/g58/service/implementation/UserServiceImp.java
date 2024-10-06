@@ -1,24 +1,20 @@
 package com.ecommerce.g58.service.implementation;
 
-import com.ecommerce.g58.dto.UserDTO;
 import com.ecommerce.g58.entity.Roles;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.repository.RoleRepository;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImp implements UserService, UserDetailsService {
@@ -34,31 +30,28 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
 
     @Override
-    public Users registerUser(UserDTO userDTO) throws Exception {
-//        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-//            throw new Exception("Email already registered!");
-//        }
-        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
-            throw new Exception("Username already taken!");
-        }
-        if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-            throw new Exception("Passwords do not match!");
-        }
+    public boolean isEmailExist(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
+    @Override
+    public Users registerUser(Users users) {
+        // Kiểm tra xem email đã tồn tại chư
 
-        Users user = new Users();
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setStatus("active");
+        // Mã hóa mật khẩu
+        users.setUsername(users.getUsername());
+        users.setEmail(users.getEmail());
+        users.setPassword(passwordEncoder.encode(users.getPassword()));
+        users.setCreatedAt(LocalDateTime.now());
 
-        Roles role = roleRepository.findByName("ROLE_CUSTOMER");
+        // Gán role mặc định
+        Roles role = roleRepository.findByRoleId(3);// Lấy role người dùng mặc định
         if (role == null) {
             throw new IllegalArgumentException("Invalid role");
         } else {
-            role.setRoleId(role.getRoleId());
+            users.setRole(role);
         }
 
-        return userRepository.save(user);
+        return userRepository.save(users);
     }
 
 @Override
