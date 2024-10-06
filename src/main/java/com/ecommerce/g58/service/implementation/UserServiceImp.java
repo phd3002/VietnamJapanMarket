@@ -1,6 +1,6 @@
 package com.ecommerce.g58.service.implementation;
 
-
+import com.ecommerce.g58.dto.UserDTO;
 import com.ecommerce.g58.entity.Roles;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.repository.RoleRepository;
@@ -34,13 +34,24 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
 
     @Override
-    public Users registerUser(Users user) throws Exception {
-        user.setUsername(user.getUsername());
-        user.setEmail(user.getEmail());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public Users registerUser(UserDTO userDTO) throws Exception {
+//        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+//            throw new Exception("Email already registered!");
+//        }
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+            throw new Exception("Username already taken!");
+        }
+        if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
+            throw new Exception("Passwords do not match!");
+        }
+
+        Users user = new Users();
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setStatus("active");
 
-        Roles role = roleRepository.findByRoleId(3); // 3 is the role id for customer
+        Roles role = roleRepository.findByName("ROLE_CUSTOMER");
         if (role == null) {
             throw new IllegalArgumentException("Invalid role");
         } else {
@@ -48,11 +59,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
 
         return userRepository.save(user);
-    }
-
-    @Override
-    public boolean isEmailExist(String email) {
-        return userRepository.findByEmail(email) != null;
     }
 
 @Override
