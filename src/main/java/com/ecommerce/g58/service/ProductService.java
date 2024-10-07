@@ -67,5 +67,8 @@ public class ProductService {
         return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
     }
 
-
+    public List<Products> searchProducts(String query) {
+        // Implement the search logic here, for example:
+        return productRepository.findByProductNameContainingIgnoreCase(query); // Search products by product name
+    }
 }
