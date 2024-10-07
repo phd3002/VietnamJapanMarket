@@ -26,9 +26,9 @@ public class Roles {
 //    private Set<Users> users = new HashSet<>();
 
     public enum RoleName {
-        CUSTOMER,
-        SELLER,
-        GUEST,
-        ADMIN
+        Admin,
+        Seller,
+        Customer,
+        Guest
     }
 }
