@@ -54,49 +54,60 @@ window.addEventListener('click', function (event) {
 // Search functionality
 async function performSearch() {
     const searchInput = document.getElementById('prod-search').value.trim();
-    console.log('Search Input:', searchInput); // Log the search input
-
-    const searchResultSection = document.getElementById('search-results');
-    const resultCountElem = document.getElementById('result-count');
 
     if (searchInput.length === 0) {
-        searchResultSection.style.display = 'none';
-        return false;
+        return false;  // Exit if there's no input
     }
 
     try {
+        // Send the search request to the backend
         const response = await fetch(`/api/search?query=${encodeURIComponent(searchInput)}`);
-        console.log('API Response Status:', response.status); // Log the response status
-        const searchResults = await response.json();
-        console.log('Search Results:', searchResults); // Log the search results
 
-        if (searchResults.length > 0) {
-            searchResultSection.style.display = 'block';
-            resultCountElem.innerText = searchResults.length;
-            updateSearchResults(searchResults);
+        if (response.ok) {
+            const searchResults = await response.json();
+            console.log('Search results:', searchResults);  // Log the search results
+            updateSearchResults(searchResults);  // Function to update the UI
         } else {
-            searchResultSection.style.display = 'none';
+            console.error('Search request failed:', response.status);
         }
     } catch (error) {
         console.error('Error fetching search results:', error);
-        searchResultSection.style.display = 'none';
     }
 
-    return false;
+    return false;  // Prevent form submission and page reload
 }
 
 function updateSearchResults(results) {
     const resultContainer = document.querySelector('.psearch-results');
-    resultContainer.innerHTML = ''; // Clear previous results
+    resultContainer.innerHTML = '';  // Clear previous results
+
+    if (results.length === 0) {
+        document.getElementById('result-count').textContent = '0';
+        document.getElementById('search-results').style.display = 'none';
+        return;
+    }
+
+    document.getElementById('result-count').textContent = results.length;
+    document.getElementById('search-results').style.display = 'block';
 
     results.forEach(result => {
-        const resultItem = document.getElementById('result-template').cloneNode(true);
-        resultItem.style.display = 'block';
-        resultItem.querySelector('.product-title a').innerText = result.productName;
-        resultItem.querySelector('.current-price').innerText = `$${result.price}`;
-        resultItem.querySelector('.old-price').innerText = ''; // Assuming no old price in the backend response
-        resultItem.querySelector('.rating-number').innerHTML = `<span>0</span> Reviews`; // Assuming no rating in the backend response
-
+        const resultItem = document.createElement('div');
+        resultItem.classList.add('result-item');
+        resultItem.innerHTML = `
+            <div class="axil-product-list">
+                <div class="thumbnail">
+                    <a href="#">
+                        <img src="${result.thumbnail}" alt="Product Image">
+                    </a>
+                </div>
+                <div class="product-content">
+                    <h6 class="product-title">${result.productName}</h6>
+                    <div class="product-price-variant">
+                        <span class="price current-price">$${result.price}</span>
+                    </div>
+                </div>
+            </div>
+        `;
         resultContainer.appendChild(resultItem);
     });
 }
