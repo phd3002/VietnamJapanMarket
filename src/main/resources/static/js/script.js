@@ -52,43 +52,37 @@ window.addEventListener('click', function (event) {
 });
 
 // Search functionality
-function performSearch() {
+async function performSearch() {
     const searchInput = document.getElementById('prod-search').value.trim();
+    console.log('Search Input:', searchInput); // Log the search input
 
-    // Get the search result section and result template
     const searchResultSection = document.getElementById('search-results');
     const resultCountElem = document.getElementById('result-count');
 
     if (searchInput.length === 0) {
-        // Hide the results section if no search input is provided
         searchResultSection.style.display = 'none';
         return false;
     }
 
-    // Simulate getting search results from the backend
-    let searchResults = simulateSearchResults(searchInput); // This should be replaced with actual backend call
+    try {
+        const response = await fetch(`/api/search?query=${encodeURIComponent(searchInput)}`);
+        console.log('API Response Status:', response.status); // Log the response status
+        const searchResults = await response.json();
+        console.log('Search Results:', searchResults); // Log the search results
 
-    if (searchResults.length > 0) {
-        // Show the search results section and update the count
-        searchResultSection.style.display = 'block';
-        resultCountElem.innerText = searchResults.length;
-
-        // Dynamically update the product listing with results
-        updateSearchResults(searchResults);
-    } else {
-        // Hide if no results are found
+        if (searchResults.length > 0) {
+            searchResultSection.style.display = 'block';
+            resultCountElem.innerText = searchResults.length;
+            updateSearchResults(searchResults);
+        } else {
+            searchResultSection.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error fetching search results:', error);
         searchResultSection.style.display = 'none';
     }
 
-    return false; // Prevent actual form submission
-}
-
-function simulateSearchResults(query) {
-    // Simulate search results; replace with actual backend integration
-    return [
-        { title: "Product 1", price: "$29.99", oldPrice: "$49.99", rating: "100+" },
-        { title: "Product 2", price: "$19.99", oldPrice: "$39.99", rating: "50+" }
-    ];
+    return false;
 }
 
 function updateSearchResults(results) {
@@ -98,10 +92,10 @@ function updateSearchResults(results) {
     results.forEach(result => {
         const resultItem = document.getElementById('result-template').cloneNode(true);
         resultItem.style.display = 'block';
-        resultItem.querySelector('.product-title a').innerText = result.title;
-        resultItem.querySelector('.current-price').innerText = result.price;
-        resultItem.querySelector('.old-price').innerText = result.oldPrice;
-        resultItem.querySelector('.rating-number').innerHTML = `<span>${result.rating}</span> Reviews`;
+        resultItem.querySelector('.product-title a').innerText = result.productName;
+        resultItem.querySelector('.current-price').innerText = `$${result.price}`;
+        resultItem.querySelector('.old-price').innerText = ''; // Assuming no old price in the backend response
+        resultItem.querySelector('.rating-number').innerHTML = `<span>0</span> Reviews`; // Assuming no rating in the backend response
 
         resultContainer.appendChild(resultItem);
     });

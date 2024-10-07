@@ -42,9 +42,6 @@ public class ProductService {
         return productDetails;
     }
 
-    //    public List<ProductDTO> findProductDetails() {
-//        return productRepository.findProductDetails();
-//    }
     public List<Products> getAllProducts() {
         return productRepository.findAll(); // Fetch all products
     }

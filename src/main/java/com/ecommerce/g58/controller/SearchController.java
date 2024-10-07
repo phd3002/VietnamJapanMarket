@@ -17,7 +17,9 @@ public class SearchController {
 
     @GetMapping("/api/search")
     public List<Products> searchProducts(@RequestParam("query") String query) {
-        // Implement the search logic in the ProductService
-        return productService.searchProducts(query);
+        System.out.println("Received search query: " + query);
+        List<Products> results = productService.searchProducts(query);
+        System.out.println("Search results: " + results);
+        return results;
     }
 }
