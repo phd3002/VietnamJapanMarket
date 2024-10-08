@@ -5,12 +5,14 @@ import com.ecommerce.g58.service.UserService;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -158,10 +160,14 @@ public class UserController {
 
     // Login form page
     @GetMapping("/sign-in")
-    public String showLoginForm(Authentication authentication, Model model) {
+    public String showLoginForm(Authentication authentication, Model model, HttpSession session) {
         if (authentication != null && authentication.isAuthenticated()) {
             return "redirect:/homepage";
         } else {
+            if (session.getAttribute("verificationSuccessMessage") != null) {
+                model.addAttribute("successMessage", session.getAttribute("verificationSuccessMessage"));
+                session.removeAttribute("verificationSuccessMessage");
+            }
             return "sign-in";
         }
 //        model.addAttribute("users", new Users());
@@ -174,6 +180,16 @@ public class UserController {
                               Model model) {
         try {
             UserDetails userDetails = userService.loadUserByUsername(email);
+            if (userDetails == null) {
+                model.addAttribute("errorMessage", "Email không tồn tại");
+                return "sign-in";
+            }
+            // Check if the password matches
+            boolean isPasswordValid = userService.checkPassword(password, userDetails.getPassword());
+            if (!isPasswordValid) {
+                model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
+                return "sign-in";
+            }
             // Tạo đối tượng Authentication token
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(email, password,userDetails.getAuthorities());
@@ -192,6 +208,69 @@ public class UserController {
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Đã xảy ra lỗi. Vui lòng thử lại.");
             return "sign-in";
+        }
+    }
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Model model) {
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        model.addAttribute("successMessage", "Đăng xuất thành công.");
+        return "redirect:/sign-in?logout"; // Redirect to login page after logout
+    }
+
+    //dẫn đến đường link forgot password
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordForm() {
+        return "forgot-password";
+    }
+
+    //thực hiện quá trình reset
+    @PostMapping("/forgot-password")
+    public String processForgotPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        try {
+            userService.sendResetPasswordEmail(email, request);
+            redirectAttributes.addFlashAttribute("successMessage", "Chúng tôi đã gửi Email về cho bạn");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Chúng tôi không thấy có Email người dùng ");
+        }
+        return "redirect:/forgot-password";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
+        if (!userService.isResetTokenValid(token)) {
+            model.addAttribute("errorMessage", "Mã thông báo đặt lại không hợp lệ hoặc đã hết hạn.");
+            return "reset-password";
+        }
+
+        model.addAttribute("token", token);
+        return "reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String processResetPassword(@RequestParam("token") String token,
+                                       @RequestParam("password") String password,
+                                       @RequestParam("confirmPassword") String confirmPassword,
+                                       RedirectAttributes redirectAttributes) {
+        if (password.length() < 6) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật Khẩu phải dài ít nhất 6 ký tự.");
+            return "redirect:/reset-password?token=" + token;
+        }
+        // Check if the password and confirm password do not match
+        if (!password.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật Khẩu và Xác Nhận Mật Khẩu không khớp.");
+            return "redirect:/reset-password?token=" + token;
+        }
+
+
+        try {
+            userService.updatePasswordReset(token, password);
+            redirectAttributes.addFlashAttribute("successMessage", "Đặt lại Mật Khẩu thành công.");
+            return "redirect:/sign-in";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
+            return "redirect:/reset-password?token=" + token;
         }
     }
 }
