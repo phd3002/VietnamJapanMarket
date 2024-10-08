@@ -63,12 +63,12 @@
                     <p class="b2 mb--55">Enter your detail below</p>
                     <form th:action="@{/sign-in}" method="post" class="singin-form">
                         <!-- Hiển thị thông báo lỗi nếu có -->
-                        <div th:if="${errorMessage}" class="error-message">
-                            <p th:text="${errorMessage}"></p>
-                        </div>
-                        <div th:if="${successMessage}" class="success-message">
-                            <p th:text="${successMessage}"></p>
-                        </div>
+<!--                        <div th:if="${errorMessage}" class="error-message">-->
+<!--                            <p th:text="${errorMessage}"></p>-->
+<!--                        </div>-->
+<!--                        <div th:if="${successMessage}" class="success-message">-->
+<!--                            <p th:text="${successMessage}"></p>-->
+<!--                        </div>-->
                         <div class="form-group">
                             <label>Email</label>
                             <input type="email" class="form-control" name="email" placeholder="Email" required>

@@ -2,10 +2,10 @@ package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.UserService;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -36,8 +36,9 @@ public class UserController {
     private Map<String, Users> temporaryUsers = new HashMap<>(); // Khai báo một bản đồ tạm thời để lưu trữ người dùng và OTP
     @Autowired
     private UserService userService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -54,44 +55,6 @@ public class UserController {
         return "sign-up";
     }
 
-    // Handle form submission
-//    @PostMapping("/sign-up")
-//    public String registerUser(@ModelAttribute("users") Users users,
-//                               @RequestParam("confirmPassword") String confirmPassword,  // Nhận mật khẩu xác nhận từ form
-//                               Model model,
-//                               RedirectAttributes redirectAttributes,
-//                               HttpServletRequest request) throws Exception {
-//
-//        // Kiểm tra xem mật khẩu và confirmPassword có khớp không
-//        if (!users.getPassword().equals(confirmPassword)) {
-//            model.addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
-//            return "sign-up";
-//        }
-//
-//        // Kiểm tra email đã tồn tại chưa
-//        if (userService.isEmailExist(users.getEmail())) {
-//            model.addAttribute("errorMessage", "Email đã tồn tại.");
-//            return "sign-up";
-//        }
-//
-//        // Đăng ký người dùng mới
-//        userService.registerUser(users);
-//        model.addAttribute("successMessage", "Đăng ký thành công!");
-//
-//        // Tạo OTP và lưu vào session
-//        String otp = generateOTP(6); // Tạo mã OTP
-//        temporaryUsers.put(otp, users); // Lưu người dùng và OTP vào bản đồ tạm thời
-//
-//        try {
-//            sendOTPByEmail(users.getEmail(), otp); // Gửi OTP qua email
-//            request.getSession().setAttribute("otp", otp); // Lưu OTP vào session
-//            users.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian tạo cho người dùng
-//            return "redirect:/sign-up/confirm-code"; // Chuyển hướng đến trang xác nhận OTP
-//        } catch (Exception e) {
-//            redirectAttributes.addFlashAttribute("errorMessage", "Không gửi được OTP. Vui lòng thử lại.");
-//            return "redirect:/sign-up"; // Chuyển hướng lại trang đăng ký nếu lỗi
-//        }
-//    }
     @PostMapping("/sign-up")
     public String registerUser(@ModelAttribute("users") Users users,
                                @RequestParam("confirmPassword") String confirmPassword,  // Nhận mật khẩu xác nhận từ form
@@ -193,31 +156,16 @@ public class UserController {
         }
     }
 
-
-//    public void sendOTPByEmail(String email, String otp) throws MessagingException, UnsupportedEncodingException {
-//        MimeMessage message = mailSender.createMimeMessage(); // Tạo một đối tượng MimeMessage
-//        MimeMessageHelper helper = new MimeMessageHelper(message);
-//
-//        helper.setFrom("G58@gmail.com", "G58 Support"); // Đặt địa chỉ email gửi và tên
-//        helper.setTo(email); // Đặt địa chỉ email nhận
-//
-//        String subject = "OTP for Registration"; // Đặt tiêu đề email
-//
-//        String content = "<p>Xin chào,</p>"
-//                + "<p>OTP của bạn để đăng ký là: <strong>" + otp + "</strong></p>"
-//                + "<p>Vui lòng sử dụng OTP này để hoàn tất đăng ký của bạn.</p>";
-//
-//        helper.setSubject(subject); // Đặt tiêu đề email
-//        helper.setText(content, true); // Đặt nội dung email
-//
-//        mailSender.send(message); // Gửi email
-//    }
-
     // Login form page
     @GetMapping("/sign-in")
-    public String showLoginForm(Model model) {
-        model.addAttribute("users", new Users());
-        return "sign-in";
+    public String showLoginForm(Authentication authentication, Model model) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/homepage";
+        } else {
+            return "sign-in";
+        }
+//        model.addAttribute("users", new Users());
+
     }
 
     @PostMapping("/sign-in")
@@ -229,11 +177,13 @@ public class UserController {
             // Tạo đối tượng Authentication token
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(email, password,userDetails.getAuthorities());
-
+            System.out.println(email);
+            System.out.println(password);
             // Xác thực người dùng bằng AuthenticationManager
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            System.out.println("Dang nhap duoc roi cmm");
             return "redirect:/homepage"; // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
 
         } catch (BadCredentialsException e) {

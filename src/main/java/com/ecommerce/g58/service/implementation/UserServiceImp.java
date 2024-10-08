@@ -6,6 +6,10 @@ import com.ecommerce.g58.repository.RoleRepository;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,11 +26,14 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
+
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private RoleRepository roleRepository;
+
+//    @Autowired
+//    private org.springframework.security.authentication.AuthenticationManager authenticationManager;
 
 
     @Override
@@ -59,6 +66,21 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRoleId().getRoleName())));
     }
+
+//    public Authentication authenticate(String email, String password) throws AuthenticationException {
+//        try {
+//            UsernamePasswordAuthenticationToken authenticationToken =
+//                    new UsernamePasswordAuthenticationToken(email, password);
+//            return authenticationManager.authenticate(authenticationToken);
+//        } catch (AuthenticationException e) {
+//            throw new AuthenticationException("Authentication failed for user: " + email) {};
+//        }
+//    }
+//
+//    @Autowired
+//    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+//        this.authenticationManager = authenticationManager;
+//    }
 
 //    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Roles> roles) {
 //        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
