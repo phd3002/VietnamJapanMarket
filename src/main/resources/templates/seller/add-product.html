@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Thêm sản phẩm | Quản trị Admin</title>
+    <title>Thêm sản phẩm | Kênh người bán</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -154,14 +154,19 @@
     </div>
     <hr>
     <ul class="app-menu">
+        <li><a class="app-menu__item" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
+                class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item active" href="table-data-product.html"><i
+        <li><a class="app-menu__item active" href="product-manager.html"><i
                 class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
         </li>
-        <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
+        <li><a class="app-menu__item" href="shipping-manager.html"><i
+                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
+        </li>
+        <li><a class="app-menu__item" href="income-manager.html"><i
                 class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
         </li>
     </ul>
@@ -186,12 +191,6 @@
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên sản phẩm</label>
                             <input class="form-control" type="text">
-                        </div>
-
-
-                        <div class="form-group  col-md-3">
-                            <label class="control-label">Số lượng</label>
-                            <input class="form-control" type="number">
                         </div>
                         <div class="form-group col-md-3 ">
                             <label for="status-products" class="control-label">Tình trạng</label>
@@ -240,22 +239,11 @@
                             <div id="mainThumbbox">
                                 <!-- Main image thumbnail will be displayed here -->
                             </div>
-
-<!--                            &lt;!&ndash; Additional Images Upload (4 max) &ndash;&gt;-->
-<!--                            <label class="control-label">Ảnh phụ (tối đa 4 ảnh)</label>-->
-<!--                            <div id="additionalImageUpload">-->
-<!--                                <input type="file" id="additionalImages" name="additionalImages[]" accept="image/*"-->
-<!--                                       multiple onchange="readAdditionalImages(this);"/>-->
-<!--                            </div>-->
-<!--                            <div id="additionalThumbbox" style="display: flex; flex-wrap: wrap;">-->
-<!--                                &lt;!&ndash; Additional image thumbnails will be displayed here &ndash;&gt;-->
-<!--                            </div>-->
                         </div>
                         <div class="col-12 mt-4">
                             <h4>Biến thể sản phẩm</h4>
                             <button type="button" class="btn btn-primary" id="add-variant">Thêm biến thể</button>
                         </div>
-
                         <div id="variants-container" class="col-12 mt-4">
                             <!-- Mẫu cho mỗi biến thể sản phẩm -->
                             <div class="variant-item row mt-12">
@@ -285,7 +273,13 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="control-label">Hình ảnh</label>
-                                    <input type="file" class="form-control-file image-input" accept="image/*">
+                                    <div id="variantImageUpload">
+                                        <input type="file" id="variantImage" name="variantImage" accept="image/*"
+                                               onchange="readVariantImage(this);"/>
+                                    </div>
+                                    <div id="variantThumbbox">
+                                        <!-- Variant image thumbnail will be displayed here -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -297,7 +291,7 @@
                     </form>
                 </div>
                 <button class="btn btn-save" type="button" id="saveButton">Tạo</button>
-                <a class="btn btn-cancel" href="table-data-product.html">Hủy bỏ</a>
+                <a class="btn btn-cancel" href="product-manager.html">Hủy bỏ</a>
             </div>
         </div>
     </div>
@@ -357,112 +351,6 @@
             reader.readAsDataURL(file);
         }
     }
-
-    // Function to handle additional images preview (max 4)
-    function readAdditionalImages(input) {
-        const additionalThumbbox = document.getElementById('additionalThumbbox');
-        additionalThumbbox.innerHTML = ""; // Clear existing images
-        additionalImageFiles = Array.from(input.files);  // Convert files to array
-
-        const maxAdditionalImages = 4;
-
-        if (additionalImageFiles.length > maxAdditionalImages) {
-            alert(`Bạn chỉ có thể tải lên tối đa ${maxAdditionalImages} ảnh phụ.`);
-            input.value = "";  // Clear the selection
-            additionalImageFiles = [];  // Reset the array
-            return;
-        }
-
-        // Loop through the selected files and create image previews
-        additionalImageFiles.forEach((file, index) => {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.margin = "10px";
-                img.height = 150;  // Additional images height
-                img.width = 150;   // Additional images width
-                img.style.objectFit = "cover"; // Cover the thumbnail area
-                img.style.position = "relative";
-
-                // Create red "X" icon for removing the image
-                const removeButton = document.createElement('span');
-                removeButton.innerHTML = "&#10006;";  // Unicode for "X"
-                removeButton.style.position = "absolute";
-                removeButton.style.top = "5px";
-                removeButton.style.right = "5px";
-                removeButton.style.color = "red";
-                removeButton.style.fontSize = "20px";
-                removeButton.style.cursor = "pointer";
-
-                // Add event listener for removing the image
-                removeButton.addEventListener('click', function () {
-                    additionalImageFiles.splice(index, 1);  // Remove the image from the array
-                    input.value = "";  // Clear the input selection
-                    refreshAdditionalImagesPreview();  // Refresh the previews
-                });
-
-                // Create a container for the image and remove button
-                const imageContainer = document.createElement('div');
-                imageContainer.style.position = "relative";
-                imageContainer.style.display = "inline-block";
-                imageContainer.appendChild(img);
-                imageContainer.appendChild(removeButton);
-
-                additionalThumbbox.appendChild(imageContainer);
-            }
-
-            reader.readAsDataURL(file);
-        });
-    }
-
-    // Function to refresh the additional images preview after removal
-    function refreshAdditionalImagesPreview() {
-        const additionalThumbbox = document.getElementById('additionalThumbbox');
-        additionalThumbbox.innerHTML = "";  // Clear existing thumbnails
-
-        additionalImageFiles.forEach((file, index) => {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.margin = "10px";
-                img.height = 150;  // Additional images height
-                img.width = 150;   // Additional images width
-                img.style.objectFit = "cover"; // Cover the thumbnail area
-                img.style.position = "relative";
-
-                // Create red "X" icon for removing the image
-                const removeButton = document.createElement('span');
-                removeButton.innerHTML = "&#10006;";  // Unicode for "X"
-                removeButton.style.position = "absolute";
-                removeButton.style.top = "5px";
-                removeButton.style.right = "5px";
-                removeButton.style.color = "red";
-                removeButton.style.fontSize = "20px";
-                removeButton.style.cursor = "pointer";
-
-                // Add event listener for removing the image
-                removeButton.addEventListener('click', function () {
-                    additionalImageFiles.splice(index, 1);  // Remove the image from the array
-                    refreshAdditionalImagesPreview();  // Refresh the previews
-                });
-
-                // Create a container for the image and remove button
-                const imageContainer = document.createElement('div');
-                imageContainer.style.position = "relative";
-                imageContainer.style.display = "inline-block";
-                imageContainer.appendChild(img);
-                imageContainer.appendChild(removeButton);
-
-                additionalThumbbox.appendChild(imageContainer);
-            }
-
-            reader.readAsDataURL(file);
-        });
-    }
 </script>
 <script>
     // Function to handle the "Lưu lại" button click event
@@ -470,7 +358,7 @@
         // Display a confirmation popup similar to the delete confirmation
         swal({
             title: "Xác nhận",
-            text: "Bạn có chắc chắn muốn tạo phẩm này?",
+            text: "Bạn có chắc chắn muốn tạo sản phẩm này?",
             buttons: ["Hủy bỏ", "Đồng ý"],
         }).then((willSave) => {
             if (willSave) {
@@ -479,17 +367,74 @@
                     icon: "success",
                 }).then(() => {
                     // After success message, redirect to another page (e.g., back to the order list)
-                    window.location.href = "table-data-product.html";  // Redirect to order management page
+                    window.location.href = "product-manager.html";  // Redirect to order management page
                 });
             }
         });
     });
 </script>
 <script>
-    document.getElementById('add-variant').addEventListener('click', function() {
+    document.getElementById('add-variant').addEventListener('click', function () {
         const variantTemplate = document.querySelector('.variant-item').cloneNode(true);
+
+        // Reset the cloned input fields
+        const imageInput = variantTemplate.querySelector('input[type="file"]');
+        const imagePreview = variantTemplate.querySelector('#variantThumbbox');
+
+        // Clear the image input and preview
+        imageInput.value = "";
+        imagePreview.innerHTML = "";
+
         document.getElementById('variants-container').appendChild(variantTemplate);
     });
+</script>
+<script>
+    // Function to handle variant image preview
+    function readVariantImage(input) {
+        const variantThumbbox = input.parentNode.nextElementSibling;  // The div for displaying the image
+        variantThumbbox.innerHTML = ""; // Clear any existing images
+
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.margin = "10px";
+                img.height = 100;  // Thumbnail height
+                img.width = 100;   // Thumbnail width
+                img.style.objectFit = "cover";
+
+                // Create red "X" icon for removing the image
+                const removeButton = document.createElement('span');
+                removeButton.innerHTML = "&#10006;";  // Unicode for "X"
+                removeButton.style.position = "absolute";
+                removeButton.style.top = "5px";
+                removeButton.style.right = "5px";
+                removeButton.style.color = "red";
+                removeButton.style.fontSize = "20px";
+                removeButton.style.cursor = "pointer";
+
+                // Remove the variant image on click
+                removeButton.addEventListener('click', function () {
+                    input.value = "";  // Clear the input
+                    variantThumbbox.innerHTML = "";  // Remove the preview
+                });
+
+                // Create a container for the image and the remove button
+                const imageContainer = document.createElement('div');
+                imageContainer.style.position = "relative";
+                imageContainer.style.display = "inline-block";
+                imageContainer.appendChild(img);
+                imageContainer.appendChild(removeButton);
+
+                variantThumbbox.appendChild(imageContainer);  // Display the variant image
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
 </script>
 </body>
 

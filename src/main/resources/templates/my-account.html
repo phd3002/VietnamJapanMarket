@@ -412,21 +412,31 @@
                                     <div class="axil-dashboard-account">
                                         <form class="account-details-form">
                                             <div class="row">
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-12">
                                                     <div class="form-group">
-                                                        <label>First Name</label>
-                                                        <input type="text" class="form-control" value="ABC">
+                                                        <label for="avatarUpload">Avatar</label>
+                                                        <input type="file" class="form-control" id="avatarUpload"
+                                                               accept="image/*" onchange="previewAvatar(event)">
+                                                        <div id="avatarPreviewContainer"
+                                                             style="display: none; position: relative; width: 150px; height: 150px; margin-top: 10px;">
+                                                            <img id="avatarPreview" src="" alt="Avatar Preview"
+                                                                 style="width: 100%; height: 100%; object-fit: cover; border: 1px solid #ddd;">
+                                                            <button type="button" onclick="removeAvatar()"
+                                                                    style="position: absolute; top: -10px; right: -10px; background: red; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer;">
+                                                                &times;
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-12">
                                                     <div class="form-group">
-                                                        <label>Last Name</label>
-                                                        <input type="text" class="form-control" value="DEF">
+                                                        <label>Full Name</label>
+                                                        <input type="text" class="form-control" value="ABC">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group mb--40">
-                                                        <label>Country/ Region</label>
+                                                        <label>Country</label>
                                                         <input type="text" class="form-control"
                                                                value="United States (USA)">
                                                     </div>
@@ -477,13 +487,15 @@
     </div>
     <!-- End My Account Area  -->
     <!-- Confirmation Popup -->
-    <div id="confirmationPopup" style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
+    <div id="confirmationPopup"
+         style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
         <p>Bạn có muốn thay đổi?</p>
         <button id="confirmYesBtn">Yes</button>
         <button id="confirmCancelBtn">Cancel</button>
     </div>
     <!-- Success Popup -->
-    <div id="successPopup" style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
+    <div id="successPopup"
+         style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
         <p>Thay đổi thành công!</p>
         <button id="successOkBtn">OK</button>
     </div>
@@ -613,6 +625,34 @@
 <script src="../static/js/main.js"></script>
 <script src="../static/js/script.js"></script>
 <script src="../static/js/script.js"></script>
+<script>
+    function previewAvatar(event) {
+        const input = event.target;
+        const previewContainer = document.getElementById('avatarPreviewContainer');
+        const previewImage = document.getElementById('avatarPreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewContainer.style.display = 'block';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function removeAvatar() {
+        const input = document.getElementById('avatarUpload');
+        const previewContainer = document.getElementById('avatarPreviewContainer');
+        const previewImage = document.getElementById('avatarPreview');
+
+        input.value = ''; // Clear file input
+        previewImage.src = ''; // Clear image preview
+        previewContainer.style.display = 'none'; // Hide the preview container
+    }
+</script>
 </body>
 
 

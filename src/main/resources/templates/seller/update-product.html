@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Thêm sản phẩm | Quản trị Admin</title>
+    <title>Thêm sản phẩm | Kênh người bán</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -154,14 +154,19 @@
     </div>
     <hr>
     <ul class="app-menu">
+        <li><a class="app-menu__item" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
+                class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item active" href="table-data-product.html"><i
+        <li><a class="app-menu__item active" href="product-manager.html"><i
                 class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
         </li>
-        <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
+        <li><a class="app-menu__item" href="shipping-manager.html"><i
+                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
+        </li>
+        <li><a class="app-menu__item" href="income-manager.html"><i
                 class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
         </li>
     </ul>
@@ -296,7 +301,7 @@
                     </form>
                 </div>
                 <button class="btn btn-save" type="button" id="saveButton">Cập nhật</button>
-                <a class="btn btn-cancel" href="table-data-product.html">Hủy bỏ</a>
+                <a class="btn btn-cancel" href="product-manager.html">Hủy bỏ</a>
             </div>
         </div>
     </div>
@@ -478,14 +483,14 @@
                     icon: "success",
                 }).then(() => {
                     // After success message, redirect to another page (e.g., back to the order list)
-                    window.location.href = "table-data-product.html";  // Redirect to order management page
+                    window.location.href = "product-manager.html";  // Redirect to order management page
                 });
             }
         });
     });
 </script>
 <script>
-    document.getElementById('add-variant').addEventListener('click', function() {
+    document.getElementById('add-variant').addEventListener('click', function () {
         const variantTemplate = document.querySelector('.variant-item').cloneNode(true);
         document.getElementById('variants-container').appendChild(variantTemplate);
     });
