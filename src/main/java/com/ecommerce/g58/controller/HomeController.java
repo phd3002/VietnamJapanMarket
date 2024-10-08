@@ -33,8 +33,8 @@ public class HomeController {
         } else {
             model.addAttribute("isLoggedIn", false);
         }
-//        List<Products> products = productService.getAllProducts();
-//        List<Categories> categories = categoriesService.getAllCategories();
+        List<Products> products = productService.getAllProducts();
+        List<Categories> categories = categoriesService.getAllCategories();
         List<ProductDTO> productDetails = productService.getProductDetails();
         model.addAttribute("productDetails", productDetails);
         model.addAttribute("categories", categoriesService.getAllCategories());
