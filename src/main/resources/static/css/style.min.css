@@ -213,6 +213,12 @@ img {
     height: auto
 }
 
+.product-thumbnail {
+    width: 200px;  /* Set an appropriate width */
+    height: 200px; /* Set an appropriate height */
+    object-fit: cover;  /* Crop the image to fit, while preserving aspect ratio */
+}
+
 svg:not(:root) {
     overflow: hidden
 }
