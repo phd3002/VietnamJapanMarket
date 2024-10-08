@@ -52,10 +52,11 @@
             <div class="axil-signin-form-wrap">
                 <div class="axil-signin-form">
                     <!-- Hiển thị thông báo lỗi nếu có -->
-                    <div th:if="${error}" class="error-message">
-                        <p th:text="${error}"></p>
-                    </div>
+
                     <form th:action="@{/sign-up/confirm-code}" method="post" class="singin-form">
+                        <div th:if="${error}" class="error-message">
+                            <p th:text="${error}"></p>
+                        </div>
                         <div class="form-group">
                             <label>Nhập mã OTP đã gửi qua email của bạn</label>
                             <!-- Sửa lại tên trường input từ "code" thành "otp" để khớp với backend -->

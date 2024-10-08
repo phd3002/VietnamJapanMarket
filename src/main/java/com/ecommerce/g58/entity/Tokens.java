@@ -24,7 +24,7 @@ public class Tokens {
     private Users userId;
 
     @Column(name = "token_value", nullable = false, unique = true)
-    private String tokenValue;
+    private String token;
 
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expirationAt;
@@ -32,4 +32,13 @@ public class Tokens {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(expirationAt);
+    }
+
+    public Tokens(String token, Users userId) {
+        this.token = token;
+        this.userId = userId;
+        this.expirationAt = LocalDateTime.now().plusHours(24); // Token expires in 24 hours
+    }
 }
