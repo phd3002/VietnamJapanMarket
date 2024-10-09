@@ -19,8 +19,10 @@ public class Cart {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users userId;
+    private Users user;
 
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
+
+
 }

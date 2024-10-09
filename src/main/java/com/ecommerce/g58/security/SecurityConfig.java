@@ -19,7 +19,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static javax.management.Query.and;
 
 
 @Configuration
@@ -76,18 +75,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .authorizeRequests()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
                 .antMatchers(
-                        "/", "/sign-up/confirm-code",
+                        "/",
                         "/address", "/cart-detail", "/checkout",
                         "/coming-soon", "/confirm-code", "/footer",
-                        "/head", "/header",
+                        "/forgot-password", "/head", "/header",
                         "/homepage", "/homepageOrg", "/homepageTest",
                         "/my-account", "/my-shop", "/notification",
                         "/order", "/order-detail", "/privacy-policy",
-                        "/product-detail", "/product-list",
+                        "/product-detail", "/product-list", "/reset-password",
                         "/sign-in", "/sign-up", "/sign-up-seller",
                         "/terms-of-service", "/view-store", "/wallet",
-                        "/wishlist", "/forgot-password", "/reset-password"
+                        "/wishlist"
                 ).permitAll()
+                .antMatchers("/add_to_cart").permitAll()
                 .anyRequest().authenticated()
 //                .and()
 //                .formLogin()
@@ -99,9 +99,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/sign-in?logout")
                 .permitAll()
                 .and()
+//                .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
 
