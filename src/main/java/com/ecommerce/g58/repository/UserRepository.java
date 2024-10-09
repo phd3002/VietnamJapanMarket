@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<Users, Integer> {
     // Tìm kiếm người dùng theo tên đăng nhập (username)
 //    Users findByUsername(String username);
     Users findByEmail(String email);

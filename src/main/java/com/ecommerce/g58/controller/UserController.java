@@ -227,12 +227,16 @@ public class UserController {
 
     //thực hiện quá trình reset
     @PostMapping("/forgot-password")
-    public String processForgotPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public String processForgotPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) {
         try {
             userService.sendResetPasswordEmail(email, request);
             redirectAttributes.addFlashAttribute("successMessage", "Chúng tôi đã gửi Email về cho bạn");
+        } catch (BadCredentialsException e) {
+            model.addAttribute("errorMessage", "Chúng tôi không thấy có Email người dùng ");
+            return "forgot-password";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Chúng tôi không thấy có Email người dùng ");
+            model.addAttribute("errorMessage", "Chúng tôi không thấy có Email người dùng");
+            return "forgot-password";
         }
         return "redirect:/forgot-password";
     }
@@ -252,18 +256,17 @@ public class UserController {
     public String processResetPassword(@RequestParam("token") String token,
                                        @RequestParam("password") String password,
                                        @RequestParam("confirmPassword") String confirmPassword,
-                                       RedirectAttributes redirectAttributes) {
+                                       RedirectAttributes redirectAttributes,
+                                       Model model) {
         if (password.length() < 6) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Mật Khẩu phải dài ít nhất 6 ký tự.");
-            return "redirect:/reset-password?token=" + token;
+            model.addAttribute("errorMessage", "Mật Khẩu phải dài ít nhất 6 ký tự.");
+            return "/reset-password"  ;
         }
         // Check if the password and confirm password do not match
         if (!password.equals(confirmPassword)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Mật Khẩu và Xác Nhận Mật Khẩu không khớp.");
-            return "redirect:/reset-password?token=" + token;
+            model.addAttribute("errorMessage", "Mật Khẩu và Xác Nhận Mật Khẩu không khớp.");
+            return "/reset-password" ;
         }
-
-
         try {
             userService.updatePasswordReset(token, password);
             redirectAttributes.addFlashAttribute("successMessage", "Đặt lại Mật Khẩu thành công.");
