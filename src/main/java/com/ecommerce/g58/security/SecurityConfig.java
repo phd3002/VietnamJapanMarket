@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/product-detail", "/product-list", "/reset-password",
                         "/sign-in", "/sign-up", "/sign-up-seller",
                         "/terms-of-service", "/view-store", "/wallet",
-                        "/wishlist"
+                        "/wishlist", "/customer/orders", "/order-detail/**"
                 ).permitAll()
                 .anyRequest().authenticated()
 //                .and()
