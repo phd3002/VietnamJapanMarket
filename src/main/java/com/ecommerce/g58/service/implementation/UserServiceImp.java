@@ -51,9 +51,20 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
 
     @Override
+    public Users findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Users getUserById(Integer userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+
+    @Override
     public boolean isEmailExist(String email) {
         return userRepository.findByEmail(email) != null;
     }
+
     @Override
     public void registerUser(Users users) {
         // Mã hóa mật khẩu
@@ -173,7 +184,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
 //    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Roles> roles) {
 //        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
 //    }
-
 
 
 }
