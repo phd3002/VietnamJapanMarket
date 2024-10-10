@@ -395,7 +395,7 @@
                             <!-- Iterate through each cart item -->
                             <tr th:each="item : ${storeEntry.value}">
                                 <td class="product-remove">
-                                    <form action="/remove_cart_item" method="post">
+                                    <form th:action="@{/remove_cart_item}" method="post">
                                         <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
                                         <button type="submit" class="remove-wishlist">
                                             <i class="fal fa-times"></i>

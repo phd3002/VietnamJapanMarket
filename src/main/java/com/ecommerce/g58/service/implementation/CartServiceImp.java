@@ -80,10 +80,10 @@ public class CartServiceImp implements CartService {
         updateCartTotalPrice(cart);
     }
 
-
+    @Transactional
     @Override
     public void removeCartItem(Integer cartItemId) {
-        cartItemRepository.deleteByCartItemId(cartItemId);
+        cartItemRepository.deleteById(cartItemId);
     }
 
     @Override
@@ -122,7 +122,8 @@ public class CartServiceImp implements CartService {
             cart.setTotalPrice(totalPrice);
             cartRepository.save(cart);
         } else {
-            cart.setTotalPrice(0); // Đặt giá trị mặc định nếu giỏ hàng trống
+            cart.setTotalPrice(0);// Đặt giá trị mặc định nếu giỏ hàng trống
+            cartRepository.save(cart);
         }
     }
 

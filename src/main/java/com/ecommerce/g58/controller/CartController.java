@@ -126,9 +126,9 @@ public class CartController {
 
     // Remove Cart Item
     @PostMapping("/remove_cart_item")
-    public String removeCartItem(@RequestParam("cartItemId") Integer cartItemId, HttpSession session) {
+    public String removeCartItem(@RequestParam("cartItemId") Integer cartItemId) {
         cartService.removeCartItem(cartItemId);
-        session.setAttribute("cartItemRemoved", "Sản phẩm đã được xóa khỏi giỏ hàng thành công");
+//        session.setAttribute("cartItemRemoved", "Sản phẩm đã được xóa khỏi giỏ hàng thành công");
         return "redirect:/cart-items";
     }
 
