@@ -32,15 +32,27 @@ public class ProductService {
 
         for (Object[] result : results) {
             ProductDTO productDTO = new ProductDTO();
-            productDTO.setThumbnail((String) result[1]);
-            productDTO.setProductName((String) result[2]);
-            productDTO.setPrice((BigDecimal) result[3]);
+
+            // Mapping the fields from the result
+            productDTO.setProductId((Integer) result[0]);        // productId
+            productDTO.setThumbnail((String) result[1]);         // thumbnail
+            productDTO.setProductName((String) result[2]);       // productName
+            productDTO.setPrice((Integer) result[3]);            // price
+            productDTO.setVariationId((Integer) result[4]);        // variationId
+            productDTO.setImageId((Integer) result[5]);          // imageId
 
             productDetails.add(productDTO);
         }
 
         return productDetails;
     }
+
+    // Method to fetch ProductVariation by its ID
+    public ProductVariation getProductVariationById(Integer variationId) {
+        return productVariationRepository.findById(variationId)
+                .orElseThrow(() -> new IllegalArgumentException("Product variation not found with id: " + variationId));
+    }
+
 
     //    public List<ProductDTO> findProductDetails() {
 //        return productRepository.findProductDetails();
@@ -63,7 +75,7 @@ public class ProductService {
         return productVariationRepository.findByProductIdProductId(productId);
     }
 
-    public Products getProductById(Long productId) {
+    public Products getProductById(Integer productId) {
         return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
     }
 

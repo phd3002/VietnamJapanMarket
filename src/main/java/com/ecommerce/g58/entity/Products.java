@@ -34,7 +34,7 @@ public class Products {
     private String productDescription;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Integer price;
 
     @Column(name = "weight")
     private float weight;

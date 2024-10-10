@@ -33,5 +33,5 @@ public class CartItem {
     private int quantity;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Integer price;
 }
