@@ -1,72 +1,123 @@
 package com.ecommerce.g58.security;
 
-import com.ecommerce.g58.service.implementation.UserServiceImp;
+import com.ecommerce.g58.service.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+
 
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+    @Autowired
+    private UserService userService;
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserServiceImp();  // Sử dụng UserServiceImpl đã định nghĩa
+    public WebMvcConfigurer configureWebMvc() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("*")
+                        .allowedHeaders("*");
+            }
+        };
     }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userService);
+        auth.setPasswordEncoder(passwordEncoder());
+        return auth;
+    }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.authenticationProvider(authenticationProvider());
+//    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(userDetailsService);
-        auth.setPasswordEncoder(passwordEncoder());
-        return auth;
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()  // Tài nguyên công cộng
-                        .requestMatchers("/login", "/register", "/**", "/homepage/**").permitAll()  // Cho phép truy cập ẩn danh vào trang chính
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-                        .anyRequest().authenticated()  // Các trang còn lại yêu cầu xác thực
-                )
-                .formLogin(login -> login
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/homepage", true)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                )
-                .exceptionHandling(ex -> ex
-                        .accessDeniedPage("/403")
-                );
-
-        return http.build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, accessDeniedException) -> response.sendRedirect("/403");
+        AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
+        accessDeniedHandler.setErrorPage("/403");
+        return accessDeniedHandler;
     }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
+                .antMatchers(
+                        "/",
+                        "/address", "/cart-detail", "/checkout",
+                        "/coming-soon", "/confirm-code", "/footer",
+                        "/forgot-password", "/head", "/header",
+                        "/homepage", "/homepageOrg", "/homepageTest",
+                        "/my-account", "/my-shop", "/notification",
+                        "/order", "/order-detail", "/privacy-policy",
+                        "/product-detail", "/product-list", "/reset-password",
+                        "/sign-in", "/sign-up", "/sign-up-seller",
+                        "/terms-of-service", "/view-store", "/wallet",
+                        "/wishlist"
+                ).permitAll()
+                .antMatchers("/add_to_cart").permitAll()
+                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/sign-in")
+//                .loginProcessingUrl("/sign-in")
+//                .defaultSuccessUrl("/homepage", true)
+//                .failureUrl("/sign-in?error")
+//                .permitAll()
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .permitAll()
+                .and()
+//                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+    }
+
+
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return new InMemoryUserDetailsManager(
+//                User.withUsername("system_admin")
+//                        .password(passwordEncoder().encode("khuong.hung2001"))
+//                        .build()
+//        );
+//    }
+
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("user").password("{noop}password").roles("Customer");
+//    }
 }

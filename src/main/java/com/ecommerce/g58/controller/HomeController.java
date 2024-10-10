@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -24,9 +25,17 @@ public class HomeController {
     private CategoriesService categoriesService;
 
     @GetMapping({"/","/homepage"})
-    public String showHomePage(Model model) {
-//        List<Products> products = productService.getAllProducts();
-//        List<Categories> categories = categoriesService.getAllCategories();
+    public String showHomePage(Model model, Principal principal) {
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        if (principal != null) {
+            model.addAttribute("isLoggedIn", true);
+            model.addAttribute("username", principal.getName());  // Tên người dùng
+        } else {
+            model.addAttribute("isLoggedIn", false);
+        }
+        System.out.println(principal);
+        List<Products> products = productService.getAllProducts();
+        List<Categories> categories = categoriesService.getAllCategories();
         List<ProductDTO> productDetails = productService.getProductDetails();
         model.addAttribute("productDetails", productDetails);
         model.addAttribute("categories", categoriesService.getAllCategories());

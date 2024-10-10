@@ -1,10 +1,12 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
 @Data
 @Builder
@@ -18,13 +20,17 @@ public class Users {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles roleId;
+
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "first_name")
@@ -41,4 +47,7 @@ public class Users {
 
     @Column(name = "status")
     private String status;
+
+    @Transient // This ensures the field is not persisted to the database
+    private String confirmPassword;
 }

@@ -1,7 +1,10 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
+import javax.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,6 +19,16 @@ public class Roles {
     @Column(name = "role_id")
     private Integer roleId;
 
-    @Column(name = "role_name", nullable = false, unique = true)
+    @Column(name = "role_name")
     private String roleName;
+
+//    @ManyToMany(mappedBy = "roles")
+//    private Set<Users> users = new HashSet<>();
+
+    public enum RoleName {
+        CUSTOMER,
+        SELLER,
+        GUEST,
+        ADMIN
+    }
 }

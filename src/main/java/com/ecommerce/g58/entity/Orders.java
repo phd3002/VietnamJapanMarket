@@ -1,9 +1,10 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -57,4 +58,5 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private ShippingUnit unitId;
+
 }

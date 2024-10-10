@@ -1,14 +1,10 @@
 package com.ecommerce.g58.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import javax.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Data
@@ -37,9 +33,6 @@ public class Products {
     @Column(name = "product_description")
     private String productDescription;
 
-    @OneToMany(mappedBy = "product")
-    private List<ProductImage> productImages;
-
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
@@ -52,5 +45,7 @@ public class Products {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+//    public Products orElseThrow(Object khôngTìmThấySảnPhẩm) {
+//    }
 }
 
