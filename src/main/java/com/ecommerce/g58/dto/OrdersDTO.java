@@ -12,15 +12,6 @@ public class OrdersDTO {
     private int orderId;
     private LocalDateTime orderDate;
     private String status;
-    private int quantity;
+    private int totalQuantity;
     private BigDecimal totalPrice;
-
-    public OrdersDTO(int orderId, LocalDateTime orderDate, String status, int quantity, BigDecimal totalPrice) {
-        this.orderId = orderId;
-        this.orderDate = orderDate;
-        this.status = status;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-    }
-
 }

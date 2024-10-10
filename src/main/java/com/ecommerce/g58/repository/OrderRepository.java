@@ -11,9 +11,12 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-    @Query("SELECT new com.ecommerce.g58.dto.OrdersDTO(o.orderId, o.orderDate, ss.status, od.quantity, o.totalPrice) " +
-            "FROM Orders o " +
-            "JOIN o.orderDetails od " +
-            "JOIN o.shippingStatus ss")
-    List<OrdersDTO> findOrderDetails();
+    @Query(value = "SELECT o.order_id AS orderId, o.order_date AS orderDate, ss.status AS status, " +
+            "SUM(od.quantity) AS totalQuantity, o.total_price AS totalPrice " +
+            "FROM orders o " +
+            "JOIN order_details od ON o.order_id = od.order_id " +
+            "JOIN shipping_status ss ON o.order_id = ss.order_id " +
+            "GROUP BY o.order_id, o.order_date, ss.status, o.total_price",
+            nativeQuery = true)
+    List<Object[]> findOrderSummaries();
 }

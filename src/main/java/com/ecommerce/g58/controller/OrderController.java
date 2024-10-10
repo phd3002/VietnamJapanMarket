@@ -18,9 +18,9 @@ public class OrderController {
     }
 
     @GetMapping("/customer/orders")
-    public String getAllOrderDetails(Model model) {
-        List<OrdersDTO> orders = orderService.getOrderDetails();
-        model.addAttribute("orders", orders); // Truyền dữ liệu vào model
-        return "order"; // Trả về view order.html
+    public String getAllOrders(Model model) {
+        List<OrdersDTO> orders = orderService.getOrderSummaries();  // Fetching the order details from the service
+        model.addAttribute("orders", orders);  // Passing the list of orders to the model
+        return "order";  // Returning the view for the orders page (order.html)
     }
 }
