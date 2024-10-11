@@ -392,7 +392,7 @@
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
                             <a href="product-detail">
-                                <img th:src="@{${product.productImages[0].thumbnail}}" alt="Product Images">
+                                <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
                             </a>
                             <div class="label-block label-right">
                                 <div class="product-badget">20% OFF</div>
@@ -532,7 +532,8 @@
                                 <div class="col-lg-10 order-lg-2">
                                     <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
                                         <div class="thumbnail">
-                                            <img th:src="@{${product.productImages[0].thumbnail}}" alt="Product Images">
+                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+
                                             <div class="label-block label-right">
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
@@ -543,7 +544,8 @@
                                             </div>
                                         </div>
                                         <div class="thumbnail">
-                                            <img th:src="@{${product.productImages[0].thumbnail}}" alt="Product Images">
+                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+
                                             <div class="label-block label-right">
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
@@ -554,7 +556,8 @@
                                             </div>
                                         </div>
                                         <div class="thumbnail">
-                                            <img th:src="@{${product.productImages[0].thumbnail}}" alt="Product Images">
+                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+
                                             <div class="label-block label-right">
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
