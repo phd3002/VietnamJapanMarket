@@ -36,7 +36,7 @@
     <div class="signin-header">
         <div class="row align-items-center">
             <div class="col-md-6">
-                <a href="homepage.html" class="site-logo"><img src="../static/images/logo/vj-market.png" alt="logo"></a>
+                <a href="/homepage" class="site-logo"><img th:src="@{/images/logo/vj-market.png}" alt="logo"></a>
             </div>
         </div>
     </div>
@@ -51,12 +51,13 @@
         <div class="col-lg-6 offset-xl-2">
             <div class="axil-signin-form-wrap">
                 <div class="axil-signin-form">
-                    <!-- Hiển thị thông báo lỗi nếu có -->
-                    <div th:if="${error}" class="error-message">
-                        <p th:text="${error}"></p>
-                    </div>
+
                     <form th:action="@{/sign-up/confirm-code}" method="post" class="singin-form">
                         <div class="form-group">
+                            <!-- Hiển thị thông báo lỗi nếu có -->
+                            <div th:if="${error}" class="error-message">
+                                <p th:text="${error}"></p>
+                            </div>
                             <label>Nhập mã OTP đã gửi qua email của bạn</label>
                             <!-- Sửa lại tên trường input từ "code" thành "otp" để khớp với backend -->
                             <input type="text" class="form-control" name="otp" id="otp" required>

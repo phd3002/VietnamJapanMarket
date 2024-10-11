@@ -1,9 +1,13 @@
 package com.ecommerce.g58.entity;
 
+import com.ecommerce.g58.enums.FeedbackStatus;
 import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
 @Data
 @Builder
@@ -37,4 +41,8 @@ public class Feedback {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "feedback_status")
+    private FeedbackStatus feedbackStatus;
 }
