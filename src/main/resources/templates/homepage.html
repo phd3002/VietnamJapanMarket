@@ -347,37 +347,85 @@
                 <h2 class="title">Explore our Products</h2>
             </div>
             <div class="row row--15">
-                <div th:each="product : ${productDetails}">
-                    <!-- Start Single Product  -->
-                    <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="axil-product product-style-one has-color-pick mt--40">
-                            <div class="thumbnail">
-                                <a href="product-detail.html">
-                                    <img th:src="@{${product.thumbnail}}" alt="Product Images">
-                                </a>
-                                <div class="product-hover-action">
-                                    <ul class="cart-action">
-                                        <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                        <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                        <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                                 data-bs-target="#quick-view-modal"><i
-                                                class="far fa-eye"></i></a></li>
-                                    </ul>
-                                </div>
+                <div th:each="product : ${productDetails}" class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="axil-product product-style-one has-color-pick mt--40">
+                        <div class="thumbnail">
+                            <a href="product-detail.html">
+                                <img th:src="@{${product.thumbnail}}" alt="Product Images">
+                            </a>
+                            <div class="product-hover-action">
+                                <!-- Add to Cart Form -->
+                                <form th:action="@{/add_to_cart}" method="get">
+                                    <!-- Passing all necessary product data -->
+                                    <input type="hidden" name="productId" th:value="${product.productId}">
+                                    <input type="hidden" name="variationId" th:value="${product.variationId}">
+                                    <input type="hidden" name="productName" th:value="${product.productName}">
+                                    <input type="hidden" name="imageId" th:value="${product.imageId}">
+                                    <input type="hidden" name="quantity" value="1"> <!-- Default quantity 1 -->
+                                    <input type="hidden" name="price" th:value="${product.price}">
+
+                                    <!-- Add to Cart Button -->
+                                    <button type="submit" class="axil-btn btn-bg-primary">Add to Cart</button>
+                                </form>
                             </div>
-                            <div class="product-content">
-                                <div class="inner">
-                                    <h5 class="title" th:text="${product.productName}" ><a href="product-detail.html"></a></h5>
-                                    <div class="product-price-variant">
-                                        <span class="price current-price" th:text="'$' + ${product.price}"></span>
-                                        <span class="price old-price">$100</span>
-                                    </div>
+                        </div>
+                        <div class="product-content">
+                            <div class="inner">
+                                <h5 class="title" th:text="${product.productName}"></h5>
+                                <div class="product-price-variant">
+                                    <span class="price current-price" th:text="'$' + ${product.price}"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- End Single Product  -->
                 </div>
+
+                <!--                <div th:each="product : ${productDetails}">-->
+<!--                    &lt;!&ndash; Start Single Product  &ndash;&gt;-->
+<!--                    <div class="col-xl-3 col-lg-4 col-sm-6">-->
+<!--                        <div class="axil-product product-style-one has-color-pick mt&#45;&#45;40">-->
+<!--                            <div class="thumbnail">-->
+<!--                                <a href="product-detail.html">-->
+<!--                                    <img th:src="@{${product.thumbnail}}" alt="Product Images">-->
+<!--                                </a>-->
+<!--                                <div class="product-hover-action">-->
+<!--&lt;!&ndash;                                    <ul class="cart-action">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <li class="select-option"><a th:href="@{'/add_to_cart?productId=' + ${product.productId}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&variantId=' + ${product.variationId}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&productName=' + ${product.productName}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&imageId=' + ${product.imageId}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&quantity=1'&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&price=' + ${product.price}}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                     class="axil-btn btn-bg-primary">Add to Cart</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <li class="quickview"><a href="#" data-bs-toggle="modal"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                 data-bs-target="#quick-view-modal"><i&ndash;&gt;-->
+<!--&lt;!&ndash;                                                class="far fa-eye"></i></a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </ul>&ndash;&gt;-->
+<!--                                    <form th:action="@{/add_to_cart}" method="post">-->
+<!--                                        <input type="hidden" name="foodId" th:value="${product.variationId}"/>-->
+<!--                                        <input type="hidden" name="quantity" value="1"/>-->
+<!--                                        &lt;!&ndash; Bạn có thể thay đổi giá trị quantity &ndash;&gt;-->
+<!--                                        <button type="submit"-->
+<!--                                                class="btn border border-secondary rounded-pill px-1 text-primary_test">-->
+<!--                                            <i class="fa fa-shopping-bag me-2 text-primary_test"></i> Add to cart-->
+<!--                                        </button>-->
+<!--                                    </form>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="product-content">-->
+<!--                                <div class="inner">-->
+<!--                                    <h5 class="title" th:text="${product.productName}" ><a href="product-detail.html"></a></h5>-->
+<!--                                    <div class="product-price-variant">-->
+<!--                                        <span class="price current-price" th:text="'$' + ${product.price}"></span>-->
+<!--                                        <span class="price old-price">$100</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; End Single Product  &ndash;&gt;-->
+<!--                </div>-->
 
             </div>
             <div class="row">
