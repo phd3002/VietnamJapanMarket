@@ -43,7 +43,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "LEFT JOIN invoice inv ON o.order_id = inv.order_id\n" +
             "LEFT JOIN payment pay ON o.order_id = pay.order_id\n" +
             "LEFT JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
-            "WHERE o.order_id = od.order_id",
+            "WHERE o.order_id = :orderId",
             nativeQuery = true)
     List<Object[]> getOrderDetails(@Param("orderId") Long orderId);
 }

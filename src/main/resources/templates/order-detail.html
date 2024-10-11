@@ -388,17 +388,17 @@
                             <nav class="axil-dashboard-nav">
                                 <div class="nav nav-tabs" role="tablist">
                                     <a class="nav-item nav-link" href="my-account.html"
-                                       aria-selected="false"><i class="fas fa-user"></i>Account Details</a>
+                                       aria-selected="false"><i class="fas fa-user"></i>Tài khoản</a>
                                     <a class="nav-item nav-link" href="my-shop.html"
-                                       aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
+                                       aria-selected="false"><i class="fas fa-store"></i>Cửa hàng</a>
                                     <a class="nav-item nav-link active" href="order.html"
-                                       aria-selected="true"><i class="fas fa-shopping-basket"></i>Orders</a>
+                                       aria-selected="true"><i class="fas fa-shopping-basket"></i>Đơn hàng</a>
                                     <a class="nav-item nav-link" href="wallet.html"
-                                       aria-selected="false"><i class="fas fa-wallet"></i>Wallet</a>
+                                       aria-selected="false"><i class="fas fa-wallet"></i>Ví</a>
                                     <a class="nav-item nav-link" href="address.html"
-                                       aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
+                                       aria-selected="false"><i class="fas fa-home"></i>Địa chỉ</a>
                                     <a class="nav-item nav-link" href="notification.html"
-                                       aria-selected="false"><i class="fas fa-bell"></i>Notification</a>
+                                       aria-selected="false"><i class="fas fa-bell"></i>Thông báo</a>
                                 </div>
                             </nav>
                         </aside>
@@ -409,9 +409,9 @@
                             <!-- Order Details Tab -->
                             <div id="nav-order-detail" class="tab-pane fade show active" role="tabpanel">
                                 <div class="order-detail axil-dashboard-order">
-                                    <h4 style="text-align: center">Code: <span
+                                    <h4 style="text-align: center">Mã: <span
                                             id="order-id" th:text="${trackingNumber}"></span></h4>
-                                    <h4 style="text-align: center">Status: <span
+                                    <h4 style="text-align: center">Trạng thái: <span
                                             id="status-order" th:text="${shippingStatus}"></span></h4>
                                     <div class="order-progress">
                                         <!--                                        <div class="order-progress-step active" (chi su dung khi da qua buoc nay, cac the o duoi tuong tu)>-->
@@ -446,7 +446,7 @@
                                     <div class="row">
                                         <div class="col-5">
                                             <div class="order-info">
-                                                Address:<p class="text-left" th:text="${shippingAddress}"></p>
+                                                <p class="text-left" th:text="'Địa chỉ: ' + ${shippingAddress}"></p>
                                                 <!-- Align text to the left -->
                                             </div>
                                         </div>
@@ -486,8 +486,7 @@
                                                     </div>
                                                     <div class="info-row">
                                                         <a href="view-store.html"><i
-                                                                class="flaticon-shop hover-flip-item"> View
-                                                            Shop</i></a>
+                                                                class="flaticon-shop hover-flip-item"> Xem cửa hàng</i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -495,49 +494,52 @@
                                     </div>
                                     <a href="product-detail.html">
                                         <div class="product-card" th:each="detail : ${orderDetails}">
-                                            <img th:src="${detail.productImage}" alt="Product Image"
-                                                 class="product-image">
-                                            <div class="product-info">
-                                                <h2 class="product-name" th:text="${detail.productName}"></h2>
-                                                <p class="product-brand"
-                                                   th:text="'Phân loại hàng: '+ ${detail.categoryName}"></p>
-                                                <p class="product-category"
-                                                   th:text="'Loại: '+ ${detail.sizeAndColor}"></p>
-                                                <p class="product-category"
-                                                   th:text="'Số lượng: '+ ${detail.quantity}"></p>
+                                            <div class="product-left">
+                                                <img th:src="${detail.productImage}" alt="Product Image"
+                                                     class="product-image">
+                                                <div class="product-info">
+                                                    <h2 class="product-name" th:text="${detail.productName}"></h2>
+                                                    <p class="product-brand"
+                                                       th:text="'Phân loại hàng: '+ ${detail.categoryName}"></p>
+                                                    <p class="product-category"
+                                                       th:text="'Loại: '+ ${detail.sizeAndColor}"></p>
+                                                    <p class="product-category"
+                                                       th:text="'Số lượng: '+ ${detail.quantity}"></p>
+                                                    <!--                                                <span class="product-policies">15 Days Returns | 15 Days Free Returns</span>-->
+                                                </div>
+                                            </div>
+                                            <div class="product-right">
                                                 <span class="product-price"
                                                       th:text="${detail.productTotalPrice}"></span>
                                                 <span class="original-price"
                                                       th:text="${detail.productTotalPrice}"></span><br>
-                                                <span class="product-policies">15 Days Returns | 15 Days Free Returns</span><br>
-                                                <span class="shop-rating"
-                                                      th:text="${detail.avgRating} + ' ★'"></span>
+                                                <span class="shop-rating" th:text="${detail.avgRating} + ' ★'"></span>
                                             </div>
                                         </div>
                                     </a>
                                     <div class="summary">
                                         <div class="summary-row">
-                                            <span class="summary-label">Total cost</span>
+                                            <span class="summary-label">Phí sản phẩm</span>
                                             <span class="summary-value"
-                                                  th:text="${orderTotalPrice}"></span>
+                                                  th:text="${totalAmount}"></span>
                                         </div>
                                         <div class="summary-row">
-                                            <span class="summary-label">Shipping fee</span>
+                                            <span class="summary-label">Phí vận chuyển</span>
                                             <span class="summary-value"
                                                   th:text="${shippingFee}"></span>
                                         </div>
+                                        <!--                                        <div class="summary-row">-->
+                                        <!--                                            <span class="summary-label">Tax(10%)</span>-->
+                                        <!--                                            <span class="summary-value">10$</span>-->
+                                        <!--                                        </div>-->
+                                        <!--                                        <div class="summary-row">-->
+                                        <!--                                            <span class="summary-label">Voucher from Shop</span>-->
+                                        <!--                                            <span class="summary-value">-5$</span>-->
+                                        <!--                                        </div>-->
                                         <div class="summary-row">
-                                            <span class="summary-label">Tax(10%)</span>
-                                            <span class="summary-value">10$</span>
-                                        </div>
-                                        <div class="summary-row">
-                                            <span class="summary-label">Voucher from Shop</span>
-                                            <span class="summary-value">-5$</span>
-                                        </div>
-                                        <div class="summary-row">
-                                            <span class="summary-label total">Total amount</span>
+                                            <span class="summary-label total">Tổng chi phí</span>
                                             <span class="summary-value total"
-                                                  th:text="${totalAmount}"></span>
+                                                  th:text="${totalAmount+shippingFee}"></span>
                                         </div>
                                     </div>
                                     <div class="payment-method">

@@ -33,4 +33,8 @@ public class OrderService {
         }
         return orders;
     }
+
+//    public List<OrdersDTO> getOrderSummaries(Integer userId) {
+//        return orderRepository.findOrdersByUserId(userId);
+//    }
 }
