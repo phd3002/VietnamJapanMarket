@@ -37,7 +37,9 @@ public class HomeController {
         List<Products> products = productService.getAllProducts();
         List<Categories> categories = categoriesService.getAllCategories();
         List<ProductDTO> productDetails = productService.getProductDetails();
+        List<ProductDTO> searchProduct = productService.getSearchProduct();
         model.addAttribute("productDetails", productDetails);
+        model.addAttribute("searchProduct", productDetails);
         model.addAttribute("categories", categoriesService.getAllCategories());
 
         return "homepage";
