@@ -48,6 +48,10 @@ public class ProductService {
         return productDetails;
     }
 
+    public List<Products> getProductsByCategory(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId);
+    }
+
     /**
      * Fetch product details using a native query that joins products, product variations, and product images.
      * This query returns the product name, thumbnail, and price.
@@ -116,6 +120,4 @@ public class ProductService {
                 })
                 .collect(Collectors.toList());
     }
-
-
 }

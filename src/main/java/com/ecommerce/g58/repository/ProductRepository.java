@@ -28,4 +28,6 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
             "JOIN product_image pi ON pv.image_id = pi.image_id " +
             "WHERE p.price IS NOT NULL AND pi.thumbnail IS NOT NULL", nativeQuery = true)
     List<Object[]> findProductDetailsNative();
+    @Query(value = "SELECT * FROM products p WHERE p.category_id = :categoryId", nativeQuery = true)
+    List<Products> findByCategoryId(@Param("categoryId") Long categoryId);
 }

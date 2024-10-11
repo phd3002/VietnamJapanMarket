@@ -75,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http
                 .authorizeRequests()
                 .antMatchers("/api/search").permitAll()
+                .antMatchers("/products/**", "/category/**").permitAll()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
                 .antMatchers(
                         "/", "/sign-up/confirm-code/**",
@@ -88,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/sign-in/**", "/sign-up/**", "/sign-up-seller/**",
                         "/terms-of-service/**", "/view-store/**", "/wallet/**",
                         "/wishlist/**", "/forgot-password/**", "/reset-password/**",
-                        "/add_to_cart", "/cart-items", "/product/**"
+                        "/add_to_cart", "/cart-items"
                 ).permitAll()
                 .anyRequest().authenticated()
 //                .and()
