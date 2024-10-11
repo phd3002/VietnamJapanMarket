@@ -35,7 +35,7 @@ public class ProductService {
                 new ProductDTO(
                         (String) result[2],  // productName
                         (result[1] != null ? (String) result[1] : "default-image.png"),  // Handle null thumbnail
-                        (BigDecimal) result[3]  // price
+                        (Integer) result[3]  // price
                 )
         ).collect(Collectors.toList());
     }
@@ -79,9 +79,15 @@ public class ProductService {
      * @param productId the product ID
      * @return Products
      */
-    public Products getProductById(Long productId) {
+    public Products getProductById(Integer productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
+    }
+
+    // Method to fetch ProductVariation by its ID
+    public ProductVariation getProductVariationById(Integer variationId) {
+        return productVariationRepository.findById(variationId)
+                .orElseThrow(() -> new IllegalArgumentException("Product variation not found with id: " + variationId));
     }
 
     /**

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ProductRepository extends JpaRepository<Products, Long> {
+public interface ProductRepository extends JpaRepository<Products, Integer> {  // Change Long to Integer
     List<Products> findAll();
     List<Products> findTop5ByOrderByCreatedAtDesc();
     List<Products> findByProductNameContainingIgnoreCase(String productName);
