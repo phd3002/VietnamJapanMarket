@@ -12,6 +12,6 @@ import java.util.List;
 public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
 
     // Query to fetch images by joining product_variation and product_image using image_id
-    @Query("SELECT pi FROM ProductImage pi JOIN ProductVariation pv ON pi.imageId = pv.productImage.imageId WHERE pv.productId.productId = :productId")
+    @Query("SELECT pi FROM ProductImage pi JOIN ProductVariation pv ON pi.imageId = pv.imageId.imageId WHERE pv.productId.productId = :productId")
     List<ProductImage> findByProductProductId(@Param("productId") Integer productId);
 }

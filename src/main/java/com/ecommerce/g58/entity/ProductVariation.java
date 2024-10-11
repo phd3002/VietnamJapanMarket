@@ -33,5 +33,5 @@ public class ProductVariation {
 
     @ManyToOne
     @JoinColumn(name = "image_id", referencedColumnName = "image_id") // Added referencedColumnName
-    private ProductImage productImage;  // Changed field name to be more descriptive
+    private ProductImage imageId;  // Changed field name to be more descriptive
 }
