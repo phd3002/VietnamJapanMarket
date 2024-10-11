@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -47,6 +48,21 @@ public class ProductService {
         return productDetails;
     }
 
+    /**
+     * Fetch product details using a native query that joins products, product variations, and product images.
+     * This query returns the product name, thumbnail, and price.
+     */
+    public List<ProductDTO> getSearchProduct() {
+        List<Object[]> results = productRepository.findProductDetailsNative();
+        return results.stream().map(result ->
+                new ProductDTO(
+                        (String) result[2],  // productName
+                        (result[1] != null ? (String) result[1] : "default-image.png"),  // Handle null thumbnail
+                        (Integer) result[3]  // price
+                )
+        ).collect(Collectors.toList());
+    }
+
     // Method to fetch ProductVariation by its ID
     public ProductVariation getProductVariationById(Integer variationId) {
         return productVariationRepository.findById(variationId)
@@ -77,6 +93,28 @@ public class ProductService {
 
     public Products getProductById(Integer productId) {
         return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
+    }
+
+    public List<ProductDTO> searchProducts(String query) {
+        // Search the products by name using the repository method
+        List<Products> products = productRepository.findByProductNameContainingIgnoreCase(query);
+
+        // Convert the Products to ProductDTO and return them
+        return products.stream()
+                .map(product -> {
+                    // Fetch the thumbnail from ProductImage entity based on product id
+                    List<ProductImage> productImages = productImageRepository.findByProductProductId(product.getProductId());
+
+                    // Use the first image's thumbnail if available
+                    String thumbnail = productImages.isEmpty() ? "default-image.png" : productImages.get(0).getThumbnail();
+
+                    return new ProductDTO(
+                            product.getProductName(),
+                            thumbnail,  // Fetch the thumbnail from ProductImage
+                            product.getPrice()
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
 

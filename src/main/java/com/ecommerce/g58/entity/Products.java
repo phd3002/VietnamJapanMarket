@@ -3,7 +3,7 @@ package com.ecommerce.g58.entity;
 import lombok.*;
 import javax.persistence.*;
 
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity

@@ -16,6 +16,7 @@ import java.util.Optional;
 public interface ProductRepository extends PagingAndSortingRepository<Products, Integer> {
     List<Products> findAll();
     List<Products> findTop5ByOrderByCreatedAtDesc();
+    List<Products> findByProductNameContainingIgnoreCase(String productName);
     //    @Query("select distinct pv.productId, pi.thumbnail, p.productName, p.price from Products p, ProductImage pi, ProductVariation pv where pi.imageId = :imageId and pv.productId = :productId")
 //    List<ProductDTO> findProductDetails(@Param("imageId") Integer imageId, @Param("productId") Integer productId);
     @Query(value = "SELECT DISTINCT p.product_id AS productId, " +
