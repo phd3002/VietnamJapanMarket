@@ -33,5 +33,7 @@ public interface UserService extends UserDetailsService {
     //change pass
     void updatePassword(Users user, String newPassword);
 
+//    Users findByEmail(String email);
+
 
 }

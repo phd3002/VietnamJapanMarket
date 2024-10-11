@@ -34,7 +34,7 @@ public class Products {
     private String productDescription;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Integer price;
 
     @Column(name = "weight")
     private float weight;
@@ -45,5 +45,7 @@ public class Products {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+//    public Products orElseThrow(Object khôngTìmThấySảnPhẩm) {
+//    }
 }
 

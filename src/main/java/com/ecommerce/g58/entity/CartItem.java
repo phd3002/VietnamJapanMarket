@@ -19,7 +19,7 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
-    private Cart cartId;
+    private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -33,5 +33,5 @@ public class CartItem {
     private int quantity;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Integer price;
 }
