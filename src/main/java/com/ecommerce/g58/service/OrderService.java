@@ -28,7 +28,7 @@ public class OrderService {
             dto.setOrderDate(orderDateTimestamp.toLocalDateTime());
             dto.setStatus((String) result[2]);
             dto.setTotalQuantity(((BigDecimal) result[3]).intValue());
-            dto.setTotalPrice((BigDecimal) result[4]);
+            dto.setTotalPrice((int) result[4]);
             orders.add(dto);
         }
         return orders;

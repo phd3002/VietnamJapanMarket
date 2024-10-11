@@ -17,7 +17,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/customer/orders")
+    @GetMapping("/order/my-orders")
     public String getAllOrders(Model model) {
         List<OrdersDTO> orders = orderService.getOrderSummaries();  // Fetching the order details from the service
         model.addAttribute("orders", orders);  // Passing the list of orders to the model

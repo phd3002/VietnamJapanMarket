@@ -420,8 +420,9 @@
                                             <p th:text="'Đơn hàng đã đặt'" style="color: black;"></p>
                                             <small id="order-placed-date">00:13 05-05-2022</small>
                                         </div>
-                                        <div th:classappend="${paymentStatus == 'Paid'} ? 'active' : ''" class="order-progress-step">
-<!--                                            <i class="fas fa-credit-card"></i>-->
+                                        <div th:classappend="${paymentStatus == 'Paid'} ? 'active' : ''"
+                                             class="order-progress-step">
+                                            <!--                                            <i class="fas fa-credit-card"></i>-->
                                             <i class="flaticon-cashback"></i>
                                             <p th:text="'Thanh toán đã xác nhận'" style="color: black;"></p>
                                             <small id="payment-confirmed-date">00:43 05-05-2022</small>
@@ -482,11 +483,8 @@
                                                         <a href="view-store.html"><span
                                                                 class="name"><h3
                                                                 th:text="${storeName}"></h3></span></a>
-                                                        <span class="joining-date">Register Since Sep 2020</span>
-                                                        <span class="email">Email: annie@example.com</span>
                                                     </div>
                                                     <div class="info-row">
-                                                        <span class="address">Address: 123 Street Name</span>
                                                         <a href="view-store.html"><i
                                                                 class="flaticon-shop hover-flip-item"> View
                                                             Shop</i></a>
@@ -495,34 +493,38 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="product-card" th:each="detail : ${orderDetails}">
-                                        <a href="product-detail.html">
+                                    <a href="product-detail.html">
+                                        <div class="product-card" th:each="detail : ${orderDetails}">
                                             <img th:src="${detail.productImage}" alt="Product Image"
                                                  class="product-image">
                                             <div class="product-info">
                                                 <h2 class="product-name" th:text="${detail.productName}"></h2>
-                                                <p class="product-brand" th:text="${detail.categoryName}"></p>
-                                                <p class="product-category" th:text="${detail.sizeAndColor}"></p>
+                                                <p class="product-brand"
+                                                   th:text="'Phân loại hàng: '+ ${detail.categoryName}"></p>
+                                                <p class="product-category"
+                                                   th:text="'Loại: '+ ${detail.sizeAndColor}"></p>
+                                                <p class="product-category"
+                                                   th:text="'Số lượng: '+ ${detail.quantity}"></p>
                                                 <span class="product-price"
-                                                      th:text="${#numbers.formatCurrency(detail.productPrice)}"></span>
+                                                      th:text="${detail.productTotalPrice}"></span>
                                                 <span class="original-price"
-                                                      th:text="${#numbers.formatCurrency(detail.productPrice)}"></span><br>
+                                                      th:text="${detail.productTotalPrice}"></span><br>
                                                 <span class="product-policies">15 Days Returns | 15 Days Free Returns</span><br>
                                                 <span class="shop-rating"
                                                       th:text="${detail.avgRating} + ' ★'"></span>
                                             </div>
-                                        </a>
-                                    </div>
+                                        </div>
+                                    </a>
                                     <div class="summary">
                                         <div class="summary-row">
                                             <span class="summary-label">Total cost</span>
                                             <span class="summary-value"
-                                                  th:text="${#numbers.formatCurrency(orderTotalPrice)}"></span>
+                                                  th:text="${orderTotalPrice}"></span>
                                         </div>
                                         <div class="summary-row">
                                             <span class="summary-label">Shipping fee</span>
                                             <span class="summary-value"
-                                                  th:text="${#numbers.formatCurrency(shippingFee)}"></span>
+                                                  th:text="${shippingFee}"></span>
                                         </div>
                                         <div class="summary-row">
                                             <span class="summary-label">Tax(10%)</span>
@@ -535,7 +537,7 @@
                                         <div class="summary-row">
                                             <span class="summary-label total">Total amount</span>
                                             <span class="summary-value total"
-                                                  th:text="${#numbers.formatCurrency(totalAmount)}"></span>
+                                                  th:text="${totalAmount}"></span>
                                         </div>
                                     </div>
                                     <div class="payment-method">
