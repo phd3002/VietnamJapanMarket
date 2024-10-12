@@ -22,12 +22,9 @@ public class SearchController {
     @GetMapping("/api/search")
     public List<ProductDTO> searchProducts(@RequestParam("query") String query) {
         logger.info("Received search query: {}", query);
-
         // Fetch the search results mapped to ProductDTO
         List<ProductDTO> results = productService.searchProducts(query);
-
         logger.info("Search results returned: {}", results.size());
-
         return results;
     }
 }
