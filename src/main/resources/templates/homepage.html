@@ -194,83 +194,24 @@
     </div>
     <!-- End Mainmenu Area -->
     <div class="header-search-modal" id="header-search-modal">
-        <button class="card-close sidebar-close"><i class="fas fa-times"></i></button>
         <div class="header-search-wrap">
             <div class="card-header">
-                <form action="#">
-                    <div class="input-group">
-                        <input type="search" class="form-control" name="prod-search" id="prod-search"
-                               placeholder="Write Something....">
-                        <button type="submit" class="axil-btn btn-bg-primary"><i class="far fa-search"></i></button>
-                    </div>
+                <form onsubmit="return performSearch()">
+                    <input type="text" id="prod-search" placeholder="Search products..." oninput="performSearch()" />
                 </form>
             </div>
-            <div class="card-body">
+            <div class="card-body" id="search-results" style="display: none;">
                 <div class="search-result-header">
-                    <h6 class="title">24 Result Found</h6>
+                    <h6 class="title"><span id="result-count">0</span> Result(s) Found</h6>
                     <a href="product-list.html" class="view-all">View All</a>
                 </div>
                 <div class="psearch-results">
-                    <div class="axil-product-list">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-rating">
-                                <span class="rating-icon">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fal fa-star"></i>
-                            </span>
-                                <span class="rating-number"><span>100+</span> Reviews</span>
-                            </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
-                            <div class="product-price-variant">
-                                <span class="price current-price">$29.99</span>
-                                <span class="price old-price">$49.99</span>
-                            </div>
-                            <div class="product-cart">
-                                <a href="cart-detail.html" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
-                                <a href="wishlist.html" class="cart-btn"><i class="fal fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="axil-product-list">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-rating">
-                                <span class="rating-icon">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fal fa-star"></i>
-                            </span>
-                                <span class="rating-number"><span>100+</span> Reviews</span>
-                            </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
-                            <div class="product-price-variant">
-                                <span class="price current-price">$29.99</span>
-                                <span class="price old-price">$49.99</span>
-                            </div>
-                            <div class="product-cart">
-                                <a href="cart-detail.html" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
-                                <a href="wishlist.html" class="cart-btn"><i class="fal fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Dynamic search result items should go here -->
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Header Search Modal End -->
 
 
@@ -406,37 +347,85 @@
                 <h2 class="title">Explore our Products</h2>
             </div>
             <div class="row row--15">
-                <div th:each="product : ${productDetails}">
-                    <!-- Start Single Product  -->
-                    <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="axil-product product-style-one has-color-pick mt--40">
-                            <div class="thumbnail">
-                                <a href="product-detail.html">
-                                    <img th:src="@{${product.thumbnail}}" alt="Product Images">
-                                </a>
-                                <div class="product-hover-action">
-                                    <ul class="cart-action">
-                                        <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                        <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                        <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                                 data-bs-target="#quick-view-modal"><i
-                                                class="far fa-eye"></i></a></li>
-                                    </ul>
-                                </div>
+                <div th:each="product : ${productDetails}" class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="axil-product product-style-one has-color-pick mt--40">
+                        <div class="thumbnail">
+                            <a href="product-detail.html">
+                                <img th:src="@{${product.thumbnail}}" alt="Product Images">
+                            </a>
+                            <div class="product-hover-action">
+                                <!-- Add to Cart Form -->
+                                <form th:action="@{/add_to_cart}" method="get">
+                                    <!-- Passing all necessary product data -->
+                                    <input type="hidden" name="productId" th:value="${product.productId}">
+                                    <input type="hidden" name="variationId" th:value="${product.variationId}">
+                                    <input type="hidden" name="productName" th:value="${product.productName}">
+                                    <input type="hidden" name="imageId" th:value="${product.imageId}">
+                                    <input type="hidden" name="quantity" value="1"> <!-- Default quantity 1 -->
+                                    <input type="hidden" name="price" th:value="${product.price}">
+
+                                    <!-- Add to Cart Button -->
+                                    <button type="submit" class="axil-btn btn-bg-primary">Add to Cart</button>
+                                </form>
                             </div>
-                            <div class="product-content">
-                                <div class="inner">
-                                    <h5 class="title" th:text="${product.productName}" ><a href="product-detail.html"></a></h5>
-                                    <div class="product-price-variant">
-                                        <span class="price current-price" th:text="'$' + ${product.price}"></span>
-                                        <span class="price old-price">$100</span>
-                                    </div>
+                        </div>
+                        <div class="product-content">
+                            <div class="inner">
+                                <h5 class="title" th:text="${product.productName}"></h5>
+                                <div class="product-price-variant">
+                                    <span class="price current-price" th:text="'$' + ${product.price}"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- End Single Product  -->
                 </div>
+
+                <!--                <div th:each="product : ${productDetails}">-->
+<!--                    &lt;!&ndash; Start Single Product  &ndash;&gt;-->
+<!--                    <div class="col-xl-3 col-lg-4 col-sm-6">-->
+<!--                        <div class="axil-product product-style-one has-color-pick mt&#45;&#45;40">-->
+<!--                            <div class="thumbnail">-->
+<!--                                <a href="product-detail.html">-->
+<!--                                    <img th:src="@{${product.thumbnail}}" alt="Product Images">-->
+<!--                                </a>-->
+<!--                                <div class="product-hover-action">-->
+<!--&lt;!&ndash;                                    <ul class="cart-action">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <li class="select-option"><a th:href="@{'/add_to_cart?productId=' + ${product.productId}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&variantId=' + ${product.variationId}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&productName=' + ${product.productName}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&imageId=' + ${product.imageId}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&quantity=1'&ndash;&gt;-->
+<!--&lt;!&ndash;                                    + '&price=' + ${product.price}}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                     class="axil-btn btn-bg-primary">Add to Cart</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <li class="quickview"><a href="#" data-bs-toggle="modal"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                                 data-bs-target="#quick-view-modal"><i&ndash;&gt;-->
+<!--&lt;!&ndash;                                                class="far fa-eye"></i></a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </ul>&ndash;&gt;-->
+<!--                                    <form th:action="@{/add_to_cart}" method="post">-->
+<!--                                        <input type="hidden" name="foodId" th:value="${product.variationId}"/>-->
+<!--                                        <input type="hidden" name="quantity" value="1"/>-->
+<!--                                        &lt;!&ndash; Bạn có thể thay đổi giá trị quantity &ndash;&gt;-->
+<!--                                        <button type="submit"-->
+<!--                                                class="btn border border-secondary rounded-pill px-1 text-primary_test">-->
+<!--                                            <i class="fa fa-shopping-bag me-2 text-primary_test"></i> Add to cart-->
+<!--                                        </button>-->
+<!--                                    </form>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="product-content">-->
+<!--                                <div class="inner">-->
+<!--                                    <h5 class="title" th:text="${product.productName}" ><a href="product-detail.html"></a></h5>-->
+<!--                                    <div class="product-price-variant">-->
+<!--                                        <span class="price current-price" th:text="'$' + ${product.price}"></span>-->
+<!--                                        <span class="price old-price">$100</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; End Single Product  &ndash;&gt;-->
+<!--                </div>-->
 
             </div>
             <div class="row">

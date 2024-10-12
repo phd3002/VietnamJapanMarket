@@ -17,17 +17,18 @@
     ============================================ -->
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../static/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/font-awesome.css">
-    <link rel="stylesheet" href="../static/css/vendor/flaticon/flaticon.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick-theme.css">
-    <link rel="stylesheet" href="../static/css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/sal.css">
-    <link rel="stylesheet" href="../static/css/vendor/magnific-popup.css">
-    <link rel="stylesheet" href="../static/css/vendor/base.css">
-    <link rel="stylesheet" href="../static/css/style.min.css">
-    <link rel="stylesheet" href="../static/css/style-2.css">
+    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/base.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/style.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/style-2.css}" type="text/css">
+
 </head>
 
 
@@ -119,7 +120,8 @@
                                         <!-- Notification Item -->
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img src="../static/images/product/electric/product-01.png"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -129,7 +131,8 @@
                                         </div>
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img src="../static/images/product/electric/product-01.png"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -363,88 +366,182 @@
 <!-- End Header -->
 
 <main class="main-wrapper">
-
     <!-- Start Cart Area  -->
     <div class="axil-product-cart-area axil-section-gap">
         <div class="container">
             <div class="axil-product-cart-wrap">
                 <div class="product-table-heading">
                     <h4 class="title">Your Cart</h4>
-                    <a href="#" class="cart-clear">Clear Shoping Cart</a>
+                    <a href="#" class="cart-clear">Clear Shopping Cart</a>
                 </div>
-                <div class="table-responsive">
-                    <table class="table axil-product-table axil-cart-table mb--40">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="product-remove"></th>
-                            <th scope="col" class="product-thumbnail">Product</th>
-                            <th scope="col" class="product-title"></th>
-                            <th scope="col" class="product-price">Price</th>
-                            <th scope="col" class="product-quantity">Quantity</th>
-                            <th scope="col" class="product-subtotal">Subtotal</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="product-remove"><a href="#" class="remove-wishlist"><i class="fal fa-times"></i></a>
-                            </td>
-                            <td class="product-thumbnail"><a href="product-detail.html"><img
-                                    src="../static/images/product/electric/product-01.png" alt="Digital Product"></a></td>
-                            <td class="product-title"><a href="product-detail.html">Wireless PS Handler</a></td>
-                            <td class="product-price" data-title="Price"><span class="currency-symbol">$</span>124.00
-                            </td>
-                            <td class="product-quantity" data-title="Qty">
-                                <div class="pro-qty">
-                                    <input type="number" class="quantity-input" value="1">
-                                </div>
-                            </td>
-                            <td class="product-subtotal" data-title="Subtotal"><span class="currency-symbol">$</span>275.00
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="product-remove"><a href="#" class="remove-wishlist"><i class="fal fa-times"></i></a>
-                            </td>
-                            <td class="product-thumbnail"><a href="product-detail.html"><img
-                                    src="../static/images/product/electric/product-02.png" alt="Digital Product"></a></td>
-                            <td class="product-title"><a href="product-detail.html">Gradient Light Keyboard</a></td>
-                            <td class="product-price" data-title="Price"><span class="currency-symbol">$</span>124.00
-                            </td>
-                            <td class="product-quantity" data-title="Qty">
-                                <div class="pro-qty">
-                                    <input type="number" class="quantity-input" value="1">
-                                </div>
-                            </td>
-                            <td class="product-subtotal" data-title="Subtotal"><span class="currency-symbol">$</span>275.00
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="product-remove"><a href="#" class="remove-wishlist"><i class="fal fa-times"></i></a>
-                            </td>
-                            <td class="product-thumbnail"><a href="product-detail.html"><img
-                                    src="../static/images/product/electric/product-03.png" alt="Digital Product"></a></td>
-                            <td class="product-title"><a href="product-detail.html">HD CC Camera</a></td>
-                            <td class="product-price" data-title="Price"><span class="currency-symbol">$</span>124.00
-                            </td>
-                            <td class="product-quantity" data-title="Qty">
-                                <div class="pro-qty">
-                                    <input type="number" class="quantity-input" value="1">
-                                </div>
-                            </td>
-                            <td class="product-subtotal" data-title="Subtotal"><span class="currency-symbol">$</span>275.00
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+
+                <div th:each="storeEntry : ${cartItemGroupedByStore}">
+                    <div class="store-name">
+                        <h5 th:text="${storeEntry.key.storeName}"></h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table axil-product-table axil-cart-table mb--40">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="product-remove"></th>
+                                <th scope="col" class="product-thumbnail">Product</th>
+                                <th scope="col" class="product-title">Product Name</th>
+                                <th scope="col" class="product-price">Price</th>
+                                <th scope="col" class="product-quantity">Quantity</th>
+                                <th scope="col" class="product-subtotal">Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Iterate through each cart item -->
+                            <tr th:each="item : ${storeEntry.value}">
+                                <td class="product-remove">
+                                    <form th:action="@{/remove_cart_item}" method="post">
+                                        <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
+                                        <button type="submit" class="remove-wishlist">
+                                            <i class="fal fa-times"></i>
+                                        </button>
+                                    </form>
+                                </td>
+
+                                <td class="product-thumbnail">
+                                    <a href="product-detail.html">
+                                        <img th:src="@{${item.variationId.imageId.thumbnail}}" alt="Product Image">
+                                    </a>
+                                </td>
+                                <td class="product-title">
+                                    <a th:href="@{/product-detail(productId=${item.productId.productId})}"
+                                       th:text="${item.productId.productName}">Product Name</a>
+                                </td>
+                                <td class="product-price" data-title="Price">
+                                    <span class="currency-symbol">$</span>
+                                    <span th:text="${item.price}">Price</span>
+                                </td>
+                                <td class="product-quantity" data-title="Qty">
+                                    <form action="/update_cart_quantity" method="post">
+                                        <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
+                                        <input type="number" name="quantity" class="quantity-input"
+                                               th:value="${item.quantity}" min="1">
+                                        <button type="submit">Update</button>
+                                    </form>
+                                </td>
+                                <td class="product-subtotal" data-title="Subtotal">
+                                    <span class="currency-symbol">$</span>
+                                    <span th:text="${item.price * item.quantity}">Subtotal</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <div class="cart-update-btn-area" style="margin-right: 10%; text-align: right">
-                <div class="update-btn">
-                    <a href="#" class="axil-btn btn-outline" style="background: #0c63e4">Check out</a>
+
+
+                <div class="cart-update-btn-area" style="margin-right: 10%; text-align: right">
+                    <div class="update-btn">
+                        <a href="/checkout" class="axil-btn btn-outline" style="background: #0c63e4">Check out</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- End Cart Area  -->
+
+    <!--    &lt;!&ndash; Start Cart Area  &ndash;&gt;-->
+    <!--    <div class="axil-product-cart-area axil-section-gap">-->
+    <!--        <div class="container">-->
+    <!--            <div class="axil-product-cart-wrap">-->
+    <!--                <div class="product-table-heading">-->
+    <!--                    <h4 class="title">Your Cart</h4>-->
+    <!--                    <a href="#" class="cart-clear">Clear Shoping Cart</a>-->
+    <!--                </div>-->
+    <!--                <div th:each="storeEntry :${cartItemGroupedByStore}">-->
+    <!--                    <div class="table-responsive">-->
+    <!--                        <table class="table axil-product-table axil-cart-table mb&#45;&#45;40">-->
+    <!--                            <thead>-->
+    <!--                            <tr>-->
+    <!--                                <th scope="col" class="product-remove"></th>-->
+    <!--                                <th scope="col" class="product-thumbnail">Product</th>-->
+    <!--                                <th scope="col" class="product-title"></th>-->
+    <!--                                <th scope="col" class="product-price">Price</th>-->
+    <!--                                <th scope="col" class="product-quantity">Quantity</th>-->
+    <!--                                <th scope="col" class="product-subtotal">Subtotal</th>-->
+    <!--                            </tr>-->
+    <!--                            </thead>-->
+    <!--                            <tbody>-->
+    <!--                            <tr th:each = "item : ${storeEntry.value}">-->
+    <!--                                <td class="product-remove"><a href="#" class="remove-wishlist"><i-->
+    <!--                                        class="fal fa-times"></i></a>-->
+    <!--                                </td>-->
+    <!--                                <td class="product-thumbnail"><a href="product-detail.html"><img-->
+    <!--                                        src="../static/images/product/electric/product-01.png"-->
+    <!--                                        alt="Digital Product"></a></td>-->
+    <!--                                <td class="product-title">-->
+    <!--                                    <label th:for="${'product' + item.cartItemId}" th:text="${item.productId.productName}" href="product-detail.html">Product Name</label>-->
+    <!--                                </td>-->
+    <!--                                <td class="product-price" data-title="Price" th:text="${item.productId.price}"><span class="currency-symbol">$</span>-->
+    <!--                                </td>-->
+    <!--                                <td class="product-quantity" data-title="Qty">-->
+    <!--                                    <div class="pro-qty">-->
+    <!--                                        <input type="number" class="quantity-input" th:id="'quantity' + ${item.cartItemId}"-->
+    <!--                                               th:value="${item.quantity}">-->
+    <!--                                    </div>-->
+    <!--                                </td>-->
+    <!--                                <td class="product-subtotal" data-title="Subtotal" th:id="'total' + ${item.cartItemId}"-->
+    <!--                                th:text="${item.productId.price * item.quantity}"><span-->
+    <!--                                        class="currency-symbol">$</span>-->
+    <!--                                </td>-->
+    <!--                            </tr>-->
+    <!--                            <tr>-->
+    <!--                                <td class="product-remove"><a href="#" class="remove-wishlist"><i-->
+    <!--                                        class="fal fa-times"></i></a>-->
+    <!--                                </td>-->
+    <!--                                <td class="product-thumbnail"><a href="product-detail.html"><img-->
+    <!--                                        src="../static/images/product/electric/product-02.png"-->
+    <!--                                        alt="Digital Product"></a></td>-->
+    <!--                                <td class="product-title"><a href="product-detail.html">Gradient Light Keyboard</a></td>-->
+    <!--                                <td class="product-price" data-title="Price"><span class="currency-symbol">$</span>124.00-->
+    <!--                                </td>-->
+    <!--                                <td class="product-quantity" data-title="Qty">-->
+    <!--                                    <div class="pro-qty">-->
+    <!--                                        <input type="number" class="quantity-input" value="1">-->
+    <!--                                    </div>-->
+    <!--                                </td>-->
+    <!--                                <td class="product-subtotal" data-title="Subtotal"><span-->
+    <!--                                        class="currency-symbol">$</span>275.00-->
+    <!--                                </td>-->
+    <!--                            </tr>-->
+    <!--                            <tr>-->
+    <!--                                <td class="product-remove"><a href="#" class="remove-wishlist"><i-->
+    <!--                                        class="fal fa-times"></i></a>-->
+    <!--                                </td>-->
+    <!--                                <td class="product-thumbnail"><a href="product-detail.html"><img-->
+    <!--                                        src="../static/images/product/electric/product-03.png"-->
+    <!--                                        alt="Digital Product"></a></td>-->
+    <!--                                <td class="product-title"><a href="product-detail.html">HD CC Camera</a></td>-->
+    <!--                                <td class="product-price" data-title="Price"><span class="currency-symbol">$</span>124.00-->
+    <!--                                </td>-->
+    <!--                                <td class="product-quantity" data-title="Qty">-->
+    <!--                                    <div class="pro-qty">-->
+    <!--                                        <input type="number" class="quantity-input" value="1">-->
+    <!--                                    </div>-->
+    <!--                                </td>-->
+    <!--                                <td class="product-subtotal" data-title="Subtotal"><span-->
+    <!--                                        class="currency-symbol">$</span>275.00-->
+    <!--                                </td>-->
+    <!--                            </tr>-->
+    <!--                            </tbody>-->
+    <!--                        </table>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+    <!--            </div>-->
+    <!--            <div class="cart-update-btn-area" style="margin-right: 10%; text-align: right">-->
+    <!--                <div class="update-btn">-->
+    <!--                    <a href="#" class="axil-btn btn-outline" style="background: #0c63e4">Check out</a>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--    &lt;!&ndash; End Cart Area  &ndash;&gt;-->
 
     <!-- Start Recently Viewed Product Area  -->
     <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
@@ -725,34 +822,40 @@
                                     <div class="col-lg-10 order-lg-2">
                                         <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
                                             <div class="thumbnail">
-                                                <img src="../static/images/product/product-big-01.png" alt="Product Images">
+                                                <img src="../static/images/product/product-big-01.png"
+                                                     alt="Product Images">
                                                 <div class="label-block label-right">
                                                     <div class="product-badget">20% OFF</div>
                                                 </div>
                                                 <div class="product-quick-view position-view">
-                                                    <a href="../static/images/product/product-big-01.png" class="popup-zoom">
+                                                    <a href="../static/images/product/product-big-01.png"
+                                                       class="popup-zoom">
                                                         <i class="far fa-search-plus"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="thumbnail">
-                                                <img src="../static/images/product/product-big-02.png" alt="Product Images">
+                                                <img src="../static/images/product/product-big-02.png"
+                                                     alt="Product Images">
                                                 <div class="label-block label-right">
                                                     <div class="product-badget">20% OFF</div>
                                                 </div>
                                                 <div class="product-quick-view position-view">
-                                                    <a href="../static/images/product/product-big-02.png" class="popup-zoom">
+                                                    <a href="../static/images/product/product-big-02.png"
+                                                       class="popup-zoom">
                                                         <i class="far fa-search-plus"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="thumbnail">
-                                                <img src="../static/images/product/product-big-03.png" alt="Product Images">
+                                                <img src="../static/images/product/product-big-03.png"
+                                                     alt="Product Images">
                                                 <div class="label-block label-right">
                                                     <div class="product-badget">20% OFF</div>
                                                 </div>
                                                 <div class="product-quick-view position-view">
-                                                    <a href="../static/images/product/product-big-03.png" class="popup-zoom">
+                                                    <a href="../static/images/product/product-big-03.png"
+                                                       class="popup-zoom">
                                                         <i class="far fa-search-plus"></i>
                                                     </a>
                                                 </div>
@@ -795,8 +898,10 @@
                                             <li><i class="fal fa-check"></i>Free delivery available</li>
                                             <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
                                         </ul>
-                                        <p class="description">In ornare lorem ut est dapibus, ut tincidunt nisi pretium.
-                                            Integer ante est, elementum eget magna. Pellentesque sagittis dictum libero, eu
+                                        <p class="description">In ornare lorem ut est dapibus, ut tincidunt nisi
+                                            pretium.
+                                            Integer ante est, elementum eget magna. Pellentesque sagittis dictum libero,
+                                            eu
                                             dignissim tellus.</p>
 
                                         <div class="product-variations-wrapper">
@@ -806,11 +911,14 @@
                                                 <h6 class="title">Colors:</h6>
                                                 <div class="color-variant-wrapper">
                                                     <ul class="color-variant mt--0">
-                                                        <li class="color-extra-01 active"><span><span class="color"></span></span>
+                                                        <li class="color-extra-01 active"><span><span
+                                                                class="color"></span></span>
                                                         </li>
-                                                        <li class="color-extra-02"><span><span class="color"></span></span>
+                                                        <li class="color-extra-02"><span><span
+                                                                class="color"></span></span>
                                                         </li>
-                                                        <li class="color-extra-03"><span><span class="color"></span></span>
+                                                        <li class="color-extra-03"><span><span
+                                                                class="color"></span></span>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -840,7 +948,8 @@
 
                                             <!-- Start Product Action  -->
                                             <ul class="product-action d-flex-center mb--0">
-                                                <li class="add-to-cart"><a href="cart-detail.html" class="axil-btn btn-bg-primary">Add
+                                                <li class="add-to-cart"><a href="cart-detail.html"
+                                                                           class="axil-btn btn-bg-primary">Add
                                                     to Cart</a></li>
                                                 <li class="wishlist"><a href="wishlist.html"
                                                                         class="axil-btn wishlist-btn"><i
@@ -861,7 +970,6 @@
     </div>
     <!-- Product Quick View Modal End -->
 </main>
-
 
 
 <div class="service-area">
@@ -963,28 +1071,29 @@
 <!-- JS
 ============================================ -->
 <!-- Modernizer JS -->
-<script src="../static/js/vendor/modernizr.min.js"></script>
+<script th:src="@{/js/vendor/modernizr.min.js}"></script>
 <!-- jQuery JS -->
-<script src="../static/js/vendor/jquery.js"></script>
+<script th:src="@{/js/vendor/jquery.js}"></script>
 <!-- Bootstrap JS -->
-<script src="../static/js/vendor/popper.min.js"></script>
-<script src="../static/js/vendor/bootstrap.min.js"></script>
-<script src="../static/js/vendor/slick.min.js"></script>
-<script src="../static/js/vendor/js.cookie.js"></script>
-<!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-<script src="../static/js/vendor/jquery-ui.min.js"></script>
-<script src="../static/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="../static/js/vendor/jquery.countdown.min.js"></script>
-<script src="../static/js/vendor/sal.js"></script>
-<script src="../static/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="../static/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="../static/js/vendor/isotope.pkgd.min.js"></script>
-<script src="../static/js/vendor/counterup.js"></script>
-<script src="../static/js/vendor/waypoints.min.js"></script>
+<script th:src="@{/js/vendor/popper.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/js/vendor/slick.min.js}"></script>
+<script th:src="@{/js/vendor/js.cookie.js}"></script>
+<!-- <script th:src="assets/js/vendor/jquery.style.switcher.js"></script> -->
+<script th:src="@{/js/vendor/jquery-ui.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.ui.touch-punch.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.countdown.min.js}"></script>
+<script th:src="@{/js/vendor/sal.js}"></script>
+<script th:src="@{/js/vendor/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/vendor/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/counterup.js}"></script>
+<script th:src="@{/js/vendor/waypoints.min.js}"></script>
 
 <!-- Main JS -->
-<script src="../static/js/main.js"></script>
-<script src="../static/js/script.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+
 </body>
 
 

@@ -17,7 +17,7 @@ public class ProductVariation {
     private Integer variationId;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Products productId;
 
     @ManyToOne
@@ -32,6 +32,6 @@ public class ProductVariation {
     private int stock;
 
     @ManyToOne
-    @JoinColumn(name = "image_id")
-    private ProductImage imageId;
+    @JoinColumn(name = "image_id", referencedColumnName = "image_id") // Added referencedColumnName
+    private ProductImage imageId;  // Changed field name to be more descriptive
 }

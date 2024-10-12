@@ -13,59 +13,25 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductService {
+public interface ProductService {
+    List<ProductDTO> getProductDetails();
 
-    @Autowired
-    private ProductRepository productRepository;
+    List<ProductDTO> getSearchProduct();
 
-    @Autowired
-    private ProductImageRepository productImageRepository;
+    ProductVariation getProductVariationById(Integer variationId);
 
-    @Autowired
-    private ProductVariationRepository productVariationRepository;
+    List<Products> getAllProducts();
 
-    public List<ProductDTO> getProductDetails() {
-        List<Object[]> results = productRepository.findProductDetailsNative();
-        List<ProductDTO> productDetails = new ArrayList<>();
+    List<Products> getLatest5Products();
 
-        for (Object[] result : results) {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setThumbnail((String) result[1]);
-            productDTO.setProductName((String) result[2]);
-            productDTO.setPrice((BigDecimal) result[3]);
+    List<ProductImage> getProductImagesByProductId(Integer productId);
 
-            productDetails.add(productDTO);
-        }
+    List<ProductVariation> getProductVariationsByProductId(Integer productId);
 
-        return productDetails;
-    }
+    Products getProductById(Integer productId);
 
-    //    public List<ProductDTO> findProductDetails() {
-//        return productRepository.findProductDetails();
-//    }
-    public List<Products> getAllProducts() {
-        return productRepository.findAll(); // Fetch all products
-    }
-
-    public List<Products> getLatest5Products() {
-        return productRepository.findTop5ByOrderByCreatedAtDesc(); // Fetch latest 5 products
-    }
-
-    // Fetch product images by productId
-    public List<ProductImage> getProductImagesByProductId(Integer productId) {
-        return productImageRepository.findByProductProductId(productId);
-    }
-
-    // Fetch product variations by productId
-    public List<ProductVariation> getProductVariationsByProductId(Integer productId) {
-        return productVariationRepository.findByProductIdProductId(productId);
-    }
-
-    public Products getProductById(Long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
-    }
-
-
+    List<ProductDTO> searchProducts(String query);
 }
