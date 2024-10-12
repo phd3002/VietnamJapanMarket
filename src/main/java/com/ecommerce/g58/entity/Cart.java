@@ -2,7 +2,6 @@ package com.ecommerce.g58.entity;
 
 import lombok.*;
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 

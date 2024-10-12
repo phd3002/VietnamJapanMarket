@@ -13,71 +13,25 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductService {
+public interface ProductService {
+    List<ProductDTO> getProductDetails();
 
-    @Autowired
-    private ProductRepository productRepository;
+    List<ProductDTO> getSearchProduct();
 
-    @Autowired
-    private ProductImageRepository productImageRepository;
+    ProductVariation getProductVariationById(Integer variationId);
 
-    @Autowired
-    private ProductVariationRepository productVariationRepository;
+    List<Products> getAllProducts();
 
-    public List<ProductDTO> getProductDetails() {
-        List<Object[]> results = productRepository.findProductDetailsNative();
-        List<ProductDTO> productDetails = new ArrayList<>();
+    List<Products> getLatest5Products();
 
-        for (Object[] result : results) {
-            ProductDTO productDTO = new ProductDTO();
+    List<ProductImage> getProductImagesByProductId(Integer productId);
 
-            // Mapping the fields from the result
-            productDTO.setProductId((Integer) result[0]);        // productId
-            productDTO.setThumbnail((String) result[1]);         // thumbnail
-            productDTO.setProductName((String) result[2]);       // productName
-            productDTO.setPrice((Integer) result[3]);            // price
-            productDTO.setVariationId((Integer) result[4]);        // variationId
-            productDTO.setImageId((Integer) result[5]);          // imageId
+    List<ProductVariation> getProductVariationsByProductId(Integer productId);
 
-            productDetails.add(productDTO);
-        }
+    Products getProductById(Integer productId);
 
-        return productDetails;
-    }
-
-    // Method to fetch ProductVariation by its ID
-    public ProductVariation getProductVariationById(Integer variationId) {
-        return productVariationRepository.findById(variationId)
-                .orElseThrow(() -> new IllegalArgumentException("Product variation not found with id: " + variationId));
-    }
-
-
-    //    public List<ProductDTO> findProductDetails() {
-//        return productRepository.findProductDetails();
-//    }
-    public List<Products> getAllProducts() {
-        return productRepository.findAll(); // Fetch all products
-    }
-
-    public List<Products> getLatest5Products() {
-        return productRepository.findTop5ByOrderByCreatedAtDesc(); // Fetch latest 5 products
-    }
-
-    // Fetch product images by productId
-    public List<ProductImage> getProductImagesByProductId(Integer productId) {
-        return productImageRepository.findByProductProductId(productId);
-    }
-
-    // Fetch product variations by productId
-    public List<ProductVariation> getProductVariationsByProductId(Integer productId) {
-        return productVariationRepository.findByProductIdProductId(productId);
-    }
-
-    public Products getProductById(Integer productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
-    }
-
-
+    List<ProductDTO> searchProducts(String query);
 }
