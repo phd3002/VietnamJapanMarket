@@ -371,55 +371,24 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
-                                    <div class="thumbnail">
-                                        <img th:src="@{/images/product/categories/toys.png}" alt="Product Images">
-                                    </div>
-                                    <div class="thumbnail">
-                                        <img th:src="@{/images/product/categories/beauty.png}" alt="Product Images">
-                                    </div>
-                                    <div class="thumbnail">
-                                        <img th:src="@{/images/product/categories/electronic.png}" alt="Product Images">
-                                    </div>
-                                    <div class="thumbnail">
-                                        <img th:src="@{/images/product/categories/fashion.png}" alt="Product Images">
-                                    </div>
-                                    <div class="thumbnail">
-                                        <img th:src="@{/images/product/categories/limited-product.png}"
-                                             alt="Product Images">
-                                    </div>
-                                    <div class="thumbnail">
-                                        <img th:src="@{/images/product/categories/second-hand.png}"
-                                             alt="Product Images">
-                                    </div>
-                                    <div class="thumbnail">
-                                        <img th:src="@{/images/product/categories/beauty.png}" alt="Product Images">
+                                    <div class="thumbnail" th:each="variation : ${productVariation}">
+                                        <img th:src="@{${variation.thumbnail}}" alt="Product Image">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="small-thumb-wrapper product-small-thumb-2 small-thumb-style-two small-thumb-style-three">
-                                    <div class="small-thumb-img ">
-                                        <img th:src="@{/images/product/categories/toys.png}" alt="Product Images">
+                                    <div class="small-thumb-img">
+                                        <img th:src="@{${variation.image1}}" alt="Product Image 1">
                                     </div>
                                     <div class="small-thumb-img">
-                                        <img th:src="@{/images/product/categories/beauty.png}" alt="Product Images">
-                                    </div>
-                                    <div class="small-thumb-img active">
-                                        <img th:src="@{/images/product/categories/electronic.png}" alt="Product Images">
+                                        <img th:src="@{${product.image2}}" alt="Product Image 2">
                                     </div>
                                     <div class="small-thumb-img">
-                                        <img th:src="@{/images/product/categories/fashion.png}" alt="Product Images">
+                                        <img th:src="@{${product.image3}}" alt="Product Image 3">
                                     </div>
                                     <div class="small-thumb-img">
-                                        <img th:src="@{/images/product/categories/limited-product.png}"
-                                             alt="Product Images">
-                                    </div>
-                                    <div class="small-thumb-img">
-                                        <img th:src="@{/images/product/categories/second-hand.png}"
-                                             alt="Product Images">
-                                    </div>
-                                    <div class="small-thumb-img">
-                                        <img th:src="@{/images/product/categories/beauty.png}" alt="Product Images">
+                                        <img th:src="@{${product.image4}}" alt="Product Image 4">
                                     </div>
                                 </div>
                             </div>
@@ -428,8 +397,8 @@
                     <div class="col-lg-6 mb--40">
                         <div class="single-product-content">
                             <div class="inner">
-                                <h2 class="product-title">3D™ wireless headset</h2>
-                                <span class="price-amount">$155.00 - $255.00</span>
+                                <h2 class="product-title" th:text="${product.productName}">Product Name</h2>
+                                <span class="price-amount" th:text="${product.price}">155.00 - 255.00</span>
                                 <div class="product-rating">
                                     <div class="star-rating">
                                         <i class="fas fa-star"></i>
@@ -443,63 +412,51 @@
                                     </div>
                                 </div>
                                 <div class="product-variations-wrapper">
-
-                                    <!-- Start Product Variation  -->
                                     <div class="product-variation">
                                         <h6 class="title">Colors:</h6>
                                         <div class="color-variant-wrapper">
                                             <ul class="color-variant">
-                                                <li class="color-extra-01 active"><span><span
-                                                        class="color"></span></span>
+                                                <li th:classappend="${variation.colorName == 'color-extra-01'} ? 'active'">
+                                                    <span><span th:text="${variation.colorName}"></span></span>
                                                 </li>
-                                                <li class="color-extra-02"><span><span class="color"></span></span>
+                                                <li th:classappend="${variation.colorName == 'color-extra-02'}">
+                                                    <span><span th:text="${variation.colorName}"></span></span>
                                                 </li>
-                                                <li class="color-extra-03"><span><span class="color"></span></span>
+                                                <li th:classappend="${variation.colorName == 'color-extra-03'}">
+                                                    <span><span th:text="${variation.colorName}"></span></span>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <!-- End Product Variation  -->
-
-                                    <!-- Start Product Variation  -->
                                     <div class="product-variation product-size-variation">
                                         <h6 class="title">Size:</h6>
                                         <ul class="range-variant">
-                                            <li>xs</li>
-                                            <li>s</li>
-                                            <li>m</li>
-                                            <li>l</li>
-                                            <li>xl</li>
+                                            <li th:each="size : ${product.sizes}">
+                                                <span th:text="${size.sizeName}"></span>
+                                            </li>
                                         </ul>
                                     </div>
-                                    <!-- End Product Variation  -->
-
                                 </div>
-
-                                <!-- Start Product Action Wrapper  -->
                                 <div class="product-action-wrapper d-flex-center">
-                                    <!-- Start Quentity Action  -->
-                                    <div class="pro-qty"><input type="text" value="1"></div>
-                                    <!-- End Quentity Action  -->
-
-                                    <!-- Start Product Action  -->
+                                    <div class="pro-qty">
+                                        <input type="text" value="1">
+                                    </div>
                                     <ul class="product-action d-flex-center mb--0">
-                                        <li class="add-to-cart"><a href="cart-detail.html"
-                                                                   class="axil-btn btn-bg-primary">Add
-                                            to Cart</a></li>
-                                        <li class="wishlist"><a href="wishlist.html" class="axil-btn wishlist-btn"><i
-                                                class="far fa-heart"></i></a></li>
+                                        <li class="add-to-cart">
+                                            <a href="cart-detail.html" class="axil-btn btn-bg-primary">Add to Cart</a>
+                                        </li>
+                                        <li class="wishlist">
+                                            <a href="wishlist.html" class="axil-btn wishlist-btn"><i class="far fa-heart"></i></a>
+                                        </li>
                                     </ul>
-                                    <!-- End Product Action  -->
-
                                 </div>
-                                <!-- End Product Action Wrapper  -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- End .single-product-thumb -->
         <!-- Start Breadcrumb Area  -->
         <div class="axil-breadcrumb-area">

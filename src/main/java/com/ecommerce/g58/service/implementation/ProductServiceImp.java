@@ -1,6 +1,8 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.ProductDTO;
+import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.dto.ProductVariationDTO;
 import com.ecommerce.g58.entity.ProductImage;
 import com.ecommerce.g58.entity.ProductVariation;
 import com.ecommerce.g58.entity.Products;
@@ -72,9 +74,15 @@ public class ProductServiceImp implements ProductService {
     //    public List<ProductDTO> findProductDetails() {
     //        return productRepository.findProductDetails();
     //    }
-    public List<Products> getAllProducts() {
-        return productRepository.findAll(); // Fetch all products
+    public List<ProductDTO> getAllProducts() {
+        return productRepository.findAllProducts();
     }
+
+    @Override
+    public List<ProductVariationDTO> getAllProductVariation() {
+        return productRepository.findAllProductVariations();
+    }
+
 
     public List<Products> getLatest5Products() {
         return productRepository.findTop5ByOrderByCreatedAtDesc(); // Fetch latest 5 products
@@ -86,9 +94,9 @@ public class ProductServiceImp implements ProductService {
     }
 
     // Fetch product variations by productId
-    public List<ProductVariation> getProductVariationsByProductId(Integer productId) {
-        return productVariationRepository.findByProductIdProductId(productId);
-    }
+//    public List<ProductVariation> getProductVariationsByProductId(Integer productId) {
+//        return productVariationRepository.findByProductIdProductId(productId);
+//    }
 
     public Products getProductById(Integer productId) {
         return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
@@ -115,4 +123,53 @@ public class ProductServiceImp implements ProductService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public ProductDTO getProductDTOById(Integer productId) {
+        return productRepository.findProductById(productId);
+    }
+
+    public ProductDTO getProductDetailById(Integer productId) {
+        Products product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductId(product.getProductId());
+        productDTO.setProductName(product.getProductName());
+        productDTO.setDescription(product.getProductDescription());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setWeight(product.getWeight());
+
+        List<ProductVariationDTO> variationDTOs = product.getProductVariations().stream()
+                .map(variation -> new ProductVariationDTO(
+                        variation.getProductId(),
+                        variation.getVariationId(),
+                        variation.getImageId().getThumbnail(),
+                        variation.getImageId().getImage1(),
+                        variation.getImageId().getImage2(),
+                        variation.getImageId().getImage3(),
+                        variation.getImageId().getImage4()
+                ))
+                .collect(Collectors.toList());
+
+        productDTO.setProductVariations(variationDTOs);
+
+        return productDTO;
+    }
+
+    @Override
+    public List<ProductVariationDTO> getProductsByCategory(Integer categoryId) {
+        return productRepository.findProductsByCategory(categoryId);
+    }
+
+    @Override
+    public ProductVariationDTO getProductByVariationId(Integer variationId) {
+        return productRepository.findProductVariationById(variationId);
+    }
+
+
+    public ProductVariationDTO getProductVariationsByProductId(Integer productId) {
+        return productVariationRepository.findProductVariationsByProductId(productId);
+    }
+
+
 }
