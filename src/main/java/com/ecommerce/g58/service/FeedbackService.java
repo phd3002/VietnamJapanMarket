@@ -27,4 +27,6 @@ public interface FeedbackService {
     Page<Feedback> findByStatus(FeedbackStatus status, Pageable pageable);
 
     Page<Feedback> findByStatusAndDateRange(FeedbackStatus status, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+
+    List<Feedback> findByProductId(Integer id);
 }

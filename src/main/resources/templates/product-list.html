@@ -391,12 +391,10 @@
                 <div th:each="product : ${products}" class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+                            <a th:href="@{/product-detail/{id}(id=${product.productId})}">
+                                <img class="spi" th:src="${product.productVariations[0].imageId.thumbnail}"
+                                     alt="Product Image">
                             </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">20% OFF</div>
-                            </div>
                             <div class="product-hover-action">
                                 <ul class="cart-action">
                                     <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
@@ -409,10 +407,10 @@
                         </div>
                         <div class="product-content">
                             <div class="inner">
-                                <h5 class="title"><a href="product-detail" th:text="${product.productName}"></a></h5>
+                                <h5 class="title"><a th:href="@{/product-detail/{id}(id=${product.productId})}"
+                                                     th:text="${product.productName}"></a></h5>
                                 <div class="product-price-variant">
-                                    <span class="price current-price" th:text="${product.price}"></span>
-                                    <span class="price old-price" th:text="${product.price}"></span>
+                                    <span class="price current-price" th:text="${'$' + product.price}"></span>
                                 </div>
                             </div>
                         </div>
@@ -531,38 +529,10 @@
                             <div class="row">
                                 <div class="col-lg-10 order-lg-2">
                                     <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
-                                        <div class="thumbnail">
-                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
-
-                                            <div class="label-block label-right">
-                                                <div class="product-badget">20% OFF</div>
-                                            </div>
+                                        <div class="thumbnail" th:each="pv : ${product.productVariations}">
+                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image">
                                             <div class="product-quick-view position-view">
-                                                <a th:src="@{${product.productImages[0].thumbnail}}" class="popup-zoom">
-                                                    <i class="far fa-search-plus"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="thumbnail">
-                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
-
-                                            <div class="label-block label-right">
-                                                <div class="product-badget">20% OFF</div>
-                                            </div>
-                                            <div class="product-quick-view position-view">
-                                                <a th:src="@{${product.productImages[0].thumbnail}}" class="popup-zoom">
-                                                    <i class="far fa-search-plus"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="thumbnail">
-                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
-
-                                            <div class="label-block label-right">
-                                                <div class="product-badget">20% OFF</div>
-                                            </div>
-                                            <div class="product-quick-view position-view">
-                                                <a th:src="@{${product.productImages[0].thumbnail}}" class="popup-zoom">
+                                                <a th:src="@{${pv.imageId.thumbnail}}" class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -571,16 +541,8 @@
                                 </div>
                                 <div class="col-lg-2 order-lg-1">
                                     <div class="product-small-thumb small-thumb-wrapper">
-                                        <div class="small-thumb-img">
-                                            <img th:src="@{${product.productImages[0].thumbnail}}"
-                                                 alt="thumb image">
-                                        </div>
-                                        <div class="small-thumb-img">
-                                            <img th:src="@{${product.productImages[0].thumbnail}}"
-                                                 alt="thumb image">
-                                        </div>
-                                        <div class="small-thumb-img">
-                                            <img th:src="@{${product.productImages[0].thumbnail}}"
+                                        <div class="small-thumb-img" th:each="pv : ${product.productVariations}">
+                                            <img th:src="@{${pv.imageId.thumbnail}}"
                                                  alt="thumb image">
                                         </div>
                                     </div>
@@ -599,7 +561,7 @@
                                         </div>
                                     </div>
                                     <h3 class="product-title" th:text="${product.productName}"></h3>
-                                    <span class="price-amount">$155.00 - $255.00</span>
+                                    <span class="price-amount" th:text="${'$' + product.price}"></span>
                                     <ul class="product-meta">
                                         <li><i class="fal fa-check"></i>In stock</li>
                                         <li><i class="fal fa-check"></i>Free delivery available</li>
@@ -611,11 +573,10 @@
                                             <h6 class="title">Colors:</h6>
                                             <div class="color-variant-wrapper">
                                                 <ul class="color-variant mt--0">
-                                                    <li class="color-extra-01 active"><span><span class="color"></span></span>
-                                                    </li>
-                                                    <li class="color-extra-02"><span><span class="color"></span></span>
-                                                    </li>
-                                                    <li class="color-extra-03"><span><span class="color"></span></span>
+                                                    <li th:class="${'color-extra-0' + (iter.index + 1) + (iter.first ? ' active' : '')}"
+                                                        th:each="pv,iter : ${product.productVariations}">
+                                                    <span><span class="color"
+                                                                th:style="${'background: ' + pv.color.colorName}"></span></span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -623,11 +584,8 @@
                                         <div class="product-variation">
                                             <h6 class="title">Size:</h6>
                                             <ul class="range-variant">
-                                                <li>xs</li>
-                                                <li>s</li>
-                                                <li>m</li>
-                                                <li>l</li>
-                                                <li>xl</li>
+                                                <li th:each="pv : ${product.productVariations}"
+                                                    th:text="${pv.size.sizeName}"></li>
                                             </ul>
                                         </div>
                                     </div>

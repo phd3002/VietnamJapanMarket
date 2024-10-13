@@ -122,6 +122,10 @@
     margin-right: 15px; /* Khoảng cách giữa ảnh và nội dung */
 }
 
+.thumbnail img.spi {
+    height: 200px !important;
+}
+
 .author-image {
     width: 100px;
     height: 100px;

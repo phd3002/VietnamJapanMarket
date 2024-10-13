@@ -33,4 +33,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable
     );
+
+    List<Feedback> findAllByVariationIdProductIdProductId(Integer variationId);
 }

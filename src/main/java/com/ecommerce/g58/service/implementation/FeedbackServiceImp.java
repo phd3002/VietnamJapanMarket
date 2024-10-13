@@ -79,4 +79,9 @@ public class FeedbackServiceImp implements FeedbackService {
         }
         return feedbackRepository.findByStatusAndDateRange(status, startDate, endDate, pageable);
     }
+
+    @Override
+    public List<Feedback> findByProductId(Integer id) {
+        return feedbackRepository.findAllByVariationIdProductIdProductId(id);
+    }
 }
