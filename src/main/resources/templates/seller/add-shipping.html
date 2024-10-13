@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Danh sách vận chuyển | Kênh người bán</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- or -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+    <!-- Font-icon seller-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl">
+<!-- Navbar-->
+<header class="app-header">
+    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                    aria-label="Hide Sidebar"></a>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+
+
+        <!-- User Menu-->
+        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+
+        </li>
+    </ul>
+</header>
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar">
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+                                        alt="User Image">
+    </div>
+    <hr>
+    <ul class="app-menu">
+        <li><a class="app-menu__item" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
+                class="app-menu__label">Thông tin cửa hàng</span></a></li>
+        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+                class="app-menu__label">Bảng điều khiển</span></a></li>
+        <li><a class="app-menu__item" href="product-manager.html"><i
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+        </li>
+        <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item  active" href="shipping-manager.html"><i
+                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
+        </li>
+        <li><a class="app-menu__item" href="income-manager.html"><i
+                class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
+        </li>
+    </ul>
+</aside>
+<main class="app-content">
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item">Danh sách vận chuyển</li>
+            <li class="breadcrumb-item"><a href="#">Thêm đơn vị vận chuyển</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <h3 class="tile-title">Tạo mới đơn vị vận chuyển</h3>
+                <div class="tile-body">
+                    <form class="row">
+                        <div class="form-group col-md-4">
+                            <label for="unitSelected" class="control-label">Đơn vị vận chuyển</label>
+                            <select class="form-control" id="unitSelected">
+                                <option value="">-- Chọn đơn vị vận chuyển --</option>
+                                <option value="viettel">Viettel Post</option>
+                                <option value="ghn">Giao Hàng Nhanh</option>
+                                <option value="ghtk">Giao Hàng Tiết Kiệm</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div id="unitDetails" style="display: none;">
+                    <h3>Thông tin chi tiết đơn vị vận chuyển</h3>
+                    <ul>
+                        <li><strong>Tên đơn vị:</strong> <span id="unitName"></span></li>
+                        <li><strong>Số điện thoại:</strong> <span id="unitPhone"></span></li>
+                        <li><strong>Địa chỉ:</strong> <span id="unitAddress"></span></li>
+                        <li><strong>Giá cước cơ bản:</strong> <span id="unitRate"></span></li>
+                    </ul>
+                </div>
+                <button class="btn btn-save" type="button" id="saveButton">Lưu lại</button>
+                <a class="btn btn-cancel" href="shipping-manager.html">Hủy bỏ</a>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- Essential javascripts for application to work-->
+<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
+<script src="../../static/seller/js/popper.min.js"></script>
+<script src="../../static/seller/js/bootstrap.min.js"></script>
+<script src="../../static/seller/js/main.js"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script src="../../static/seller/js/plugins/pace.min.js"></script>
+<script>
+    // Function to handle the "Lưu lại" button click event
+    document.getElementById("saveButton").addEventListener("click", function () {
+        // Display a confirmation popup similar to the delete confirmation
+        swal({
+            title: "Xác nhận",
+            text: "Bạn có chắc chắn muốn thêm đơn vị vận chuyển này?",
+            buttons: ["Hủy bỏ", "Đồng ý"],
+        }).then((willSave) => {
+            if (willSave) {
+                // After confirmation, display success message
+                swal("Đơn vị vận chuyển đã được tạo thành công!", {
+                    icon: "success",
+                }).then(() => {
+                    // After success message, redirect to another page (e.g., back to the order list)
+                    window.location.href = "shipping-manager.html";  // Redirect to order management page
+                });
+            }
+        });
+    });
+</script>
+<script>
+    const shippingUnits = {
+        "viettel": {
+            name: "Viettel Post",
+            phone: "19008095",
+            address: "Số 1 Trần Hưng Đạo, Hà Nội",
+            rate: "10,000 VND/kg"
+        },
+        "ghn": {
+            name: "Giao Hàng Nhanh",
+            phone: "18006328",
+            address: "Số 2 Nguyễn Huệ, TP. HCM",
+            rate: "12,000 VND/kg"
+        },
+        "ghtk": {
+            name: "Giao Hàng Tiết Kiệm",
+            phone: "19006092",
+            address: "Số 3 Lê Lợi, Đà Nẵng",
+            rate: "9,000 VND/kg"
+        }
+    };
+
+    document.getElementById("unitSelected").addEventListener("change", function () {
+        const selectedUnit = this.value;
+
+        // Nếu có đơn vị vận chuyển được chọn, hiển thị thông tin chi tiết
+        if (shippingUnits[selectedUnit]) {
+            document.getElementById("unitName").innerText = shippingUnits[selectedUnit].name;
+            document.getElementById("unitPhone").innerText = shippingUnits[selectedUnit].phone;
+            document.getElementById("unitAddress").innerText = shippingUnits[selectedUnit].address;
+            document.getElementById("unitRate").innerText = shippingUnits[selectedUnit].rate;
+
+            // Hiển thị khu vực thông tin chi tiết
+            document.getElementById("unitDetails").style.display = "block";
+        } else {
+            // Nếu không có đơn vị nào được chọn, ẩn khu vực thông tin
+            document.getElementById("unitDetails").style.display = "none";
+        }
+    });
+</script>
+</body>
+</html>
