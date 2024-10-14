@@ -413,12 +413,12 @@
                                         <table class="table">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Order</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Total</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">Đơn hàng</th>
+                                                <th scope="col">Ngày tạo đơn</th>
+                                                <th scope="col">Trạng thái</th>
+                                                <th scope="col">Số lượng</th>
+                                                <th scope="col">Tổng</th>
+                                                <th scope="col">Hành động</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -428,7 +428,7 @@
                                                 <td th:text="${order.status}"></td>
                                                 <td th:text="${order.totalQuantity}"></td>
                                                 <td th:text="${order.totalPrice}"></td>
-                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}" class="axil-btn view-btn">View</a></td>
+                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}" class="axil-btn view-btn">Xem</a></td>
                                             </tr>
                                             </tbody>
                                         </table>
