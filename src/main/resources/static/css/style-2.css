@@ -517,3 +517,10 @@
     font-size: 16px;
 }
 
+.store-image {
+    width: 100px; /* Adjust the size */
+    height: 100px; /* Ensures the image remains square */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image fits within the circle */
+}
+
