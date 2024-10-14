@@ -7,12 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductVariationDTO {
-    // Getters and Setters
-    private Products productId;
+    private Integer productId;
+    private String productName;
+    private String categoryName;
     private Integer variationId;
     private String size;
     private String color;
-    private int stock;
+    private Integer stock;
 
     // Add image fields
     private String thumbnail;
@@ -22,66 +23,36 @@ public class ProductVariationDTO {
     private String image4;
 
     private int price;
+    private double discount;
 
-    // Constructors
-
-    public ProductVariationDTO() {}
-
-    public ProductVariationDTO(Integer variationId, String thumbnail) {
-        this.variationId = variationId;
-        this.thumbnail = thumbnail;
-    }
-
-    public ProductVariationDTO(Integer variationId, String size, String color, String thumbnail, String image1, String image2, String image3, String image4) {
-        this.variationId = variationId;
-        this.thumbnail = thumbnail;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
-        this.image4 = image4;
-    }
-
-    public ProductVariationDTO(Integer variationId, String thumbnail, String image1, String image2, String image3, String image4) {
-        this.variationId = variationId;
-        this.thumbnail = thumbnail;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
-        this.image4 = image4;
-    }
-
-    public ProductVariationDTO(Products productId, Integer variationId, String size, String color, String image1, String image2, String thumbnail, String image3, String image4) {
+    public ProductVariationDTO(Integer productId, String thumbnail, String image1, String image2, String image3, String image4, String categoryName, String productName, String color, String size, int price, int stock) {
         this.productId = productId;
-        this.variationId = variationId;
-        this.size = size;
+        this.thumbnail = thumbnail;
+        this.image1 = image1;
+        this.image2 = image2;
+        this.image3 = image3;
+        this.image4 = image4;
+        this.categoryName = categoryName;
+        this.productName = productName;
         this.color = color;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.thumbnail = thumbnail;
-        this.image3 = image3;
-        this.image4 = image4;
-    }
-
-    public ProductVariationDTO(Products productId, Integer variationId, String thumbnail, String image1, String image2, String image3, String image4) {
-        this.productId = productId;
-        this.variationId = variationId;
-        this.thumbnail = thumbnail;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
-        this.image4 = image4;
-    }
-
-    public ProductVariationDTO(Integer variationId, String size, String color, String thumbnail, String image1, String image2, String image3, String image4, int price) {
-        this.variationId = variationId;
         this.size = size;
-        this.color = color;
-        this.thumbnail = thumbnail;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
-        this.image4 = image4;
         this.price = price;
+        this.stock = stock;
     }
+
+    public ProductVariationDTO(Integer productId, String thumbnail, String image1, String image2, String image3, String image4, String categoryName, String productName, Integer price, Integer stock) {
+        this.productId = productId;
+        this.thumbnail = thumbnail;
+        this.image1 = image1;
+        this.image2 = image2;
+        this.image3 = image3;
+        this.image4 = image4;
+        this.categoryName = categoryName;
+        this.productName = productName;
+        this.price = price;
+        this.stock = stock;
+    }
+
+
 }
 

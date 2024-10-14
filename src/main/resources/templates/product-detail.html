@@ -371,15 +371,14 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
-                                    <div class="thumbnail" th:each="variation : ${productVariation}">
-                                        <img th:src="@{${variation.thumbnail}}" alt="Product Image">
+                                    <div class="thumbnail">
+                                        <img th:src="@{${product.thumbnail}}" alt="Product Image">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-12">
+
                                 <div class="small-thumb-wrapper product-small-thumb-2 small-thumb-style-two small-thumb-style-three">
                                     <div class="small-thumb-img">
-                                        <img th:src="@{${variation.image1}}" alt="Product Image 1">
+                                        <img th:src="@{${product.image1}}" alt="Product Image 1">
                                     </div>
                                     <div class="small-thumb-img">
                                         <img th:src="@{${product.image2}}" alt="Product Image 2">
@@ -391,51 +390,23 @@
                                         <img th:src="@{${product.image4}}" alt="Product Image 4">
                                     </div>
                                 </div>
+
+                                <h2 class="product-title" th:text="${product.productName}">Tên sản phẩm</h2>
+                                <span class="price-amount" th:text="${product.price}">Giá sản phẩm</span>
+
+                                <!-- Màu sắc -->
+                                <h6 class="title">Colors:</h6>
+                                <ul class="color-variant mt--0">
+                                    <li th:each="color : ${colors}" th:text="${color}" class="color-option"></li>
+                                </ul>
+
+                                <!-- Hiển thị các biến thể kích thước -->
+                                <h6 class="title">Kích thước:</h6>
+                                <ul class="size-variant">
+                                    <li th:each="size : ${sizes}" th:text="${size}" class="size-option"></li>
+                                </ul>
+
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb--40">
-                        <div class="single-product-content">
-                            <div class="inner">
-                                <h2 class="product-title" th:text="${product.productName}">Product Name</h2>
-                                <span class="price-amount" th:text="${product.price}">155.00 - 255.00</span>
-                                <div class="product-rating">
-                                    <div class="star-rating">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <div class="review-link">
-                                        <a href="#">(<span>2</span> customer reviews)</a>
-                                    </div>
-                                </div>
-                                <div class="product-variations-wrapper">
-                                    <div class="product-variation">
-                                        <h6 class="title">Colors:</h6>
-                                        <div class="color-variant-wrapper">
-                                            <ul class="color-variant">
-                                                <li th:classappend="${variation.colorName == 'color-extra-01'} ? 'active'">
-                                                    <span><span th:text="${variation.colorName}"></span></span>
-                                                </li>
-                                                <li th:classappend="${variation.colorName == 'color-extra-02'}">
-                                                    <span><span th:text="${variation.colorName}"></span></span>
-                                                </li>
-                                                <li th:classappend="${variation.colorName == 'color-extra-03'}">
-                                                    <span><span th:text="${variation.colorName}"></span></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="product-variation product-size-variation">
-                                        <h6 class="title">Size:</h6>
-                                        <ul class="range-variant">
-                                            <li th:each="size : ${product.sizes}">
-                                                <span th:text="${size.sizeName}"></span>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
                                 <div class="product-action-wrapper d-flex-center">
                                     <div class="pro-qty">

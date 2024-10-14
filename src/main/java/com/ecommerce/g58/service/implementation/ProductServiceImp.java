@@ -78,20 +78,6 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findAllProducts();
     }
 
-    @Override
-    public List<ProductVariationDTO> getAllProductVariation() {
-        return productRepository.findAllProductVariations();
-    }
-
-
-    public List<Products> getLatest5Products() {
-        return productRepository.findTop5ByOrderByCreatedAtDesc(); // Fetch latest 5 products
-    }
-
-    // Fetch product images by productId
-    public List<ProductImage> getProductImagesByProductId(Integer productId) {
-        return productImageRepository.findByProductProductId(productId);
-    }
 
     // Fetch product variations by productId
 //    public List<ProductVariation> getProductVariationsByProductId(Integer productId) {
@@ -124,51 +110,23 @@ public class ProductServiceImp implements ProductService {
                 .collect(Collectors.toList());
     }
 
-    public ProductDTO getProductDTOById(Integer productId) {
-        return productRepository.findProductById(productId);
-    }
-
-    public ProductDTO getProductDetailById(Integer productId) {
-        Products product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setProductId(product.getProductId());
-        productDTO.setProductName(product.getProductName());
-        productDTO.setDescription(product.getProductDescription());
-        productDTO.setPrice(product.getPrice());
-        productDTO.setWeight(product.getWeight());
-
-        List<ProductVariationDTO> variationDTOs = product.getProductVariations().stream()
-                .map(variation -> new ProductVariationDTO(
-                        variation.getProductId(),
-                        variation.getVariationId(),
-                        variation.getImageId().getThumbnail(),
-                        variation.getImageId().getImage1(),
-                        variation.getImageId().getImage2(),
-                        variation.getImageId().getImage3(),
-                        variation.getImageId().getImage4()
-                ))
-                .collect(Collectors.toList());
-
-        productDTO.setProductVariations(variationDTOs);
-
-        return productDTO;
-    }
-
     @Override
     public List<ProductVariationDTO> getProductsByCategory(Integer categoryId) {
-        return productRepository.findProductsByCategory(categoryId);
+        return List.of();
     }
 
     @Override
-    public ProductVariationDTO getProductByVariationId(Integer variationId) {
-        return productRepository.findProductVariationById(variationId);
+    public List<ProductVariationDTO> getAllDistinctProducts() {
+        return productRepository.getAllDistinctProducts();
     }
 
+    @Override
+    public List<ProductVariationDTO> getProductDetailById(Integer productId) {
+        return productRepository.findAllProductVariationsById(productId);
+    }
 
-    public ProductVariationDTO getProductVariationsByProductId(Integer productId) {
-        return productVariationRepository.findProductVariationsByProductId(productId);
+    public ProductDTO getProductDTOById(Integer productId) {
+        return productRepository.findProductById(productId);
     }
 
 

@@ -388,11 +388,13 @@
             </div>
             <!-- Product List  -->
             <div class="row row--15">
+                <!-- Bắt đầu vòng lặp th:each để lặp qua các sản phẩm -->
                 <div th:each="product : ${products}" class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+                            <!-- Hiển thị hình ảnh của sản phẩm -->
+                            <a th:href="@{'/product-detail/' + ${product.productId}}">
+                                <img th:src="${product.thumbnail}" alt="Product Image">
                             </a>
                             <div class="label-block label-right">
                                 <div class="product-badget">20% OFF</div>
@@ -409,16 +411,18 @@
                         </div>
                         <div class="product-content">
                             <div class="inner">
+                                <!-- Hiển thị tên sản phẩm -->
                                 <h5 class="title"><a href="product-detail" th:text="${product.productName}"></a></h5>
+                                <!-- Hiển thị giá sản phẩm -->
                                 <div class="product-price-variant">
                                     <span class="price current-price" th:text="${product.price}"></span>
-                                    <span class="price old-price" th:text="${product.price}"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="text-center pt--30">
                 <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
             </div>
@@ -532,37 +536,37 @@
                                 <div class="col-lg-10 order-lg-2">
                                     <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
                                         <div class="thumbnail">
-                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+                                            <img th:src="${product.thumbnail}" alt="Product Image">
 
                                             <div class="label-block label-right">
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a th:src="@{${product.productVariations[0].imageId.thumbnail}}" class="popup-zoom">
+                                                <a th:src="@{${product.thumbnail}}" class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="thumbnail">
-                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+                                            <img th:src="${product.thumbnail}" alt="Product Image">
 
                                             <div class="label-block label-right">
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a th:src="@{${product.productVariations[0].imageId.thumbnail}}" class="popup-zoom">
+                                                <a th:src="@{${product.thumbnail}}" class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="thumbnail">
-                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+                                            <img th:src="${product.thumbnail}" alt="Product Image">
 
                                             <div class="label-block label-right">
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a th:src="@{${product.productVariations[0].imageId.thumbnail}}" class="popup-zoom">
+                                                <a th:src="@{product.thumbnail}" class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -572,15 +576,15 @@
                                 <div class="col-lg-2 order-lg-1">
                                     <div class="product-small-thumb small-thumb-wrapper">
                                         <div class="small-thumb-img">
-                                            <img th:src="@{${product.productVariations[0].imageId.thumbnail}}"
+                                            <img th:src="@{product.thumbnail}"
                                                  alt="thumb image">
                                         </div>
                                         <div class="small-thumb-img">
-                                            <img th:src="@{${product.productVariations[0].imageId.thumbnail}}"
+                                            <img th:src="@{product.thumbnail}"
                                                  alt="thumb image">
                                         </div>
                                         <div class="small-thumb-img">
-                                            <img th:src="@{${product.productVariations[0].imageId.thumbnail}}"
+                                            <img th:src="@{product.thumbnail}"
                                                  alt="thumb image">
                                         </div>
                                     </div>
@@ -605,7 +609,7 @@
                                         <li><i class="fal fa-check"></i>Free delivery available</li>
                                         <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
                                     </ul>
-                                    <p class="description" th:text="${product.productDescription}"></p>
+<!--                                    <p class="description" th:text="${product.productDescription}"></p>-->
                                     <div class="product-variations-wrapper">
                                         <div class="product-variation">
                                             <h6 class="title">Colors:</h6>
