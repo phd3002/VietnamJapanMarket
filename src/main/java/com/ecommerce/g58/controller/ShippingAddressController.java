@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/shipping-address")
 public class ShippingAddressController {
@@ -14,9 +17,11 @@ public class ShippingAddressController {
 
     // Modify (update) shipping address
     @PutMapping("/modify/{orderId}")
-    public ResponseEntity<String> modifyShippingAddress(@PathVariable Integer orderId, @RequestBody String newAddress) {
+    public ResponseEntity<Map<String, String>> modifyShippingAddress(@PathVariable Integer orderId, @RequestBody String newAddress) {
         shippingAddressService.updateShippingAddress(orderId, newAddress);
-        return ResponseEntity.ok("Shipping address updated successfully");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Shipping address updated successfully");
+        return ResponseEntity.ok(response);
     }
 
     // View saved shipping address
@@ -28,9 +33,10 @@ public class ShippingAddressController {
 
     // Optional: Remove saved shipping address (set it to null)
     @DeleteMapping("/delete/{orderId}")
-    public ResponseEntity<String> deleteShippingAddress(@PathVariable Integer orderId) {
+    public ResponseEntity<Map<String, String>> deleteShippingAddress(@PathVariable Integer orderId) {
         shippingAddressService.deleteShippingAddress(orderId);
-        return ResponseEntity.ok("Shipping address removed");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Shipping address removed");
+        return ResponseEntity.ok(response);
     }
 }
-
