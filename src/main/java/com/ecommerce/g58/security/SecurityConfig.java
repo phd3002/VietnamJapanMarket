@@ -56,43 +56,49 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/api/search").permitAll()
-                .antMatchers("/api/shipping-address/**").permitAll()
+                // Public APIs
+                .antMatchers("/api/search", "/api/shipping-address/**").permitAll()
+
+                // Public pages
                 .antMatchers("/products/**", "/category/**").permitAll()
-                .antMatchers("/checkout").authenticated()  // Only authenticated users can access checkout
+                .antMatchers("/checkout").authenticated()
+
+                // Static resources
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
+
+                // Public-facing endpoints
                 .antMatchers(
-                        "/", "/sign-up/confirm-code/**",
-                        "/address/**", "/cart-detail/**", "/checkout/**",
-                        "/coming-soon/**", "/confirm-code/**", "/footer/**",
-                        "/head/**", "/header/**",
-                        "/homepage/**", "/homepageOrg/**", "/homepageTest/**",
-                        "/my-account", "/my-shop/**", "/notification/**",
-                        "/order/**", "/order-detail/**", "/privacy-policy/**",
-                        "/product-detail/**", "/product-list/**",
-                        "/sign-in/**", "/sign-up/**", "/sign-up-seller/**",
-                        "/terms-of-service/**", "/view-store/**", "/wallet/**",
-                        "/wishlist/**", "/forgot-password/**", "/reset-password/**",
-                        "/add_to_cart", "/cart-items"
+                        "/", "/sign-up/confirm-code/**", "/address/**", "/cart-detail/**", "/checkout/**",
+                        "/coming-soon/**", "/confirm-code/**", "/footer/**", "/head/**", "/header/**",
+                        "/homepage/**", "/homepageOrg/**", "/homepageTest/**", "/my-account", "/my-shop/**",
+                        "/notification/**", "/order/**", "/order-detail/**", "/privacy-policy/**",
+                        "/product-detail/**", "/product-list/**", "/sign-in/**", "/sign-up/**",
+                        "/sign-up-seller/**", "/terms-of-service/**", "/view-store/**", "/wallet/**",
+                        "/wishlist/**", "/forgot-password/**", "/reset-password/**", "/add_to_cart", "/cart-items"
                 ).permitAll()
-                .anyRequest().authenticated()  // All other requests need authentication
+
+                // Any other request must be authenticated
+                .anyRequest().authenticated()
                 .and()
+                // Redirect to login page for unauthorized access
                 .formLogin()
-                .loginPage("/sign-in")  // Redirect to sign-in page if not authenticated
+                .loginPage("/sign-in")
                 .defaultSuccessUrl("/homepage", true)
+                .failureUrl("/sign-in?error=true")
                 .permitAll()
                 .and()
+                // Logout configuration
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/sign-in?logout")
                 .permitAll()
                 .and()
+                // Handle access denied
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.sendRedirect("/sign-in");  // Redirect to sign-in page when unauthorized
-                })
+                .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/sign-in"))
                 .and()
+                // Disable CSRF and CORS
                 .csrf().disable()
                 .cors().disable();
     }
