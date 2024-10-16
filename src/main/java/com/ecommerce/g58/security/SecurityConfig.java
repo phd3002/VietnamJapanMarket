@@ -105,7 +105,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .logoutSuccessUrl("/sign-in?logout")
                 .permitAll()
                 .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .and().csrf().disable().cors().disable();
+
     }
 
 

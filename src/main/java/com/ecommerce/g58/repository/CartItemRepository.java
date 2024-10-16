@@ -16,25 +16,6 @@ import java.util.Optional;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
 
-    //    List<CartItem> findByCart(Cart cart);
-//
-//    @Query("SELECT ci FROM CartItem ci WHERE ci.cart = :cart AND ci.productId = :products ")
-//    Optional<CartItem> findByCartAndProduct(@Param("cart") Cart cart, @Param("products") Products product);
-//
-//    @Query("SELECT ci FROM CartItem ci JOIN ci.cart c WHERE c.user.userId = :userId")
-//    List<CartItem> findCartItemsByUserId(@Param("userId") Integer userId);
-//
-//    List<CartItem> findByCartItemIdIn(List<Integer> cartItemIds);
-//
-//    @Query("SELECT ci FROM CartItem ci WHERE ci.cartItemId = :cartItemId")
-//    CartItem getCartItemByCartItemId(Integer cartItemId);
-//
-//    @Modifying
-//    @Query("DELETE FROM CartItem ci WHERE ci.cartItemId IN :ids")
-//    void deleteByIds(@Param("ids") List<Integer> ids);
-//
-//    @Query("SELECT ci FROM CartItem ci WHERE ci.cart.user.userId = :deliveryRoleId")
-//    List<CartItem> findCartItemsByDeliveryRoleId(Integer deliveryRoleId);
     List<CartItem> findByCart_CartId(Integer cartId);
 
     @Query("SELECT ci FROM CartItem ci WHERE ci.cart.user.userId = :userId")
@@ -47,16 +28,17 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     @Query("SELECT ci FROM CartItem ci WHERE ci.cart.cartId = :cartId AND ci.variationId = :variation")
     CartItem findByCartIdAndVariation(@Param("cartId") Integer cartId, @Param("variation") ProductVariation variation);
 
-//    CartItem findByCartIdAndProductId(Integer cartId, Integer productId);
+    // In CartItemRepository.java
+    @Query("SELECT ci FROM CartItem ci WHERE ci.cart.cartId = :cartId AND ci.variationId = :variationId")
+    CartItem findByCartIdAndVariationId(@Param("cartId") Integer cartId, @Param("variationId") Integer variationId);
+
+    @Query("SELECT ci FROM CartItem ci WHERE ci.cart = :cart AND ci.productId = :product AND ci.variationId = :variation")
+    CartItem findByCartAndProductAndVariation(@Param("cart") Cart cart, @Param("product") Products product, @Param("variation") ProductVariation variation);
+
 
     // Find cart items by a list of cart item IDs
     List<CartItem> findByCartItemIdIn(List<Integer> cartItemIds);
 
-    // Find cart items by a delivery role ID
-//    List<CartItem> findCartItemsByDeliveryRoleId(Integer deliveryRoleId);
-
-    // Delete cart items by their IDs
-//    void deleteById(List<Integer> cartItemId);
 
     // Delete a single cart item by its ID
     @Modifying
