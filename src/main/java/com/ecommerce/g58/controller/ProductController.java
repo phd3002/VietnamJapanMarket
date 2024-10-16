@@ -1,7 +1,9 @@
 package com.ecommerce.g58.controller;
 
-import com.ecommerce.g58.dto.ProductVariationDTO;
+import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.entity.Color;
 import com.ecommerce.g58.entity.Products;
+import com.ecommerce.g58.entity.Size;
 import com.ecommerce.g58.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,35 +21,55 @@ public class ProductController {
 
     @GetMapping("/product-list")
     public String productList(Model model) {
-        List<ProductVariationDTO> products = productService.getAllDistinctProducts();
+        var products = productService.getAllProducts();
         model.addAttribute("products", products);
         return "product-list";
     }
 
     @GetMapping("/product-detail/{productId}")
-    public String getProductDetail(@PathVariable Integer productId, Model model) {
-        List<ProductVariationDTO> productVariations = productService.getProductDetailById(productId);
+    public String showProductDetail(@PathVariable("productId") Integer productId,
+                                    @RequestParam(value = "colorId", required = false) Integer colorId,
+                                    @RequestParam(value = "sizeId", required = false) Integer sizeId,
+                                    Model model) {
+        if (colorId == null) {
+            // Default to the lowest colorId
+            List<Color> availableColors = productService.getAvailableColors(productId);
+            if (!availableColors.isEmpty()) {
+                colorId = availableColors.get(0).getColorId(); // Get the lowest colorId
+            }
+        }
 
-        // Lấy danh sách màu sắc và kích thước
-        Set<String> colors = productVariations.stream().map(ProductVariationDTO::getColor).collect(Collectors.toSet());
-        Set<String> sizes = productVariations.stream().map(ProductVariationDTO::getSize).collect(Collectors.toSet());
+        // Fetch product details based on productId and colorId
+        ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndColorId(productId, colorId);
 
-        // Lấy sản phẩm đầu tiên để hiển thị thông tin cơ bản
-        ProductVariationDTO mainProduct = productVariations.get(0);
+        if (productDetail == null) {
+            return "error";  // Handle product not found
+        }
 
-        model.addAttribute("product", mainProduct);
-        model.addAttribute("colors", colors);
-        model.addAttribute("sizes", sizes);
-        return "product-detail";  // Tên của template product-detail
+        // Fetch available sizes
+        List<String> availableSizes = productService.getAvailableSizesByProductIdAndColorId(productId, colorId);
+        List<Color> availableColors = productService.getAvailableColors(productId);
+        System.out.println("Available colors: " + availableColors);
+        System.out.println("Available sizes: " + availableSizes);
+        System.out.println("Selected size: " + sizeId);
+        System.out.println(productDetail.getVariationId());
+        // Pass the product details, available colors, and sizes to the front-end
+        model.addAttribute("productDetail", productDetail);
+        model.addAttribute("availableColors", availableColors);
+        model.addAttribute("availableSizes", availableSizes);
+        model.addAttribute("selectedSize", sizeId);  // Add selected size to the model
+        return "product-detail";
     }
+
+
 
 
 
 
 
     @GetMapping("/products")
-    public String getProductsByCategory(@RequestParam("categoryId") Integer categoryId, Model model) {
-        List<ProductVariationDTO> products = productService.getProductsByCategory(categoryId);
+    public String getProductsByCategory(@RequestParam("categoryId") Long categoryId, Model model) {
+        List<Products> products = productService.getProductsByCategory(categoryId);
         model.addAttribute("products", products);
         return "product-list";
     }

@@ -213,7 +213,7 @@
                             </span>
                                 <span class="rating-number"><span>100+</span> Reviews</span>
                             </div>
-                            <h6 class="product-title"><a href="product-detail">Media Remote</a></h6>
+                            <h6 class=" "><a href="product-detail">Media Remote</a></h6>
                             <div class="product-price-variant">
                                 <span class="price current-price">$29.99</span>
                                 <span class="price old-price">$49.99</span>
@@ -370,55 +370,150 @@
                     <div class="col-lg-6 mb--40">
                         <div class="row">
                             <div class="col-lg-12">
+                                <!-- Dynamic large product images -->
                                 <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
                                     <div class="thumbnail">
-                                        <img th:src="@{${product.thumbnail}}" alt="Product Image">
+                                        <img th:src="@{${productDetail.thumbnail}}" alt="Product Image">
+                                    </div>
+                                    <div class="thumbnail" th:if="${productDetail.image1}">
+                                        <img th:src="@{${productDetail.image1}}" alt="Product Image">
+                                    </div>
+                                    <div class="thumbnail" th:if="${productDetail.image2}">
+                                        <img th:src="@{${productDetail.image2}}" alt="Product Image">
+                                    </div>
+                                    <div class="thumbnail" th:if="${productDetail.image3}">
+                                        <img th:src="@{${productDetail.image3}}" alt="Product Image">
+                                    </div>
+                                    <div class="thumbnail" th:if="${productDetail.image4}">
+                                        <img th:src="@{${productDetail.image4}}" alt="Product Image">
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="col-lg-12">
+                                <!-- Small thumbnails -->
                                 <div class="small-thumb-wrapper product-small-thumb-2 small-thumb-style-two small-thumb-style-three">
                                     <div class="small-thumb-img">
-                                        <img th:src="@{${product.image1}}" alt="Product Image 1">
+                                        <img th:src="@{${productDetail.thumbnail}}" alt="Thumbnail Image">
                                     </div>
-                                    <div class="small-thumb-img">
-                                        <img th:src="@{${product.image2}}" alt="Product Image 2">
+                                    <div class="small-thumb-img" th:if="${productDetail.image1}">
+                                        <img th:src="@{${productDetail.image1}}" alt="Thumbnail Image">
                                     </div>
-                                    <div class="small-thumb-img">
-                                        <img th:src="@{${product.image3}}" alt="Product Image 3">
+                                    <div class="small-thumb-img" th:if="${productDetail.image2}">
+                                        <img th:src="@{${productDetail.image2}}" alt="Thumbnail Image">
                                     </div>
-                                    <div class="small-thumb-img">
-                                        <img th:src="@{${product.image4}}" alt="Product Image 4">
+                                    <div class="small-thumb-img" th:if="${productDetail.image3}">
+                                        <img th:src="@{${productDetail.image3}}" alt="Thumbnail Image">
+                                    </div>
+                                    <div class="small-thumb-img" th:if="${productDetail.image4}">
+                                        <img th:src="@{${productDetail.image4}}" alt="Thumbnail Image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb--40">
+                        <div class="single-product-content">
+                            <div class="inner">
+                                <!-- Product title and price -->
+                                <h2 class="product-title" th:text="${productDetail.productName}">Product Name</h2>
+                                <span class="price-amount" th:text="${productDetail.price} + ' $'">Price</span>
+
+                                <!-- Rating and review count -->
+                                <div class="product-rating">
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div class="review-link">
+                                        <a href="#">(<span>2</span> customer reviews)</a>
                                     </div>
                                 </div>
 
-                                <h2 class="product-title" th:text="${product.productName}">Tên sản phẩm</h2>
-                                <span class="price-amount" th:text="${product.price}">Giá sản phẩm</span>
+                                <!-- Product variations -->
+                                <div class="product-variations-wrapper">
+                                    <!-- Colors Section -->
+                                    <div class="product-variation">
+                                        <h6 class="title">Colors:</h6>
+                                        <div class="color-variant-wrapper">
+                                            <ul class="color-variant">
+                                                <li class="color-extra-01" th:each="color : ${availableColors}">
+                                                    <a th:href="@{'/product-detail/' + ${productDetail.productId} + '?colorId=' + ${color.colorId}}">
+                                                        <span th:text="${color.colorName}"></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                                <!-- Màu sắc -->
-                                <h6 class="title">Colors:</h6>
-                                <ul class="color-variant mt--0">
-                                    <li th:each="color : ${colors}" th:text="${color}" class="color-option"></li>
-                                </ul>
+                                    <!-- Sizes Section -->
+                                    <div class="product-variation product-size-variation">
+                                        <h6 class="title">Size:</h6>
+                                        <ul class="range-variant">
+                                            <li th:each="size : ${availableSizes}"
+                                                th:data-size-name="${size}"
+                                                th:text="${size}"
+                                                th:classappend="${size == selectedSize} ? 'selected' : ''"
+                                                class="size-option"></li>
+                                        </ul>
+                                    </div>
 
-                                <!-- Hiển thị các biến thể kích thước -->
-                                <h6 class="title">Kích thước:</h6>
-                                <ul class="size-variant">
-                                    <li th:each="size : ${sizes}" th:text="${size}" class="size-option"></li>
-                                </ul>
+                                    <!-- Add to Cart Form -->
+                                    <form th:action="@{/add_to_cart}" method="get">
+                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">
+                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
+                                        <input type="hidden" name="productName" th:value="${productDetail.productName}">
+                                        <input type="hidden" name="imageId" th:value="${productDetail.thumbnail}">
+                                        <input type="hidden" name="selectedSize" id="selectedSizeInput" value=""> <!-- This will hold the selected size -->
+                                        <input type="hidden" name="quantity" value="1"> <!-- Default quantity -->
+                                        <input type="hidden" name="price" th:value="${productDetail.price}">
+
+                                        <button type="submit" id="addToCartButton" class="btn btn-primary" disabled>
+                                            Add to Cart
+                                        </button>
+                                    </form>
+
+                                    <!-- Script to enable Add to Cart button when a size is selected -->
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            const sizeOptions = document.querySelectorAll('.size-option');
+                                            const addToCartButton = document.getElementById('addToCartButton');
+                                            const selectedSizeInput = document.getElementById('selectedSizeInput');
+
+                                            sizeOptions.forEach(option => {
+                                                option.addEventListener('click', function () {
+                                                    sizeOptions.forEach(s => s.classList.remove('selected'));
+                                                    this.classList.add('selected');
+
+                                                    // Set the selected size name to the hidden input
+                                                    const selectedSize = this.getAttribute('data-size-name');
+                                                    selectedSizeInput.value = selectedSize; // Set the selected size
+
+                                                    // Enable Add to Cart button
+                                                    addToCartButton.removeAttribute('disabled');
+                                                });
+                                            });
+                                        });
+                                    </script>
+
+                                </div>
+
+
 
                             </div>
-                                </div>
+
+                                <!-- Product action (quantity, add to cart, wishlist) -->
                                 <div class="product-action-wrapper d-flex-center">
                                     <div class="pro-qty">
                                         <input type="text" value="1">
                                     </div>
                                     <ul class="product-action d-flex-center mb--0">
-                                        <li class="add-to-cart">
-                                            <a href="cart-detail.html" class="axil-btn btn-bg-primary">Add to Cart</a>
-                                        </li>
-                                        <li class="wishlist">
-                                            <a href="wishlist.html" class="axil-btn wishlist-btn"><i class="far fa-heart"></i></a>
-                                        </li>
+                                        <li class="add-to-cart"><a href="cart-detail.html"
+                                                                   class="axil-btn btn-bg-primary">Add to Cart</a></li>
+                                        <li class="wishlist"><a href="wishlist.html" class="axil-btn wishlist-btn"><i
+                                                class="far fa-heart"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -428,36 +523,7 @@
             </div>
         </div>
 
-        <!-- End .single-product-thumb -->
-        <!-- Start Breadcrumb Area  -->
-        <div class="axil-breadcrumb-area">
-            <div class="container">
-                <div class="axil-dashboard-author">
-                    <div class="media">
-                        <div class="thumbnail">
-                            <a href="#"><img th:src="@{/images/product/categories/beauty.png}" alt="Hello Annie"
-                                             class="author-image"></a>
-                        </div>
-                        <div class="media-body-1">
-                            <div class="info-row">
-                                <span class="name"><h3>Shop Vippro</h3></span>
-                                <span class="joining-date">Register Since Sep 2020</span>
-                                <span class="email">Email: annie@example.com</span>
-                            </div>
-                            <div class="info-row">
-                                <a href="#"><i class="flaticon-chat hover-flip-item"> Chat with shop</i></a>
-                                <span class="address">Address: 123 Street Name</span>
-                                <a href="#"><i class="flaticon-shop hover-flip-item"> View Shop</i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- End Breadcrumb Area  -->
-        <br>
-
+        <!-- Description -->
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
@@ -466,416 +532,14 @@
                         <div class="col-lg-6 mb--30">
                             <div class="single-desc">
                                 <h5 class="title">Specifications:</h5>
-                                <p>We’ve created a full-stack structure for our working workflow processes, were from
-                                    the funny the century initial all the made, have spare to negatives. But the
-                                    structure was from the funny the century rather, initial
-                                    all the made, have spare to negatives.</p>
-                            </div>
-                        </div>
-                        <!-- End .col-lg-6 -->
-                        <div class="col-lg-6 mb--30">
-                            <div class="single-desc">
-                                <h5 class="title">Care & Maintenance:</h5>
-                                <p>Use warm water to describe us as a product team that creates amazing UI/UX
-                                    experiences, by crafting top-notch user experience.</p>
-                            </div>
-                        </div>
-                        <!-- End .col-lg-6 -->
-                    </div>
-                    <!-- End .row -->
-                </div>
-                <!-- End .product-desc-wrapper -->
-
-                <div class="reviews-wrapper">
-                    <h4 class="mb--60">Reviews</h4>
-                    <div class="row">
-                        <div class="col-lg-12 mb--40">
-                            <div class="axil-comment-area pro-desc-commnet-area">
-                                <h5 class="title">01 Review for this product</h5>
-                                <ul class="comment-list">
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img th:src="@{/images/others/author1.png}"
-                                                         alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Cameron Williamson">Eleanor Pena</span>
-                                                                </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star empty-rating"></i></a>
-                                                            </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working
-                                                            workflow processes, were from the funny the century initial
-                                                            all the made, have spare to negatives. ” </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img th:src="@{/images/others/author2.png}"
-                                                         alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Rahabi Khan">Courtney Henry</span>
-                                                                </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                            </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working
-                                                            workflow processes, were from the funny the century initial
-                                                            all the made, have spare to negatives. ”</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img th:src="@{/images/others/author3.png}"
-                                                         alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Rahabi Khan">Devon Lane</span>
-                                                                </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                            </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working
-                                                            workflow processes, were from the funny the century initial
-                                                            all the made, have spare to negatives. ” </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-                                </ul>
-                            </div>
-                            <!-- End .axil-commnet-area -->
-                        </div>
-                        <!-- End .col -->
-                        <!-- End .col -->
-                    </div>
-                </div>
-                <!-- End .reviews-wrapper -->
-
-                <div class="text-center pt--30">
-                    <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
-                </div>
-            </div>
-
-        </div>
-        <!-- woocommerce-tabs -->
-
-    </div>
-    <!-- End Shop Area  -->
-
-    <!-- Start Recently Viewed Product Area  -->
-    <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
-        <div class="container">
-            <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i> Your Recently</span>
-                <h2 class="title">Viewed Items</h2>
-            </div>
-            <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{/images/product/categories/beauty.png}" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">20% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail">3D™ wireless headset</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$30</span>
-                                    <span class="price current-price">$30</span>
-                                </div>
+                                <p th:text="${productDetail.productDescription}"></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{/images/product/categories/electronic.png}" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">40% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail">Media remote</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$80</span>
-                                    <span class="price current-price">$50</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{/images/product/categories/fashion.png}" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">30% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail">HD camera</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$60</span>
-                                    <span class="price current-price">$45</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{/images/product/categories/limited-product.png}" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">50% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$70</span>
-                                    <span class="price current-price">$35</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{/images/product/categories/second-hand.png}" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">25% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$50</span>
-                                    <span class="price current-price">$38</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{/images/product/categories/toys.png}" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">30% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail">HD camera</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$60</span>
-                                    <span class="price current-price">$45</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{/images/product/categories/second-hand.png}" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">50% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$70</span>
-                                    <span class="price current-price">$35</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{/images/product/categories/beauty.png}" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">25% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail">PS5 Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$50</span>
-                                    <span class="price current-price">$38</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
             </div>
         </div>
     </div>
-    <!-- End Recently Viewed Product Area  -->
 </main>
 
 <div class="service-area">
@@ -1073,16 +737,17 @@
                                         <div class="product-variation">
                                             <h6 class="title">Colors:</h6>
                                             <div class="color-variant-wrapper">
-                                                <ul class="color-variant mt--0">
-                                                    <li class="color-extra-01 active"><span><span class="color"></span></span>
-                                                    </li>
-                                                    <li class="color-extra-02"><span><span class="color"></span></span>
-                                                    </li>
-                                                    <li class="color-extra-03"><span><span class="color"></span></span>
+                                                <ul class="color-variant-wrapper">
+                                                    <li class="color-variant" th:each="color : ${availableColors}">
+                                                        <a th:href="@{'/product-detail/' + ${productDetail.productId} + '?colorId=' + ${color.colorId}}"
+                                                           th:text="${color.colorName}" class="color-link"></a>
+
                                                     </li>
                                                 </ul>
+
                                             </div>
                                         </div>
+
                                         <!-- End Product Variation  -->
 
                                         <!-- Start Product Variation  -->

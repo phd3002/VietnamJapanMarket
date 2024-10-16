@@ -1,33 +1,66 @@
 package com.ecommerce.g58.dto;
 
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.Entity;
-import java.util.List;
 
 @Getter
 @Setter
 public class ProductDetailDTO {
-
+    // Product table fields
     private Integer productId;
     private String productName;
-    private int price;
-    private String thumbnail;
+    private String productDescription;
+    private Integer price;
+    private Float weight;
 
-    // Các trường hình ảnh bổ sung
+    // ProductVariation table fields
+    private Integer variationId;
+    private String size;
+    private String color;
+    private Integer stock;
+
+    // ProductImage table fields
+    private String thumbnail;
     private String image1;
     private String image2;
     private String image3;
     private String image4;
 
-    // Màu sắc và kích thước
-    private List<String> colors;
-    private List<String> sizes;
+    // Constructors
+    public ProductDetailDTO() {}
+
+    public ProductDetailDTO(Integer productId, String productName, String productDescription, Integer price, Float weight,
+                            Integer variationId, String sizeName, String colorName, Integer stock, String thumbnail) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.price = price;
+        this.weight = weight;
+        this.variationId = variationId;
+        this.size = sizeName;
+        this.color = colorName;
+        this.stock = stock;
+        this.thumbnail = thumbnail;
+    }
 
 
-//    public ProductDetailDTO(Integer productId, String productName, int price, String thumbnail, String image1, String image2, String image3, String image4, List<String> colors, List<String> sizes) {
-//    }
+    public ProductDetailDTO(Integer productId, String productName, String productDescription,
+                            Integer price, Float weight, Integer variationId, String size,
+                            String color, Integer stock, String thumbnail,
+                            String image1, String image2, String image3, String image4) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.price = price;
+        this.weight = weight;
+        this.variationId = variationId;
+        this.size = size;
+        this.color = color;
+        this.stock = stock;
+        this.thumbnail = thumbnail;
+        this.image1 = image1;
+        this.image2 = image2;
+        this.image3 = image3;
+        this.image4 = image4;
+    }
 }
