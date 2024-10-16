@@ -80,25 +80,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 // Any other request must be authenticated
                 .anyRequest().authenticated()
                 .and()
-                // Redirect to login page for unauthorized access
-                .formLogin()
-                .loginPage("/sign-in")
-                .defaultSuccessUrl("/homepage", true)
-                .failureUrl("/sign-in?error=true")
-                .permitAll()
-                .and()
                 // Logout configuration
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/sign-in?logout")
                 .permitAll()
                 .and()
-                // Handle access denied
-                .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler())
-                .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/sign-in"))
+                // Exception handling for access denied
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                 .and()
-                // Disable CSRF and CORS
+                // Disable CSRF and CORS for simplicity (adjust as necessary)
                 .csrf().disable()
                 .cors().disable();
     }
