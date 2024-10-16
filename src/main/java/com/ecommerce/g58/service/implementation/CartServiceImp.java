@@ -99,6 +99,11 @@ public class CartServiceImp implements CartService {
     }
 
     @Override
+    public List<CartItem> getCartItemsByIds(List<Integer> cartItemIds) {
+        return List.of();
+    }
+
+    @Override
     public void updateCartItemQuantity(Integer cartItemId, int quantity) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
@@ -109,10 +114,6 @@ public class CartServiceImp implements CartService {
         updateCartTotalPrice(cartItem.getCart());
     }
 
-    @Override
-    public List<CartItem> getCartItemsByIds(List<Integer> cartItemIds) {
-        return cartItemRepository.findByCartItemIdIn(cartItemIds);
-    }
 
     public void updateCartTotalPrice(Cart cart) {
         if (cart.getCartItems() != null && !cart.getCartItems().isEmpty()) {
