@@ -1,9 +1,8 @@
 package com.ecommerce.g58.service;
 
 import com.ecommerce.g58.dto.ProductDTO;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.ProductVariation;
-import com.ecommerce.g58.entity.Products;
+import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ProductRepository;
 import com.ecommerce.g58.repository.ProductVariationRepository;
@@ -19,9 +18,13 @@ import java.util.stream.Collectors;
 public interface ProductService {
     List<ProductDTO> getProductDetails();
 
+    List<Products> getProductsByCategory(Long categoryId);
+
     List<ProductDTO> getSearchProduct();
 
     ProductVariation getProductVariationById(Integer variationId);
+
+    ProductDetailDTO getProductDetailByProductIdAndVariationId(Integer productId, Integer variationId);
 
     List<Products> getAllProducts();
 
@@ -34,4 +37,11 @@ public interface ProductService {
     Products getProductById(Integer productId);
 
     List<ProductDTO> searchProducts(String query);
+
+    ProductDetailDTO getProductDetailByProductIdAndColorId(Integer productId, Integer colorId);
+
+    List<Color> getAvailableColors(Integer productId);
+
+    List<String> getAvailableSizesByProductIdAndColorId(Integer productId, Integer colorId);
+
 }

@@ -1,5 +1,6 @@
 package com.ecommerce.g58.service.implementation;
 
+import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.CartItemRepository;
 import com.ecommerce.g58.repository.CartRepository;
@@ -45,40 +46,73 @@ public class CartServiceImp implements CartService {
     }
 
     @Override
-    public void addToCart(Cart cart, Integer variationId, Integer productId, String productName, Integer imageId, int quantity, Integer price) {
-        if (cart.getCartItems() == null) {
-            cart.setCartItems(new ArrayList<>());  // Khởi tạo danh sách trống nếu chưa có
-        }
-        // Log to check parameters
-        System.out.println("Adding to cart - productId: " + productId + ", variantId: " + variationId);
-        // Fetch the product and variation
-        Products product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-        ProductVariation variation = productVariationRepository.findById(variationId)
-                .orElseThrow(() -> new IllegalArgumentException("Product variation not found"));
+    public void addProductToCart(Users user, ProductDetailDTO productDetail, int quantity, Cart cart) {
+        // Fetch the product and variation as entities from the database
+        Products product = productRepository.findById(productDetail.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
 
-        // Find the cart item by cart and variation
-        CartItem cartItem = cartItemRepository.findByCartIdAndVariation(cart.getCartId(), variation);
+        ProductVariation variation = productVariationRepository.findById(productDetail.getVariationId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid variation ID"));
 
-        if (cartItem == null) {
-            System.out.println("Creating new cart item");
-            // If the item doesn't exist in the cart, create a new CartItem
-            cartItem = new CartItem();
-            cartItem.setCart(cart);
-            cartItem.setProductId(product);
-            cartItem.setVariationId(variation);
-            cartItem.setQuantity(quantity);
-            cartItem.setPrice(price);
-            cartItemRepository.save(cartItem);
-        } else {
-            System.out.println("Updating cart item quantity");
-            // If the item already exists, just update the quantity
+        // Check if the product variation is already in the cart
+        CartItem cartItem = cartItemRepository.findByCartAndProductAndVariation(cart, product, variation);
+
+        if (cartItem != null) {
+            // If the item is already in the cart, update the quantity
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
             cartItemRepository.save(cartItem);
+        } else {
+            // If the item is not in the cart, create a new CartItem
+            cartItem = new CartItem();
+            cartItem.setCart(cart);
+            cartItem.setProductId(product);  // Use entity Products
+            cartItem.setVariationId(variation);  // Use entity ProductVariation
+            cartItem.setQuantity(quantity);
+            cartItem.setPrice(productDetail.getPrice());  // Store the price from the ProductDetailDTO
+            cartItemRepository.save(cartItem);
         }
-
+        cartRepository.save(cart);
         updateCartTotalPrice(cart);
     }
+
+
+
+
+//    @Override
+//    public void addToCart(Cart cart, Integer variationId, Integer productId, String productName, Integer imageId, int quantity, Integer price) {
+//        if (cart.getCartItems() == null) {
+//            cart.setCartItems(new ArrayList<>());  // Khởi tạo danh sách trống nếu chưa có
+//        }
+//        // Log to check parameters
+//        System.out.println("Adding to cart - productId: " + productId + ", variantId: " + variationId);
+//        // Fetch the product and variation
+//        Products product = productRepository.findById(productId)
+//                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+//        ProductVariation variation = productVariationRepository.findById(variationId)
+//                .orElseThrow(() -> new IllegalArgumentException("Product variation not found"));
+//
+//        // Find the cart item by cart and variation
+//        CartItem cartItem = cartItemRepository.findByCartIdAndVariation(cart.getCartId(), variation);
+//
+//        if (cartItem == null) {
+//            System.out.println("Creating new cart item");
+//            // If the item doesn't exist in the cart, create a new CartItem
+//            cartItem = new CartItem();
+//            cartItem.setCart(cart);
+//            cartItem.setProductId(product);
+//            cartItem.setVariationId(variation);
+//            cartItem.setQuantity(quantity);
+//            cartItem.setPrice(price);
+//            cartItemRepository.save(cartItem);
+//        } else {
+//            System.out.println("Updating cart item quantity");
+//            // If the item already exists, just update the quantity
+//            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+//            cartItemRepository.save(cartItem);
+//        }
+//
+//        updateCartTotalPrice(cart);
+//    }
 
     @Transactional
     @Override

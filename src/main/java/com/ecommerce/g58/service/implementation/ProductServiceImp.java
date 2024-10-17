@@ -1,9 +1,8 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.ProductDTO;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.ProductVariation;
-import com.ecommerce.g58.entity.Products;
+import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ProductRepository;
 import com.ecommerce.g58.repository.ProductVariationRepository;
@@ -11,8 +10,10 @@ import com.ecommerce.g58.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +48,16 @@ public class ProductServiceImp implements ProductService {
         return productDetails;
     }
 
+    @Override
+    public ProductDetailDTO getProductDetailByProductIdAndVariationId(Integer productId, Integer variationId) {
+        // Directly get the ProductDetailDTO from the repository
+        return productRepository.findProductDetailByProductIdAndVariationId(productId, variationId);
+    }
+
+    public List<Products> getProductsByCategory(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId);
+    }
+
     /**
      * Fetch product details using a native query that joins products, product variations, and product images.
      * This query returns the product name, thumbnail, and price.
@@ -70,8 +81,8 @@ public class ProductServiceImp implements ProductService {
 
 
     //    public List<ProductDTO> findProductDetails() {
-    //        return productRepository.findProductDetails();
-    //    }
+//        return productRepository.findProductDetails();
+//    }
     public List<Products> getAllProducts() {
         return productRepository.findAll(); // Fetch all products
     }
@@ -115,4 +126,27 @@ public class ProductServiceImp implements ProductService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public ProductDetailDTO getProductDetailByProductIdAndColorId(Integer productId, Integer colorId) {
+        ProductDetailDTO productDetail = productRepository.findProductDetailByProductIdAndColorId(productId, colorId);
+
+        if (productDetail != null) {
+            return productDetail;
+        } else {
+            throw new EntityNotFoundException("Product not found for ID: " + productId + " and Color ID: " + colorId);
+        }
+    }
+
+    public List<Color> getAvailableColors(Integer productId) {
+        return productRepository.findAvailableColorsByProductId(productId);
+    }
+
+    @Override
+    public List<String> getAvailableSizesByProductIdAndColorId(Integer productId, Integer colorId) {
+        return productRepository.findSizesByProductIdAndColorId(productId, colorId);
+    }
+
 }
+
+
