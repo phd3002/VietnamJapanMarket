@@ -417,7 +417,6 @@
                                 <!-- Product title and price -->
                                 <h2 class="product-title" th:text="${productDetail.productName}">Product Name</h2>
                                 <span class="price-amount" th:text="${productDetail.price} + ' $'">Price</span>
-
                                 <!-- Rating and review count -->
                                 <div class="product-rating">
                                     <div class="star-rating">
@@ -431,7 +430,6 @@
                                         <a href="#">(<span>2</span> customer reviews)</a>
                                     </div>
                                 </div>
-
                                 <!-- Product variations -->
                                 <div class="product-variations-wrapper">
                                     <!-- Colors Section -->
@@ -447,7 +445,6 @@
                                             </ul>
                                         </div>
                                     </div>
-
                                     <!-- Sizes Section -->
                                     <div class="product-variation product-size-variation">
                                         <h6 class="title">Size:</h6>
@@ -459,7 +456,6 @@
                                                 class="size-option"></li>
                                         </ul>
                                     </div>
-
                                     <!-- Add to Cart Form -->
                                     <div th:if="${message}" class="alert alert-success" role="alert">
                                         <span th:text="${message}"></span>
@@ -480,7 +476,6 @@
                                             Add to Cart
                                         </button>
                                     </form>
-
                                     <!-- Script to enable Add to Cart button when a size is selected -->
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function () {
@@ -503,12 +498,35 @@
                                             });
                                         });
                                     </script>
-
                                 </div>
-
-
-
                             </div>
+
+<!--                            <div class="product-action-wrapper d-flex-center">-->
+<!--                                <div class="wishlist-form-container d-flex">-->
+<!--                                    &lt;!&ndash; Add to Cart Form &ndash;&gt;-->
+<!--                                    <form th:action="@{/add_to_cart}" method="post" style="margin-right: 10px;">-->
+<!--                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">-->
+<!--                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">-->
+<!--                                        <input type="hidden" name="productName" th:value="${productDetail.productName}">-->
+<!--                                        <input type="hidden" name="imageId" th:value="${productDetail.thumbnail}">-->
+<!--                                        <input type="hidden" name="selectedSize" id="selectedSizeInput" value="">-->
+<!--                                        <input type="hidden" name="quantity" value="1">-->
+<!--                                        <input type="hidden" name="price" th:value="${productDetail.price}">-->
+
+<!--                                        &lt;!&ndash; Set width to 100% for both buttons &ndash;&gt;-->
+<!--                                        <button type="submit" id="addToCartButton" class="btn btn-primary" style="width: 155px; height: 60px" disabled>Add to Cart</button>-->
+<!--                                    </form>-->
+
+<!--                                    &lt;!&ndash; Add to Wishlist Form &ndash;&gt;-->
+<!--                                    <form th:action="@{/add_to_wishlist}" method="post">-->
+<!--                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">-->
+<!--                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">-->
+
+<!--                                        &lt;!&ndash; Set same width for this button as well &ndash;&gt;-->
+<!--                                        <button type="submit" class="btn wishlist-btn" style="width: 155px; height: 60px; background-color: hotpink">Add to Wishlist</button>-->
+<!--                                    </form>-->
+<!--                                </div>-->
+<!--                            </div>-->
 
                                 <!-- Product action (quantity, add to cart, wishlist) -->
                             <!-- Corrected Placement for the Form -->
@@ -532,9 +550,6 @@
                                     </form>
                                 </div>
                             </div>
-
-
-                        </div>
                         </div>
                     </div>
                 </div>
