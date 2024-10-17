@@ -405,23 +405,7 @@
                                 <input type="email" id="email">
                             </div>
                             <h4 class="title mb--40">Địa chỉ giao hàng</h4>
-                            <div class="form-group input-group">
-                                <input type="checkbox" id="address" name="address" onchange="onlyOne(this)">
-                                <label for="address">ABC, XYZ, CBD</label>
-                            </div>
-                            <div class="form-group input-group">
-                                <input type="checkbox" id="checkbox1" name="address" onchange="onlyOne(this)">
-                                <label for="checkbox1">ABC, XYZ, CBD</label>
-                            </div>
-                            <div class="form-group different-shippng">
-                                <div class="toggle-bar">
-                                    <a href="javascript:void(0)" class="toggle-btn">
-                                        <input type="checkbox" id="checkbox2" name="diffrent-ship" onchange="onlyOne(this)">
-                                        <label for="checkbox2">Địa chỉ khác</label>
-                                    </a>
-                                </div>
-                                <div class="toggle-open">
-                                    <div class="form-group">
+                            <div class="form-group">
                                         <label>Quốc gia <span>*</span></label>
                                         <select id="Region">
                                             <option value="3">Việt Nam</option>
@@ -431,17 +415,6 @@
                                     <div class="form-group">
                                         <label>Địa chỉ chi tiết <span>*</span></label>
                                         <input type="text" id="new-address" class="mb--15">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Điện thoại <span>*</span></label>
-                                        <input type="tel" id="new-phone">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Other Notes (optional)</label>
-                                <textarea id="notes" rows="2"
-                                          placeholder="Notes about your order, e.g. speacial notes for delivery."></textarea>
                             </div>
                         </div>
                     </div>
@@ -452,8 +425,8 @@
                                 <table class="table summery-table">
                                     <thead>
                                     <tr>
-                                        <th>Product</th>
-                                        <th>Subtotal</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -468,7 +441,7 @@
                                         <td>$117.00</td>
                                     </tr>
                                     <tr class="order-subtotal">
-                                        <td>Subtotal</td>
+                                        <td>Tổng</td>
                                         <td>$117.00</td>
                                     </tr>
                                     <tr class="order-shipping">
@@ -527,7 +500,6 @@
         </div>
     </div>
     <!-- End Checkout Area  -->
-
 </main>
 
 
@@ -651,14 +623,6 @@
 <!-- Main JS -->
 <script src="../static/js/main.js"></script>
 <script src="../static/js/script.js"></script>
-<script>
-    function onlyOne(checkbox) {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach((item) => {
-            if (item !== checkbox) item.checked = false;
-        });
-    }
-</script>
 </body>
 
 
