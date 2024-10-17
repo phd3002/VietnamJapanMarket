@@ -47,8 +47,6 @@ public class CartServiceImp implements CartService {
 
     @Override
     public void addProductToCart(Users user, ProductDetailDTO productDetail, int quantity, Cart cart) {
-//        Cart cart = getOrCreateCart(user);
-
         // Fetch the product and variation as entities from the database
         Products product = productRepository.findById(productDetail.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
@@ -73,10 +71,6 @@ public class CartServiceImp implements CartService {
             cartItem.setPrice(productDetail.getPrice());  // Store the price from the ProductDetailDTO
             cartItemRepository.save(cartItem);
         }
-
-        // Update the total price and amount in the cart
-//        cart.setTotalAmount(cart.getTotalAmount() + quantity);
-//        cart.setTotalPrice(cart.getTotalPrice() + (productDetail.getPrice() * quantity));
         cartRepository.save(cart);
         updateCartTotalPrice(cart);
     }

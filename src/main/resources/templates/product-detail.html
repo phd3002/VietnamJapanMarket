@@ -511,18 +511,30 @@
                             </div>
 
                                 <!-- Product action (quantity, add to cart, wishlist) -->
-                                <div class="product-action-wrapper d-flex-center">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
-                                    </div>
-                                    <ul class="product-action d-flex-center mb--0">
-                                        <li class="add-to-cart"><a href="cart-detail.html"
-                                                                   class="axil-btn btn-bg-primary">Add to Cart</a></li>
-                                        <li class="wishlist"><a href="wishlist.html" class="axil-btn wishlist-btn"><i
-                                                class="far fa-heart"></i></a></li>
-                                    </ul>
+                            <!-- Corrected Placement for the Form -->
+                            <!-- Corrected Placement for the Form -->
+                            <div class="product-action-wrapper d-flex-center">
+                                <ul class="product-action d-flex-center mb--0">
+                                    <!-- Original actions inside ul, without form or div -->
+                                    <li class="wishlist">
+                                        <!-- Any existing wishlist icon here -->
+                                        <a href="#" class="add-wishlist-icon"><i class="fal fa-heart"></i></a>
+                                    </li>
+                                    <!-- Other list items here if needed -->
+                                </ul>
+
+                                <!-- Place the form separately, outside the ul -->
+                                <div class="wishlist-form-container">
+                                    <form th:action="@{/add_to_wishlist}" method="post">
+                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">
+                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
+                                        <button type="submit" class="axil-btn wishlist-btn">Add to Wishlist</button>
+                                    </form>
                                 </div>
                             </div>
+
+
+                        </div>
                         </div>
                     </div>
                 </div>
