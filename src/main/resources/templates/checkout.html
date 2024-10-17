@@ -17,17 +17,17 @@
     ============================================ -->
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
-    <link rel="stylesheet" th:href="@{/css/style.min.css}">
-    <link rel="stylesheet" th:href="@{/css/style-2.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/base.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/style.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/style-2.css}" type="text/css">
 </head>
 
 
@@ -119,7 +119,8 @@
                                         <!-- Notification Item -->
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img src="../static/images/product/electric/product-01.png"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -129,7 +130,8 @@
                                         </div>
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img src="../static/images/product/electric/product-01.png"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -370,187 +372,123 @@
             <form action="#">
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="axil-checkout-notice">
-                            <div class="axil-toggle-box">
-                                <div class="toggle-bar"><i class="fas fa-pencil"></i> Have a coupon? <a
-                                        href="javascript:void(0)" class="toggle-btn">Click here to enter your code <i
-                                        class="fas fa-angle-down"></i></a>
-                                </div>
+                        <!--                        <div class="axil-checkout-notice">-->
+                        <!--                            <div class="axil-toggle-box">-->
+                        <!--                                <div class="toggle-bar"><i class="fas fa-pencil"></i> Have a coupon? <a-->
+                        <!--                                        href="javascript:void(0)" class="toggle-btn">Click here to enter your code <i-->
+                        <!--                                        class="fas fa-angle-down"></i></a>-->
+                        <!--                                </div>-->
 
-                                <div class="axil-checkout-coupon toggle-open">
-                                    <p>If you have a coupon code, please apply it below.</p>
-                                    <div class="input-group">
-                                        <input placeholder="Enter coupon code" type="text">
-                                        <div class="apply-btn">
-                                            <button type="submit" class="axil-btn btn-bg-primary">Apply</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--                                <div class="axil-checkout-coupon toggle-open">-->
+                        <!--                                    <p>If you have a coupon code, please apply it below.</p>-->
+                        <!--                                    <div class="input-group">-->
+                        <!--                                        <input placeholder="Enter coupon code" type="text">-->
+                        <!--                                        <div class="apply-btn">-->
+                        <!--                                            <button type="submit" class="axil-btn btn-bg-primary">Apply</button>-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
                         <div class="axil-checkout-billing">
-                            <h4 class="title mb--40">Billing details</h4>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>First Name <span>*</span></label>
-                                        <input type="text" id="first-name" placeholder="Adam">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>Last Name <span>*</span></label>
-                                        <input type="text" id="last-name" placeholder="John">
-                                    </div>
-                                </div>
+                            <h4 class="title mb--40">Chi tiết thanh toán</h4>
+                            <div class="form-group">
+                                <label>Họ tên <span>*</span></label>
+                                <input type="text" id="fullname" value="Meo">
                             </div>
                             <div class="form-group">
-                                <label>Company Name</label>
-                                <input type="text" id="company-name">
+                                <label>Điện thoại <span>*</span></label>
+                                <input type="tel" id="phone">
                             </div>
                             <div class="form-group">
-                                <label>Country/ Region <span>*</span></label>
-                                <select id="Region1">
-                                    <option value="3">Australia</option>
-                                    <option value="4">England</option>
-                                    <option value="6">New Zealand</option>
-                                    <option value="5">Switzerland</option>
-                                    <option value="1">United Kindom (UK)</option>
-                                    <option value="2">United States (USA)</option>
+                                <label>Địa chỉ Email <span>*</span></label>
+                                <input type="email" id="email">
+                            </div>
+                            <h4 class="title mb--40">Địa chỉ giao hàng</h4>
+                            <div class="form-group">
+                                <label>Quốc gia <span>*</span></label>
+                                <select id="Region">
+                                    <option value="3">Việt Nam</option>
+                                    <option value="4">Nhật Bản</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Street Address <span>*</span></label>
-                                <input type="text" id="address1-1" class="mb--15" placeholder="House number and street name">
-                                <input type="text" id="address2-1" placeholder="Apartment, suite, unit, etc. (optional)">
-                            </div>
-                            <div class="form-group">
-                                <label>Town/ City <span>*</span></label>
-                                <input type="text" id="town1">
-                            </div>
-                            <div class="form-group">
-                                <label>Country</label>
-                                <input type="text" id="country1">
-                            </div>
-                            <div class="form-group">
-                                <label>Phone <span>*</span></label>
-                                <input type="tel" id="phone1">
-                            </div>
-                            <div class="form-group">
-                                <label>Email Address <span>*</span></label>
-                                <input type="email" id="email">
-                            </div>
-                            <div class="form-group input-group">
-                                <input type="checkbox" id="checkbox1" name="account-create">
-                                <label for="checkbox1">Create an account</label>
-                            </div>
-                            <div class="form-group different-shippng">
-                                <div class="toggle-bar">
-                                    <a href="javascript:void(0)" class="toggle-btn">
-                                        <input type="checkbox" id="checkbox2" name="diffrent-ship">
-                                        <label for="checkbox2">Ship to a different address?</label>
-                                    </a>
-                                </div>
-                                <div class="toggle-open">
-                                    <div class="form-group">
-                                        <label>Country/ Region <span>*</span></label>
-                                        <select id="Region2">
-                                            <option value="3">Australia</option>
-                                            <option value="4">England</option>
-                                            <option value="6">New Zealand</option>
-                                            <option value="5">Switzerland</option>
-                                            <option value="1">United Kindom (UK)</option>
-                                            <option value="2">United States (USA)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Street Address <span>*</span></label>
-                                        <input type="text" id="address1-2" class="mb--15" placeholder="House number and street name">
-                                        <input type="text" id="address2-2" placeholder="Apartment, suite, unit, etc. (optional)">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Town/ City <span>*</span></label>
-                                        <input type="text" id="town2">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Country</label>
-                                        <input type="text" id="country2">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Phone <span>*</span></label>
-                                        <input type="tel" id="phone2">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Other Notes (optional)</label>
-                                <textarea id="notes" rows="2"
-                                          placeholder="Notes about your order, e.g. speacial notes for delivery."></textarea>
+                                <label>Địa chỉ chi tiết <span>*</span></label>
+                                <input type="text" id="new-address" class="mb--15">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="axil-order-summery order-checkout-summery">
-                            <h5 class="title mb--20">Your Order</h5>
+                            <h5 class="title mb--20">Đơn hàng của bạn</h5>
                             <div class="summery-table-wrap">
                                 <table class="table summery-table">
                                     <thead>
                                     <tr>
-                                        <th>Product</th>
-                                        <th>Subtotal</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr class="order-product">
-                                        <td>Commodo Blown Lamp <span class="quantity">x1</span></td>
+                                        <td><img src="../static/images/product/categories/beauty.png" height="100"
+                                                 width="100"/>Commodo Blown Lamp <span class="quantity">x1</span></td>
                                         <td>$117.00</td>
                                     </tr>
                                     <tr class="order-product">
-                                        <td>Commodo Blown Lamp <span class="quantity">x1</span></td>
-                                        <td>$198.00</td>
+                                        <td><img src="../static/images/product/categories/beauty.png" height="100"
+                                                 width="100"/>Commodo Blown Lamp <span class="quantity">x1</span></td>
+                                        <td>$117.00</td>
                                     </tr>
                                     <tr class="order-subtotal">
-                                        <td>Subtotal</td>
+                                        <td>Tổng</td>
                                         <td>$117.00</td>
                                     </tr>
                                     <tr class="order-shipping">
-                                        <td colspan="2">
+                                        <td colspan="3">
                                             <div class="shipping-amount">
-                                                <span class="title">Shipping Method</span>
+                                                <span class="title">Phương thức vận chuyển</span>
                                                 <span class="amount">$35.00</span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="radio" id="radio1" name="shipping" checked>
-                                                <label for="radio1">Free Shippping</label>
+                                                <label for="radio1">Hỏa tốc</label>
                                             </div>
                                             <div class="input-group">
                                                 <input type="radio" id="radio2" name="shipping">
-                                                <label for="radio2">Local</label>
+                                                <label for="radio2">Thường</label>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr class="order-total">
-                                        <td>Total</td>
+                                        <td>Tổng</td>
                                         <td class="order-total-amount">$323.00</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <h5 class="title mb--20">Phương thức thanh toán</h5>
                             <div class="order-payment-method">
                                 <div class="single-payment">
                                     <div class="input-group">
-                                        <input type="radio" id="radio5" name="payment">
-                                        <label for="radio5">Cash on delivery</label>
+                                        <input type="radio" id="walletPayment" name="paymentMethod" value="Wallet" required>
+                                        <label for="walletPayment">Thanh toán bằng ví</label>
                                     </div>
-                                    <p>Pay with cash upon delivery.</p>
+                                    <p>Thanh toán trực tiếp từ ví của bạn.</p>
                                 </div>
                                 <div class="single-payment">
                                     <div class="input-group justify-content-between align-items-center">
-                                        <input type="radio" id="radio6" name="payment" checked>
-                                        <label for="radio6">Banking</label>
-                                        <img src="../static/images/others/payment.png" alt="Paypal payment">
+                                        <input type="radio" id="onlinePayment" name="paymentMethod" value="Online">
+                                        <label for="onlinePayment">Thanh toán online</label>
                                     </div>
-                                    <p>Using your app backing</p>
+                                    <p>Thanh toán qua ngân hàng hoặc thẻ tín dụng.</p>
+                                </div>
+                                <div class="single-payment">
+                                    <div class="input-group justify-content-between align-items-center">
+                                        <input type="radio" id="codPayment" name="paymentMethod" value="Cash on Delivery">
+                                        <label for="codPayment">Thanh toán khi nhận hàng</label>
+                                    </div>
+                                    <p>Trả tiền mặt khi nhận hàng.</p>
                                 </div>
                             </div>
                             <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Checkout
@@ -562,7 +500,6 @@
         </div>
     </div>
     <!-- End Checkout Area  -->
-
 </main>
 
 
@@ -683,12 +620,11 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 
 
-<!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
 <!-- Main JS -->
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
 </body>
 
 
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/homepage.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:13:01 GMT -->
+<!-- Mirrored from new.axilthemes.com/demo/template/etrade/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:16 GMT -->
 </html>
