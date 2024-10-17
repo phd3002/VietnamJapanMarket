@@ -62,6 +62,7 @@ public class CartServiceImp implements CartService {
         if (cartItem != null) {
             // If the item is already in the cart, update the quantity
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            cartItemRepository.save(cartItem);
         } else {
             // If the item is not in the cart, create a new CartItem
             cartItem = new CartItem();
@@ -74,9 +75,10 @@ public class CartServiceImp implements CartService {
         }
 
         // Update the total price and amount in the cart
-        cart.setTotalAmount(cart.getTotalAmount() + quantity);
-        cart.setTotalPrice(cart.getTotalPrice() + (productDetail.getPrice() * quantity));
+//        cart.setTotalAmount(cart.getTotalAmount() + quantity);
+//        cart.setTotalPrice(cart.getTotalPrice() + (productDetail.getPrice() * quantity));
         cartRepository.save(cart);
+        updateCartTotalPrice(cart);
     }
 
 

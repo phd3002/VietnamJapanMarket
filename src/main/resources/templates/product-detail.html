@@ -461,7 +461,13 @@
                                     </div>
 
                                     <!-- Add to Cart Form -->
-                                    <form th:action="@{/add_to_cart}" method="get">
+                                    <div th:if="${message}" class="alert alert-success" role="alert">
+                                        <span th:text="${message}"></span>
+                                    </div>
+                                    <div th:if="${error}" class="alert alert-danger" role="alert">
+                                        <span th:text="${error}"></span>
+                                    </div>
+                                    <form th:action="@{/add_to_cart}" method="post">
                                         <input type="hidden" name="productId" th:value="${productDetail.productId}">
                                         <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
                                         <input type="hidden" name="productName" th:value="${productDetail.productName}">
