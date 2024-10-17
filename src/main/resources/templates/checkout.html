@@ -7,7 +7,6 @@
     <meta name="robots" content="noindex, follow"/>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
 
     <!-- CSS
@@ -44,7 +43,7 @@
                             <h4 class="title mb--40">Chi tiết thanh toán</h4>
                             <div class="form-group">
                                 <label>Họ tên <span>*</span></label>
-                                <input type="text" id="fullname" value="Meo">
+                                <input type="text" id="fullname">
                             </div>
                             <div class="form-group">
                                 <label>Điện thoại <span>*</span></label>
@@ -80,39 +79,16 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr class="order-product">
-                                        <td><img src="../static/images/product/categories/beauty.png" height="100"
-                                                 width="100"/>Commodo Blown Lamp <span class="quantity">x1</span></td>
-                                        <td>$117.00</td>
-                                    </tr>
-                                    <tr class="order-product">
-                                        <td><img src="../static/images/product/categories/beauty.png" height="100"
-                                                 width="100"/>Commodo Blown Lamp <span class="quantity">x1</span></td>
-                                        <td>$117.00</td>
-                                    </tr>
-                                    <tr class="order-subtotal">
-                                        <td>Tổng</td>
-                                        <td>$117.00</td>
-                                    </tr>
-                                    <tr class="order-shipping">
-                                        <td colspan="3">
-                                            <div class="shipping-amount">
-                                                <span class="title">Phương thức vận chuyển</span>
-                                                <span class="amount">$35.00</span>
-                                            </div>
-                                            <div class="input-group">
-                                                <input type="radio" id="radio1" name="shipping" checked>
-                                                <label for="radio1">Hỏa tốc</label>
-                                            </div>
-                                            <div class="input-group">
-                                                <input type="radio" id="radio2" name="shipping">
-                                                <label for="radio2">Thường</label>
-                                            </div>
+                                    <tr th:each="item : ${cartItems}">
+                                        <td>
+                                            <img th:src="${productImages[item.productId.productId]}" alt="Product Image" height="100" width="100" />
+                                            <span th:text="${item.productId.productName}"></span> x<span th:text="${item.quantity}"></span>
                                         </td>
+                                        <td th:text="${item.price}">Price</td>
                                     </tr>
                                     <tr class="order-total">
                                         <td>Tổng</td>
-                                        <td class="order-total-amount">$323.00</td>
+                                        <td th:text="${totalPrice}" class="order-total-amount"></td>
                                     </tr>
                                     </tbody>
                                 </table>
