@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title th:replace="${pageTitle}"></title>
+    <title th:text="${pageTitle} ?: 'Default Title'"></title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
 
@@ -48,11 +49,11 @@
                 <div class="col-sm-6">
                     <div class="header-top-link">
                         <ul class="quick-link">
-                            <li th:if="${isLoggedIn}">
+                            <li th:if="${isLoggedIn != null and isLoggedIn}">
                                 <span>Welcome, <span th:text="${username}"></span></span>
                                 <a href="/logout">Logout</a>
                             </li>
-                            <li th:if="${!isLoggedIn}">
+                            <li th:if="${isLoggedIn == null or !isLoggedIn}">
                                 <a href="/sign-up">Join Us</a>
                                 <a href="/sign-in">Sign In</a>
                             </li>
