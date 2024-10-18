@@ -36,34 +36,33 @@
     <!-- Start Checkout Area  -->
     <div class="axil-checkout-area axil-section-gap">
         <div class="container">
-            <form action="#">
+            <form action="/place-order" method="post">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="axil-checkout-billing">
                             <h4 class="title mb--40">Chi tiết thanh toán</h4>
                             <div class="form-group">
-                                <label>Họ tên <span>*</span></label>
-                                <input type="text" id="fullname">
+                                <label>Họ tên </label>
+                                <input type="text" id="name" name="name" value="${user.firstName} ${user.lastName}" readonly>
                             </div>
                             <div class="form-group">
-                                <label>Điện thoại <span>*</span></label>
-                                <input type="tel" id="phone">
+                                <label>Điện thoại </label>
+                                <input type="tel" id="phone" name="phone" value="${user.phoneNumber}" readonly>
                             </div>
                             <div class="form-group">
-                                <label>Địa chỉ Email <span>*</span></label>
-                                <input type="email" id="email">
+                                <label>Địa chỉ Email </label>
+                                <input type="email" id="email" name="email" value="${user.email}" readonly>
                             </div>
                             <h4 class="title mb--40">Địa chỉ giao hàng</h4>
                             <div class="form-group">
-                                <label>Quốc gia <span>*</span></label>
-                                <select id="Region">
-                                    <option value="3">Việt Nam</option>
-                                    <option value="4">Nhật Bản</option>
+                                <label for="country">Quốc gia <span>*</span></label>
+                                <select id="country" name="country">
+                                    <option option th:each="country : ${countries}" th:value="${country.countryId}" th:text="${country.countryName}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Địa chỉ chi tiết <span>*</span></label>
-                                <input type="text" id="new-address" class="mb--15">
+                                <input type="text" id="address" name="address" class="mb--15">
                             </div>
                         </div>
                     </div>
@@ -93,31 +92,41 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <h5 class="title mb--20">Phương thức thanh toán</h5>
-                            <div class="order-payment-method">
+                            <h5 class="title mb--20">Phương thức vận chuyển</h5>
+<!--                            <div class="order-payment-method" >-->
+<!--                                <div class="single-payment" for="shippingMethod">-->
+<!--                                    <div class="input-group" th:each="shipping : ${shippingMethods}">-->
+<!--                                        <input type="radio" id="shippingMethod" name="shippingMethod" th:value="${shipping.unitId}">-->
+<!--&lt;!&ndash;                                        <label th:for="${shipping.unitId}" th:text="${shipping.unitName}"></label>&ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                    <p>Thanh toán trực tiếp từ ví của bạn.</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            <h5 class="title mb--20" for="paymentMethod">Phương thức thanh toán</h5>
+                            <div class="order-payment-method" th:each="payment : ${paymentMethods}">
                                 <div class="single-payment">
-                                    <div class="input-group">
-                                        <input type="radio" id="walletPayment" name="paymentMethod" value="Wallet" required>
-                                        <label for="walletPayment">Thanh toán bằng ví</label>
+                                    <div class="input-group" >
+                                        <input type="radio" id="paymentMethod" name="paymentMethod" th:value="${payment.paymentId}">
+                                        <label th:for="${payment.paymentId}" th:text="${payment.paymentMethod}"></label>
                                     </div>
-                                    <p>Thanh toán trực tiếp từ ví của bạn.</p>
+<!--                                    <p>Thanh toán trực tiếp từ ví của bạn.</p>-->
                                 </div>
-                                <div class="single-payment">
-                                    <div class="input-group justify-content-between align-items-center">
-                                        <input type="radio" id="onlinePayment" name="paymentMethod" value="Online">
-                                        <label for="onlinePayment">Thanh toán online</label>
-                                    </div>
-                                    <p>Thanh toán qua ngân hàng hoặc thẻ tín dụng.</p>
-                                </div>
-                                <div class="single-payment">
-                                    <div class="input-group justify-content-between align-items-center">
-                                        <input type="radio" id="codPayment" name="paymentMethod" value="Cash on Delivery">
-                                        <label for="codPayment">Thanh toán khi nhận hàng</label>
-                                    </div>
-                                    <p>Trả tiền mặt khi nhận hàng.</p>
-                                </div>
+<!--                                <div class="single-payment">-->
+<!--                                    <div class="input-group justify-content-between align-items-center">-->
+<!--                                        <input type="radio" id="onlinePayment" name="paymentMethod" value="Online">-->
+<!--                                        <label for="onlinePayment">Thanh toán online</label>-->
+<!--                                    </div>-->
+<!--                                    <p>Thanh toán qua ngân hàng hoặc thẻ tín dụng.</p>-->
+<!--                                </div>-->
+<!--                                <div class="single-payment">-->
+<!--                                    <div class="input-group justify-content-between align-items-center">-->
+<!--                                        <input type="radio" id="codPayment" name="paymentMethod" value="Cash on Delivery">-->
+<!--                                        <label for="codPayment">Thanh toán khi nhận hàng</label>-->
+<!--                                    </div>-->
+<!--                                    <p>Trả tiền mặt khi nhận hàng.</p>-->
+<!--                                </div>-->
                             </div>
-                            <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Checkout
+                            <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán
                             </button>
                         </div>
                     </div>
