@@ -1,5 +1,6 @@
 package com.ecommerce.g58.service.implementation;
 
+import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.CartItemRepository;
 import com.ecommerce.g58.repository.CartRepository;
@@ -45,38 +46,32 @@ public class CartServiceImp implements CartService {
     }
 
     @Override
-    public void addToCart(Cart cart, Integer variationId, Integer productId, String productName, Integer imageId, int quantity, Integer price) {
-        if (cart.getCartItems() == null) {
-            cart.setCartItems(new ArrayList<>());  // Khởi tạo danh sách trống nếu chưa có
-        }
-        // Log to check parameters
-        System.out.println("Adding to cart - productId: " + productId + ", variantId: " + variationId);
-        // Fetch the product and variation
-        Products product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-        ProductVariation variation = productVariationRepository.findById(variationId)
-                .orElseThrow(() -> new IllegalArgumentException("Product variation not found"));
+    public void addProductToCart(Users user, ProductDetailDTO productDetail, int quantity, Cart cart) {
+        // Fetch the product and variation as entities from the database
+        Products product = productRepository.findById(productDetail.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
 
-        // Find the cart item by cart and variation
-        CartItem cartItem = cartItemRepository.findByCartIdAndVariation(cart.getCartId(), variation);
+        ProductVariation variation = productVariationRepository.findById(productDetail.getVariationId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid variation ID"));
 
-        if (cartItem == null) {
-            System.out.println("Creating new cart item");
-            // If the item doesn't exist in the cart, create a new CartItem
-            cartItem = new CartItem();
-            cartItem.setCart(cart);
-            cartItem.setProductId(product);
-            cartItem.setVariationId(variation);
-            cartItem.setQuantity(quantity);
-            cartItem.setPrice(price);
-            cartItemRepository.save(cartItem);
-        } else {
-            System.out.println("Updating cart item quantity");
-            // If the item already exists, just update the quantity
+        // Check if the product variation is already in the cart
+        CartItem cartItem = cartItemRepository.findByCartAndProductAndVariation(cart, product, variation);
+
+        if (cartItem != null) {
+            // If the item is already in the cart, update the quantity
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
             cartItemRepository.save(cartItem);
+        } else {
+            // If the item is not in the cart, create a new CartItem
+            cartItem = new CartItem();
+            cartItem.setCart(cart);
+            cartItem.setProductId(product);  // Use entity Products
+            cartItem.setVariationId(variation);  // Use entity ProductVariation
+            cartItem.setQuantity(quantity);
+            cartItem.setPrice(productDetail.getPrice());  // Store the price from the ProductDetailDTO
+            cartItemRepository.save(cartItem);
         }
-
+        cartRepository.save(cart);
         updateCartTotalPrice(cart);
     }
 
@@ -127,81 +122,8 @@ public class CartServiceImp implements CartService {
         }
     }
 
-
-
-
-//    @Autowired
-//    private ProductService productService;
-//    @Autowired
-//    private ProductRepository productRepository;
-//    @Autowired
-//    private CartRepository cartRepository;
-//    @Autowired
-//    private CartItemRepository cartItemRepository;
-//
-//
-//    @org.springframework.transaction.annotation.Transactional
-//    @Override
-//    public Integer getTotalQuantityByUser(Users user) {
-//        return cartRepository.getTotalQuantityByUser(user);
-//
-//    }
-//
-//    @Override
-//    @Transactional
-//    public Cart getOrCreateCart(Users user) {
-//        Optional<Cart> optionalCart = cartRepository.findByUser(user);
-//        if (optionalCart.isPresent()) {
-//            return optionalCart.get();
-//        }
-//
-//        Cart cart = Cart.builder()
-//                .cartId(0)
-//                .user(user)
-//                .totalPrice(0)
-//                .build();
-//        return cartRepository.save(cart);
-//    }
-//
-//
-//    @Override
-//    @Transactional
-//    public void addToCart(Cart cart, Integer variantId, Integer productId, String productName, Integer imageId, Integer quantity, Integer price) {
-//        Products product = productRepository.findById(productId)
-//                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy sản phẩm"));
-//        // Lay danh sach cac san pham trong gio hang
-//        List<CartItem> cartItems = cartItemRepository.findByCart(cart);
-//        Optional<CartItem> optionalCartItem = cartItemRepository.findByCartAndProduct(cart, product);
-//
-//        if (optionalCartItem.isPresent()) {
-//            CartItem cartItem = optionalCartItem.get();
-//            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-//            cartItemRepository.save(cartItem);
-//        } else {
-//            CartItem cartItem = CartItem.builder()
-//                    .cart(cart)
-//                    .productId(product)
-//                    .quantity(quantity)
-//                    .price(price)
-//                    .build();
-//            cartItemRepository.save(cartItem);
-//        }
-//    }
-//
-//    @org.springframework.transaction.annotation.Transactional
-//    @Override
-//    public void removeCartItem(Integer cartItemId) {
-//        cartItemRepository.deleteById(cartItemId);
-//    }
-//
-//    @Override
-//    public List<Cart> getListCartProvisionalByDeliveryRoleId(Integer deliveryRoleId) {
-//        return cartRepository.findListCartsByDeliveryRoleIdAndStatusProvisional(deliveryRoleId);
-//
-//    }
-//    @Override
-//    public Cart getCartProvisionalByDeliveryRoleId(Integer deliveryRoleId) {
-//        return cartRepository.findCartsByDeliveryRoleIdAndStatusProvisional(deliveryRoleId);
-//
-//    }
+    @Override
+    public Cart getCartByUserId(Integer userId) {
+        return cartRepository.findByUser_UserId(userId);
+    }
 }

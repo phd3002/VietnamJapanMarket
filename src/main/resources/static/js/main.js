@@ -803,7 +803,7 @@
                 nextArrow: '<button class="slide-arrow next-arrow"><i class="fal fa-long-arrow-right"></i></button>',
             });
 
-            $('#quick-view-modal').on('shown.bs.modal', function (event) {
+            $('.quick-view-product').on('shown.bs.modal', function (event) {
                 $('.slick-slider').slick('setPosition');
             });
 

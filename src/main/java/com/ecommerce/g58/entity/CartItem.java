@@ -2,7 +2,6 @@ package com.ecommerce.g58.entity;
 
 import lombok.*;
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -22,7 +21,7 @@ public class CartItem {
     private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Products productId;
 
     @ManyToOne

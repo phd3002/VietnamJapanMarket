@@ -213,6 +213,12 @@ img {
     height: auto
 }
 
+.product-thumbnail {
+    width: 200px;  /* Set an appropriate width */
+    height: 200px; /* Set an appropriate height */
+    object-fit: cover;  /* Crop the image to fit, while preserving aspect ratio */
+}
+
 svg:not(:root) {
     overflow: hidden
 }
@@ -7906,7 +7912,6 @@ a.axil-btn.btn-size-md i, button.axil-btn.btn-size-md i {
     border-radius: 10px;
     padding: 40px 30px;
     width: 800px;
-    height: 575px;
     max-height: 90vh;
     overflow: auto
 }

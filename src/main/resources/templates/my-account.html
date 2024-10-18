@@ -1,8 +1,6 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:16 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -10,31 +8,27 @@
     <meta name="robots" content="noindex, follow"/>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 
     <!-- CSS
     ============================================ -->
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../static/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/font-awesome.css">
-    <link rel="stylesheet" href="../static/css/vendor/flaticon/flaticon.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick-theme.css">
-    <link rel="stylesheet" href="../static/css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/sal.css">
-    <link rel="stylesheet" href="../static/css/vendor/magnific-popup.css">
-    <link rel="stylesheet" href="../static/css/vendor/base.css">
-    <link rel="stylesheet" href="../static/css/style.min.css">
-    <link rel="stylesheet" href="../static/css/style-2.css">
+    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
+    <link rel="stylesheet" th:href="@{/css/style.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style-2.css}">
 </head>
 
-
 <body class="sticky-header">
-<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
-<!-- Start Header -->
+<a href="#" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
 <header class="header axil-header header-style-1">
+    <!-- Header Top -->
     <div class="axil-header-top">
         <div class="container">
             <div class="row align-items-center">
@@ -42,8 +36,7 @@
                     <div class="header-top-dropdown">
                         <div class="dropdown">
                             <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                English
+                                    aria-expanded="false">English
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">English</a></li>
@@ -64,32 +57,31 @@
             </div>
         </div>
     </div>
-    <!-- Start Mainmenu Area  -->
+
+    <!-- Menu  -->
     <div id="axil-sticky-placeholder"></div>
     <div class="axil-mainmenu">
         <div class="container">
             <div class="header-navbar">
                 <div class="header-brand">
-                    <a href="homepage.html" class="logo logo-dark">
-                        <img src="../static/images/logo/vj-market.png" alt="Site Logo">
+                    <a href="/" class="logo logo-dark">
+                        <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                     </a>
                 </div>
                 <div class="header-main-nav">
-                    <!-- Start Mainmanu Nav -->
                     <nav class="mainmenu-nav">
                         <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
                         <div class="mobile-nav-brand">
                             <a href="homepage.html" class="logo">
-                                <img src="../static/images/logo/vj-market.png" alt="Site Logo">
+                                <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                             </a>
                         </div>
                         <ul class="mainmenu">
                             <li>
-                                <img src="../static/images/logo/baner.png">
+                                <img th:src="@{/images/logo/baner.png}" alt="">
                             </li>
                         </ul>
                     </nav>
-                    <!-- End Mainmanu Nav -->
                 </div>
                 <div class="header-action">
                     <ul class="action-list">
@@ -104,22 +96,19 @@
                             </a>
                         </li>
                         <li class="notification">
-                            <a href="my-account.html#nav-notification" class="notification-dropdown-btn">
+                            <a href="my-account.html" class="notification-dropdown-btn">
                                 <i class="flaticon-envelope"></i>
                                 <span class="notification-count"></span>
                             </a>
-
-                            <!-- Notification Dropdown -->
                             <div id="notification-dropdown" class="notification-dropdown">
                                 <div class="notification-content-wrap">
                                     <div class="notification-header">
                                         <p>New notifications</p>
                                     </div>
                                     <div class="notification-body">
-                                        <!-- Notification Item -->
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png"
+                                                <img th:src="@{/images/product/categories/beauty.png}"
                                                      alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
@@ -130,7 +119,7 @@
                                         </div>
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png"
+                                                <img th:src="@{/images/product/categories/toys.png}"
                                                      alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
@@ -139,10 +128,9 @@
                                                 <span class="item-time">2 minutes ago</span>
                                             </div>
                                         </div>
-                                        <!-- Repeat for more notification items -->
                                     </div>
                                     <div class="notification-footer">
-                                        <a href="my-account.html#nav-notification">View All Notifications</a>
+                                        <a href="my-account.html">View All Notifications</a>
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +149,7 @@
                                 <span class="title">QUICKLINKS</span>
                                 <ul>
                                     <li>
-                                        <a href="my-account.html">My Account</a>
+                                        <a href="my-account">My Account</a>
                                     </li>
                                     <li>
                                         <a href="order.html">My Orders</a>
@@ -170,9 +158,9 @@
                                 <div class="login-btn">
                                     <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
                                 </div>
-                                <div class="reg-footer text-center">No account yet? <a href="sign-up.html"
-                                                                                       class="btn-link">REGISTER
-                                    HERE.</a></div>
+                                <div class="reg-footer text-center">
+                                    No account yet? <a href="sign-up.html" class="btn-link">REGISTER HERE.</a>
+                                </div>
                             </div>
                         </li>
                         <li class="axil-mobile-toggle">
@@ -185,15 +173,18 @@
             </div>
         </div>
     </div>
-    <!-- End Mainmenu Area -->
+
+    <!-- Search Modal -->
     <div class="header-search-modal" id="header-search-modal">
         <button class="card-close sidebar-close"><i class="fas fa-times"></i></button>
         <div class="header-search-wrap">
             <div class="card-header">
                 <form action="#">
                     <div class="input-group">
-                        <input type="search" class="form-control" name="prod-search" id="prod-search"
-                               placeholder="Write Something....">
+                        <label>
+                            <input type="search" class="form-control" name="prod-search" id="prod-search"
+                                   placeholder="Write Something....">
+                        </label>
                         <button type="submit" class="axil-btn btn-bg-primary"><i class="far fa-search"></i></button>
                     </div>
                 </form>
@@ -206,8 +197,9 @@
                 <div class="psearch-results">
                     <div class="axil-product-list">
                         <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
+                            <a href="product-detail">
+                                <img th:src="@{/images/product/categories/toys.png}" width="100px"
+                                     alt="Yantiti Leather Bags">
                             </a>
                         </div>
                         <div class="product-content">
@@ -221,7 +213,7 @@
                             </span>
                                 <span class="rating-number"><span>100+</span> Reviews</span>
                             </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
+                            <h6 class="product-title"><a href="product-detail">Media Remote</a></h6>
                             <div class="product-price-variant">
                                 <span class="price current-price">$29.99</span>
                                 <span class="price old-price">$49.99</span>
@@ -234,8 +226,9 @@
                     </div>
                     <div class="axil-product-list">
                         <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
+                            <a href="product-detail">
+                                <img th:src="@{/images/product/categories/fashion.png}" width="100px"
+                                     alt="Yantiti Leather Bags">
                             </a>
                         </div>
                         <div class="product-content">
@@ -249,7 +242,7 @@
                             </span>
                                 <span class="rating-number"><span>100+</span> Reviews</span>
                             </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
+                            <h6 class="product-title"><a href="product-detail">Media Remote</a></h6>
                             <div class="product-price-variant">
                                 <span class="price current-price">$29.99</span>
                                 <span class="price old-price">$49.99</span>
@@ -264,9 +257,8 @@
             </div>
         </div>
     </div>
-    <!-- Header Search Modal End -->
 
-
+    <!-- Cart Modal -->
     <div class="cart-dropdown" id="cart-dropdown">
         <div class="cart-content-wrap">
             <div class="cart-header">
@@ -277,8 +269,8 @@
                 <ul class="cart-item-list">
                     <li class="cart-item">
                         <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-01.png"
-                                                               alt="Commodo Blown Lamp"></a>
+                            <a href="product-detail"><img th:src="@{/images/product/categories/toys.png}"
+                                                          alt="Commodo Blown Lamp"></a>
                             <button class="close-btn"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="item-content">
@@ -292,17 +284,19 @@
 							</span>
                                 <span class="rating-number">(64)</span>
                             </div>
-                            <h3 class="item-title"><a href="product-detail.html">Wireless PS Handler</a></h3>
+                            <h3 class="item-title"><a href="product-detail">Wireless PS Handler</a></h3>
                             <div class="item-price"><span class="currency-symbol">$</span>155.00</div>
                             <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="15">
+                                <label>
+                                    <input type="number" class="quantity-input" value="15">
+                                </label>
                             </div>
                         </div>
                     </li>
                     <li class="cart-item">
                         <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-02.png"
-                                                               alt="Commodo Blown Lamp"></a>
+                            <a href="product-detail"><img th:src="@{/images/product/categories/electronic.png}"
+                                                          alt="Commodo Blown Lamp"></a>
                             <button class="close-btn"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="item-content">
@@ -316,17 +310,20 @@
 							</span>
                                 <span class="rating-number">(4)</span>
                             </div>
-                            <h3 class="item-title"><a href="product-detail.html">Gradient Light Keyboard</a></h3>
+                            <h3 class="item-title"><a href="product-detail">Gradient Light Keyboard</a></h3>
                             <div class="item-price"><span class="currency-symbol">$</span>255.00</div>
                             <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="5">
+                                <label>
+                                    <input type="number" class="quantity-input" value="5">
+                                </label>
                             </div>
                         </div>
                     </li>
                     <li class="cart-item">
                         <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-03.png"
-                                                               alt="Commodo Blown Lamp"></a>
+                            <a href="product-detail"><img
+                                    th:src="@{/images/product/categories/limited-product.png}"
+                                    alt="Commodo Blown Lamp"></a>
                             <button class="close-btn"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="item-content">
@@ -340,10 +337,12 @@
 							</span>
                                 <span class="rating-number">(6)</span>
                             </div>
-                            <h3 class="item-title"><a href="product-detail.html">HD CC Camera</a></h3>
+                            <h3 class="item-title"><a href="product-detail">HD CC Camera</a></h3>
                             <div class="item-price"><span class="currency-symbol">$</span>200.00</div>
                             <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="100">
+                                <label>
+                                    <input type="number" class="quantity-input" value="100">
+                                </label>
                             </div>
                         </div>
                     </li>
@@ -362,19 +361,14 @@
         </div>
     </div>
 </header>
-<!-- End Header -->
-
 <main class="main-wrapper">
-
-    <!-- Start My Account Area  -->
     <div class="axil-dashboard-area axil-section-gap">
         <div class="container">
             <div class="axil-dashboard-warp">
-                <!-- Dashboard Sidebar -->
                 <div class="axil-dashboard-author">
                     <div class="media">
                         <div class="thumbnail">
-                            <img src="../static/images/product/author1.png">
+                            <img th:src="@{/images/product/categories/beauty.png}" alt="" width="150px">
                         </div>
                         <div class="media-body">
                             <h5 class="title mb-0">Hello ....</h5>
@@ -387,7 +381,7 @@
                         <aside class="axil-dashboard-aside">
                             <nav class="axil-dashboard-nav">
                                 <div class="nav nav-tabs" role="tablist">
-                                    <a class="nav-item nav-link active" href="my-account.html"
+                                    <a class="nav-item nav-link active" href="my-account"
                                        aria-selected="true"><i class="fas fa-user"></i>Account Details</a>
                                     <a class="nav-item nav-link" href="my-shop.html"
                                        aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
@@ -403,40 +397,28 @@
                             </nav>
                         </aside>
                     </div>
-                    <!-- Dashboard Content -->
                     <div class="col-xl-9 col-md-8">
                         <div class="tab-content">
-                            <!-- Account Details Tab -->
                             <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
                                 <div class="col-lg-9">
                                     <div class="axil-dashboard-account">
                                         <form class="account-details-form">
                                             <div class="row">
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="avatarUpload">Avatar</label>
-                                                        <input type="file" class="form-control" id="avatarUpload"
-                                                               accept="image/*" onchange="previewAvatar(event)">
-                                                        <div id="avatarPreviewContainer"
-                                                             style="display: none; position: relative; width: 150px; height: 150px; margin-top: 10px;">
-                                                            <img id="avatarPreview" src="" alt="Avatar Preview"
-                                                                 style="width: 100%; height: 100%; object-fit: cover; border: 1px solid #ddd;">
-                                                            <button type="button" onclick="removeAvatar()"
-                                                                    style="position: absolute; top: -10px; right: -10px; background: red; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer;">
-                                                                &times;
-                                                            </button>
-                                                        </div>
+                                                        <label>First Name</label>
+                                                        <input type="text" class="form-control" value="ABC">
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label>Full Name</label>
-                                                        <input type="text" class="form-control" value="ABC">
+                                                        <label>Last Name</label>
+                                                        <input type="text" class="form-control" value="DEF">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group mb--40">
-                                                        <label>Country</label>
+                                                        <label>Country/ Region</label>
                                                         <input type="text" class="form-control"
                                                                value="United States (USA)">
                                                     </div>
@@ -479,21 +461,18 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> <!-- End of tab-content -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- End My Account Area  -->
-    <!-- Confirmation Popup -->
     <div id="confirmationPopup"
          style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
         <p>Bạn có muốn thay đổi?</p>
         <button id="confirmYesBtn">Yes</button>
         <button id="confirmCancelBtn">Cancel</button>
     </div>
-    <!-- Success Popup -->
     <div id="successPopup"
          style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
         <p>Thay đổi thành công!</p>
@@ -501,14 +480,14 @@
     </div>
 </main>
 
-
+<!-- Services -->
 <div class="service-area">
     <div class="container">
         <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service1.png" alt="Service">
+                        <img th:src="@{/images/icons/service1.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Fast &amp; Secure Delivery</h6>
@@ -519,7 +498,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service2.png" alt="Service">
+                        <img th:src="@{/images/icons/service2.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Money Back Guarantee</h6>
@@ -530,7 +509,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service3.png" alt="Service">
+                        <img th:src="@{/images/icons/service3.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">24 Hour Return Policy</h6>
@@ -541,7 +520,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service4.png" alt="Service">
+                        <img th:src="@{/images/icons/service4.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Pro Quality Support</h6>
@@ -552,13 +531,11 @@
         </div>
     </div>
 </div>
-<!-- Start Footer Area  -->
+
 <footer class="axil-footer-area footer-style-2">
-    <!-- Start Footer Top Area  -->
     <div class="footer-top separator-top">
         <div class="container">
             <div class="row">
-                <!-- Start Single Widget  -->
                 <div class="col-lg-6 col-sm-6">
                     <div class="axil-footer-widget">
                         <h5 class="widget-title">Support</h5>
@@ -569,13 +546,10 @@
                                     example@domain.com</a></li>
                                 <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
                                 </li>
-                                <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
                             </ul>
                         </div>
                     </div>
                 </div>
-                <!-- End Single Widget  -->
-                <!-- Start Single Widget  -->
                 <div class="col-lg-6 col-sm-6">
                     <div class="axil-footer-widget">
                         <h5 class="widget-title">Account</h5>
@@ -590,71 +564,30 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Single Widget  -->
             </div>
         </div>
     </div>
-    <!-- End Footer Top Area  -->
 </footer>
-<!-- End Footer Area  -->
 
-<!-- Header Search Modal End -->
 <!-- JS
 ============================================ -->
-<!-- Modernizer JS -->
-<script src="../static/js/vendor/modernizr.min.js"></script>
-<!-- jQuery JS -->
-<script src="../static/js/vendor/jquery.js"></script>
-<!-- Bootstrap JS -->
-<script src="../static/js/vendor/popper.min.js"></script>
-<script src="../static/js/vendor/bootstrap.min.js"></script>
-<script src="../static/js/vendor/slick.min.js"></script>
-<script src="../static/js/vendor/js.cookie.js"></script>
-<!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-<script src="../static/js/vendor/jquery-ui.min.js"></script>
-<script src="../static/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="../static/js/vendor/jquery.countdown.min.js"></script>
-<script src="../static/js/vendor/sal.js"></script>
-<script src="../static/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="../static/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="../static/js/vendor/isotope.pkgd.min.js"></script>
-<script src="../static/js/vendor/counterup.js"></script>
-<script src="../static/js/vendor/waypoints.min.js"></script>
-
-<!-- Main JS -->
-<script src="../static/js/main.js"></script>
-<script src="../static/js/script.js"></script>
-<script src="../static/js/script.js"></script>
-<script>
-    function previewAvatar(event) {
-        const input = event.target;
-        const previewContainer = document.getElementById('avatarPreviewContainer');
-        const previewImage = document.getElementById('avatarPreview');
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                previewImage.src = e.target.result;
-                previewContainer.style.display = 'block';
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function removeAvatar() {
-        const input = document.getElementById('avatarUpload');
-        const previewContainer = document.getElementById('avatarPreviewContainer');
-        const previewImage = document.getElementById('avatarPreview');
-
-        input.value = ''; // Clear file input
-        previewImage.src = ''; // Clear image preview
-        previewContainer.style.display = 'none'; // Hide the preview container
-    }
-</script>
+<script th:src="@{/js/vendor/modernizr.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.js}"></script>
+<script th:src="@{/js/vendor/popper.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/js/vendor/slick.min.js}"></script>
+<script th:src="@{/js/vendor/js.cookie.js}"></script>
+<script th:src="@{/js/vendor/jquery-ui.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.ui.touch-punch.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.countdown.min.js}"></script>
+<script th:src="@{/js/vendor/sal.js}"></script>
+<script th:src="@{/js/vendor/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/vendor/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/counterup.js}"></script>
+<script th:src="@{/js/vendor/waypoints.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:17 GMT -->
 </html>

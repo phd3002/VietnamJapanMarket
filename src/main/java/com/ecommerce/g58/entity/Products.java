@@ -3,10 +3,13 @@ package com.ecommerce.g58.entity;
 import lombok.*;
 import javax.persistence.*;
 
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Data
 @Builder
 @NoArgsConstructor
@@ -45,7 +48,8 @@ public class Products {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-//    public Products orElseThrow(Object khôngTìmThấySảnPhẩm) {
-//    }
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
+    private List<ProductVariation> productVariations;
+
 }
 

@@ -461,7 +461,7 @@
     transform: translate(-50%, -50%); /* Center it vertically and horizontally */
     padding: 20px;
     border: 1px solid #888;
-    width: 400px; /* Small fixed width */
+    /*width: 400px; !* Small fixed width *!*/
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
 }

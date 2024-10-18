@@ -1,9 +1,8 @@
 package com.ecommerce.g58.service;
 
 import com.ecommerce.g58.dto.ProductDTO;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.ProductVariation;
-import com.ecommerce.g58.entity.Products;
+import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ProductRepository;
 import com.ecommerce.g58.repository.ProductVariationRepository;
@@ -13,71 +12,36 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductService {
+public interface ProductService {
+    List<ProductDTO> getProductDetails();
 
-    @Autowired
-    private ProductRepository productRepository;
+    List<Products> getProductsByCategory(Long categoryId);
 
-    @Autowired
-    private ProductImageRepository productImageRepository;
+    List<ProductDTO> getSearchProduct();
 
-    @Autowired
-    private ProductVariationRepository productVariationRepository;
+    ProductVariation getProductVariationById(Integer variationId);
 
-    public List<ProductDTO> getProductDetails() {
-        List<Object[]> results = productRepository.findProductDetailsNative();
-        List<ProductDTO> productDetails = new ArrayList<>();
+    ProductDetailDTO getProductDetailByProductIdAndVariationId(Integer productId, Integer variationId);
 
-        for (Object[] result : results) {
-            ProductDTO productDTO = new ProductDTO();
+    List<Products> getAllProducts();
 
-            // Mapping the fields from the result
-            productDTO.setProductId((Integer) result[0]);        // productId
-            productDTO.setThumbnail((String) result[1]);         // thumbnail
-            productDTO.setProductName((String) result[2]);       // productName
-            productDTO.setPrice((Integer) result[3]);            // price
-            productDTO.setVariationId((Integer) result[4]);        // variationId
-            productDTO.setImageId((Integer) result[5]);          // imageId
+    List<Products> getLatest5Products();
 
-            productDetails.add(productDTO);
-        }
+    List<ProductImage> getProductImagesByProductId(Integer productId);
 
-        return productDetails;
-    }
+    List<ProductVariation> getProductVariationsByProductId(Integer productId);
 
-    // Method to fetch ProductVariation by its ID
-    public ProductVariation getProductVariationById(Integer variationId) {
-        return productVariationRepository.findById(variationId)
-                .orElseThrow(() -> new IllegalArgumentException("Product variation not found with id: " + variationId));
-    }
+    Products getProductById(Integer productId);
 
+    List<ProductDTO> searchProducts(String query);
 
-    //    public List<ProductDTO> findProductDetails() {
-//        return productRepository.findProductDetails();
-//    }
-    public List<Products> getAllProducts() {
-        return productRepository.findAll(); // Fetch all products
-    }
+    ProductDetailDTO getProductDetailByProductIdAndColorId(Integer productId, Integer colorId);
 
-    public List<Products> getLatest5Products() {
-        return productRepository.findTop5ByOrderByCreatedAtDesc(); // Fetch latest 5 products
-    }
+    List<Color> getAvailableColors(Integer productId);
 
-    // Fetch product images by productId
-    public List<ProductImage> getProductImagesByProductId(Integer productId) {
-        return productImageRepository.findByProductProductId(productId);
-    }
-
-    // Fetch product variations by productId
-    public List<ProductVariation> getProductVariationsByProductId(Integer productId) {
-        return productVariationRepository.findByProductIdProductId(productId);
-    }
-
-    public Products getProductById(Integer productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
-    }
-
+    List<String> getAvailableSizesByProductIdAndColorId(Integer productId, Integer colorId);
 
 }

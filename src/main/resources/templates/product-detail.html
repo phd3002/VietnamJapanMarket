@@ -1,40 +1,34 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/product-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:13 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Home Page</title>
+    <title>Product Detail</title>
     <meta name="robots" content="noindex, follow"/>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 
     <!-- CSS
     ============================================ -->
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../static/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/font-awesome.css">
-    <link rel="stylesheet" href="../static/css/vendor/flaticon/flaticon.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick-theme.css">
-    <link rel="stylesheet" href="../static/css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/sal.css">
-    <link rel="stylesheet" href="../static/css/vendor/magnific-popup.css">
-    <link rel="stylesheet" href="../static/css/vendor/base.css">
-    <link rel="stylesheet" href="../static/css/style.min.css">
-    <link rel="stylesheet" href="../static/css/style-2.css">
+    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
+    <link rel="stylesheet" th:href="@{/css/style.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style-2.css}">
 </head>
 
-
 <body class="sticky-header">
-<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
-<!-- Start Header -->
+<a href="#" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
 <header class="header axil-header header-style-1">
+    <!-- Header Top -->
     <div class="axil-header-top">
         <div class="container">
             <div class="row align-items-center">
@@ -42,8 +36,7 @@
                     <div class="header-top-dropdown">
                         <div class="dropdown">
                             <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                English
+                                    aria-expanded="false">English
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">English</a></li>
@@ -64,32 +57,31 @@
             </div>
         </div>
     </div>
-    <!-- Start Mainmenu Area  -->
+
+    <!-- Menu  -->
     <div id="axil-sticky-placeholder"></div>
     <div class="axil-mainmenu">
         <div class="container">
             <div class="header-navbar">
                 <div class="header-brand">
-                    <a href="homepage.html" class="logo logo-dark">
-                        <img src="../static/images/logo/vj-market.png" alt="Site Logo">
+                    <a href="/" class="logo logo-dark">
+                        <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                     </a>
                 </div>
                 <div class="header-main-nav">
-                    <!-- Start Mainmanu Nav -->
                     <nav class="mainmenu-nav">
                         <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
                         <div class="mobile-nav-brand">
                             <a href="homepage.html" class="logo">
-                                <img src="../static/images/logo/vj-market.png" alt="Site Logo">
+                                <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                             </a>
                         </div>
                         <ul class="mainmenu">
                             <li>
-                                <img src="../static/images/logo/baner.png">
+                                <img th:src="@{/images/logo/baner.png}" alt="">
                             </li>
                         </ul>
                     </nav>
-                    <!-- End Mainmanu Nav -->
                 </div>
                 <div class="header-action">
                     <ul class="action-list">
@@ -104,22 +96,20 @@
                             </a>
                         </li>
                         <li class="notification">
-                            <a href="my-account.html#nav-notification" class="notification-dropdown-btn">
+                            <a href="my-account.html" class="notification-dropdown-btn">
                                 <i class="flaticon-envelope"></i>
                                 <span class="notification-count"></span>
                             </a>
-
-                            <!-- Notification Dropdown -->
                             <div id="notification-dropdown" class="notification-dropdown">
                                 <div class="notification-content-wrap">
                                     <div class="notification-header">
                                         <p>New notifications</p>
                                     </div>
                                     <div class="notification-body">
-                                        <!-- Notification Item -->
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img th:src="@{/images/product/categories/beauty.png}"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -129,7 +119,8 @@
                                         </div>
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img th:src="@{/images/product/categories/toys.png}"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -137,10 +128,9 @@
                                                 <span class="item-time">2 minutes ago</span>
                                             </div>
                                         </div>
-                                        <!-- Repeat for more notification items -->
                                     </div>
                                     <div class="notification-footer">
-                                        <a href="my-account.html#nav-notification">View All Notifications</a>
+                                        <a href="my-account.html">View All Notifications</a>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +149,7 @@
                                 <span class="title">QUICKLINKS</span>
                                 <ul>
                                     <li>
-                                        <a href="my-account.html">My Account</a>
+                                        <a href="my-account">My Account</a>
                                     </li>
                                     <li>
                                         <a href="order.html">My Orders</a>
@@ -168,9 +158,9 @@
                                 <div class="login-btn">
                                     <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
                                 </div>
-                                <div class="reg-footer text-center">No account yet? <a href="sign-up.html"
-                                                                                       class="btn-link">REGISTER
-                                    HERE.</a></div>
+                                <div class="reg-footer text-center">
+                                    No account yet? <a href="sign-up.html" class="btn-link">REGISTER HERE.</a>
+                                </div>
                             </div>
                         </li>
                         <li class="axil-mobile-toggle">
@@ -183,15 +173,18 @@
             </div>
         </div>
     </div>
-    <!-- End Mainmenu Area -->
+
+    <!-- Search Modal -->
     <div class="header-search-modal" id="header-search-modal">
         <button class="card-close sidebar-close"><i class="fas fa-times"></i></button>
         <div class="header-search-wrap">
             <div class="card-header">
                 <form action="#">
                     <div class="input-group">
-                        <input type="search" class="form-control" name="prod-search" id="prod-search"
-                               placeholder="Write Something....">
+                        <label>
+                            <input type="search" class="form-control" name="prod-search" id="prod-search"
+                                   placeholder="Write Something....">
+                        </label>
                         <button type="submit" class="axil-btn btn-bg-primary"><i class="far fa-search"></i></button>
                     </div>
                 </form>
@@ -204,8 +197,9 @@
                 <div class="psearch-results">
                     <div class="axil-product-list">
                         <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
+                            <a href="product-detail">
+                                <img th:src="@{/images/product/categories/toys.png}" width="100px"
+                                     alt="Yantiti Leather Bags">
                             </a>
                         </div>
                         <div class="product-content">
@@ -219,7 +213,7 @@
                             </span>
                                 <span class="rating-number"><span>100+</span> Reviews</span>
                             </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
+                            <h6 class=" "><a href="product-detail">Media Remote</a></h6>
                             <div class="product-price-variant">
                                 <span class="price current-price">$29.99</span>
                                 <span class="price old-price">$49.99</span>
@@ -232,8 +226,9 @@
                     </div>
                     <div class="axil-product-list">
                         <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
+                            <a href="product-detail">
+                                <img th:src="@{/images/product/categories/fashion.png}" width="100px"
+                                     alt="Yantiti Leather Bags">
                             </a>
                         </div>
                         <div class="product-content">
@@ -247,7 +242,7 @@
                             </span>
                                 <span class="rating-number"><span>100+</span> Reviews</span>
                             </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
+                            <h6 class="product-title"><a href="product-detail">Media Remote</a></h6>
                             <div class="product-price-variant">
                                 <span class="price current-price">$29.99</span>
                                 <span class="price old-price">$49.99</span>
@@ -262,9 +257,8 @@
             </div>
         </div>
     </div>
-    <!-- Header Search Modal End -->
 
-
+    <!-- Cart Modal -->
     <div class="cart-dropdown" id="cart-dropdown">
         <div class="cart-content-wrap">
             <div class="cart-header">
@@ -275,8 +269,8 @@
                 <ul class="cart-item-list">
                     <li class="cart-item">
                         <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-01.png"
-                                                               alt="Commodo Blown Lamp"></a>
+                            <a href="product-detail"><img th:src="@{/images/product/categories/toys.png}"
+                                                          alt="Commodo Blown Lamp"></a>
                             <button class="close-btn"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="item-content">
@@ -290,17 +284,19 @@
 							</span>
                                 <span class="rating-number">(64)</span>
                             </div>
-                            <h3 class="item-title"><a href="product-detail.html">Wireless PS Handler</a></h3>
+                            <h3 class="item-title"><a href="product-detail">Wireless PS Handler</a></h3>
                             <div class="item-price"><span class="currency-symbol">$</span>155.00</div>
                             <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="15">
+                                <label>
+                                    <input type="number" class="quantity-input" value="15">
+                                </label>
                             </div>
                         </div>
                     </li>
                     <li class="cart-item">
                         <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-02.png"
-                                                               alt="Commodo Blown Lamp"></a>
+                            <a href="product-detail"><img th:src="@{/images/product/categories/electronic.png}"
+                                                          alt="Commodo Blown Lamp"></a>
                             <button class="close-btn"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="item-content">
@@ -314,17 +310,20 @@
 							</span>
                                 <span class="rating-number">(4)</span>
                             </div>
-                            <h3 class="item-title"><a href="product-detail.html">Gradient Light Keyboard</a></h3>
+                            <h3 class="item-title"><a href="product-detail">Gradient Light Keyboard</a></h3>
                             <div class="item-price"><span class="currency-symbol">$</span>255.00</div>
                             <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="5">
+                                <label>
+                                    <input type="number" class="quantity-input" value="5">
+                                </label>
                             </div>
                         </div>
                     </li>
                     <li class="cart-item">
                         <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-03.png"
-                                                               alt="Commodo Blown Lamp"></a>
+                            <a href="product-detail"><img
+                                    th:src="@{/images/product/categories/limited-product.png}"
+                                    alt="Commodo Blown Lamp"></a>
                             <button class="close-btn"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="item-content">
@@ -338,10 +337,12 @@
 							</span>
                                 <span class="rating-number">(6)</span>
                             </div>
-                            <h3 class="item-title"><a href="product-detail.html">HD CC Camera</a></h3>
+                            <h3 class="item-title"><a href="product-detail">HD CC Camera</a></h3>
                             <div class="item-price"><span class="currency-symbol">$</span>200.00</div>
                             <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="100">
+                                <label>
+                                    <input type="number" class="quantity-input" value="100">
+                                </label>
                             </div>
                         </div>
                     </li>
@@ -360,8 +361,6 @@
         </div>
     </div>
 </header>
-<!-- End Header -->
-
 <main class="main-wrapper">
     <!-- Start Shop Area  -->
     <div class="axil-single-product-area bg-color-white">
@@ -371,52 +370,42 @@
                     <div class="col-lg-6 mb--40">
                         <div class="row">
                             <div class="col-lg-12">
+                                <!-- Dynamic large product images -->
                                 <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
                                     <div class="thumbnail">
-                                        <img src="../static/images/product/furniture/product-1.png" alt="Product Images">
+                                        <img th:src="@{${productDetail.thumbnail}}" alt="Product Image">
                                     </div>
-                                    <div class="thumbnail">
-                                        <img src="../static/images/product/furniture/product-2.png" alt="Product Images">
+                                    <div class="thumbnail" th:if="${productDetail.image1}">
+                                        <img th:src="@{${productDetail.image1}}" alt="Product Image">
                                     </div>
-                                    <div class="thumbnail">
-                                        <img src="../static/images/product/furniture/product-3.png" alt="Product Images">
+                                    <div class="thumbnail" th:if="${productDetail.image2}">
+                                        <img th:src="@{${productDetail.image2}}" alt="Product Image">
                                     </div>
-                                    <div class="thumbnail">
-                                        <img src="../static/images/product/furniture/product-4.png" alt="Product Images">
+                                    <div class="thumbnail" th:if="${productDetail.image3}">
+                                        <img th:src="@{${productDetail.image3}}" alt="Product Image">
                                     </div>
-                                    <div class="thumbnail">
-                                        <img src="../static/images/product/furniture/product-5.png" alt="Product Images">
-                                    </div>
-                                    <div class="thumbnail">
-                                        <img src="../static/images/product/furniture/product-6.png" alt="Product Images">
-                                    </div>
-                                    <div class="thumbnail">
-                                        <img src="../static/images/product/furniture/product-7.png" alt="Product Images">
+                                    <div class="thumbnail" th:if="${productDetail.image4}">
+                                        <img th:src="@{${productDetail.image4}}" alt="Product Image">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-12">
+                                <!-- Small thumbnails -->
                                 <div class="small-thumb-wrapper product-small-thumb-2 small-thumb-style-two small-thumb-style-three">
-                                    <div class="small-thumb-img ">
-                                        <img src="../static/images/product/furniture/product-1.png" alt="samll-thumb">
-                                    </div>
                                     <div class="small-thumb-img">
-                                        <img src="../static/images/product/furniture/product-2.png" alt="samll-thumb">
+                                        <img th:src="@{${productDetail.thumbnail}}" alt="Thumbnail Image">
                                     </div>
-                                    <div class="small-thumb-img active">
-                                        <img src="../static/images/product/furniture/product-3.png" alt="samll-thumb">
+                                    <div class="small-thumb-img" th:if="${productDetail.image1}">
+                                        <img th:src="@{${productDetail.image1}}" alt="Thumbnail Image">
                                     </div>
-                                    <div class="small-thumb-img">
-                                        <img src="../static/images/product/furniture/product-4.png" alt="samll-thumb">
+                                    <div class="small-thumb-img" th:if="${productDetail.image2}">
+                                        <img th:src="@{${productDetail.image2}}" alt="Thumbnail Image">
                                     </div>
-                                    <div class="small-thumb-img">
-                                        <img src="../static/images/product/furniture/product-5.png" alt="samll-thumb">
+                                    <div class="small-thumb-img" th:if="${productDetail.image3}">
+                                        <img th:src="@{${productDetail.image3}}" alt="Thumbnail Image">
                                     </div>
-                                    <div class="small-thumb-img">
-                                        <img src="../static/images/product/furniture/product-6.png" alt="samll-thumb">
-                                    </div>
-                                    <div class="small-thumb-img">
-                                        <img src="../static/images/product/furniture/product-7.png" alt="samll-thumb">
+                                    <div class="small-thumb-img" th:if="${productDetail.image4}">
+                                        <img th:src="@{${productDetail.image4}}" alt="Thumbnail Image">
                                     </div>
                                 </div>
                             </div>
@@ -425,8 +414,10 @@
                     <div class="col-lg-6 mb--40">
                         <div class="single-product-content">
                             <div class="inner">
-                                <h2 class="product-title">3D™ wireless headset</h2>
-                                <span class="price-amount">$155.00 - $255.00</span>
+                                <!-- Product title and price -->
+                                <h2 class="product-title" th:text="${productDetail.productName}">Product Name</h2>
+                                <span class="price-amount" th:text="${productDetail.price} + ' $'">Price</span>
+                                <!-- Rating and review count -->
                                 <div class="product-rating">
                                     <div class="star-rating">
                                         <i class="fas fa-star"></i>
@@ -439,94 +430,133 @@
                                         <a href="#">(<span>2</span> customer reviews)</a>
                                     </div>
                                 </div>
+                                <!-- Product variations -->
                                 <div class="product-variations-wrapper">
-
-                                    <!-- Start Product Variation  -->
+                                    <!-- Colors Section -->
                                     <div class="product-variation">
                                         <h6 class="title">Colors:</h6>
                                         <div class="color-variant-wrapper">
                                             <ul class="color-variant">
-                                                <li class="color-extra-01 active"><span><span
-                                                        class="color"></span></span>
-                                                </li>
-                                                <li class="color-extra-02"><span><span class="color"></span></span>
-                                                </li>
-                                                <li class="color-extra-03"><span><span class="color"></span></span>
+                                                <li class="color-extra-01" th:each="color : ${availableColors}">
+                                                    <a th:href="@{'/product-detail/' + ${productDetail.productId} + '?colorId=' + ${color.colorId}}">
+                                                        <span th:text="${color.colorName}"></span>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <!-- End Product Variation  -->
-
-                                    <!-- Start Product Variation  -->
+                                    <!-- Sizes Section -->
                                     <div class="product-variation product-size-variation">
                                         <h6 class="title">Size:</h6>
                                         <ul class="range-variant">
-                                            <li>xs</li>
-                                            <li>s</li>
-                                            <li>m</li>
-                                            <li>l</li>
-                                            <li>xl</li>
+                                            <li th:each="size : ${availableSizes}"
+                                                th:data-size-name="${size}"
+                                                th:text="${size}"
+                                                th:classappend="${size == selectedSize} ? 'selected' : ''"
+                                                class="size-option"></li>
                                         </ul>
                                     </div>
-                                    <!-- End Product Variation  -->
+                                    <!-- Add to Cart Form -->
+                                    <div th:if="${message}" class="alert alert-success" role="alert">
+                                        <span th:text="${message}"></span>
+                                    </div>
+                                    <div th:if="${error}" class="alert alert-danger" role="alert">
+                                        <span th:text="${error}"></span>
+                                    </div>
+                                    <form th:action="@{/add_to_cart}" method="post">
+                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">
+                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
+                                        <input type="hidden" name="productName" th:value="${productDetail.productName}">
+                                        <input type="hidden" name="imageId" th:value="${productDetail.thumbnail}">
+                                        <input type="hidden" name="selectedSize" id="selectedSizeInput" value=""> <!-- This will hold the selected size -->
+                                        <input type="hidden" name="quantity" value="1"> <!-- Default quantity -->
+                                        <input type="hidden" name="price" th:value="${productDetail.price}">
 
+                                        <button type="submit" id="addToCartButton" class="btn btn-primary" disabled>
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                    <!-- Script to enable Add to Cart button when a size is selected -->
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            const sizeOptions = document.querySelectorAll('.size-option');
+                                            const addToCartButton = document.getElementById('addToCartButton');
+                                            const selectedSizeInput = document.getElementById('selectedSizeInput');
+
+                                            sizeOptions.forEach(option => {
+                                                option.addEventListener('click', function () {
+                                                    sizeOptions.forEach(s => s.classList.remove('selected'));
+                                                    this.classList.add('selected');
+
+                                                    // Set the selected size name to the hidden input
+                                                    const selectedSize = this.getAttribute('data-size-name');
+                                                    selectedSizeInput.value = selectedSize; // Set the selected size
+
+                                                    // Enable Add to Cart button
+                                                    addToCartButton.removeAttribute('disabled');
+                                                });
+                                            });
+                                        });
+                                    </script>
                                 </div>
+                            </div>
 
-                                <!-- Start Product Action Wrapper  -->
-                                <div class="product-action-wrapper d-flex-center">
-                                    <!-- Start Quentity Action  -->
-                                    <div class="pro-qty"><input type="text" value="1"></div>
-                                    <!-- End Quentity Action  -->
+<!--                            <div class="product-action-wrapper d-flex-center">-->
+<!--                                <div class="wishlist-form-container d-flex">-->
+<!--                                    &lt;!&ndash; Add to Cart Form &ndash;&gt;-->
+<!--                                    <form th:action="@{/add_to_cart}" method="post" style="margin-right: 10px;">-->
+<!--                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">-->
+<!--                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">-->
+<!--                                        <input type="hidden" name="productName" th:value="${productDetail.productName}">-->
+<!--                                        <input type="hidden" name="imageId" th:value="${productDetail.thumbnail}">-->
+<!--                                        <input type="hidden" name="selectedSize" id="selectedSizeInput" value="">-->
+<!--                                        <input type="hidden" name="quantity" value="1">-->
+<!--                                        <input type="hidden" name="price" th:value="${productDetail.price}">-->
 
-                                    <!-- Start Product Action  -->
-                                    <ul class="product-action d-flex-center mb--0">
-                                        <li class="add-to-cart"><a href="cart-detail.html"
-                                                                   class="axil-btn btn-bg-primary">Add
-                                            to Cart</a></li>
-                                        <li class="wishlist"><a href="wishlist.html" class="axil-btn wishlist-btn"><i
-                                                class="far fa-heart"></i></a></li>
-                                    </ul>
-                                    <!-- End Product Action  -->
+<!--                                        &lt;!&ndash; Set width to 100% for both buttons &ndash;&gt;-->
+<!--                                        <button type="submit" id="addToCartButton" class="btn btn-primary" style="width: 155px; height: 60px" disabled>Add to Cart</button>-->
+<!--                                    </form>-->
 
+<!--                                    &lt;!&ndash; Add to Wishlist Form &ndash;&gt;-->
+<!--                                    <form th:action="@{/add_to_wishlist}" method="post">-->
+<!--                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">-->
+<!--                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">-->
+
+<!--                                        &lt;!&ndash; Set same width for this button as well &ndash;&gt;-->
+<!--                                        <button type="submit" class="btn wishlist-btn" style="width: 155px; height: 60px; background-color: hotpink">Add to Wishlist</button>-->
+<!--                                    </form>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+                                <!-- Product action (quantity, add to cart, wishlist) -->
+                            <!-- Corrected Placement for the Form -->
+                            <!-- Corrected Placement for the Form -->
+                            <div class="product-action-wrapper d-flex-center">
+                                <ul class="product-action d-flex-center mb--0">
+                                    <!-- Original actions inside ul, without form or div -->
+                                    <li class="wishlist">
+                                        <!-- Any existing wishlist icon here -->
+                                        <a href="#" class="add-wishlist-icon"><i class="fal fa-heart"></i></a>
+                                    </li>
+                                    <!-- Other list items here if needed -->
+                                </ul>
+
+                                <!-- Place the form separately, outside the ul -->
+                                <div class="wishlist-form-container">
+                                    <form th:action="@{/add_to_wishlist}" method="post">
+                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">
+                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
+                                        <button type="submit" class="axil-btn wishlist-btn">Add to Wishlist</button>
+                                    </form>
                                 </div>
-                                <!-- End Product Action Wrapper  -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End .single-product-thumb -->
-        <!-- Start Breadcrumb Area  -->
-        <div class="axil-breadcrumb-area">
-            <div class="container">
-                <div class="axil-dashboard-author">
-                    <div class="media">
-                        <div class="thumbnail">
-                            <a href="#"><img src="../static/images/product/author1.png" alt="Hello Annie"
-                                             class="author-image"></a>
-                        </div>
-                        <div class="media-body-1">
-                            <div class="info-row">
-                                <span class="name"><h3>Shop Vippro</h3></span>
-                                <span class="joining-date">Register Since Sep 2020</span>
-                                <span class="email">Email: annie@example.com</span>
-                            </div>
-                            <div class="info-row">
-                                <a href="#"><i class="flaticon-chat hover-flip-item"> Chat with shop</i></a>
-                                <span class="address">Address: 123 Street Name</span>
-                                <a href="#"><i class="flaticon-shop hover-flip-item"> View Shop</i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- End Breadcrumb Area  -->
-        <br>
-
+        <!-- Description -->
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
@@ -535,418 +565,15 @@
                         <div class="col-lg-6 mb--30">
                             <div class="single-desc">
                                 <h5 class="title">Specifications:</h5>
-                                <p>We’ve created a full-stack structure for our working workflow processes, were from
-                                    the funny the century initial all the made, have spare to negatives. But the
-                                    structure was from the funny the century rather, initial
-                                    all the made, have spare to negatives.</p>
-                            </div>
-                        </div>
-                        <!-- End .col-lg-6 -->
-                        <div class="col-lg-6 mb--30">
-                            <div class="single-desc">
-                                <h5 class="title">Care & Maintenance:</h5>
-                                <p>Use warm water to describe us as a product team that creates amazing UI/UX
-                                    experiences, by crafting top-notch user experience.</p>
-                            </div>
-                        </div>
-                        <!-- End .col-lg-6 -->
-                    </div>
-                    <!-- End .row -->
-                </div>
-                <!-- End .product-desc-wrapper -->
-
-                <div class="reviews-wrapper">
-                    <h4 class="mb--60">Reviews</h4>
-                    <div class="row">
-                        <div class="col-lg-12 mb--40">
-                            <div class="axil-comment-area pro-desc-commnet-area">
-                                <h5 class="title">01 Review for this product</h5>
-                                <ul class="comment-list">
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img src="../static/images/blog/author-image-4.png"
-                                                         alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Cameron Williamson">Eleanor Pena</span>
-                                                                </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star empty-rating"></i></a>
-                                                            </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working
-                                                            workflow processes, were from the funny the century initial
-                                                            all the made, have spare to negatives. ” </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img src="../static/images/blog/author-image-4.png"
-                                                         alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Rahabi Khan">Courtney Henry</span>
-                                                                </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                            </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working
-                                                            workflow processes, were from the funny the century initial
-                                                            all the made, have spare to negatives. ”</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-
-                                    <!-- Start Single Comment  -->
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img src="../static/images/blog/author-image-5.png"
-                                                         alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Rahabi Khan">Devon Lane</span>
-                                                                </span>
-                                                        </a>
-                                                        <span class="commenter-rating ratiing-four-star">
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                                <a href="#"><i class="fas fa-star"></i></a>
-                                                            </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p>“We’ve created a full-stack structure for our working
-                                                            workflow processes, were from the funny the century initial
-                                                            all the made, have spare to negatives. ” </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- End Single Comment  -->
-                                </ul>
-                            </div>
-                            <!-- End .axil-commnet-area -->
-                        </div>
-                        <!-- End .col -->
-                        <!-- End .col -->
-                    </div>
-                </div>
-                <!-- End .reviews-wrapper -->
-
-                <div class="text-center pt--30">
-                    <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
-                </div>
-            </div>
-
-        </div>
-        <!-- woocommerce-tabs -->
-
-    </div>
-    <!-- End Shop Area  -->
-
-    <!-- Start Recently Viewed Product Area  -->
-    <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
-        <div class="container">
-            <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i> Your Recently</span>
-                <h2 class="title">Viewed Items</h2>
-            </div>
-            <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-01.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">20% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">3D™ wireless headset</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$30</span>
-                                    <span class="price current-price">$30</span>
-                                </div>
+                                <p th:text="${productDetail.productDescription}"></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-02.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">40% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">Media remote</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$80</span>
-                                    <span class="price current-price">$50</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">30% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$60</span>
-                                    <span class="price current-price">$45</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">50% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$70</span>
-                                    <span class="price current-price">$35</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">25% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$50</span>
-                                    <span class="price current-price">$38</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">30% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$60</span>
-                                    <span class="price current-price">$45</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">50% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$70</span>
-                                    <span class="price current-price">$35</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">25% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS5 Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$50</span>
-                                    <span class="price current-price">$38</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
             </div>
         </div>
     </div>
-    <!-- End Recently Viewed Product Area  -->
 </main>
-
 
 <div class="service-area">
     <div class="container">
@@ -954,7 +581,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service1.png" alt="Service">
+                        <img th:src="@{/images/icons/service1.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Fast &amp; Secure Delivery</h6>
@@ -965,7 +592,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service2.png" alt="Service">
+                        <img th:src="@{/images/icons/service2.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Money Back Guarantee</h6>
@@ -976,7 +603,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service3.png" alt="Service">
+                        <img th:src="@{/images/icons/service3.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">24 Hour Return Policy</h6>
@@ -987,7 +614,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service4.png" alt="Service">
+                        <img th:src="@{/images/icons/service4.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Pro Quality Support</h6>
@@ -1065,7 +692,8 @@
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a href="../static/images/product/product-big-01.png" class="popup-zoom">
+                                                <a href="../static/images/product/product-big-01.png"
+                                                   class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -1076,7 +704,8 @@
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a href="../static/images/product/product-big-02.png" class="popup-zoom">
+                                                <a href="../static/images/product/product-big-02.png"
+                                                   class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -1087,7 +716,8 @@
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a href="../static/images/product/product-big-03.png" class="popup-zoom">
+                                                <a href="../static/images/product/product-big-03.png"
+                                                   class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -1140,16 +770,17 @@
                                         <div class="product-variation">
                                             <h6 class="title">Colors:</h6>
                                             <div class="color-variant-wrapper">
-                                                <ul class="color-variant mt--0">
-                                                    <li class="color-extra-01 active"><span><span class="color"></span></span>
-                                                    </li>
-                                                    <li class="color-extra-02"><span><span class="color"></span></span>
-                                                    </li>
-                                                    <li class="color-extra-03"><span><span class="color"></span></span>
+                                                <ul class="color-variant-wrapper">
+                                                    <li class="color-variant" th:each="color : ${availableColors}">
+                                                        <a th:href="@{'/product-detail/' + ${productDetail.productId} + '?colorId=' + ${color.colorId}}"
+                                                           th:text="${color.colorName}" class="color-link"></a>
+
                                                     </li>
                                                 </ul>
+
                                             </div>
                                         </div>
+
                                         <!-- End Product Variation  -->
 
                                         <!-- Start Product Variation  -->
@@ -1170,7 +801,11 @@
                                     <!-- Start Product Action Wrapper  -->
                                     <div class="product-action-wrapper d-flex-center">
                                         <!-- Start Quentity Action  -->
-                                        <div class="pro-qty"><input type="text" value="1"></div>
+                                        <div class="pro-qty">
+                                            <label>
+                                                <input type="text" value="1">
+                                            </label>
+                                        </div>
                                         <!-- End Quentity Action  -->
 
                                         <!-- Start Product Action  -->
@@ -1199,31 +834,23 @@
 
 <!-- JS
 ============================================ -->
-<!-- Modernizer JS -->
-<script src="../static/js/vendor/modernizr.min.js"></script>
-<!-- jQuery JS -->
-<script src="../static/js/vendor/jquery.js"></script>
-<!-- Bootstrap JS -->
-<script src="../static/js/vendor/popper.min.js"></script>
-<script src="../static/js/vendor/bootstrap.min.js"></script>
-<script src="../static/js/vendor/slick.min.js"></script>
-<script src="../static/js/vendor/js.cookie.js"></script>
-<!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-<script src="../static/js/vendor/jquery-ui.min.js"></script>
-<script src="../static/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="../static/js/vendor/jquery.countdown.min.js"></script>
-<script src="../static/js/vendor/sal.js"></script>
-<script src="../static/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="../static/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="../static/js/vendor/isotope.pkgd.min.js"></script>
-<script src="../static/js/vendor/counterup.js"></script>
-<script src="../static/js/vendor/waypoints.min.js"></script>
-
-<!-- Main JS -->
-<script src="../static/js/main.js"></script>
-<script src="../static/js/script.js"></script>
+<script th:src="@{/js/vendor/modernizr.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.js}"></script>
+<script th:src="@{/js/vendor/popper.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/js/vendor/slick.min.js}"></script>
+<script th:src="@{/js/vendor/js.cookie.js}"></script>
+<script th:src="@{/js/vendor/jquery-ui.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.ui.touch-punch.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.countdown.min.js}"></script>
+<script th:src="@{/js/vendor/sal.js}"></script>
+<script th:src="@{/js/vendor/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/vendor/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/counterup.js}"></script>
+<script th:src="@{/js/vendor/waypoints.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/product-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:14 GMT -->
 </html>

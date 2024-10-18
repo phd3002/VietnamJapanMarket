@@ -2,7 +2,6 @@ package com.ecommerce.g58.entity;
 
 import lombok.*;
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -33,5 +32,5 @@ public class OrderDetails {
     private int quantity;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Integer price;
 }
