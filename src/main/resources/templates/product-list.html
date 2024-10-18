@@ -26,11 +26,343 @@
 </head>
 
 <body class="sticky-header">
+<a href="#" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<header class="header axil-header header-style-1">
+    <!-- Header Top -->
+    <div class="axil-header-top">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="header-top-dropdown">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">English
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">English</a></li>
+                                <li><a class="dropdown-item" href="#">Japanese</a></li>
+                                <li><a class="dropdown-item" href="#">Vietnamese</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="header-top-link">
+                        <ul class="quick-link">
+                            <li><a href="sign-up.html">Join Us</a></li>
+                            <li><a href="sign-in.html">Sign In</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- Include Header Fragment -->
-<div th:replace="base :: header"></div>
+    <!-- Menu  -->
+    <div id="axil-sticky-placeholder"></div>
+    <div class="axil-mainmenu">
+        <div class="container">
+            <div class="header-navbar">
+                <div class="header-brand">
+                    <a href="/" class="logo logo-dark">
+                        <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
+                    </a>
+                </div>
+                <div class="header-main-nav">
+                    <nav class="mainmenu-nav">
+                        <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
+                        <div class="mobile-nav-brand">
+                            <a href="/homepage" class="logo">
+                                <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
+                            </a>
+                        </div>
+                        <ul class="mainmenu">
+                            <li>
+                                <img th:src="@{/images/logo/baner.png}" alt="">
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header-action">
+                    <ul class="action-list">
+                        <li class="axil-search">
+                            <a href="javascript:void(0)" class="header-search-icon" title="Search">
+                                <i class="flaticon-magnifying-glass"></i>
+                            </a>
+                        </li>
+                        <li class="wishlist">
+                            <a href="wishlist.html">
+                                <i class="flaticon-heart"></i>
+                            </a>
+                        </li>
+                        <li class="notification">
+                            <a href="my-account.html" class="notification-dropdown-btn">
+                                <i class="flaticon-envelope"></i>
+                                <span class="notification-count"></span>
+                            </a>
+                            <div id="notification-dropdown" class="notification-dropdown">
+                                <div class="notification-content-wrap">
+                                    <div class="notification-header">
+                                        <p>New notifications</p>
+                                    </div>
+                                    <div class="notification-body">
+                                        <div class="notification-item">
+                                            <div class="item-icon">
+                                                <img th:src="@{/images/product/categories/beauty.png}"
+                                                     alt="Notification Icon">
+                                            </div>
+                                            <div class="item-content">
+                                                <h3 class="item-title">New message from John</h3>
+                                                <p class="item-text">Hey, how's it going?</p>
+                                                <span class="item-time">2 minutes ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="notification-item">
+                                            <div class="item-icon">
+                                                <img th:src="@{/images/product/categories/toys.png}"
+                                                     alt="Notification Icon">
+                                            </div>
+                                            <div class="item-content">
+                                                <h3 class="item-title">New message from John</h3>
+                                                <p class="item-text">Hey, how's it going?</p>
+                                                <span class="item-time">2 minutes ago</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="notification-footer">
+                                        <a href="my-account.html">View All Notifications</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="shopping-cart">
+                            <a href="#" class="cart-dropdown-btn">
+                                <span class="cart-count">3</span>
+                                <i class="flaticon-shopping-cart"></i>
+                            </a>
+                        </li>
+                        <li class="my-account">
+                            <a href="javascript:void(0)">
+                                <i class="flaticon-person"></i>
+                            </a>
+                            <div class="my-account-dropdown">
+                                <span class="title">QUICKLINKS</span>
+                                <ul>
+                                    <li>
+                                        <a href="my-account">My Account</a>
+                                    </li>
+                                    <li>
+                                        <a href="order.html">My Orders</a>
+                                    </li>
+                                </ul>
+                                <div class="login-btn">
+                                    <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
+                                </div>
+                                <div class="reg-footer text-center">
+                                    No account yet? <a href="sign-up.html" class="btn-link">REGISTER HERE.</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="axil-mobile-toggle">
+                            <button class="menu-btn mobile-nav-toggler">
+                                <i class="flaticon-menu-2"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<main class="main-wrapper" th:fragment="content">
+    <!-- Search Modal -->
+    <div class="header-search-modal" id="header-search-modal">
+        <button class="card-close sidebar-close"><i class="fas fa-times"></i></button>
+        <div class="header-search-wrap">
+            <div class="card-header">
+                <form action="#">
+                    <div class="input-group">
+                        <label>
+                            <input type="search" class="form-control" name="prod-search" id="prod-search"
+                                   placeholder="Write Something....">
+                        </label>
+                        <button type="submit" class="axil-btn btn-bg-primary"><i class="far fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="search-result-header">
+                    <h6 class="title">24 Result Found</h6>
+                    <a href="/product-list" class="view-all">View All</a>
+                </div>
+                <div class="psearch-results">
+                    <div class="axil-product-list">
+                        <div class="thumbnail">
+                            <a href="/product-detail">
+                                <img th:src="@{/images/product/categories/toys.png}" width="100px"
+                                     alt="Yantiti Leather Bags">
+                            </a>
+                        </div>
+                        <div class="product-content">
+                            <div class="product-rating">
+                                <span class="rating-icon">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fal fa-star"></i>
+                            </span>
+                                <span class="rating-number"><span>100+</span> Reviews</span>
+                            </div>
+                            <h6 class="product-title"><a href="/product-detail">Media Remote</a></h6>
+                            <div class="product-price-variant">
+                                <span class="price current-price">$29.99</span>
+                                <span class="price old-price">$49.99</span>
+                            </div>
+                            <div class="product-cart">
+                                <a href="/cart-items" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
+                                <a href="wishlist.html" class="cart-btn"><i class="fal fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axil-product-list">
+                        <div class="thumbnail">
+                            <a href="product-detail">
+                                <img th:src="@{/images/product/categories/fashion.png}" width="100px"
+                                     alt="Yantiti Leather Bags">
+                            </a>
+                        </div>
+                        <div class="product-content">
+                            <div class="product-rating">
+                                <span class="rating-icon">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fal fa-star"></i>
+                            </span>
+                                <span class="rating-number"><span>100+</span> Reviews</span>
+                            </div>
+                            <h6 class="product-title"><a href="product-detail">Media Remote</a></h6>
+                            <div class="product-price-variant">
+                                <span class="price current-price">$29.99</span>
+                                <span class="price old-price">$49.99</span>
+                            </div>
+                            <div class="product-cart">
+                                <a href="cart-detail.html" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
+                                <a href="wishlist.html" class="cart-btn"><i class="fal fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-dropdown" id="cart-dropdown">
+        <div class="cart-content-wrap">
+            <div class="cart-header">
+                <h2 class="header-title">Cart review</h2>
+                <button class="cart-close sidebar-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-body">
+                <ul class="cart-item-list">
+                    <li class="cart-item">
+                        <div class="item-img">
+                            <a href="product-detail"><img th:src="@{/images/product/categories/toys.png}"
+                                                          alt="Commodo Blown Lamp"></a>
+                            <button class="close-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="item-content">
+                            <div class="product-rating">
+                                <span class="icon">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+							</span>
+                                <span class="rating-number">(64)</span>
+                            </div>
+                            <h3 class="item-title"><a href="product-detail">Wireless PS Handler</a></h3>
+                            <div class="item-price"><span class="currency-symbol">$</span>155.00</div>
+                            <div class="pro-qty item-quantity">
+                                <label>
+                                    <input type="number" class="quantity-input" value="15">
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cart-item">
+                        <div class="item-img">
+                            <a href="product-detail"><img th:src="@{/images/product/categories/electronic.png}"
+                                                          alt="Commodo Blown Lamp"></a>
+                            <button class="close-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="item-content">
+                            <div class="product-rating">
+                                <span class="icon">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+							</span>
+                                <span class="rating-number">(4)</span>
+                            </div>
+                            <h3 class="item-title"><a href="product-detail">Gradient Light Keyboard</a></h3>
+                            <div class="item-price"><span class="currency-symbol">$</span>255.00</div>
+                            <div class="pro-qty item-quantity">
+                                <label>
+                                    <input type="number" class="quantity-input" value="5">
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cart-item">
+                        <div class="item-img">
+                            <a href="product-detail"><img
+                                    th:src="@{/images/product/categories/limited-product.png}"
+                                    alt="Commodo Blown Lamp"></a>
+                            <button class="close-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="item-content">
+                            <div class="product-rating">
+                                <span class="icon">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+							</span>
+                                <span class="rating-number">(6)</span>
+                            </div>
+                            <h3 class="item-title"><a href="product-detail">HD CC Camera</a></h3>
+                            <div class="item-price"><span class="currency-symbol">$</span>200.00</div>
+                            <div class="pro-qty item-quantity">
+                                <label>
+                                    <input type="number" class="quantity-input" value="100">
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="cart-footer">
+                <h3 class="cart-subtotal">
+                    <span class="subtotal-title">Subtotal:</span>
+                    <span class="subtotal-amount">$610.00</span>
+                </h3>
+                <div class="group-btn">
+                    <a href="cart-detail.html" class="axil-btn btn-bg-primary viewcart-btn">View Cart</a>
+                    <a href="checkout.html" class="axil-btn btn-bg-secondary checkout-btn">Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-wrapper">
     <div class="axil-shop-area axil-section-gap bg-color-white">
         <div class="container">
             <!-- Sort  -->
@@ -96,8 +428,239 @@
     </div>
 </main>
 
-<!-- Include Footer Fragment -->
-<div th:replace="base :: footer"></div>
+<!-- Services -->
+<div class="service-area">
+    <div class="container">
+        <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
+            <div class="col">
+                <div class="service-box service-style-2">
+                    <div class="icon">
+                        <img th:src="@{/images/icons/service1.png}" alt="Service">
+                    </div>
+                    <div class="content">
+                        <h6 class="title">Fast &amp; Secure Delivery</h6>
+                        <p>Tell about your service.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box service-style-2">
+                    <div class="icon">
+                        <img th:src="@{/images/icons/service2.png}" alt="Service">
+                    </div>
+                    <div class="content">
+                        <h6 class="title">Money Back Guarantee</h6>
+                        <p>Within 10 days.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box service-style-2">
+                    <div class="icon">
+                        <img th:src="@{/images/icons/service3.png}" alt="Service">
+                    </div>
+                    <div class="content">
+                        <h6 class="title">24 Hour Return Policy</h6>
+                        <p>No question ask.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box service-style-2">
+                    <div class="icon">
+                        <img th:src="@{/images/icons/service4.png}" alt="Service">
+                    </div>
+                    <div class="content">
+                        <h6 class="title">Pro Quality Support</h6>
+                        <p>24/7 Live support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="axil-footer-area footer-style-2">
+    <div class="footer-top separator-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="axil-footer-widget">
+                        <h5 class="widget-title">Support</h5>
+                        <div class="inner">
+                            <p>685 Market Street, Las Vegas, LA 95820</p>
+                            <ul class="support-list-item">
+                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
+                                    example@domain.com</a></li>
+                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="axil-footer-widget">
+                        <h5 class="widget-title">Account</h5>
+                        <div class="inner">
+                            <ul>
+                                <li><a href="my-account.html">My Account</a></li>
+                                <li><a href="sign-up.html">Login / Register</a></li>
+                                <li><a href="cart-detail.html">Cart</a></li>
+                                <li><a href="wishlist.html">Wishlist</a></li>
+                                <li><a href="product-list.html">Shop</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Product Quick View Modal -->
+<div th:each="product : ${products}" class="modal fade quick-view-product"
+     th:attr="id=${'quick-view-modal-' + product.productId}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="far fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="single-product-thumb">
+                    <div class="row">
+                        <div class="col-lg-7 mb--40">
+                            <div class="row">
+                                <div class="col-lg-10 order-lg-2">
+                                    <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
+                                        <div class="thumbnail">
+                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+
+                                            <div class="label-block label-right">
+                                                <div class="product-badget">20% OFF</div>
+                                            </div>
+                                            <div class="product-quick-view position-view">
+                                                <a th:src="@{${product.productVariations[0].imageId.thumbnail}}" class="popup-zoom">
+                                                    <i class="far fa-search-plus"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="thumbnail">
+                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+
+                                            <div class="label-block label-right">
+                                                <div class="product-badget">20% OFF</div>
+                                            </div>
+                                            <div class="product-quick-view position-view">
+                                                <a th:src="@{${product.productVariations[0].imageId.thumbnail}}" class="popup-zoom">
+                                                    <i class="far fa-search-plus"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="thumbnail">
+                                            <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+
+                                            <div class="label-block label-right">
+                                                <div class="product-badget">20% OFF</div>
+                                            </div>
+                                            <div class="product-quick-view position-view">
+                                                <a th:src="@{${product.productVariations[0].imageId.thumbnail}}" class="popup-zoom">
+                                                    <i class="far fa-search-plus"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 order-lg-1">
+                                    <div class="product-small-thumb small-thumb-wrapper">
+                                        <div class="small-thumb-img">
+                                            <img th:src="@{${product.productVariations[0].imageId.thumbnail}}"
+                                                 alt="thumb image">
+                                        </div>
+                                        <div class="small-thumb-img">
+                                            <img th:src="@{${product.productVariations[0].imageId.thumbnail}}"
+                                                 alt="thumb image">
+                                        </div>
+                                        <div class="small-thumb-img">
+                                            <img th:src="@{${product.productVariations[0].imageId.thumbnail}}"
+                                                 alt="thumb image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 mb--40">
+                            <div class="single-product-content">
+                                <div class="inner">
+                                    <div class="product-rating">
+                                        <div class="star-rating">
+                                            <img th:src="@{/images/icons/rate.png}" alt="Rate Images">
+                                        </div>
+                                        <div class="review-link">
+                                            <a href="#">(<span>1</span> customer reviews)</a>
+                                        </div>
+                                    </div>
+                                    <h3 class="product-title" th:text="${product.productName}"></h3>
+                                    <span class="price-amount">$155.00 - $255.00</span>
+                                    <ul class="product-meta">
+                                        <li><i class="fal fa-check"></i>In stock</li>
+                                        <li><i class="fal fa-check"></i>Free delivery available</li>
+                                        <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
+                                    </ul>
+                                    <p class="description" th:text="${product.productDescription}"></p>
+                                    <div class="product-variations-wrapper">
+                                        <div class="product-variation">
+                                            <h6 class="title">Colors:</h6>
+                                            <div class="color-variant-wrapper">
+                                                <ul class="color-variant mt--0">
+                                                    <li class="color-extra-01 active"><span><span class="color"></span></span>
+                                                    </li>
+                                                    <li class="color-extra-02"><span><span class="color"></span></span>
+                                                    </li>
+                                                    <li class="color-extra-03"><span><span class="color"></span></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-variation">
+                                            <h6 class="title">Size:</h6>
+                                            <ul class="range-variant">
+                                                <li>xs</li>
+                                                <li>s</li>
+                                                <li>m</li>
+                                                <li>l</li>
+                                                <li>xl</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product-action-wrapper d-flex-center">
+                                        <div class="pro-qty">
+                                            <label>
+                                                <input type="text" value="1">
+                                            </label>
+                                        </div>
+                                        <ul class="product-action d-flex-center mb--0">
+                                            <li class="add-to-cart">
+                                                <a href="cart-detail.html"
+                                                   class="axil-btn btn-bg-primary">Add to Cart
+                                                </a>
+                                            </li>
+                                            <li class="wishlist">
+                                                <a href="wishlist.html"
+                                                   class="axil-btn wishlist-btn"><i class="far fa-heart"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- JS
 ============================================ -->

@@ -45,6 +45,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+//    @Autowired
+//    private org.springframework.security.authentication.AuthenticationManager authenticationManager;
+
+
     @Override
     public Users findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -160,4 +165,25 @@ public class UserServiceImp implements UserService, UserDetailsService {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
+
+//    public Authentication authenticate(String email, String password) throws AuthenticationException {
+//        try {
+//            UsernamePasswordAuthenticationToken authenticationToken =
+//                    new UsernamePasswordAuthenticationToken(email, password);
+//            return authenticationManager.authenticate(authenticationToken);
+//        } catch (AuthenticationException e) {
+//            throw new AuthenticationException("Authentication failed for user: " + email) {};
+//        }
+//    }
+//
+//    @Autowired
+//    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+//        this.authenticationManager = authenticationManager;
+//    }
+
+//    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Roles> roles) {
+//        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
+//    }
+
+
 }

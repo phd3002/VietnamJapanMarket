@@ -59,9 +59,4 @@ public class Orders {
     @JoinColumn(name = "unit_id")
     private ShippingUnit unitId;
 
-    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
-    private List<OrderDetails> orderDetails;
-
-    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
-    private List<ShippingStatus> shippingStatus;
 }

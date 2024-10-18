@@ -26,7 +26,16 @@ public interface CartService {
     List<CartItem> getCartItemsByIds(List<Integer> cartItemIds);
 
     void updateCartItemQuantity(Integer cartItemId, int quantity);
-
-    public Cart getCartByUserId(Integer userId);
-
+    //    Cart getOrCreateCart(Users user);
+//
+//    Integer getTotalQuantityByUser(Users user);
+//
+//    void addToCart(Cart cart, Integer variantId, Integer productId, String productName, Integer imageId, Integer quantity, Integer price);
+//
+//    void removeCartItem(Integer cartItemId);
+//
+//    List<Cart> getListCartProvisionalByDeliveryRoleId(Integer deliveryRoleId);
+//
+//    Cart getCartProvisionalByDeliveryRoleId(Integer deliveryRoleId);
+// Retrieve or create a cart for the user
 }
