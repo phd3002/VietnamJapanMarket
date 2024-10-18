@@ -11,6 +11,7 @@ import com.ecommerce.g58.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class WishlistServiceImp implements WishlistService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid variation ID"));
 
         // Check if the product variation is already in the wishlist
-        Optional<Wishlist> existingWishlistItem = wishlistRepository.findByUserIdAndProductVariation(user.getUserId(), productVariation);
+        Optional<Wishlist> existingWishlistItem = wishlistRepository.findByUserAndProductVariation(user, productVariation);
         if (existingWishlistItem.isPresent()) {
             throw new RuntimeException("Product is already in the wishlist");
         }
@@ -49,9 +50,27 @@ public class WishlistServiceImp implements WishlistService {
         wishlistRepository.save(wishlist);
     }
 
+
     @Override
     public List<Wishlist> getUserWishlist(Integer userId) {
-        return wishlistRepository.findByUser(userId);
+        Users user = new Users();
+        user.setUserId(userId);
+        return wishlistRepository.findByUser(user);
     }
+
+    @Override
+    @Transactional
+    public void removeProductFromWishlist(Integer wishlistId) {
+        wishlistRepository.deleteById(wishlistId);
+    }
+
+//    @Override
+//    public void removeProductFromWishlist(Users user, Integer variationId) {
+//        ProductVariation productVariation = productVariationRepository.findById(variationId)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid variation ID"));
+//
+//        Optional<Wishlist> wishlistItem = wishlistRepository.findByUserAndProductVariation(user, productVariation);
+//        wishlistItem.ifPresent(wishlistRepository::delete);
+//    }
 }
 

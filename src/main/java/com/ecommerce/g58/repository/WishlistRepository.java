@@ -13,16 +13,11 @@ import java.util.Optional;
 
 @Repository
 public interface WishlistRepository extends JpaRepository<Wishlist, Integer> {
-    // Find a wishlist by the associated user
-//    Wishlist findByUserId(Users user);
+    @Query("SELECT w FROM Wishlist w WHERE w.userId = :user AND w.productVariation = :productVariation")
+    Optional<Wishlist> findByUserAndProductVariation(@Param("user") Users user, @Param("productVariation") ProductVariation productVariation);
 
-    // Find a wishlist by the user ID
-//    Wishlist findByUserId(Users userId);
 
-    @Query("SELECT w FROM Wishlist w WHERE w.userId = :userId AND w.productVariation = :productVariation")
-    Optional<Wishlist> findByUserIdAndProductVariation(@Param("userId") Integer userId, @Param("productVariation") ProductVariation productVariation);
-
-    @Query("SELECT w FROM Wishlist w WHERE w.userId = :userId")
-    List<Wishlist> findByUser(@Param("user") Integer userId); // Added method to find wishlist items by user
+    @Query("SELECT w FROM Wishlist w WHERE w.userId = :user")
+    List<Wishlist> findByUser(@Param("user") Users user);
 
 }

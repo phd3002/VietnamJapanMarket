@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 public class Wishlist {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Add this annotation
+    @Column(name = "wishlist_id")
     private Integer wishlistId;
 
     @ManyToOne

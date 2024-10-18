@@ -12,4 +12,6 @@ public interface WishlistService {
     void addProductToWishlist(Users user, ProductDetailDTO productDetailDTO);
 
     List<Wishlist> getUserWishlist(Integer userId); // New method to get user wishlist
+
+    void removeProductFromWishlist(Integer wishlistId); // New method to remove a product from wishlist
 }

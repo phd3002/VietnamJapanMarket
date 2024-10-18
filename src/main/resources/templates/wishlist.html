@@ -125,7 +125,8 @@
                                         <!-- Notification Item -->
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img src="../static/images/product/electric/product-01.png"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -135,7 +136,8 @@
                                         </div>
                                         <div class="notification-item">
                                             <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
+                                                <img src="../static/images/product/electric/product-01.png"
+                                                     alt="Notification Icon">
                                             </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
@@ -388,15 +390,23 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="wishlistItem : ${wishlist}">
+                    <tr th:each="wishlistItem : ${wishlistItems}">
                         <td class="product-remove">
-                            <a th:href="@{/wishlist/remove/{id}(id=${wishlistItem.wishlistId})}" class="remove-wishlist">
-                                <i class="fal fa-times"></i>
-                            </a>
+                            <form th:action="@{/remove_wishlist}" method="post">
+                                <input type="hidden" name="wishlistId" th:value="${wishlistItem.wishlistId}">
+                                <button type="submit" class="remove-wishlist">
+                                    <i class="fal fa-times"></i>
+                                </button>
+                            </form>
+<!--                            <a th:href="@{/remove/{id}(id=${wishlistItem.wishlistId})}"-->
+<!--                               class="remove-wishlist">-->
+<!--                                <i class="fal fa-times"></i>-->
+<!--                            </a>-->
                         </td>
                         <td class="product-thumbnail">
                             <a th:href="@{/product-detail/{productId}(productId=${wishlistItem.product.productId})}">
-                                <img th:src="@{${wishlistItem.productVariation.imageId.thumbnail}}" alt="Digital Product">
+                                <img th:src="@{${wishlistItem.productVariation.imageId.thumbnail}}"
+                                     alt="Digital Product">
                             </a>
                         </td>
                         <td class="product-title">
@@ -407,8 +417,6 @@
                             <span class="currency-symbol">$</span>
                             <span th:text="${wishlistItem.product.price}"></span>
                         </td>
-                        <td class="product-stock-status" data-title="Status"
-                            th:text="${wishlistItem.product.stock > 0 ? 'In Stock' : 'Out of Stock'}"></td>
                         <td class="product-add-cart">
                             <a th:href="@{/cart/add/{productId}(productId=${wishlistItem.product.productId})}"
                                class="axil-btn btn-outline">
@@ -421,7 +429,6 @@
             </div>
         </div>
     </div>
-
     <!-- End Wishlist Area  -->
 
     <!-- Start Recently Viewed Product Area  -->
@@ -762,7 +769,8 @@
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a href="../static/images/product/product-big-01.png" class="popup-zoom">
+                                                <a href="../static/images/product/product-big-01.png"
+                                                   class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -773,7 +781,8 @@
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a href="../static/images/product/product-big-02.png" class="popup-zoom">
+                                                <a href="../static/images/product/product-big-02.png"
+                                                   class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -784,7 +793,8 @@
                                                 <div class="product-badget">20% OFF</div>
                                             </div>
                                             <div class="product-quick-view position-view">
-                                                <a href="../static/images/product/product-big-03.png" class="popup-zoom">
+                                                <a href="../static/images/product/product-big-03.png"
+                                                   class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -872,7 +882,8 @@
 
                                         <!-- Start Product Action  -->
                                         <ul class="product-action d-flex-center mb--0">
-                                            <li class="add-to-cart"><a href="cart-detail.html" class="axil-btn btn-bg-primary">Add
+                                            <li class="add-to-cart"><a href="cart-detail.html"
+                                                                       class="axil-btn btn-bg-primary">Add
                                                 to Cart</a></li>
                                             <li class="wishlist"><a href="wishlist.html"
                                                                     class="axil-btn wishlist-btn"><i
