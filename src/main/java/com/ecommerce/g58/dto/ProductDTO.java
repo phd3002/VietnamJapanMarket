@@ -3,6 +3,8 @@ package com.ecommerce.g58.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 //import java.math.BigDecimal;
 
 @Getter
@@ -14,6 +16,10 @@ public class ProductDTO {
     private String thumbnail;
     private Integer price;
     private Integer imageId;
+    private String description;
+    private float weight;
+    private List<ProductVariationDTO> productVariations;
+
 
 
     // Constructor
@@ -23,17 +29,22 @@ public class ProductDTO {
         this.price = price;
     }
 
-//    public ProductDTO(String productName, String thumbnail, Integer price, Integer productId, Integer variationId, Integer storeId, Integer categoryId, String productDescription, Integer imageId) {
-//        this.productName = productName;
-//        this.thumbnail = thumbnail;
-//        this.price = price;
-//        this.productId = productId;
-//        this.variationId = variationId;
-//        this.storeId = storeId;
-//        this.categoryId = categoryId;
-//        this.productDescription = productDescription;
-//        this.imageId = imageId;
-//    }
+    public ProductDTO(Integer productId, String productName, String thumbnail, int price) {
+        this.productId = productId;
+        this.productName = productName;
+        this.thumbnail = thumbnail;
+        this.price = price;
+    }
+
+
+    public ProductDTO(Integer productId, String productName, String thumbnail, int price, String description) {
+        this.productId = productId;
+        this.productName = productName;
+        this.thumbnail = thumbnail;
+        this.price = price;
+        this.description = description;
+    }
+
 
     public ProductDTO() {
     }

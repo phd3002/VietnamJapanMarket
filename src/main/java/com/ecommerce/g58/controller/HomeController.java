@@ -34,13 +34,13 @@ public class HomeController {
             model.addAttribute("isLoggedIn", false);
         }
         System.out.println(principal);
-        List<Products> products = productService.getAllProducts();
+//        List<Products> products = productService.getAllProducts();
         List<Categories> categories = categoriesService.getAllCategories();
         List<ProductDTO> productDetails = productService.getProductDetails();
         List<ProductDTO> searchProduct = productService.getSearchProduct();
         model.addAttribute("productDetails", productDetails);
-        model.addAttribute("searchProduct", productDetails);
-        model.addAttribute("categories", categoriesService.getAllCategories());
+        model.addAttribute("searchProduct", searchProduct);
+        model.addAttribute("categories", categories);
 
         return "homepage";
     }
