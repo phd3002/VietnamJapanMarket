@@ -2,27 +2,11 @@
 <html class="no-js" lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Product List</title>
-    <meta name="robots" content="noindex, follow"/>
-    <meta name="description" content="">
+    <title th:text="${pageTitle} ?: 'Product List'"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 
-    <!-- CSS
-    ============================================ -->
-    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
-    <link rel="stylesheet" th:href="@{/css/style.min.css}">
-    <link rel="stylesheet" th:href="@{/css/style-2.css}">
+    <!-- Including CSS Files from base.html -->
+    <th:block th:replace="~{base :: head}"></th:block>
 </head>
 
 <body class="sticky-header">
@@ -30,6 +14,7 @@
 <!-- Include Header Fragment -->
 <div th:replace="base :: header"></div>
 
+<!-- Main Content Section -->
 <main class="main-wrapper" th:fragment="content">
     <div class="axil-shop-area axil-section-gap bg-color-white">
         <div class="container">
@@ -119,5 +104,4 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
 </body>
-
 </html>
