@@ -6,6 +6,7 @@ import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.Size;
 import com.ecommerce.g58.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.var;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
