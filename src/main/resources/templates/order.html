@@ -85,7 +85,7 @@
                                 <p th:if="${message}" th:text="${message}"></p>
                                 <!-- Display the link to the product list if there are no orders -->
                                 <a th:if="${message}" th:href="${productListLink}">Mua ngay</a>
-                                <div class="axil-dashboard-order">
+                                <div class="axil-dashboard-order" th:if="${message == null}">
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead>
