@@ -11598,7 +11598,7 @@ body.open .closeMask {
     position: relative;
     overflow: hidden;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     cursor: pointer;
     transition: all .4s
 }

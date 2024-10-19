@@ -57,17 +57,18 @@
             </div>
         </div>
     </div>
-
     <!-- Menu  -->
     <div id="axil-sticky-placeholder"></div>
     <div class="axil-mainmenu">
         <div class="container">
             <div class="header-navbar">
+                <!-- Header Brand -->
                 <div class="header-brand">
                     <a href="/" class="logo logo-dark">
                         <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                     </a>
                 </div>
+                <!-- Header Main Nav -->
                 <div class="header-main-nav">
                     <nav class="mainmenu-nav">
                         <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
@@ -83,18 +84,22 @@
                         </ul>
                     </nav>
                 </div>
+                <!-- Header Actions -->
                 <div class="header-action">
                     <ul class="action-list">
+                        <!-- Action Search -->
                         <li class="axil-search">
                             <a href="javascript:void(0)" class="header-search-icon" title="Search">
                                 <i class="flaticon-magnifying-glass"></i>
                             </a>
                         </li>
+                        <!-- Action Wishlist -->
                         <li class="wishlist">
                             <a href="wishlist.html">
                                 <i class="flaticon-heart"></i>
                             </a>
                         </li>
+                        <!-- Action Notification -->
                         <li class="notification">
                             <a href="my-account.html" class="notification-dropdown-btn">
                                 <i class="flaticon-envelope"></i>
@@ -135,12 +140,14 @@
                                 </div>
                             </div>
                         </li>
+                        <!-- Action Cart -->
                         <li class="shopping-cart">
                             <a href="#" class="cart-dropdown-btn">
                                 <span class="cart-count">3</span>
                                 <i class="flaticon-shopping-cart"></i>
                             </a>
                         </li>
+                        <!-- Action Account -->
                         <li class="my-account">
                             <a href="javascript:void(0)">
                                 <i class="flaticon-person"></i>
@@ -163,6 +170,7 @@
                                 </div>
                             </div>
                         </li>
+                        <!-- Action Mobile Toggle -->
                         <li class="axil-mobile-toggle">
                             <button class="menu-btn mobile-nav-toggler">
                                 <i class="flaticon-menu-2"></i>
@@ -417,6 +425,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Load More  -->
             <div class="text-center pt--30">
                 <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
             </div>
@@ -424,7 +433,6 @@
     </div>
 </main>
 
-<!-- Services -->
 <div class="service-area">
     <div class="container">
         <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
@@ -530,7 +538,7 @@
                                 <div class="col-lg-10 order-lg-2">
                                     <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
                                         <div class="thumbnail" th:each="pv : ${product.productVariations}">
-                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image">
+                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image" style="width: 400px; height: 300px;">
                                             <div class="product-quick-view position-view">
                                                 <a th:src="@{${pv.imageId.thumbnail}}" class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
@@ -543,7 +551,8 @@
                                     <div class="product-small-thumb small-thumb-wrapper">
                                         <div class="small-thumb-img" th:each="pv : ${product.productVariations}">
                                             <img th:src="@{${pv.imageId.thumbnail}}"
-                                                 alt="thumb image">
+                                                 alt="thumb image"
+                                                 style="width: 69px; height: 42px">
                                         </div>
                                     </div>
                                 </div>

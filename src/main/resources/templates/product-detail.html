@@ -57,17 +57,18 @@
             </div>
         </div>
     </div>
-
     <!-- Menu  -->
     <div id="axil-sticky-placeholder"></div>
     <div class="axil-mainmenu">
         <div class="container">
             <div class="header-navbar">
+                <!-- Header Brand -->
                 <div class="header-brand">
                     <a href="/" class="logo logo-dark">
                         <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                     </a>
                 </div>
+                <!-- Header Main Nav -->
                 <div class="header-main-nav">
                     <nav class="mainmenu-nav">
                         <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
@@ -83,18 +84,22 @@
                         </ul>
                     </nav>
                 </div>
+                <!-- Header Actions -->
                 <div class="header-action">
                     <ul class="action-list">
+                        <!-- Action Search -->
                         <li class="axil-search">
                             <a href="javascript:void(0)" class="header-search-icon" title="Search">
                                 <i class="flaticon-magnifying-glass"></i>
                             </a>
                         </li>
+                        <!-- Action Wishlist -->
                         <li class="wishlist">
                             <a href="wishlist.html">
                                 <i class="flaticon-heart"></i>
                             </a>
                         </li>
+                        <!-- Action Notification -->
                         <li class="notification">
                             <a href="my-account.html" class="notification-dropdown-btn">
                                 <i class="flaticon-envelope"></i>
@@ -135,12 +140,14 @@
                                 </div>
                             </div>
                         </li>
+                        <!-- Action Cart -->
                         <li class="shopping-cart">
                             <a href="#" class="cart-dropdown-btn">
                                 <span class="cart-count">3</span>
                                 <i class="flaticon-shopping-cart"></i>
                             </a>
                         </li>
+                        <!-- Action Account -->
                         <li class="my-account">
                             <a href="javascript:void(0)">
                                 <i class="flaticon-person"></i>
@@ -163,6 +170,7 @@
                                 </div>
                             </div>
                         </li>
+                        <!-- Action Mobile Toggle -->
                         <li class="axil-mobile-toggle">
                             <button class="menu-btn mobile-nav-toggler">
                                 <i class="flaticon-menu-2"></i>
@@ -361,12 +369,14 @@
         </div>
     </div>
 </header>
+
 <main class="main-wrapper">
-    <!-- Start Shop Area  -->
     <div class="axil-single-product-area bg-color-white">
+        <!-- Product Detail  -->
         <div class="single-product-thumb axil-section-gap pb--30 pb_sm--20">
             <div class="container">
                 <div class="row row--50">
+                    <!-- Product Large Image  -->
                     <div class="col-lg-6 mb--40">
                         <div class="row">
                             <div class="col-lg-12">
@@ -386,6 +396,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Product Info  -->
                     <div class="col-lg-6 mb--40">
                         <div class="single-product-content">
                             <div class="inner">
@@ -401,8 +412,6 @@
                                     </div>
                                 </div>
                                 <div class="product-variations-wrapper">
-
-                                    <!-- Start Product Variation  -->
                                     <div class="product-variation">
                                         <h6 class="title">Colors:</h6>
                                         <div class="color-variant-wrapper">
@@ -415,46 +424,35 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <!-- End Product Variation  -->
-
-                                    <!-- Start Product Variation  -->
                                     <div class="product-variation product-size-variation">
                                         <h6 class="title">Size:</h6>
                                         <ul class="range-variant">
                                             <li th:each="pv : ${product.productVariations}"
-                                                th:text="${pv.size.sizeName}"></li>
+                                                th:text="${pv.size.sizeName}">
+                                            </li>
                                         </ul>
                                     </div>
-                                    <!-- End Product Variation  -->
-
                                 </div>
-
-                                <!-- Start Product Action Wrapper  -->
                                 <div class="product-action-wrapper d-flex-center">
-                                    <!-- Start Quentity Action  -->
                                     <div class="pro-qty"><input type="text" value="1"></div>
-                                    <!-- End Quentity Action  -->
-
-                                    <!-- Start Product Action  -->
                                     <ul class="product-action d-flex-center mb--0">
-                                        <li class="add-to-cart"><a href="cart-detail.html"
-                                                                   class="axil-btn btn-bg-primary">Add
-                                            to Cart</a></li>
-                                        <li class="wishlist"><a href="wishlist.html" class="axil-btn wishlist-btn"><i
-                                                class="far fa-heart"></i></a></li>
+                                        <li class="add-to-cart">
+                                            <a href="cart-detail.html" class="axil-btn btn-bg-primary">Add to Cart</a>
+                                        </li>
+                                        <li class="wishlist">
+                                            <a href="wishlist.html" class="axil-btn wishlist-btn">
+                                                <i class="far fa-heart"></i>
+                                            </a>
+                                        </li>
                                     </ul>
-                                    <!-- End Product Action  -->
-
                                 </div>
-                                <!-- End Product Action Wrapper  -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End .single-product-thumb -->
-        <!-- Start Breadcrumb Area  -->
+        <!-- Store Detail  -->
         <div class="axil-breadcrumb-area">
             <div class="container">
                 <div class="axil-dashboard-author">
@@ -481,10 +479,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- End Breadcrumb Area  -->
         <br>
-
+        <!-- Description & Review  -->
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
@@ -497,10 +493,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End .row -->
                 </div>
-                <!-- End .product-desc-wrapper -->
-
                 <div class="reviews-wrapper">
                     <h4 class="mb--60">Reviews</h4>
                     <div class="row">
@@ -508,7 +501,6 @@
                             <div class="axil-comment-area pro-desc-commnet-area">
                                 <h5 class="title" th:text="${feedbacks.size() + ' Review for this product'}"></h5>
                                 <ul class="comment-list" th:each="feedback : ${feedbacks}">
-                                    <!-- Start Single Comment  -->
                                     <li class="comment">
                                         <div class="comment-body">
                                             <div class="single-comment">
@@ -538,26 +530,17 @@
                                     </li>
                                 </ul>
                             </div>
-                            <!-- End .axil-commnet-area -->
                         </div>
-                        <!-- End .col -->
-                        <!-- End .col -->
                     </div>
                 </div>
-                <!-- End .reviews-wrapper -->
-
                 <div class="text-center pt--30">
                     <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
                 </div>
             </div>
-
         </div>
-        <!-- woocommerce-tabs -->
-
     </div>
-    <!-- End Shop Area  -->
 
-    <!-- Start Recently Viewed Product Area  -->
+    <!-- All product  -->
     <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
         <div class="container">
             <div class="section-title-wrapper">
@@ -577,7 +560,7 @@
                                     <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
                                     <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
                                     <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             th:attr="data-bs-target=${'#quick-view-modal-' + product.productId}"><i
+                                                             th:attr="data-bs-target=${'#quick-view-modal-' + p.productId}"><i
                                             class="far fa-eye"></i></a></li>
                                 </ul>
                             </div>
@@ -596,7 +579,6 @@
             </div>
         </div>
     </div>
-    <!-- End Recently Viewed Product Area  -->
 </main>
 
 <div class="service-area">
@@ -649,13 +631,11 @@
         </div>
     </div>
 </div>
-<!-- Start Footer Area  -->
+
 <footer class="axil-footer-area footer-style-2">
-    <!-- Start Footer Top Area  -->
     <div class="footer-top separator-top">
         <div class="container">
             <div class="row">
-                <!-- Start Single Widget  -->
                 <div class="col-lg-6 col-sm-6">
                     <div class="axil-footer-widget">
                         <h5 class="widget-title">Support</h5>
@@ -666,13 +646,10 @@
                                     example@domain.com</a></li>
                                 <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
                                 </li>
-                                <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
                             </ul>
                         </div>
                     </div>
                 </div>
-                <!-- End Single Widget  -->
-                <!-- Start Single Widget  -->
                 <div class="col-lg-6 col-sm-6">
                     <div class="axil-footer-widget">
                         <h5 class="widget-title">Account</h5>
@@ -687,17 +664,14 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Single Widget  -->
             </div>
         </div>
     </div>
-    <!-- End Footer Top Area  -->
 </footer>
-<!-- End Footer Area  -->
 
 <!-- Product Quick View Modal -->
-<div th:each="product : ${allProducts}" class="modal fade quick-view-product"
-     th:attr="id=${'quick-view-modal-' + product.productId}" tabindex="-1" aria-hidden="true">
+<div th:each="p2 : ${allProducts}" class="modal fade quick-view-product"
+     th:attr="id=${'quick-view-modal-' + p2.productId}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -711,8 +685,8 @@
                             <div class="row">
                                 <div class="col-lg-10 order-lg-2">
                                     <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
-                                        <div class="thumbnail" th:each="pv : ${product.productVariations}">
-                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image">
+                                        <div class="thumbnail" th:each="pv : ${p2.productVariations}">
+                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image" style="width: 400px; height: 300px;">
                                             <div class="product-quick-view position-view">
                                                 <a th:src="@{${pv.imageId.thumbnail}}" class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
@@ -723,9 +697,10 @@
                                 </div>
                                 <div class="col-lg-2 order-lg-1">
                                     <div class="product-small-thumb small-thumb-wrapper">
-                                        <div class="small-thumb-img" th:each="pv : ${product.productVariations}">
+                                        <div class="small-thumb-img" th:each="pv : ${p2.productVariations}">
                                             <img th:src="@{${pv.imageId.thumbnail}}"
-                                                 alt="thumb image">
+                                                 alt="thumb image"
+                                                 style="width: 69px; height: 42px">
                                         </div>
                                     </div>
                                 </div>
@@ -742,21 +717,21 @@
                                             <a href="#">(<span>1</span> customer reviews)</a>
                                         </div>
                                     </div>
-                                    <h3 class="product-title" th:text="${product.productName}"></h3>
-                                    <span class="price-amount" th:text="${'$' + product.price}"></span>
+                                    <h3 class="product-title" th:text="${p2.productName}"></h3>
+                                    <span class="price-amount" th:text="${'$' + p2.price}"></span>
                                     <ul class="product-meta">
                                         <li><i class="fal fa-check"></i>In stock</li>
                                         <li><i class="fal fa-check"></i>Free delivery available</li>
                                         <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
                                     </ul>
-                                    <p class="description" th:text="${product.productDescription}"></p>
+                                    <p class="description" th:text="${p2.productDescription}"></p>
                                     <div class="product-variations-wrapper">
                                         <div class="product-variation">
                                             <h6 class="title">Colors:</h6>
                                             <div class="color-variant-wrapper">
                                                 <ul class="color-variant mt--0">
                                                     <li th:class="${'color-extra-0' + (iter.index + 1) + (iter.first ? ' active' : '')}"
-                                                        th:each="pv,iter : ${product.productVariations}">
+                                                        th:each="pv,iter : ${p2.productVariations}">
                                                     <span><span class="color"
                                                                 th:style="${'background: ' + pv.color.colorName}"></span></span>
                                                     </li>
@@ -766,7 +741,7 @@
                                         <div class="product-variation">
                                             <h6 class="title">Size:</h6>
                                             <ul class="range-variant">
-                                                <li th:each="pv : ${product.productVariations}"
+                                                <li th:each="pv : ${p2.productVariations}"
                                                     th:text="${pv.size.sizeName}"></li>
                                             </ul>
                                         </div>
