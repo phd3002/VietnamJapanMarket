@@ -1,17 +1,15 @@
 package com.ecommerce.g58.controller;
 
-import com.ecommerce.g58.entity.Cart;
-import com.ecommerce.g58.entity.CartItem;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.ProductImageRepository;
-import com.ecommerce.g58.repository.ShippingRateRepository;
 import com.ecommerce.g58.service.*;
+import com.ecommerce.g58.service.implementation.ShippingUnitServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -29,12 +27,14 @@ public class CheckoutController {
 
     @Autowired
     private ProductImageRepository productImageRepository; // Inject ProductImageRepository
+
     @Autowired
     private ShippingRateService shippingRateService;
-    @Autowired
-    private PaymentService paymentService;
+
     @Autowired
     private CountriesService countriesSerive;
+    @Autowired
+    private ShippingUnitService shippingUnitService;
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal) {
@@ -59,11 +59,12 @@ public class CheckoutController {
             int quantity = item.getQuantity(); // Assuming item.getQuantity() returns the quantity of the item in the cart
             totalPrice += itemPrice * quantity;
         }
-
-        model.addAttribute("shippingMethods", shippingRateService.getAllShippingRates());
-        model.addAttribute("paymentMethods", paymentService.getAllPaymentMethods());
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        List<ShippingRate> shippingRates = shippingRateService.getAllShippingRates();
+        model.addAttribute("shippingRates", shippingRates);
         model.addAttribute("countries", countriesSerive.getAllCountries());
-
+        model.addAttribute("users", user);
+        model.addAttribute("shippingUnits", shippingUnits);
         // Add cart items and total price to the model
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
