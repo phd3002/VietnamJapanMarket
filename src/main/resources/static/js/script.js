@@ -19,7 +19,34 @@ document.querySelectorAll('.toggle-password').forEach(item => {
 // Save changes button
 document.getElementById('saveChangesBtn').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
-    document.getElementById('confirmationPopup').style.display = 'block'; // Show confirmation popup
+//    document.getElementById('confirmationPopup').style.display = 'block'; // Show confirmation popup
+
+    const firstName = document.querySelector('input[name="firstName"]').value
+    const lastName = document.querySelector('input[name="lastName"]').value
+    const email = document.querySelector('input[name="email"]').value
+    const phoneNumber = document.querySelector('input[name="phoneNumber"]').value
+    const password = document.querySelector('input[name="password"]').value
+    const newPassword = document.querySelector('input[name="newPassword"]').value
+    const confirmPassword = document.querySelector('input[name="confirmPassword"]').value
+
+    if (newPassword != confirmPassword) {
+        alert('Password not match!')
+        return
+    }
+
+    fetch('http://localhost:8080/my-account/post?' + new URLSearchParams({
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            password,
+            newPassword
+        }).toString()
+    ).then(res => {
+        if (res.status === 200) {
+            location.reload();
+        }
+    })
 });
 
 document.getElementById('confirmYesBtn').addEventListener('click', function () {
@@ -40,7 +67,7 @@ document.getElementById('successOkBtn').addEventListener('click', function () {
     document.getElementById('successPopup').style.display = 'none';
 
     // Reload the page after successful confirmation
-    location.reload();
+    document.getElementById('uform').submit()
 });
 
 // Close popup if clicking outside the popup

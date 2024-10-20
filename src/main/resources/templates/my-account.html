@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -57,17 +57,18 @@
             </div>
         </div>
     </div>
-
     <!-- Menu  -->
     <div id="axil-sticky-placeholder"></div>
     <div class="axil-mainmenu">
         <div class="container">
             <div class="header-navbar">
+                <!-- Header Brand -->
                 <div class="header-brand">
                     <a href="/" class="logo logo-dark">
                         <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                     </a>
                 </div>
+                <!-- Header Main Nav -->
                 <div class="header-main-nav">
                     <nav class="mainmenu-nav">
                         <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
@@ -83,18 +84,22 @@
                         </ul>
                     </nav>
                 </div>
+                <!-- Header Actions -->
                 <div class="header-action">
                     <ul class="action-list">
+                        <!-- Action Search -->
                         <li class="axil-search">
                             <a href="javascript:void(0)" class="header-search-icon" title="Search">
                                 <i class="flaticon-magnifying-glass"></i>
                             </a>
                         </li>
+                        <!-- Action Wishlist -->
                         <li class="wishlist">
                             <a href="wishlist.html">
                                 <i class="flaticon-heart"></i>
                             </a>
                         </li>
+                        <!-- Action Notification -->
                         <li class="notification">
                             <a href="my-account.html" class="notification-dropdown-btn">
                                 <i class="flaticon-envelope"></i>
@@ -135,12 +140,14 @@
                                 </div>
                             </div>
                         </li>
+                        <!-- Action Cart -->
                         <li class="shopping-cart">
                             <a href="#" class="cart-dropdown-btn">
                                 <span class="cart-count">3</span>
                                 <i class="flaticon-shopping-cart"></i>
                             </a>
                         </li>
+                        <!-- Action Account -->
                         <li class="my-account">
                             <a href="javascript:void(0)">
                                 <i class="flaticon-person"></i>
@@ -149,7 +156,7 @@
                                 <span class="title">QUICKLINKS</span>
                                 <ul>
                                     <li>
-                                        <a href="my-account">My Account</a>
+                                        <a href="/my-account">My Account</a>
                                     </li>
                                     <li>
                                         <a href="order.html">My Orders</a>
@@ -163,6 +170,7 @@
                                 </div>
                             </div>
                         </li>
+                        <!-- Action Mobile Toggle -->
                         <li class="axil-mobile-toggle">
                             <button class="menu-btn mobile-nav-toggler">
                                 <i class="flaticon-menu-2"></i>
@@ -361,6 +369,7 @@
         </div>
     </div>
 </header>
+
 <main class="main-wrapper">
     <div class="axil-dashboard-area axil-section-gap">
         <div class="container">
@@ -372,7 +381,7 @@
                         </div>
                         <div class="media-body">
                             <h5 class="title mb-0">Hello ....</h5>
-                            <span class="joining-date">Register Since Sep 2020</span>
+                            <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
                         </div>
                     </div>
                 </div>
@@ -381,7 +390,7 @@
                         <aside class="axil-dashboard-aside">
                             <nav class="axil-dashboard-nav">
                                 <div class="nav nav-tabs" role="tablist">
-                                    <a class="nav-item nav-link active" href="my-account"
+                                    <a class="nav-item nav-link active" href="/my-account"
                                        aria-selected="true"><i class="fas fa-user"></i>Account Details</a>
                                     <a class="nav-item nav-link" href="my-shop.html"
                                        aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
@@ -402,18 +411,21 @@
                             <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
                                 <div class="col-lg-9">
                                     <div class="axil-dashboard-account">
-                                        <form class="account-details-form">
+                                        <form class="account-details-form"
+                                              id="uform">
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label>First Name</label>
-                                                        <input type="text" class="form-control" value="ABC">
+                                                        <input name="firstName" type="text" class="form-control"
+                                                               th:value="${user.firstName}">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label>Last Name</label>
-                                                        <input type="text" class="form-control" value="DEF">
+                                                        <input name="lastName" type="text" class="form-control"
+                                                               th:value="${user.lastName}">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -426,30 +438,32 @@
                                                 <div class="col-12">
                                                     <div class="form-group mb--40">
                                                         <label>Email</label>
-                                                        <input type="text" class="form-control"
-                                                               value="abcdef@gmail.com">
+                                                        <input name="email" type="text" class="form-control"
+                                                               th:value="${user.email}">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group mb--40">
                                                         <label>Phone</label>
-                                                        <input type="text" class="form-control" value="0123456789">
+                                                        <input name="phoneNumber" type="text" class="form-control"
+                                                               th:value="${user.phoneNumber}">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <h5 class="title">Password Change</h5>
                                                     <div class="form-group">
                                                         <label>Password</label>
-                                                        <input type="password" class="form-control"
-                                                               value="123456789101112131415">
+                                                        <input name="password" type="password" class="form-control"
+                                                               th:value="${user.password}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label>New Password</label>
-                                                        <input type="password" class="form-control">
+                                                        <input name="newPassword" type="password" class="form-control">
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Confirm New Password</label>
-                                                        <input type="password" class="form-control">
+                                                        <input name="confirmPassword" type="password"
+                                                               class="form-control">
                                                     </div>
                                                     <div class="form-group mb--0">
                                                         <input type="submit" class="axil-btn" value="Save Changes"
@@ -467,17 +481,17 @@
             </div>
         </div>
     </div>
-    <div id="confirmationPopup"
-         style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
-        <p>Bạn có muốn thay đổi?</p>
-        <button id="confirmYesBtn">Yes</button>
-        <button id="confirmCancelBtn">Cancel</button>
-    </div>
-    <div id="successPopup"
-         style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">
-        <p>Thay đổi thành công!</p>
-        <button id="successOkBtn">OK</button>
-    </div>
+    <!--    <div id="confirmationPopup"-->
+    <!--         style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">-->
+    <!--        <p>Bạn có muốn thay đổi?</p>-->
+    <!--        <button id="confirmYesBtn">Yes</button>-->
+    <!--        <button id="confirmCancelBtn">Cancel</button>-->
+    <!--    </div>-->
+    <!--    <div id="successPopup"-->
+    <!--         style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 20px; background: #fff; border: 1px solid #ddd;">-->
+    <!--        <p>Thay đổi thành công!</p>-->
+    <!--        <button id="successOkBtn">OK</button>-->
+    <!--    </div>-->
 </main>
 
 <!-- Services -->

@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .antMatchers("/api/search").permitAll()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
                 .antMatchers(
-                        "/", "/sign-up/confirm-code/**",
+                        "/","/**", "/sign-up/confirm-code/**",
                         "/address/**", "/cart-detail/**", "/checkout/**",
                         "/coming-soon/**", "/confirm-code/**", "/footer/**",
                         "/head/**", "/header/**",
