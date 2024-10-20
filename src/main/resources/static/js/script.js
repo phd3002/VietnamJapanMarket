@@ -44,7 +44,13 @@ document.getElementById('saveChangesBtn').addEventListener('click', function (ev
         }).toString()
     ).then(res => {
         if (res.status === 200) {
+            alert('Profile updated successfully!')
             location.reload();
+        } else {
+            res.json()
+                .then((json) => {
+                    alert(json.message)
+                })
         }
     })
 });

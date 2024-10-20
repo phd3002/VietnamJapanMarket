@@ -3,6 +3,8 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.service.implementation.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +20,9 @@ public class AccountController {
     private final ProfileService profileService;
 
     @GetMapping("/my-account")
-    public String myAccount(Model model) {
-        var user = profileService.getUserById(1);
+    public String myAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        var email = userDetails.getUsername();
+        var user = profileService.getUserByEmail(email);
         model.addAttribute("user", user);
         model.addAttribute("createdAtFormatted", DateTimeFormatter.ofPattern("MMM yyyy").format(user.getCreatedAt()));
         return "my-account";
@@ -33,7 +36,10 @@ public class AccountController {
                               @RequestParam String email,
                               @RequestParam String phoneNumber,
                               @RequestParam String password,
-                              @RequestParam String newPassword) {
-        profileService.updateUser(1, firstName, lastName, email, phoneNumber, password, newPassword);
+                              @RequestParam String newPassword,
+                              @AuthenticationPrincipal UserDetails userDetails) {
+        var loggedInEmail = userDetails.getUsername();
+        var user = profileService.getUserByEmail(loggedInEmail);
+        profileService.updateUser(user.getUserId(), firstName, lastName, email, phoneNumber, password, newPassword);
     }
 }

@@ -49,8 +49,8 @@
                 <div class="col-sm-6">
                     <div class="header-top-link">
                         <ul class="quick-link">
-                            <li><a href="sign-up.html">Join Us</a></li>
-                            <li><a href="sign-in.html">Sign In</a></li>
+                            <li><a href="/sign-up">Join Us</a></li>
+                            <li><a href="/sign-in">Sign In</a></li>
                         </ul>
                     </div>
                 </div>
@@ -163,10 +163,10 @@
                                     </li>
                                 </ul>
                                 <div class="login-btn">
-                                    <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
+                                    <a href="/sign-in" class="axil-btn btn-bg-primary">Login</a>
                                 </div>
                                 <div class="reg-footer text-center">
-                                    No account yet? <a href="sign-up.html" class="btn-link">REGISTER HERE.</a>
+                                    No account yet? <a href="/sign-up" class="btn-link">REGISTER HERE.</a>
                                 </div>
                             </div>
                         </li>
@@ -382,7 +382,8 @@
                             <div class="col-lg-12">
                                 <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
                                     <div class="thumbnail" th:each="pv : ${product.productVariations}">
-                                        <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Images">
+                                        <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Images"
+                                             style="width: 580px !important; height: 350px !important;">
                                     </div>
                                 </div>
                             </div>
@@ -464,7 +465,8 @@
                         </div>
                         <div class="media-body-1">
                             <div class="info-row">
-                                <span class="name"><h3 style="margin-bottom: 8px;" th:text="${product.storeId.storeName}"></h3></span>
+                                <span class="name"><h3 style="margin-bottom: 8px;"
+                                                       th:text="${product.storeId.storeName}"></h3></span>
                                 <span class="joining-date">Register Since Sep 2020</span>
                                 <span class="email">Email: annie@example.com</span>
                             </div>
@@ -686,7 +688,8 @@
                                 <div class="col-lg-10 order-lg-2">
                                     <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
                                         <div class="thumbnail" th:each="pv : ${p2.productVariations}">
-                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image" style="width: 400px; height: 300px;">
+                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image"
+                                                 style="width: 400px; height: 300px;">
                                             <div class="product-quick-view position-view">
                                                 <a th:src="@{${pv.imageId.thumbnail}}" class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
