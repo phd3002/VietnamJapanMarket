@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 public interface UserService extends UserDetailsService {
 
     Users findByEmail(String email);
+
     Users getUserById(Integer userId);
+
     UserDetails loadUserByUsername(String email);
 
     void registerUser(Users users);
@@ -32,8 +34,6 @@ public interface UserService extends UserDetailsService {
 
     //change pass
     void updatePassword(Users user, String newPassword);
-
-//    Users findByEmail(String email);
 
 
 }

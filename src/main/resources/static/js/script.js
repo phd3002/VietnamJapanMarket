@@ -16,33 +16,6 @@ document.querySelectorAll('.toggle-password').forEach(item => {
     });
 });
 
-// Save changes button
-document.getElementById('saveChangesBtn').addEventListener('click', function (event) {
-    event.preventDefault(); // Prevent form submission
-    document.getElementById('confirmationPopup').style.display = 'block'; // Show confirmation popup
-});
-
-document.getElementById('confirmYesBtn').addEventListener('click', function () {
-    // Hide the confirmation popup
-    document.getElementById('confirmationPopup').style.display = 'none';
-
-    // Show the success popup
-    document.getElementById('successPopup').style.display = 'block';
-});
-
-document.getElementById('confirmCancelBtn').addEventListener('click', function () {
-    // Hide the confirmation popup
-    document.getElementById('confirmationPopup').style.display = 'none';
-});
-
-document.getElementById('successOkBtn').addEventListener('click', function () {
-    // Hide the success popup
-    document.getElementById('successPopup').style.display = 'none';
-
-    // Reload the page after successful confirmation
-    location.reload();
-});
-
 // Close popup if clicking outside the popup
 window.addEventListener('click', function (event) {
     var confirmationPopup = document.getElementById('confirmationPopup');
@@ -78,7 +51,7 @@ async function performSearch() {
 }
 
 function updateSearchResults(results) {
-    const resultContainer = document.querySelector('.psearch-results');
+    const resultContainer = document.querySelector('.search-results');
     resultContainer.innerHTML = '';  // Clear previous results
 
     if (results.length === 0) {
@@ -111,3 +84,29 @@ function updateSearchResults(results) {
         resultContainer.appendChild(resultItem);
     });
 }
+
+// cap nhat so luong san pham trong gio hang tren header
+async function updateCartItemCount() {
+    try {
+        const response = await fetch('/api/cart/count');
+        if (response.ok) {
+            const count = await response.json();
+            console.log("Fetched count:", count);  // Log the fetched count
+            const cartCountElement = document.getElementById('cart-count');
+            console.log("Cart count element:", cartCountElement);  // Log the element to ensure it exists
+            if (cartCountElement) {
+                cartCountElement.textContent = count; // Update the cart count on the page
+            }
+        } else {
+            console.error('Failed to fetch cart item count:', response.status);
+        }
+    } catch (error) {
+        console.error('Error while updating cart item count:', error);
+    }
+}
+
+// dam bao DOM da duoc load truoc khi chay script
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM content is loaded, script is running...");
+    updateCartItemCount();  // Update cart count on page load
+});

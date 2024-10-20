@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 
 <!-- Mirrored from new.axilthemes.com/demo/template/etrade/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:16 GMT -->
@@ -11,357 +11,30 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 
     <!-- CSS
     ============================================ -->
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../static/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/font-awesome.css">
-    <link rel="stylesheet" href="../static/css/vendor/flaticon/flaticon.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick-theme.css">
-    <link rel="stylesheet" href="../static/css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/sal.css">
-    <link rel="stylesheet" href="../static/css/vendor/magnific-popup.css">
-    <link rel="stylesheet" href="../static/css/vendor/base.css">
-    <link rel="stylesheet" href="../static/css/style.min.css">
-    <link rel="stylesheet" href="../static/css/style-2.css">
+    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
+    <link rel="stylesheet" th:href="@{/css/style.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style-2.css}">
 </head>
 
 
 <body class="sticky-header">
-<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
-<!-- Start Header -->
-<header class="header axil-header header-style-1">
-    <div class="axil-header-top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <div class="header-top-dropdown">
-                        <div class="dropdown">
-                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                English
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">English</a></li>
-                                <li><a class="dropdown-item" href="#">Japanese</a></li>
-                                <li><a class="dropdown-item" href="#">Vietnamese</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="header-top-link">
-                        <ul class="quick-link">
-                            <li><a href="sign-up.html">Join Us</a></li>
-                            <li><a href="sign-in.html">Sign In</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Start Mainmenu Area  -->
-    <div id="axil-sticky-placeholder"></div>
-    <div class="axil-mainmenu">
-        <div class="container">
-            <div class="header-navbar">
-                <div class="header-brand">
-                    <a href="homepage.html" class="logo logo-dark">
-                        <img src="../static/images/logo/vj-market.png" alt="Site Logo">
-                    </a>
-                </div>
-                <div class="header-main-nav">
-                    <!-- Start Mainmanu Nav -->
-                    <nav class="mainmenu-nav">
-                        <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
-                        <div class="mobile-nav-brand">
-                            <a href="homepage.html" class="logo">
-                                <img src="../static/images/logo/vj-market.png" alt="Site Logo">
-                            </a>
-                        </div>
-                        <ul class="mainmenu">
-                            <li>
-                                <img src="../static/images/logo/baner.png">
-                            </li>
-                        </ul>
-                    </nav>
-                    <!-- End Mainmanu Nav -->
-                </div>
-                <div class="header-action">
-                    <ul class="action-list">
-                        <li class="axil-search">
-                            <a href="javascript:void(0)" class="header-search-icon" title="Search">
-                                <i class="flaticon-magnifying-glass"></i>
-                            </a>
-                        </li>
-                        <li class="wishlist">
-                            <a href="wishlist.html">
-                                <i class="flaticon-heart"></i>
-                            </a>
-                        </li>
-                        <li class="notification">
-                            <a href="my-account.html#nav-notification" class="notification-dropdown-btn">
-                                <i class="flaticon-envelope"></i>
-                                <span class="notification-count"></span>
-                            </a>
 
-                            <!-- Notification Dropdown -->
-                            <div id="notification-dropdown" class="notification-dropdown">
-                                <div class="notification-content-wrap">
-                                    <div class="notification-header">
-                                        <p>New notifications</p>
-                                    </div>
-                                    <div class="notification-body">
-                                        <!-- Notification Item -->
-                                        <div class="notification-item">
-                                            <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png"
-                                                     alt="Notification Icon">
-                                            </div>
-                                            <div class="item-content">
-                                                <h3 class="item-title">New message from John</h3>
-                                                <p class="item-text">Hey, how's it going?</p>
-                                                <span class="item-time">2 minutes ago</span>
-                                            </div>
-                                        </div>
-                                        <div class="notification-item">
-                                            <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png"
-                                                     alt="Notification Icon">
-                                            </div>
-                                            <div class="item-content">
-                                                <h3 class="item-title">New message from John</h3>
-                                                <p class="item-text">Hey, how's it going?</p>
-                                                <span class="item-time">2 minutes ago</span>
-                                            </div>
-                                        </div>
-                                        <!-- Repeat for more notification items -->
-                                    </div>
-                                    <div class="notification-footer">
-                                        <a href="my-account.html#nav-notification">View All Notifications</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="shopping-cart">
-                            <a href="#" class="cart-dropdown-btn">
-                                <span class="cart-count">3</span>
-                                <i class="flaticon-shopping-cart"></i>
-                            </a>
-                        </li>
-                        <li class="my-account">
-                            <a href="javascript:void(0)">
-                                <i class="flaticon-person"></i>
-                            </a>
-                            <div class="my-account-dropdown">
-                                <span class="title">QUICKLINKS</span>
-                                <ul>
-                                    <li>
-                                        <a href="my-account.html">My Account</a>
-                                    </li>
-                                    <li>
-                                        <a href="order.html">My Orders</a>
-                                    </li>
-                                </ul>
-                                <div class="login-btn">
-                                    <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
-                                </div>
-                                <div class="reg-footer text-center">No account yet? <a href="sign-up.html"
-                                                                                       class="btn-link">REGISTER
-                                    HERE.</a></div>
-                            </div>
-                        </li>
-                        <li class="axil-mobile-toggle">
-                            <button class="menu-btn mobile-nav-toggler">
-                                <i class="flaticon-menu-2"></i>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Mainmenu Area -->
-    <div class="header-search-modal" id="header-search-modal">
-        <button class="card-close sidebar-close"><i class="fas fa-times"></i></button>
-        <div class="header-search-wrap">
-            <div class="card-header">
-                <form action="#">
-                    <div class="input-group">
-                        <input type="search" class="form-control" name="prod-search" id="prod-search"
-                               placeholder="Write Something....">
-                        <button type="submit" class="axil-btn btn-bg-primary"><i class="far fa-search"></i></button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-body">
-                <div class="search-result-header">
-                    <h6 class="title">24 Result Found</h6>
-                    <a href="product-list.html" class="view-all">View All</a>
-                </div>
-                <div class="psearch-results">
-                    <div class="axil-product-list">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-rating">
-                                <span class="rating-icon">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fal fa-star"></i>
-                            </span>
-                                <span class="rating-number"><span>100+</span> Reviews</span>
-                            </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
-                            <div class="product-price-variant">
-                                <span class="price current-price">$29.99</span>
-                                <span class="price old-price">$49.99</span>
-                            </div>
-                            <div class="product-cart">
-                                <a href="cart-detail.html" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
-                                <a href="wishlist.html" class="cart-btn"><i class="fal fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="axil-product-list">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-rating">
-                                <span class="rating-icon">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fal fa-star"></i>
-                            </span>
-                                <span class="rating-number"><span>100+</span> Reviews</span>
-                            </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
-                            <div class="product-price-variant">
-                                <span class="price current-price">$29.99</span>
-                                <span class="price old-price">$49.99</span>
-                            </div>
-                            <div class="product-cart">
-                                <a href="cart-detail.html" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
-                                <a href="wishlist.html" class="cart-btn"><i class="fal fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Header Search Modal End -->
-
-
-    <div class="cart-dropdown" id="cart-dropdown">
-        <div class="cart-content-wrap">
-            <div class="cart-header">
-                <h2 class="header-title">Cart review</h2>
-                <button class="cart-close sidebar-close"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="cart-body">
-                <ul class="cart-item-list">
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-01.png"
-                                                               alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</span>
-                                <span class="rating-number">(64)</span>
-                            </div>
-                            <h3 class="item-title"><a href="product-detail.html">Wireless PS Handler</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>155.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="15">
-                            </div>
-                        </div>
-                    </li>
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-02.png"
-                                                               alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</span>
-                                <span class="rating-number">(4)</span>
-                            </div>
-                            <h3 class="item-title"><a href="product-detail.html">Gradient Light Keyboard</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>255.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="5">
-                            </div>
-                        </div>
-                    </li>
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-03.png"
-                                                               alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</span>
-                                <span class="rating-number">(6)</span>
-                            </div>
-                            <h3 class="item-title"><a href="product-detail.html">HD CC Camera</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>200.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="100">
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="cart-footer">
-                <h3 class="cart-subtotal">
-                    <span class="subtotal-title">Subtotal:</span>
-                    <span class="subtotal-amount">$610.00</span>
-                </h3>
-                <div class="group-btn">
-                    <a href="cart-detail.html" class="axil-btn btn-bg-primary viewcart-btn">View Cart</a>
-                    <a href="checkout.html" class="axil-btn btn-bg-secondary checkout-btn">Checkout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+<!-- Include Header Fragment -->
+<div th:replace="base :: header"></div>
 <!-- End Header -->
 
 <main class="main-wrapper">
@@ -374,7 +47,7 @@
                 <div class="axil-dashboard-author">
                     <div class="media">
                         <div class="thumbnail">
-                            <img src="../static/images/product/author1.png">
+                            <img th:src="@{/images/product/author1.png}">
                         </div>
                         <div class="media-body">
                             <h5 class="title mb-0">Hello ....</h5>
@@ -408,27 +81,31 @@
                         <div class="tab-content">
                             <!-- Orders Tab -->
                             <div class="tab-pane fade show active" id="nav-orders" role="tabpanel">
-                                <div class="axil-dashboard-order">
+                                <!-- Check if there is a message (no orders) -->
+                                <p th:if="${message}" th:text="${message}"></p>
+                                <!-- Display the link to the product list if there are no orders -->
+                                <a th:if="${message}" th:href="${productListLink}">Mua ngay</a>
+                                <div class="axil-dashboard-order" th:if="${message == null}">
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Order</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Total</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">Đơn hàng</th>
+                                                <th scope="col">Ngày tạo đơn</th>
+                                                <th scope="col">Trạng thái</th>
+                                                <th scope="col">Số lượng</th>
+                                                <th scope="col">Tổng</th>
+                                                <th scope="col">Hành động</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr th:each="order : ${orders}">
-                                                <th scope="row" th:text="'#' + ${order.orderId}"></th>
+                                                <td th:text="${order.orderId}"></td>
                                                 <td th:text="${order.orderDate}"></td>
                                                 <td th:text="${order.status}"></td>
-                                                <td th:text="${order.orderDetails.size()} + ' items'"></td>
+                                                <td th:text="${order.totalQuantity}"></td>
                                                 <td th:text="${order.totalPrice}"></td>
-                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}" class="axil-btn view-btn">View</a></td>
+                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}" class="axil-btn view-btn">Xem</a></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -450,7 +127,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service1.png" alt="Service">
+                        <img th:src="@{/images/icons/service1.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Fast &amp; Secure Delivery</h6>
@@ -461,7 +138,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service2.png" alt="Service">
+                        <img th:src="@{/images/icons/service2.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Money Back Guarantee</h6>
@@ -472,7 +149,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service3.png" alt="Service">
+                        <img th:src="@{/images/icons/service3.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">24 Hour Return Policy</h6>
@@ -483,7 +160,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="../static/images/icons/service4.png" alt="Service">
+                        <img th:src="@{/images/icons/service4.png}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Pro Quality Support</h6>
@@ -544,29 +221,29 @@
 <!-- JS
 ============================================ -->
 <!-- Modernizer JS -->
-<script src="../static/js/vendor/modernizr.min.js"></script>
+<script th:src="@{/js/vendor/modernizr.min.js}"></script>
 <!-- jQuery JS -->
-<script src="../static/js/vendor/jquery.js"></script>
+<script th:src="@{/js/vendor/jquery.js}"></script>
 <!-- Bootstrap JS -->
-<script src="../static/js/vendor/popper.min.js"></script>
-<script src="../static/js/vendor/bootstrap.min.js"></script>
-<script src="../static/js/vendor/slick.min.js"></script>
-<script src="../static/js/vendor/js.cookie.js"></script>
+<script th:src="@{/js/vendor/popper.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/js/vendor/slick.min.js}"></script>
+<script th:src="@{/js/vendor/js.cookie.js}"></script>
 <!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-<script src="../static/js/vendor/jquery-ui.min.js"></script>
-<script src="../static/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="../static/js/vendor/jquery.countdown.min.js"></script>
-<script src="../static/js/vendor/sal.js"></script>
-<script src="../static/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="../static/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="../static/js/vendor/isotope.pkgd.min.js"></script>
-<script src="../static/js/vendor/counterup.js"></script>
-<script src="../static/js/vendor/waypoints.min.js"></script>
+<script th:src="@{/js/vendor/jquery-ui.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.ui.touch-punch.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.countdown.min.js}"></script>
+<script th:src="@{/js/vendor/sal.js}"></script>
+<script th:src="@{/js/vendor/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/vendor/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/counterup.js}"></script>
+<script th:src="@{/js/vendor/waypoints.min.js}"></script>
 
 <!-- Main JS -->
-<script src="../static/js/main.js"></script>
-<script src="../static/js/script.js"></script>
-<script src="../static/js/script.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 
 

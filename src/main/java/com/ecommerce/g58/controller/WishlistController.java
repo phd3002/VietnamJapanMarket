@@ -32,41 +32,6 @@ public class WishlistController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/add_to_wishlist")
-    public String addToWishlist(@RequestParam("productId") Integer productId,
-                                @RequestParam("variationId") Integer variationId,
-                                RedirectAttributes redirectAttributes,
-                                HttpServletRequest request) {
-
-        // Get authentication
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-            return "redirect:/sign-in";
-        }
-
-        // Fetch user data
-        String email = authentication.getName();
-        Users user = userService.findByEmail(email);
-
-        try {
-            // Fetch product variation details
-            ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndVariationId(productId, variationId);
-
-            // Add the product to the wishlist
-            wishlistService.addProductToWishlist(user, productDetail);
-
-            // Success message
-            redirectAttributes.addFlashAttribute("message", "Product successfully added to your wishlist!");
-        } catch (Exception e) {
-            // Handle exceptions and add an error message
-            redirectAttributes.addFlashAttribute("error", "Error adding product to wishlist. Please try again.");
-        }
-
-        // Redirect to the same product-detail page (stay on the same page)
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;  // Redirects to the same URL
-    }
-
     @GetMapping("/wishlist")
     public String getWishlist(Model model) {
         // Get authentication
@@ -88,8 +53,74 @@ public class WishlistController {
             return "wishlist";  // Return empty wishlist view
         }
 
-        model.addAttribute("wishlist", wishlistItems);
+        model.addAttribute("wishlistItems", wishlistItems);
         return "wishlist";  // Thymeleaf template for wishlist details
+    }
+
+    @PostMapping("/add_to_wishlist")
+    public String addToWishlist(@RequestParam("productId") Integer productId,
+                                @RequestParam("variationId") Integer variationId,
+                                RedirectAttributes redirectAttributes,
+                                HttpServletRequest request) {
+
+        // Get authentication
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            return "redirect:/sign-in";
+        }
+
+        // Fetch user data
+        String email = authentication.getName();
+        Users user = userService.findByEmail(email);
+
+        try {
+            // Fetch product variation details
+            ProductDetailDTO productDetail = new ProductDetailDTO();
+            productDetail.setProductId(productId);
+            productDetail.setVariationId(variationId);
+
+            // Add the product to the wishlist
+            wishlistService.addProductToWishlist(user, productDetail);
+
+            // Success message
+            redirectAttributes.addFlashAttribute("message", "Product successfully added to your wishlist!");
+        } catch (Exception e) {
+            // Handle exceptions and add an error message
+            e.printStackTrace(); // Print the full exception stack trace for better debugging
+            redirectAttributes.addFlashAttribute("error", "Error adding product to wishlist. Please try again.");
+        }
+
+        // Redirect to the same product-detail page (stay on the same page)
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;  // Redirects to the same URL
+    }
+
+
+    @PostMapping("/remove_wishlist")
+    public String removeFromWishlist(@RequestParam("wishlistId") Integer wishlistId,
+                                     RedirectAttributes redirectAttributes,
+                                     HttpServletRequest request) {
+
+        // Get authentication
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            return "redirect:/sign-in";
+        }
+
+        try {
+            // Remove the product from the wishlist
+            wishlistService.removeProductFromWishlist(wishlistId);
+
+            // Success message
+            redirectAttributes.addFlashAttribute("message", "Product successfully removed from your wishlist!");
+        } catch (Exception e) {
+            // Handle exceptions and add an error message
+            redirectAttributes.addFlashAttribute("error", "Error removing product from wishlist. Please try again.");
+        }
+
+        // Redirect to the wishlist page
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;  // Redirects to the same URL
     }
 
 }

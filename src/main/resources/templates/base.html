@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title th:text="${pageTitle} ?: 'Default Title'"></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/vendor/base.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/style.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/style-2.css}" type="text/css">
+</head>
+
+<body class="sticky-header newsletter-popup-modal">
+
+<!-- Back to Top Button -->
+<a href="" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+
+<!-- Header Section -->
+<header class="header axil-header header-style-1" th:fragment="header">
+    <div class="axil-header-top">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="header-top-dropdown">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                English
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">English</a></li>
+                                <li><a class="dropdown-item" href="#">Japanese</a></li>
+                                <li><a class="dropdown-item" href="#">Vietnamese</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="header-top-link">
+                        <ul class="quick-link">
+                            <li th:if="${isLoggedIn}">
+                                <span>Welcome, <span th:text="${username}"></span></span>
+                                <a href="/logout">Logout</a>
+                            </li>
+                            <li th:if="${!isLoggedIn}">
+                                <a href="/sign-up">Join Us</a>
+                                <a href="/sign-in">Sign In</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="axil-mainmenu">
+        <div class="container">
+            <div class="header-navbar">
+                <div class="header-brand">
+                    <a href="homepage" class="logo logo-dark">
+                        <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
+                    </a>
+                </div>
+                <div class="header-main-nav">
+                    <!-- Start Mainmanu Nav -->
+                    <nav class="mainmenu-nav">
+                        <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
+                        <div class="mobile-nav-brand">
+                            <a href="homepage.html" class="logo">
+                                <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
+                            </a>
+                        </div>
+                        <ul class="mainmenu">
+                            <li>
+                                <img th:src="@{/images/logo/baner.png}">
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- End Mainmanu Nav -->
+                </div>
+                <div class="header-action">
+                    <ul class="action-list">
+                        <li class="axil-search">
+                            <a href="javascript:void(0)" class="header-search-icon" title="Search">
+                                <i class="flaticon-magnifying-glass"></i>
+                            </a>
+                        </li>
+                        <li class="wishlist">
+                            <a href="wishlist">
+                                <i class="flaticon-heart"></i>
+                            </a>
+                        </li>
+                        <li class="notification">
+                            <a href="my-account.html#nav-notification" class="notification-dropdown-btn">
+                                <i class="flaticon-envelope"></i>
+                                <span class="notification-count"></span>
+                            </a>
+
+                            <!-- Notification Dropdown -->
+                            <div id="notification-dropdown" class="notification-dropdown">
+                                <div class="notification-content-wrap">
+                                    <div class="notification-header">
+                                        <p>New notifications</p>
+                                    </div>
+                                    <div class="notification-body">
+                                        <!-- Notification Item -->
+                                        <div class="notification-item">
+                                            <div class="item-content">
+                                                <h3 class="item-title">New message from John</h3>
+                                                <p class="item-text">Hey, how's it going?</p>
+                                                <span class="item-time">2 minutes ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="notification-item">
+                                            <div class="item-content">
+                                                <h3 class="item-title">New message from John</h3>
+                                                <p class="item-text">Hey, how's it going?</p>
+                                                <span class="item-time">2 minutes ago</span>
+                                            </div>
+                                        </div>
+                                        <!-- Repeat for more notification items -->
+                                    </div>
+                                    <div class="notification-footer">
+                                        <a href="my-account.html#nav-notification">View All Notifications</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="shopping-cart">
+                            <a href="/cart-items" class="cart-dropdown-btn" onclick="event.stopPropagation();">
+                                <span id="cart-count" class="cart-count">0</span>
+                                <i class="flaticon-shopping-cart"></i>
+                            </a>
+                        </li>
+                        <li class="my-account">
+                            <a href="javascript:void(0)">
+                                <i class="flaticon-person"></i>
+                            </a>
+                            <div class="my-account-dropdown">
+                                <span class="title">QUICKLINKS</span>
+                                <ul>
+                                    <li>
+                                        <a href="my-account.html">My Account</a>
+                                    </li>
+                                    <li>
+                                        <a href="order.html">My Orders</a>
+                                    </li>
+                                </ul>
+                                <div class="login-btn">
+                                    <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
+                                </div>
+                                <div class="reg-footer text-center">No account yet? <a href="sign-up.html"
+                                                                                       class="btn-link">REGISTER
+                                    HERE.</a></div>
+                            </div>
+                        </li>
+                        <li class="axil-mobile-toggle">
+                            <button class="menu-btn mobile-nav-toggler">
+                                <i class="flaticon-menu-2"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Mainmenu Area -->
+
+    <!-- Search Modal -->
+    <div class="header-search-modal" id="header-search-modal">
+        <div class="header-search-wrap">
+            <div class="card-header">
+                <form onsubmit="return performSearch()">
+                    <input type="text" id="prod-search" placeholder="Search products..." oninput="performSearch()" />
+                </form>
+            </div>
+            <div class="card-body" id="search-results" style="display: none;">
+                <div class="search-result-header">
+                    <h6 class="title"><span id="result-count">0</span> Result(s) Found</h6>
+                    <a href="product-list" class="view-all">View All</a>
+                </div>
+                <div class="search-results">
+                    <!-- Dynamic search result items should go here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Search Modal -->
+</header>
+
+<!-- Main Content Section -->
+<main class="main-wrapper" th:fragment="content">
+    <!-- Content will be replaced in child templates -->
+</main>
+
+<!-- Footer Section -->
+<footer class="axil-footer-area footer-style-2" th:fragment="footer">
+    <!-- Services -->
+    <div class="service-area">
+        <div class="container">
+            <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
+                <div class="col">
+                    <div class="service-box service-style-2">
+                        <div class="icon">
+                            <img th:src="@{/images/icons/service1.png}" alt="Service">
+                        </div>
+                        <div class="content">
+                            <h6 class="title">Fast &amp; Secure Delivery</h6>
+                            <p>Tell about your service.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="service-box service-style-2">
+                        <div class="icon">
+                            <img th:src="@{/images/icons/service2.png}" alt="Service">
+                        </div>
+                        <div class="content">
+                            <h6 class="title">Money Back Guarantee</h6>
+                            <p>Within 10 days.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="service-box service-style-2">
+                        <div class="icon">
+                            <img th:src="@{/images/icons/service3.png}" alt="Service">
+                        </div>
+                        <div class="content">
+                            <h6 class="title">24 Hour Return Policy</h6>
+                            <p>No question ask.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="service-box service-style-2">
+                        <div class="icon">
+                            <img th:src="@{/images/icons/service4.png}" alt="Service">
+                        </div>
+                        <div class="content">
+                            <h6 class="title">Pro Quality Support</h6>
+                            <p>24/7 Live support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-top separator-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="axil-footer-widget">
+                        <h5 class="widget-title">Support</h5>
+                        <div class="inner">
+                            <p>685 Market Street, Las Vegas, LA 95820</p>
+                            <ul class="support-list-item">
+                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i> example@domain.com</a></li>
+                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="axil-footer-widget">
+                        <h5 class="widget-title">Account</h5>
+                        <div class="inner">
+                            <ul>
+                                <li><a href="my-account.html">My Account</a></li>
+                                <li><a href="sign-up.html">Login / Register</a></li>
+                                <li><a href="cart-detail.html">Cart</a></li>
+                                <li><a href="wishlist.html">Wishlist</a></li>
+                                <li><a href="product-list">Shop</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript Files -->
+<script th:src="@{/js/vendor/modernizr.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.js}"></script>
+<script th:src="@{/js/vendor/popper.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
