@@ -21,6 +21,9 @@ public class AccountController {
 
     @GetMapping("/my-account")
     public String myAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) return "/sign-in";
+        if (userDetails.getUsername() == null) return "/sign-in";
+
         var email = userDetails.getUsername();
         var user = profileService.getUserByEmail(email);
         model.addAttribute("user", user);
