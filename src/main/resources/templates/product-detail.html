@@ -458,13 +458,13 @@
                 <div class="axil-dashboard-author">
                     <div class="media">
                         <div class="thumbnail">
-                            <a href="#"><img th:src="@{${product.productVariations[0].imageId.thumbnail}}"
+                            <a href="#"><img th:src="@{${product.storeId.pictureUrl}}"
                                              alt="Hello Annie"
                                              class="author-image"></a>
                         </div>
                         <div class="media-body-1">
                             <div class="info-row">
-                                <span class="name"><h3 th:text="${product.storeId.storeName}"></h3></span>
+                                <span class="name"><h3 style="margin-bottom: 8px;" th:text="${product.storeId.storeName}"></h3></span>
                                 <span class="joining-date">Register Since Sep 2020</span>
                                 <span class="email">Email: annie@example.com</span>
                             </div>

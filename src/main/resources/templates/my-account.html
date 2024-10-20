@@ -1,10 +1,10 @@
 <!doctype html>
-<html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org">
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Home Page</title>
+    <title>My Account</title>
     <meta name="robots" content="noindex, follow"/>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -377,10 +377,10 @@
                 <div class="axil-dashboard-author">
                     <div class="media">
                         <div class="thumbnail">
-                            <img th:src="@{/images/product/categories/beauty.png}" alt="" width="150px">
+                            <img th:src="@{https://i.pravatar.cc/150?img=12}" alt="" width="120px" height="120px">
                         </div>
                         <div class="media-body">
-                            <h5 class="title mb-0">Hello ....</h5>
+                            <h5 class="title mb-0" th:text="'Hello ' + ${user.firstName}"></h5>
                             <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
                         </div>
                     </div>
