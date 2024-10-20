@@ -29,4 +29,7 @@ public interface CartService {
 
     public Cart getCartByUserId(Integer userId);
 
+    int getCartItemCount(Integer userId);
+
+
 }

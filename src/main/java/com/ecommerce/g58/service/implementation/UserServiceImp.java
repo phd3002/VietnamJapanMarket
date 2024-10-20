@@ -45,6 +45,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Autowired
     private JavaMailSender mailSender;
+
     @Override
     public Users findByEmail(String email) {
         return userRepository.findByEmail(email);
