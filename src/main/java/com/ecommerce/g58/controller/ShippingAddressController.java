@@ -15,28 +15,12 @@ public class ShippingAddressController {
     @Autowired
     private ShippingAddressService shippingAddressService;
 
-    // Modify (update) shipping address
+    // thay đổi địa chỉ giao hàng
     @PutMapping("/modify/{orderId}")
     public ResponseEntity<Map<String, String>> modifyShippingAddress(@PathVariable Integer orderId, @RequestBody String newAddress) {
         shippingAddressService.updateShippingAddress(orderId, newAddress);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Shipping address updated successfully");
-        return ResponseEntity.ok(response);
-    }
-
-    // View saved shipping address
-    @GetMapping("/view/{orderId}")
-    public ResponseEntity<String> viewShippingAddress(@PathVariable Integer orderId) {
-        String address = shippingAddressService.getShippingAddress(orderId);
-        return ResponseEntity.ok(address);
-    }
-
-    // Optional: Remove saved shipping address (set it to null)
-    @DeleteMapping("/delete/{orderId}")
-    public ResponseEntity<Map<String, String>> deleteShippingAddress(@PathVariable Integer orderId) {
-        shippingAddressService.deleteShippingAddress(orderId);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Shipping address removed");
+        response.put("message", "Đã cập nhật địa chỉ giao hàng mới");
         return ResponseEntity.ok(response);
     }
 }

@@ -27,9 +27,9 @@ public interface CartService {
 
     void updateCartItemQuantity(Integer cartItemId, int quantity);
 
-    public Cart getCartByUserId(Integer userId);
+    public Cart getCartByUserId(Integer userId); // lay gio hang cua user
 
-    int getCartItemCount(Integer userId);
+    int getCartItemCount(Integer userId); // lay so luong mon hang trong gio hang
 
 
 }

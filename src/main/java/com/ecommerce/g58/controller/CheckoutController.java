@@ -31,33 +31,36 @@ public class CheckoutController {
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal) {
+        // lay thong tin user dang dang nhap
         if (principal == null) {
             return "redirect:/sign-in";
         }
 
+        // neu user chua login thi chuyen huong den trang dang nhap
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
             return "redirect:/sign-in";
         }
 
+        // lay id, gio hang cua user, va danh sach cac mon hang trong cua hang
         Integer userId = user.getUserId();
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
 
-        // Calculate total price based on quantity of each cart item
+        // vong lap de tinh tong gia tri cua gio hang
         double totalPrice = 0.0;
         for (CartItem item : cartItems) {
-            double itemPrice = item.getPrice(); // Assuming item.getPrice() returns the price of a single unit
-            int quantity = item.getQuantity(); // Assuming item.getQuantity() returns the quantity of the item in the cart
-            totalPrice += itemPrice * quantity;
+            double itemPrice = item.getPrice();
+            int quantity = item.getQuantity();
+            totalPrice += itemPrice * quantity; // tong gia tri moi = tong gia tri cu + gia tri moi
         }
 
-        // Add cart items and total price to the model
+        // them cac thuoc tinh vao model de hien thi tren trang checkout
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
 
-        // Use existing function to get images for each cart item
+        // lay thong tin anh cua san pham
         Map<Integer, String> productImages = new HashMap<>();
         for (CartItem item : cartItems) {
             List<ProductImage> images = productImageRepository.findByProductProductId(item.getProductId().getProductId());

@@ -85,7 +85,7 @@ function updateSearchResults(results) {
     });
 }
 
-// Function to update the cart item count
+// cap nhat so luong san pham trong gio hang tren header
 async function updateCartItemCount() {
     try {
         const response = await fetch('/api/cart/count');
@@ -105,7 +105,7 @@ async function updateCartItemCount() {
     }
 }
 
-// Ensure the function runs when the page loads
+// dam bao DOM da duoc load truoc khi chay script
 document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM content is loaded, script is running...");
     updateCartItemCount();  // Update cart count on page load
