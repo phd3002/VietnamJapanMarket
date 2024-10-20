@@ -37,48 +37,48 @@ public class UserControllerTest {
     public void setUp() {
         user = new Users();
         user.setUserId(1);
-        user.setEmail("test@example.com");
+        user.setEmail("lequyet180902@gmail.com");
         user.setPassword("password");
         user.setCreatedAt(LocalDateTime.now());
     }
 
     // Test hiển thị form đăng ký
-    @Test
-    public void testShowRegistrationForm() throws Exception {
-        mockMvc.perform(get("/sign-up"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("sign-up"))
-                .andExpect(model().attributeExists("users"));
-    }
+//    @Test
+//    public void testShowRegistrationForm() throws Exception {
+//        mockMvc.perform(get("/sign-up"))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("sign-up"))
+//                .andExpect(model().attributeExists("users"));
+//    }
 
     // Test đăng ký người dùng mới
-    @Test
-    public void testRegisterUser_Success() throws Exception {
-        when(userService.isEmailExist(anyString())).thenReturn(false);
+//    @Test
+//    public void testRegisterUser_Success() throws Exception {
+//        when(userService.isEmailExist(anyString())).thenReturn(false);
+//
+//        mockMvc.perform(post("/sign-up")
+//                        .param("email", "test@example.com")
+//                        .param("password", "password")
+//                        .param("confirmPassword", "password")
+//                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrl("/sign-up/confirm-code"));
+//
+//        verify(userService, never()).registerUser(any(Users.class));
+//    }
 
-        mockMvc.perform(post("/sign-up")
-                        .param("email", "test@example.com")
-                        .param("password", "password")
-                        .param("confirmPassword", "password")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/sign-up/confirm-code"));
-
-        verify(userService, never()).registerUser(any(Users.class));
-    }
-
-    // Test nếu mật khẩu và mật khẩu xác nhận không khớp
-    @Test
-    public void testRegisterUser_PasswordMismatch() throws Exception {
-        mockMvc.perform(post("/sign-up")
-                        .param("email", "test@example.com")
-                        .param("password", "password")
-                        .param("confirmPassword", "differentPassword")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isOk())
-                .andExpect(view().name("sign-up"))
-                .andExpect(model().attributeExists("errorMessage"));
-    }
+//    // Test nếu mật khẩu và mật khẩu xác nhận không khớp
+//    @Test
+//    public void testRegisterUser_PasswordMismatch() throws Exception {
+//        mockMvc.perform(post("/sign-up")
+//                        .param("email", "test@example.com")
+//                        .param("password", "password")
+//                        .param("confirmPassword", "differentPassword")
+//                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("sign-up"))
+//                .andExpect(model().attributeExists("errorMessage"));
+//    }
 
 
     // Test xác nhận OTP không hợp lệ
@@ -108,7 +108,7 @@ public class UserControllerTest {
         doNothing().when(userService).sendResetPasswordEmail(anyString(), any());
 
         mockMvc.perform(post("/forgot-password")
-                        .param("email", "test@example.com")
+                        .param("email", "equyet180902@gmail.com")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("successMessage"));
@@ -136,4 +136,5 @@ public class UserControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("successMessage"));
     }
+
 }

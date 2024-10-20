@@ -1,9 +1,10 @@
 package com.ecommerce.g58.controller;
 
-
+import com.ecommerce.g58.config.TestSecurityConfig;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.Cart;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.repository.CartItemRepository;
 import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.ProductService;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CartController.class)
-
+@Import(TestSecurityConfig.class)
 public class CartControllerTest {
 
     @Autowired
@@ -41,6 +42,9 @@ public class CartControllerTest {
     @MockBean
     private ProductService productService;
 
+    @MockBean
+    private CartItemRepository cartItemRepository;
+
     private Users user;
     private Cart cart;
     private ProductDetailDTO productDetail;
@@ -49,7 +53,7 @@ public class CartControllerTest {
     public void setUp() {
         user = new Users();
         user.setUserId(1);
-        user.setEmail("test@example.com");
+        user.setEmail("lequyet180902@gmail.com");
 
         cart = new Cart();
         cart.setCartId(1);
@@ -60,9 +64,9 @@ public class CartControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@example.com")
+    @WithMockUser(username = "lequyet180902@gmail.com")
     public void testAddToCart_Success() throws Exception {
-        when(userService.findByEmail("test@example.com")).thenReturn(user);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
         when(cartService.getOrCreateCart(user)).thenReturn(cart);
         when(productService.getProductDetailByProductIdAndVariationId(anyInt(), anyInt())).thenReturn(productDetail);
 

@@ -1,4 +1,4 @@
-package com.ecommerce.g58.api.repository;
+package com.ecommerce.g58.api.imp;
 
 import com.ecommerce.g58.dto.ProductDTO;
 import com.ecommerce.g58.entity.ProductImage;
