@@ -28,9 +28,18 @@ public class Stores {
     private Users ownerId;
 
     @Column(name = "store_revenue", nullable = false)
-    private BigDecimal storeRevenue;
+    private Integer storeRevenue;
 
     @OneToOne
     @JoinColumn(name = "country_id")
     private Countries country;
+
+    @Column(name = "store_address")
+    private String storeAddress;
+
+    @Column(name = "store_mail")
+    private String storeMail;
+
+    @Column(name = "store_phone")
+    private String storePhone;
 }
