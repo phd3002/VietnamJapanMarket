@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -24,6 +24,7 @@
     <link rel="stylesheet" th:href="@{/css/vendor/base.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style-2.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/checkout.css}" type="text/css">
 </head>
 <body class="sticky-header">
 
@@ -36,103 +37,140 @@
     <!-- Start Checkout Area  -->
     <div class="axil-checkout-area axil-section-gap">
         <div class="container">
-            <form action="/place-order" method="post">
+            <form action="#">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="axil-checkout-billing">
-                            <h4 class="title mb--40">Chi tiết thanh toán</h4>
+                            <h4 class="title mb--40">Thông tin người mua</h4>
                             <div class="form-group">
-                                <label>Họ tên </label>
-                                <input type="text" id="name" name="name" th:value="${users.firstName + ' ' + users.lastName}" readonly>
+                                <span>Họ tên</span>
+                                <input type="text" id="full-name">
                             </div>
                             <div class="form-group">
-                                <label>Điện thoại </label>
-                                <input type="tel" id="phone" name="phone" th:value="${users.phoneNumber}" readonly>
+                                <span>Số điện thoại</span>
+                                <input type="text" id="phone-number">
                             </div>
                             <div class="form-group">
-                                <label>Địa chỉ Email </label>
-                                <input type="email" id="email" name="email" th:value="${users.email}" readonly>
+                                <span>Địa chỉ email</span>
+                                <input type="text" id="email-address">
                             </div>
-                            <h4 class="title mb--40">Địa chỉ giao hàng</h4>
                             <div class="form-group">
-                                <label for="country">Quốc gia <span>*</span></label>
-                                <select id="country" name="country">
-                                    <option option th:each="country : ${countries}" th:value="${country.countryId}" th:text="${country.countryName}"></option>
+                                <span>Quốc gia</span>
+                                <select id="country">
+                                    <option value="vietnam">Việt Nam</option>
+                                    <option value="nhatban">Nhật Bản</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Địa chỉ chi tiết <span>*</span></label>
-                                <input type="text" id="address" name="address" class="mb--15">
+                                <span>Địa chỉ chi tiết</span>
+                                <input type="text" id="address">
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="axil-order-summery order-checkout-summery">
                             <h5 class="title mb--20">Đơn hàng của bạn</h5>
                             <div class="summery-table-wrap">
                                 <table class="table summery-table">
                                     <thead>
                                     <tr>
-                                        <th>Sản phẩm</th>
-                                        <th>Giá</th>
+                                        <th width="70%">Sản phẩm</th>
+                                        <th width="10%">Đơn giá</th>
+                                        <th width="10%">Số lượng</th>
+                                        <th width="10%">Thành tiền</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="item : ${cartItems}">
-                                        <td>
-                                            <img th:src="${productImages[item.productId.productId]}" alt="Product Image" height="100" width="100" />
-                                            <span th:text="${item.productId.productName}"></span> x<span th:text="${item.quantity}"></span>
+                                    <tr class="order-product">
+                                        <td><img src="../static/images/product/categories/beauty.png"
+                                                 height="100" width="100"/>Áo thun nam<br>
+                                            <span>Loại: Xanh, M</span>
                                         </td>
-                                        <td th:text="${item.price}">Price</td>
-                                    </tr>
-                                    <tr class="order-total">
-                                        <td>Tổng</td>
-                                        <td th:text="${totalPrice}" class="order-total-amount"></td>
+                                        <td>$117.00</td>
+                                        <td>1</td>
+                                        <td>$117.00</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <h4 class="title mb--40">Phương thức vận chuyển</h4>
-                            <div class="order-payment-method">
-                                <div th:each="unit : ${shippingUnits}" class="single-payment">
-                                    <div class="input-group">
-                                        <input type="radio" th:id="${'shipping-' + unit.unitId}" name="shippingUnit" th:value="${unit.unitId}" required>
-                                        <label th:for="${'shipping-' + unit.unitId}">
-                                            <span th:text="${unit.unitName}"></span>
-                                        </label>
+                            <div class="shipping-method">
+                                <h5 class="title mb--20">Phương thức vận chuyển</h5>
+                                <div class="row">
+                                    <div class="col-sm-12 d-flex justify-content-between">
+                                        <div>
+                                            <button id="ghn" class="shipping-btn btn-common selected"
+                                                    data-price="30000">Giao hàng nhanh
+                                            </button>
+                                            <button id="dhl" class="shipping-btn btn-common" data-price="20000">DHL
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <span id="shipping-price-ghn" class="shipping-price">30.000đ</span>
+                                            <span id="shipping-price-dhl" class="shipping-price" style="display:none;">20.000đ</span>
+                                        </div>
                                     </div>
-                                </div>
-<!--                                <div th:each="rate : ${shippingRates}">-->
-<!--                                    <span th:text="${'Giá vận chuyển: ' + rate.rate + ' VND'}"></span>-->
-<!--                                </div>-->
-                            </div>
-                            <h5 class="title mb--20">Phương thức thanh toán</h5>
-                            <div class="order-payment-method">
-                                <div class="single-payment">
-                                    <div class="input-group">
-                                        <input type="radio" id="walletPayment" name="paymentMethod" value="Wallet" required>
-                                        <label for="walletPayment">Thanh toán bằng ví</label>
-                                    </div>
-                                    <p>Thanh toán trực tiếp từ ví của bạn.</p>
-                                </div>
-                                <div class="single-payment">
-                                    <div class="input-group justify-content-between align-items-center">
-                                        <input type="radio" id="onlinePayment" name="paymentMethod" value="Online">
-                                        <label for="onlinePayment">Thanh toán online</label>
-                                    </div>
-                                    <p>Thanh toán qua ngân hàng hoặc thẻ tín dụng.</p>
-                                </div>
-                                <div class="single-payment">
-                                    <div class="input-group justify-content-between align-items-center">
-                                        <input type="radio" id="codPayment" name="paymentMethod" value="Cash on Delivery">
-                                        <label for="codPayment">Thanh toán khi nhận hàng</label>
-                                    </div>
-                                    <p>Trả tiền mặt khi nhận hàng.</p>
                                 </div>
                             </div>
-                            <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán
-                            </button>
+                            <div class="order-total row">
+                                <div class="col-sm-12 d-flex justify-content-end">
+                                    <h5 class="title mb-0">Tổng số tiền (<span>1</span> sản phẩm):
+                                        <span id="total-price" style="color: #bb2d3b;">$117.00</span>
+                                    </h5>
+                                </div>
+                            </div>
                         </div>
+                        <div class="order-payment-method">
+                            <h5 class="title mb--20">Phương thức thanh toán</h5>
+                            <div class="row">
+                                <div class="col-sm-12 d-flex justify-content-between">
+                                    <div>
+                                        <button id="wallet" class="payment-btn btn-common selected"
+                                                data-method="wallet">Ví VJ-Market
+                                        </button>
+                                        <button id="credit-card" class="payment-btn btn-common"
+                                                data-method="credit-card">Thanh toán qua ngân hàng
+                                        </button>
+                                        <button id="cod" class="payment-btn btn-common" data-method="cod">Thanh toán khi
+                                            nhận hàng
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <div class="payment-details" id="walletDetails">
+                                            <p>Số dư ví của bạn: <strong>1,500,000đ</strong></p>
+                                        </div>
+                                        <div class="payment-details" id="credit-cardDetails" style="display:none;">
+                                            <select name="bank" id="bank-select">
+                                                <option value="">Chọn ngân hàng</option>
+                                                <option value="vietcombank">Vietcombank</option>
+                                                <option value="techcombank">Techcombank</option>
+                                                <option value="bidv">BIDV</option>
+                                                <option value="acb">ACB</option>
+                                            </select>
+                                        </div>
+                                        <div class="payment-details" id="codDetails" style="display:none;">
+                                            <p>Trả tiền mặt khi nhận hàng.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="order-price">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="title mb-0">Tổng tiền hàng:</h6>
+                                    <span id="total-product-price">$117.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="title mb-0">Tổng tiền phí vận chuyển:</h6>
+                                    <span id="total-shipping-fee">$50.40</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="title mb-0">Tổng thanh toán:</h5>
+                                    <h6 id="total-order-price" style="color: #bb2d3b;">$175.40</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán
+                        </button>
                     </div>
                 </div>
             </form>
@@ -169,5 +207,6 @@
 <!-- Main JS -->
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/checkout.js}"></script>
 </body>
 </html>
