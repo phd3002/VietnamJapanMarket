@@ -29,8 +29,28 @@ document.getElementById('saveChangesBtn').addEventListener('click', function (ev
     const newPassword = document.querySelector('input[name="newPassword"]').value
     const confirmPassword = document.querySelector('input[name="confirmPassword"]').value
 
-    if (newPassword != confirmPassword) {
-        alert('Password not match!')
+    if (!firstName) {
+        alert('First Name must be at least 3 characters.')
+        return;
+    }
+
+    if (!lastName) {
+        alert('Last Name must be at least 3 characters.')
+        return;
+    }
+
+    if (!phoneNumber) {
+        alert('Invalid phone number.')
+        return;
+    }
+
+    if (newPassword && confirmPassword && !password) {
+        alert('Please enter your old password.')
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        alert('Confirm password not match!')
         return
     }
 
@@ -44,12 +64,17 @@ document.getElementById('saveChangesBtn').addEventListener('click', function (ev
         }).toString()
     ).then(res => {
         if (res.status === 200) {
-            alert('Profile updated successfully!')
-            location.reload();
+            Swal.fire({
+                title: "Success!",
+                text: "Profile updated.",
+                icon: "success"
+            }).then(() =>{
+                location.reload();
+            })
         } else {
             res.json()
                 .then((json) => {
-                    alert(json.message)
+                    alert('HH' + json.message)
                 })
         }
     })
