@@ -12,6 +12,6 @@ public class OrdersDTO {
     private int orderId;
     private LocalDateTime orderDate;
     private String status;
-    private int totalQuantity;
-    private int totalPrice;
+    private BigDecimal totalQuantity;
+    private BigDecimal totalPrice;
 }
