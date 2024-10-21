@@ -74,6 +74,15 @@
                             <label>Store Phone</label>
                             <input type="text" class="form-control" name="storePhone" required>
                         </div>
+                        <div class="form-group">
+                            <label>Quốc gia <span>*</span></label>
+                            <select name="countryId" class="form-control" required>
+                                <option th:each="country : ${countries}"
+                                        th:value="${country.countryId}"
+                                        th:text="${country.countryName}">
+                                </option>
+                            </select>
+                        </div>
                         <div class="form-group mb--0">
                             <input type="submit" class="axil-btn" value="Sign Up">
                         </div>

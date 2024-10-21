@@ -83,11 +83,9 @@ public class WishlistController {
             wishlistService.addProductToWishlist(user, productDetail);
 
             // Success message
-            redirectAttributes.addFlashAttribute("message", "Product successfully added to your wishlist!");
+            redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được thêm vào mục ưa thích của bạn!");
         } catch (Exception e) {
-            // Handle exceptions and add an error message
-            e.printStackTrace(); // Print the full exception stack trace for better debugging
-            redirectAttributes.addFlashAttribute("error", "Error adding product to wishlist. Please try again.");
+            redirectAttributes.addFlashAttribute("error", "Sản phẩm đã tồn tại trong mục ưa thích của bạn!");
         }
 
         // Redirect to the same product-detail page (stay on the same page)

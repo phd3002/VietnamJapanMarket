@@ -1,8 +1,10 @@
 package com.ecommerce.g58.controller.Seller;
 
+import com.ecommerce.g58.entity.Countries;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.repository.UserRepository;
+import com.ecommerce.g58.service.CountryService;
 import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -30,31 +33,45 @@ public class SellerController {
     private UserService userService;
 
 
+    @Autowired
+    private CountryService countryService;
+
     @GetMapping("/sign-up-seller")
-    public String signUpSellerForm(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String signUpSellerForm(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             redirectAttributes.addFlashAttribute("errorMessage", "Bạn phải đăng nhập để có thể đăng kí bán hàng");
             return "redirect:/sign-in";
         }
-//        User userDetails = (User) authentication.getPrincipal();
-//        Users user = userService.findByEmail(userDetails.getUsername())
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//        Optional<Stores> existingStore = storeService.findByOwnerId(user);
-//        if (existingStore.isPresent()) {
-//            return "redirect:/seller/dashboard";
-//        }
+
+        User userDetails = (User) authentication.getPrincipal();
+        Users user = userService.findByEmail(userDetails.getUsername());
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        Optional<Stores> existingStore = storeService.findByOwnerId(user);
+        if (existingStore.isPresent()) {
+            return "redirect:/seller/dashboard";
+        }
+
+        // Adding available countries to model
+        model.addAttribute("countries", countryService.getAllCountries());
+
         return "sign-up-seller";
     }
 
     @PostMapping("/sign-up-seller")
     public String registerStore(@ModelAttribute Stores store,
+                                @RequestParam("countryId") Integer countryId,
                                 RedirectAttributes redirectAttributes,
                                 HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         Users user = userService.findByEmail(userDetails.getUsername());
         store.setOwnerId(user);
+        Countries country = countryService.getCountryById(countryId);
+        store.setCountry(country); // Set country
         Optional<Stores> existingStoreByName = storeService.findByStoreName(store.getStoreName());
         if (existingStoreByName.isPresent()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Tên cửa hàng đã tồn tại. Vui lòng chọn tên khác");
