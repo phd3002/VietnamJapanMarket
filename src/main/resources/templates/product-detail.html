@@ -2,95 +2,176 @@
 <html class="no-js" lang="en">
 
 <head>
-    <title th:text="${pageTitle} ?: 'Home Page'"></title>
+    <title th:text="${pageTitle} ?: 'Product Detail'"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Including CSS Files from base.html -->
     <th:block th:replace="~{base :: head}"></th:block>
 </head>
 
-<body class="sticky-header newsletter-popup-modal">
+<body class="sticky-header">
 
 <!-- Include Header Fragment -->
 <div th:replace="base :: header"></div>
 
 <!-- Main Content Section -->
 <main class="main-wrapper">
+    <!-- Start Shop Area  -->
     <div class="axil-single-product-area bg-color-white">
-        <!-- Product Detail  -->
         <div class="single-product-thumb axil-section-gap pb--30 pb_sm--20">
             <div class="container">
                 <div class="row row--50">
-                    <!-- Product Large Image  -->
                     <div class="col-lg-6 mb--40">
                         <div class="row">
                             <div class="col-lg-12">
+                                <!-- Dynamic large product images -->
                                 <div class="product-large-thumbnail-2 single-product-thumbnail axil-product slick-layout-wrapper--15 axil-slick-arrow arrow-both-side-3">
-                                    <div class="thumbnail" th:each="pv : ${product.productVariations}">
-                                        <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Images"
-                                             style="width: 580px !important; height: 350px !important;">
+                                    <div class="thumbnail">
+                                        <img th:src="@{${productDetail.thumbnail}}" alt="Product Image">
+                                    </div>
+                                    <div class="thumbnail" th:if="${productDetail.image1}">
+                                        <img th:src="@{${productDetail.image1}}" alt="Product Image">
+                                    </div>
+                                    <div class="thumbnail" th:if="${productDetail.image2}">
+                                        <img th:src="@{${productDetail.image2}}" alt="Product Image">
+                                    </div>
+                                    <div class="thumbnail" th:if="${productDetail.image3}">
+                                        <img th:src="@{${productDetail.image3}}" alt="Product Image">
+                                    </div>
+                                    <div class="thumbnail" th:if="${productDetail.image4}">
+                                        <img th:src="@{${productDetail.image4}}" alt="Product Image">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-12">
+                                <!-- Small thumbnails -->
                                 <div class="small-thumb-wrapper product-small-thumb-2 small-thumb-style-two small-thumb-style-three">
-                                    <div class="small-thumb-img" th:each="pv : ${product.productVariations}">
-                                        <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Images"
-                                             style="width: 50px !important; height: 50px !important;">
+                                    <div class="small-thumb-img">
+                                        <img th:src="@{${productDetail.thumbnail}}" alt="Thumbnail Image">
+                                    </div>
+                                    <div class="small-thumb-img" th:if="${productDetail.image1}">
+                                        <img th:src="@{${productDetail.image1}}" alt="Thumbnail Image">
+                                    </div>
+                                    <div class="small-thumb-img" th:if="${productDetail.image2}">
+                                        <img th:src="@{${productDetail.image2}}" alt="Thumbnail Image">
+                                    </div>
+                                    <div class="small-thumb-img" th:if="${productDetail.image3}">
+                                        <img th:src="@{${productDetail.image3}}" alt="Thumbnail Image">
+                                    </div>
+                                    <div class="small-thumb-img" th:if="${productDetail.image4}">
+                                        <img th:src="@{${productDetail.image4}}" alt="Thumbnail Image">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Product Info  -->
                     <div class="col-lg-6 mb--40">
                         <div class="single-product-content">
                             <div class="inner">
-                                <h2 class="product-title" th:text="${product.productName}"></h2>
-                                <span class="price-amount" th:text="${'$' + product.price}"></span>
+                                <!-- Product title and price -->
+                                <h2 class="product-title" th:text="${productDetail.productName}">Product Name</h2>
+                                <span class="price-amount" th:text="${productDetail.price} + ' $'">Price</span>
+                                <!-- Rating and review count -->
                                 <div class="product-rating">
-                                    <div class="star-rating" th:if="${feedbacks.size() > 0}">
-                                        <i th:class="${'fas fa-star' + (r > averageRating ? ' empty-rating' : '')}"
-                                           th:each="r : ${#numbers.sequence(1, 5)}"></i>
+                                    <div class="star-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
                                     </div>
                                     <div class="review-link">
-                                        <a href="#">(<span th:text="${feedbacks.size()}"></span> customer reviews)</a>
+                                        <a href="#">(<span>2</span> customer reviews)</a>
                                     </div>
                                 </div>
+                                <!-- Product variations -->
                                 <div class="product-variations-wrapper">
+                                    <!-- Colors Section -->
                                     <div class="product-variation">
                                         <h6 class="title">Colors:</h6>
                                         <div class="color-variant-wrapper">
                                             <ul class="color-variant">
-                                                <li th:class="${'color-extra-0' + (iter.index + 1) + (iter.first ? ' active' : '')}"
-                                                    th:each="pv,iter : ${product.productVariations}">
-                                                    <span><span class="color"
-                                                                th:style="${'background: ' + pv.color.colorName}"></span></span>
+                                                <li class="color-extra-01" th:each="color : ${availableColors}">
+                                                    <a th:href="@{'/product-detail/' + ${productDetail.productId} + '?colorId=' + ${color.colorId}}">
+                                                        <span th:text="${color.colorName}"></span>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
+                                    <!-- Sizes Section -->
                                     <div class="product-variation product-size-variation">
                                         <h6 class="title">Size:</h6>
                                         <ul class="range-variant">
-                                            <li th:each="pv : ${product.productVariations}"
-                                                th:text="${pv.size.sizeName}">
-                                            </li>
+                                            <li th:each="size : ${availableSizes}"
+                                                th:data-size-name="${size}"
+                                                th:text="${size}"
+                                                th:classappend="${size == selectedSize} ? 'selected' : ''"
+                                                class="size-option"></li>
                                         </ul>
                                     </div>
+                                    <!-- Add to Cart Form -->
+                                    <div th:if="${message}" class="alert alert-success" role="alert">
+                                        <span th:text="${message}"></span>
+                                    </div>
+                                    <div th:if="${error}" class="alert alert-danger" role="alert">
+                                        <span th:text="${error}"></span>
+                                    </div>
+                                    <form th:action="@{/add_to_cart}" method="post">
+                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">
+                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
+                                        <input type="hidden" name="productName" th:value="${productDetail.productName}">
+                                        <input type="hidden" name="imageId" th:value="${productDetail.thumbnail}">
+                                        <input type="hidden" name="selectedSize" id="selectedSizeInput" value=""> <!-- This will hold the selected size -->
+                                        <input type="hidden" name="quantity" value="1"> <!-- Default quantity -->
+                                        <input type="hidden" name="price" th:value="${productDetail.price}">
+
+                                        <button type="submit" id="addToCartButton" class="btn btn-primary" disabled>
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                    <!-- Script to enable Add to Cart button when a size is selected -->
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            const sizeOptions = document.querySelectorAll('.size-option');
+                                            const addToCartButton = document.getElementById('addToCartButton');
+                                            const selectedSizeInput = document.getElementById('selectedSizeInput');
+
+                                            sizeOptions.forEach(option => {
+                                                option.addEventListener('click', function () {
+                                                    sizeOptions.forEach(s => s.classList.remove('selected'));
+                                                    this.classList.add('selected');
+
+                                                    // Set the selected size name to the hidden input
+                                                    const selectedSize = this.getAttribute('data-size-name');
+                                                    selectedSizeInput.value = selectedSize; // Set the selected size
+
+                                                    // Enable Add to Cart button
+                                                    addToCartButton.removeAttribute('disabled');
+                                                });
+                                            });
+                                        });
+                                    </script>
                                 </div>
-                                <div class="product-action-wrapper d-flex-center">
-                                    <div class="pro-qty"><input type="text" value="1"></div>
-                                    <ul class="product-action d-flex-center mb--0">
-                                        <li class="add-to-cart">
-                                            <a href="cart-detail.html" class="axil-btn btn-bg-primary">Add to Cart</a>
-                                        </li>
-                                        <li class="wishlist">
-                                            <a href="wishlist.html" class="axil-btn wishlist-btn">
-                                                <i class="far fa-heart"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
+                            </div>
+                            <!-- Wishlist Form -->
+                            <div class="product-action-wrapper d-flex-center">
+                                <ul class="product-action d-flex-center mb--0">
+                                    <!-- Original actions inside ul, without form or div -->
+                                    <li class="wishlist">
+                                        <!-- Any existing wishlist icon here -->
+                                        <a href="#" class="add-wishlist-icon"><i class="fal fa-heart"></i></a>
+                                    </li>
+                                    <!-- Other list items here if needed -->
+                                </ul>
+
+                                <!-- Place the form separately, outside the ul -->
+                                <div class="wishlist-form-container">
+                                    <form th:action="@{/add_to_wishlist}" method="post">
+                                        <input type="hidden" name="productId" th:value="${productDetail.productId}">
+                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
+                                        <button type="submit" class="axil-btn wishlist-btn">Add to Wishlist</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -98,127 +179,16 @@
                 </div>
             </div>
         </div>
-        <!-- Store Detail  -->
-        <div class="axil-breadcrumb-area">
-            <div class="container">
-                <div class="axil-dashboard-author">
-                    <div class="media">
-                        <div class="thumbnail">
-                            <a href="#"><img th:src="@{${product.storeId.pictureUrl}}"
-                                             alt="Hello Annie"
-                                             class="author-image"></a>
-                        </div>
-                        <div class="media-body-1">
-                            <div class="info-row">
-                                <span class="name"><h3 style="margin-bottom: 8px;"
-                                                       th:text="${product.storeId.storeName}"></h3></span>
-                                <span class="joining-date">Register Since Sep 2020</span>
-                                <span class="email">Email: annie@example.com</span>
-                            </div>
-                            <div class="info-row">
-                                <a href="#"><i class="flaticon-chat hover-flip-item"> Chat with shop</i></a>
-                                <span class="address">Address: 123 Street Name</span>
-                                <a th:href="@{/view-store/{id}(id=${product.storeId.storeId})}"><i
-                                        class="flaticon-shop hover-flip-item"> View Shop</i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br>
-        <!-- Description & Review  -->
+        <!-- Description -->
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
                     <h4 class="mb--60 desc-heading">Description</h4>
                     <div class="row mb--15">
-                        <div class="col-lg-12 mb--30">
+                        <div class="col-lg-6 mb--30">
                             <div class="single-desc">
                                 <h5 class="title">Specifications:</h5>
-                                <p th:text="${product.productDescription}"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="reviews-wrapper">
-                    <h4 class="mb--60">Reviews</h4>
-                    <div class="row">
-                        <div class="col-lg-12 mb--40">
-                            <div class="axil-comment-area pro-desc-commnet-area">
-                                <h5 class="title" th:text="${feedbacks.size() + ' Review for this product'}"></h5>
-                                <ul class="comment-list" th:each="feedback : ${feedbacks}">
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img th:src="@{/images/others/author1.png}"
-                                                         alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                                <span class="hover-flip-item">
-                                                                    <span data-text="Cameron Williamson"
-                                                                          th:text="${feedback.userId.firstName + ' ' + feedback.userId.lastName}"></span>
-                                                                </span>
-                                                        </a>
-                                                        <span class="commenter-rating rating-four-star">
-                                                                <a href="#" th:each="r : ${#numbers.sequence(1, 5)}"><i
-                                                                        th:class="${'fas fa-star' + (r > feedback.rating ? ' empty-rating' : '')}"></i></a>
-                                                        </span>
-                                                    </h6>
-                                                    <div class="comment-text">
-                                                        <p th:text="${'“' + feedback.comment + '”'}"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center pt--30">
-                    <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- All product  -->
-    <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
-        <div class="container">
-            <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i> Your Recently</span>
-                <h2 class="title">All products</h2>
-            </div>
-            <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                <div class="slick-single-layout" th:each="p : ${allProducts}">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a th:href="@{/product-detail/{id}(id=${p.productId})}">
-                                <img class="spi" th:src="@{${p.productVariations[0].imageId.thumbnail}}"
-                                     alt="Product Images">
-                            </a>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             th:attr="data-bs-target=${'#quick-view-modal-' + p.productId}"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a th:href="@{/product-detail/{id}(id=${p.productId})}"
-                                                     th:text="${p.productName}"></a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price current-price" th:text="'$' + ${p.price}"></span>
-                                </div>
+                                <p th:text="${productDetail.productDescription}"></p>
                             </div>
                         </div>
                     </div>

@@ -1,10 +1,12 @@
 package com.ecommerce.g58.controller;
 
+import com.ecommerce.g58.entity.Feedback;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.Color;
 import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.Size;
 import com.ecommerce.g58.entity.Stores;
+import com.ecommerce.g58.service.FeedbackService;
 import com.ecommerce.g58.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    private final FeedbackService feedbackService;
 
 //    @GetMapping("/product-list")
 //    public String productList(Model model) {
@@ -78,6 +81,13 @@ public class ProductController {
         model.addAttribute("availableColors", availableColors);
         model.addAttribute("availableSizes", availableSizes);
         model.addAttribute("selectedSize", sizeId);  // Add selected size to the model
+        model.addAttribute("feedbacks", feedbackService.findByProductId(productId));
+        int averageRating = (int) feedbackService.findByProductId(productId).stream()
+                .mapToInt(Feedback::getRating)
+                .average()
+                .orElse(0);
+
+        model.addAttribute("averageRating", averageRating);
         return "product-detail";
     }
 
