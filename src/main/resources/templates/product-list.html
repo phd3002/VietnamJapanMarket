@@ -44,7 +44,6 @@
                 <div th:each="product : ${products}" class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
-                            <!-- Pass productId to product-detail page -->
                             <a th:href="@{/product-detail/{productId}(productId=${product.productId})}">
                                 <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
                             </a>
@@ -61,7 +60,6 @@
                         <div class="product-content">
                             <div class="inner">
                                 <h5 class="title">
-                                    <!-- Pass productId to product-detail page -->
                                     <a th:href="@{/product-detail/{productId}(productId=${product.productId})}" th:text="${product.productName}"></a>
                                 </h5>
                                 <div class="product-price-variant">
@@ -72,7 +70,21 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
+            <!-- Pagination Controls -->
+            <div class="pagination-controls text-center pt--30">
+                <ul class="pagination">
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{/product-list(page=${currentPage - 1})}" class="prev">Previous</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{/product-list(page=${i})}" th:text="${i + 1}"
+                           th:classappend="${i == currentPage} ? 'active'"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/product-list(page=${currentPage + 1})}" class="next">Next</a>
+                    </li>
+                </ul>
             </div>
             <div class="text-center pt--30">
                 <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>

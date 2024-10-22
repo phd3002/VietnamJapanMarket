@@ -57,6 +57,7 @@ public class CartController {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
             return "redirect:/sign-in";
         }
 
@@ -74,14 +75,14 @@ public class CartController {
                 cartService.addProductToCart(user, productDetail, quantity,cart);
 
                 // Success message
-                redirectAttributes.addFlashAttribute("message", "Product successfully added to your cart!");
+                redirectAttributes.addFlashAttribute("message", "Sản phâ đã được thêm vào giỏ hàng của bạn");
             } else {
                 // Error message if the product detail is not found
-                redirectAttributes.addFlashAttribute("error", "Failed to add product to cart. Product not found.");
+                redirectAttributes.addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
             }
         } catch (Exception e) {
             // Handle exceptions and add an error message
-            redirectAttributes.addFlashAttribute("error", "Error adding product to cart. Please try again.");
+            redirectAttributes.addFlashAttribute("error", "Đã có lỗi xảy ra khi thêm vào giỏ hảng");
         }
 
         // Redirect to the same product-detail page (stay on the same page)
