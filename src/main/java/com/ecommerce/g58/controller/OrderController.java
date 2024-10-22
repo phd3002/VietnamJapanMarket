@@ -5,12 +5,16 @@ import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.OrderService;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -27,8 +31,31 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/order/my-orders")
-    public String getAllOrders(Model model) {
+//    @GetMapping("/orders")
+//    public String getAllOrders(Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+//            return "redirect:/sign-in";
+//        }
+//
+//        // Fetch the authenticated user's email and user data
+//        String email = authentication.getName();
+//        Users user = userService.findByEmail(email);
+//        Integer userId = user.getUserId();
+//
+//        List<OrdersDTO> orders = orderService.getOrderSummariesByUserId(userId);  // Fetching the order details from the service
+//        if (orders.isEmpty()) {
+//            model.addAttribute("message", "Bạn không có đơn hàng nào.");  // Message if no orders
+//            model.addAttribute("productListLink", "/product-list");  // Link to the product list
+//        } else {
+//            model.addAttribute("orders", orders);  // Passing the list of orders to the model
+//        }
+//        return "order";  // Returning the view for the orders page (order.html)
+//    }
+
+    @GetMapping("/orders")
+    public String getOrders(@RequestParam(value = "status", required = false) String status,
+                            Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             return "redirect:/sign-in";
@@ -38,14 +65,21 @@ public class OrderController {
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
         Integer userId = user.getUserId();
+        List<OrdersDTO> orders;
 
-        List<OrdersDTO> orders = orderService.getOrderSummariesByUserId(userId);  // Fetching the order details from the service
-        if (orders.isEmpty()) {
-            model.addAttribute("message", "Bạn không có đơn hàng nào.");  // Message if no orders
-            model.addAttribute("productListLink", "/product-list");  // Link to the product list
+        if (status != null && !status.isEmpty()) {
+            orders = orderService.getOrdersByUserIdAndStatus(userId, status);
         } else {
-            model.addAttribute("orders", orders);  // Passing the list of orders to the model
+            orders = orderService.getOrdersByUserIdAndStatus(userId, null);
         }
-        return "order";  // Returning the view for the orders page (order.html)
+
+        if (orders.isEmpty()) {
+            model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
+            model.addAttribute("productListLink", "/product-detail");
+        } else {
+            model.addAttribute("orders", orders);
+            model.addAttribute("status", status); // Truyền status nếu cần để duy trì trạng thái lọc
+        }
+        return "order";
     }
 }

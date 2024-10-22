@@ -85,8 +85,16 @@
                                 <p th:if="${message}" th:text="${message}"></p>
                                 <!-- Display the link to the product list if there are no orders -->
                                 <a th:if="${message}" th:href="${productListLink}">Mua ngay</a>
-                                <div class="axil-dashboard-order" th:if="${message == null}">
+                                <div class="axil-dashboard-order" th:if="orders != null">
                                     <div class="table-responsive">
+                                        <div class="filter-section">
+                                            <label for="statusFilter">Lọc theo trạng thái: </label>
+                                            <select id="statusFilter" name="status" onchange="filterOrdersByStatus(this.value)">
+                                                <option value="">Tất cả</option> <!-- Thay đổi giá trị thành chuỗi trống -->
+                                                <option value="Pending" th:selected="${status == 'Pending'}">Đang chờ</option>
+                                                <option value="Processing" th:selected="${status == 'Processing'}">Đang chuẩn bị</option>
+                                            </select>
+                                        </div>
                                         <table class="table">
                                             <thead>
                                             <tr>
@@ -105,7 +113,8 @@
                                                 <td th:text="${order.status}"></td>
                                                 <td th:text="${order.totalQuantity}"></td>
                                                 <td th:text="${order.totalPrice}"></td>
-                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}" class="axil-btn view-btn">Xem</a></td>
+                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"
+                                                       class="axil-btn view-btn">Xem</a></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -243,7 +252,15 @@
 <!-- Main JS -->
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
-<script th:src="@{/js/script.js}"></script>
+<script>
+    function filterOrdersByStatus(status) {
+        let url = '/orders';
+        if (status) {
+            url += '?status=' + status;
+        }
+        window.location.href = url;
+    }
+</script>
 </body>
 
 
