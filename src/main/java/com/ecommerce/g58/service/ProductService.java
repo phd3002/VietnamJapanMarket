@@ -7,6 +7,8 @@ import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ProductRepository;
 import com.ecommerce.g58.repository.ProductVariationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,6 +29,8 @@ public interface ProductService {
     ProductDetailDTO getProductDetailByProductIdAndVariationId(Integer productId, Integer variationId);
 
     List<Products> getAllProducts();
+
+    Page<Products> findAllProducts(Pageable pageable);
 
     List<Products> getLatest5Products();
 

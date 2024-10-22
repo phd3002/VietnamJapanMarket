@@ -8,6 +8,9 @@ import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.Size;
 import com.ecommerce.g58.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +26,26 @@ public class ProductController {
     private final ProductService productService;
     private final FeedbackService feedbackService;
 
+//    @GetMapping("/product-list")
+//    public String productList(Model model) {
+//        var products = productService.getAllProducts();
+//        model.addAttribute("products", products);
+//        return "product-list";
+//    }
+
     @GetMapping("/product-list")
-    public String productList(Model model) {
-        var products = productService.getAllProducts();
-        model.addAttribute("products", products);
+    public String getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Products> productPage = productService.findAllProducts(pageable);
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+
         return "product-list";
     };
 
@@ -45,11 +64,6 @@ public class ProductController {
 
         return "product-detail";
     }
-
-
-
-
-
 
 
     @GetMapping("/products")
