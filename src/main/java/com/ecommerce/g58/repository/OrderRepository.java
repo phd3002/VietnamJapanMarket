@@ -82,9 +82,16 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "JOIN \n" +
             "    invoice i ON o.order_id = i.order_id \n" +
             "WHERE o.user_id = :userId " +
-            "AND (:status IS NULL OR ss.status = :status)\n" +
+            "AND (COALESCE(:status, '') = '' OR ss.status = :status)\n" +
             "GROUP BY \n" +
             "    o.order_id, o.order_date, ss.status, o.total_price, i.shipping_fee",
+            countQuery = "SELECT COUNT(DISTINCT o.order_id) " +
+                    "FROM orders o " +
+                    "JOIN shipping_status ss ON o.order_id = ss.order_id " +
+                    "WHERE o.user_id = :userId " +
+                    "AND (COALESCE(:status, '') = '' OR ss.status = :status)",
             nativeQuery = true)
-    List<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId, @Param("status") String status);
+    Page<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId,
+                                               @Param("status") String status,
+                                               Pageable pageable);
 }

@@ -53,32 +53,60 @@ public class OrderController {
 //        return "order";  // Returning the view for the orders page (order.html)
 //    }
 
+    //    @GetMapping("/orders")
+//    public String getOrders(@RequestParam(value = "status", required = false) String status,
+//                            Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+//            return "redirect:/sign-in";
+//        }
+//
+//        // Fetch the authenticated user's email and user data
+//        String email = authentication.getName();
+//        Users user = userService.findByEmail(email);
+//        Integer userId = user.getUserId();
+//        List<OrdersDTO> orders;
+//
+//        if (status != null && !status.isEmpty()) {
+//            orders = orderService.getOrdersByUserIdAndStatus(userId, status);
+//        } else {
+//            orders = orderService.getOrdersByUserIdAndStatus(userId, null);
+//        }
+//
+//        if (orders.isEmpty()) {
+//            model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
+//            model.addAttribute("productListLink", "/product-detail");
+//        } else {
+//            model.addAttribute("orders", orders);
+//            model.addAttribute("status", status); // Truyền status nếu cần để duy trì trạng thái lọc
+//        }
+//        return "order";
+//    }
     @GetMapping("/orders")
     public String getOrders(@RequestParam(value = "status", required = false) String status,
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "10") int size,
                             Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             return "redirect:/sign-in";
         }
 
-        // Fetch the authenticated user's email and user data
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
         Integer userId = user.getUserId();
-        List<OrdersDTO> orders;
 
-        if (status != null && !status.isEmpty()) {
-            orders = orderService.getOrdersByUserIdAndStatus(userId, status);
-        } else {
-            orders = orderService.getOrdersByUserIdAndStatus(userId, null);
-        }
+        Page<OrdersDTO> orderPage = orderService.getOrdersByUserIdAndStatus(userId, status, PageRequest.of(page, size));
 
-        if (orders.isEmpty()) {
+        if (orderPage.isEmpty()) {
             model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
             model.addAttribute("productListLink", "/product-detail");
         } else {
-            model.addAttribute("orders", orders);
-            model.addAttribute("status", status); // Truyền status nếu cần để duy trì trạng thái lọc
+            model.addAttribute("orders", orderPage.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", orderPage.getTotalPages());
+            model.addAttribute("totalItems", orderPage.getTotalElements());
+            model.addAttribute("status", status);
         }
         return "order";
     }

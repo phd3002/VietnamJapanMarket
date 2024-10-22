@@ -16,5 +16,6 @@ public interface OrderService {
 
     // Method to get order summaries for the logged-in user
 //    List<OrdersDTO> getOrderSummariesForLoggedInUser();
-    List<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status);
+//    List<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status);
+    Page<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable);
 }

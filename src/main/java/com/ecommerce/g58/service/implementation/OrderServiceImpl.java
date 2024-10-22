@@ -31,32 +31,32 @@ public class OrderServiceImpl implements OrderService {
         this.orderRepository = orderRepository;
     }
 
-    @Override
-    public List<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status) {
-        // Use the query that filters by userId
-        List<Object[]> results = orderRepository.findOrdersByUserIdAndStatus(userId, status);
-        List<OrdersDTO> orders = new java.util.ArrayList<>();
-
-        for (Object[] result : results) {
-            OrdersDTO dto = new OrdersDTO();
-            dto.setOrderId((int) result[0]);
-            Timestamp orderDateTimestamp = (Timestamp) result[1];
-            dto.setOrderDate(orderDateTimestamp.toLocalDateTime());
-            dto.setStatus((String) result[2]);
-            if (result[3] instanceof BigInteger) {
-                dto.setTotalQuantity(new BigDecimal((BigInteger) result[3]));
-            } else if (result[3] instanceof BigDecimal) {
-                dto.setTotalQuantity((BigDecimal) result[3]);
-            }
-            if (result[4] instanceof BigInteger) {
-                dto.setTotalPrice(new BigDecimal((BigInteger) result[4]));
-            } else if (result[4] instanceof BigDecimal) {
-                dto.setTotalPrice((BigDecimal) result[4]);
-            }
-            orders.add(dto);
-        }
-        return orders;
-    }
+//    @Override
+//    public List<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status) {
+//        // Use the query that filters by userId
+//        List<Object[]> results = orderRepository.findOrdersByUserIdAndStatus(userId, status);
+//        List<OrdersDTO> orders = new java.util.ArrayList<>();
+//
+//        for (Object[] result : results) {
+//            OrdersDTO dto = new OrdersDTO();
+//            dto.setOrderId((int) result[0]);
+//            Timestamp orderDateTimestamp = (Timestamp) result[1];
+//            dto.setOrderDate(orderDateTimestamp.toLocalDateTime());
+//            dto.setStatus((String) result[2]);
+//            if (result[3] instanceof BigInteger) {
+//                dto.setTotalQuantity(new BigDecimal((BigInteger) result[3]));
+//            } else if (result[3] instanceof BigDecimal) {
+//                dto.setTotalQuantity((BigDecimal) result[3]);
+//            }
+//            if (result[4] instanceof BigInteger) {
+//                dto.setTotalPrice(new BigDecimal((BigInteger) result[4]));
+//            } else if (result[4] instanceof BigDecimal) {
+//                dto.setTotalPrice((BigDecimal) result[4]);
+//            }
+//            orders.add(dto);
+//        }
+//        return orders;
+//    }
 
 //    @Override
 //    public Integer getLoggedInUserId() {
@@ -68,37 +68,33 @@ public class OrderServiceImpl implements OrderService {
 //        return user.getUserId();
 //    }
 
-//    @Override
-//    public Page<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable) {
-//        Page<Object[]> results = orderRepository.findOrdersByUserIdAndStatus(userId, status, pageable);
-//        return results.map(result -> {
-//            OrdersDTO dto = new OrdersDTO();
-//            dto.setOrderId((int) result[0]);
-//
-//            // Xử lý orderDate
-//            Timestamp orderDateTimestamp = (Timestamp) result[1];
-//            dto.setOrderDate(orderDateTimestamp.toLocalDateTime());
-//
-//            // Xử lý status
-//            dto.setStatus((String) result[2]);
-//
-//            // Xử lý totalQuantity
-//            if (result[3] instanceof BigInteger) {
-//                dto.setTotalQuantity(new BigDecimal((BigInteger) result[3]));
-//            } else if (result[3] instanceof BigDecimal) {
-//                dto.setTotalQuantity((BigDecimal) result[3]);
-//            }
-//
-//            // Xử lý totalPrice
-//            if (result[4] instanceof BigInteger) {
-//                dto.setTotalPrice(new BigDecimal((BigInteger) result[4]));
-//            } else if (result[4] instanceof BigDecimal) {
-//                dto.setTotalPrice((BigDecimal) result[4]);
-//            }
-//
-//            return dto; // Trả về đối tượng OrdersDTO đã xử lý
-//        });
-//    }
+    @Override
+    public Page<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable) {
+        Page<Object[]> results = orderRepository.findOrdersByUserIdAndStatus(userId, status, pageable);
+        return results.map(result -> {
+            OrdersDTO dto = new OrdersDTO();
+            dto.setOrderId((int) result[0]);
+
+            Timestamp orderDateTimestamp = (Timestamp) result[1];
+            dto.setOrderDate(orderDateTimestamp.toLocalDateTime());
+
+            dto.setStatus((String) result[2]);
+
+            if (result[3] instanceof BigInteger) {
+                dto.setTotalQuantity(new BigDecimal((BigInteger) result[3]));
+            } else if (result[3] instanceof BigDecimal) {
+                dto.setTotalQuantity((BigDecimal) result[3]);
+            }
+
+            if (result[4] instanceof BigInteger) {
+                dto.setTotalPrice(new BigDecimal((BigInteger) result[4]));
+            } else if (result[4] instanceof BigDecimal) {
+                dto.setTotalPrice((BigDecimal) result[4]);
+            }
+
+            return dto;
+        });
+    }
 
 //    @Override
 //    public List<OrdersDTO> getOrderSummariesForLoggedInUser() {
