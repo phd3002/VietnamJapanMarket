@@ -82,6 +82,7 @@ public class ProductController {
         model.addAttribute("availableSizes", availableSizes);
         model.addAttribute("selectedSize", sizeId);  // Add selected size to the model
         model.addAttribute("feedbacks", feedbackService.findByProductId(productId));
+        model.addAttribute("product", productService.getProductById(productId));
         int averageRating = (int) feedbackService.findByProductId(productId).stream()
                 .mapToInt(Feedback::getRating)
                 .average()
