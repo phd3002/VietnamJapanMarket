@@ -4,6 +4,7 @@ import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.Color;
 import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.Size;
+import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -81,8 +82,12 @@ public class ProductController {
     }
 
 
-
-
+    @GetMapping("/seller-products")
+    public String getProductsByStore(@RequestParam Stores storeId, Model model) {
+        List<Products> products = productService.getProductsByStoreId(storeId);
+        model.addAttribute("products", products);
+        return "seller/product-manager";
+    }
 
 
 

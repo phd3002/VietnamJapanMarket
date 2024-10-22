@@ -154,6 +154,11 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findSizesByProductIdAndColorId(productId, colorId);
     }
 
+    @Override
+    public List<Products> getProductsByStoreId(Stores storeId) {
+        return productRepository.findByStoreId(storeId);
+    }
+
 }
 
 

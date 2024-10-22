@@ -32,7 +32,6 @@ public interface ProductService {
 
     Page<Products> findAllProducts(Pageable pageable);
 
-
     List<Products> getLatest5Products();
 
     List<ProductImage> getProductImagesByProductId(Integer productId);
@@ -48,5 +47,7 @@ public interface ProductService {
     List<Color> getAvailableColors(Integer productId);
 
     List<String> getAvailableSizesByProductIdAndColorId(Integer productId, Integer colorId);
+
+    List<Products> getProductsByStoreId(Stores storeId);
 
 }
