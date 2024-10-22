@@ -2440,15 +2440,12 @@ input[type=submit]:hover {
     }
 }
 
-.axil-breadcrumb-area .inner .bradcrumb-thumb::after {
+.axil-breadcrumb-area .inner .bradcrumb-thumb img {
     content: "";
     height: 110px;
     width: 110px;
     background-color: var(--color-white);
     border-radius: 50%;
-    position: absolute;
-    top: -10px;
-    right: 60px;
     z-index: -1
 }
 
@@ -11598,7 +11595,7 @@ body.open .closeMask {
     position: relative;
     overflow: hidden;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     cursor: pointer;
     transition: all .4s
 }

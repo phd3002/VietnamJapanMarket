@@ -9,6 +9,9 @@ import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.ProductService;
 import com.ecommerce.g58.service.UserService;
+import com.ecommerce.g58.utils.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +31,8 @@ import java.util.stream.Collectors;
 
 @Controller
 public class CartController {
+    private static final Logger logger = LoggerFactory.getLogger(CartController.class);
+
     @Autowired
     private CartService cartService;
 
@@ -41,10 +47,16 @@ public class CartController {
 
     @Autowired
     private CartItemRepository cartItemRepository;
+
     @Autowired
     private ProductVariationRepository productVariationRepository;
+
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private SecurityUtils securityUtils;
+
 
     // Add to Cart
     @PostMapping("/add_to_cart")
@@ -132,31 +144,8 @@ public class CartController {
     @PostMapping("/remove_cart_item")
     public String removeCartItem(@RequestParam("cartItemId") Integer cartItemId) {
         cartService.removeCartItem(cartItemId);
-//        session.setAttribute("cartItemRemoved", "Sản phẩm đã được xóa khỏi giỏ hàng thành công");
         return "redirect:/cart-items";
     }
-
-    // Update Cart Item Quantity
-//    @PostMapping("/update_cart_quantity")
-//    public ResponseEntity<String> updateCartQuantity(@RequestParam("cartItemId") Integer cartItemId,
-//                                                     @RequestParam("quantity") Integer quantity) {
-//        // Fetch cart item and check product stock
-//        CartItem cartItem = cartItemRepository.findById(cartItemId)
-//                .orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
-//        int productStock = cartItem.getVariationId().getStock();
-//
-//        try {
-//            // Check if the requested quantity is within the available stock
-//            if (quantity <= productStock) {
-//                cartItemService.updateCartItemQuantity(cartItemId, quantity);
-//                return ResponseEntity.ok("Quantity updated successfully");
-//            } else {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating quantity: Exceeds stock limit");
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating quantity");
-//        }
-//    }
     @PostMapping("/update_cart_quantity")
     public String updateCartQuantity(@RequestParam("cartItemId") Integer cartItemId,
                                      @RequestParam("quantity") Integer quantity,
@@ -182,4 +171,16 @@ public class CartController {
         return "redirect:/cart-items";
     }
 
+    @GetMapping("/api/cart/count")
+    @ResponseBody
+    public int getCartItemCount() {
+        logger.info("API endpoint /api/cart/count called.");
+        Integer userId = securityUtils.getCurrentUserId();
+        if (userId != null) {
+            logger.info("User ID found: {}", userId);
+            return cartService.getCartItemCount(userId);
+        }
+        logger.warn("User ID not found, returning cart count as 0");
+        return 0;
+    }
 }

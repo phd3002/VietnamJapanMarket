@@ -69,14 +69,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
                 // Public pages and resources
                 .antMatchers(
-                        "/products/**", "/category/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**",
-                        "/", "/sign-up/confirm-code/**", "/address/**", "/cart-detail/**", "/checkout/**", "/coming-soon/**",
-                        "/confirm-code/**", "/footer/**", "/head/**", "/header/**", "/homepage/**", "/homepageOrg/**",
-                        "/homepageTest/**", "/my-account", "/my-shop/**", "/notification/**", "/order/**",
-                        "/order-detail/**", "/privacy-policy/**", "/product-detail/**", "/product-list/**", "/sign-in/**",
-                        "/sign-up/**", "/sign-up-seller/**", "/terms-of-service/**", "/view-store/**", "/wallet/**",
-                        "/wishlist/**", "/forgot-password/**", "/reset-password/**", "/add_to_cart", "/cart-items",
-                        "/seller/dashboard", "/seller/products"
+                        "/","/**", "/sign-up/confirm-code/**",
+                        "/address/**", "/cart-detail/**", "/checkout/**",
+                        "/coming-soon/**", "/confirm-code/**", "/footer/**",
+                        "/head/**", "/header/**",
+                        "/homepage/**", "/homepageOrg/**", "/homepageTest/**",
+                        "/my-account", "/my-shop/**", "/notification/**",
+                        "/order/**", "/order-detail/**", "/privacy-policy/**",
+                        "/product-detail/**", "/product-list/**",
+                        "/sign-in/**", "/sign-up/**", "/sign-up-seller/**",
+                        "/terms-of-service/**", "/view-store/**", "/wallet/**",
+                        "/wishlist/**", "/forgot-password/**", "/reset-password/**",
+                        "/add_to_cart", "/cart-items", "/product/**"
                 ).permitAll()
 
                 // Checkout page requires authentication

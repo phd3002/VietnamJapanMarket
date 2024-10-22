@@ -12,20 +12,9 @@ public class ShippingAddressService {
     @Autowired
     private OrderRepository ordersRepository;
 
-    // Modify (update) shipping address
+    // thay đổi địa chỉ giao hàng
     @Transactional
     public void updateShippingAddress(Integer orderId, String newAddress) {
         ordersRepository.updateShippingAddressByOrderId(orderId, newAddress);
-    }
-
-    // View saved shipping address by order ID
-    public String getShippingAddress(Integer orderId) {
-        return ordersRepository.findShippingAddressByOrderId(orderId);
-    }
-
-    // Optional: Remove shipping address by setting it to null (if applicable)
-    @Transactional
-    public void deleteShippingAddress(Integer orderId) {
-        ordersRepository.updateShippingAddressByOrderId(orderId, null);
     }
 }

@@ -126,4 +126,9 @@ public class CartServiceImp implements CartService {
     public Cart getCartByUserId(Integer userId) {
         return cartRepository.findByUser_UserId(userId);
     }
+
+    @Override
+    public int getCartItemCount(Integer userId) {
+        return cartItemRepository.countCartItemsByUserId(userId);
+    }
 }
