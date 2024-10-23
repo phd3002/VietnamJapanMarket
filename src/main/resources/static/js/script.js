@@ -16,6 +16,32 @@ document.querySelectorAll('.toggle-password').forEach(item => {
     });
 });
 
+// Function to update the cart item count
+async function updateCartItemCount() {
+    try {
+        const response = await fetch('/api/cart/count');
+        if (response.ok) {
+            const count = await response.json();
+            console.log("Fetched count:", count);  // Log the fetched count
+            const cartCountElement = document.getElementById('cart-count');
+            console.log("Cart count element:", cartCountElement);  // Log the element to ensure it exists
+            if (cartCountElement) {
+                cartCountElement.textContent = count; // Update the cart count on the page
+            }
+        } else {
+            console.error('Failed to fetch cart item count:', response.status);
+        }
+    } catch (error) {
+        console.error('Error while updating cart item count:', error);
+    }
+}
+
+// Ensure the function runs when the page loads
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM content is loaded, script is running...");
+    updateCartItemCount();  // Update cart count on page load
+});
+
 // Save changes button
 document.getElementById('saveChangesBtn').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
