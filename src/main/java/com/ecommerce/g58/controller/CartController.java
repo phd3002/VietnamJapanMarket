@@ -145,6 +145,7 @@ public class CartController {
         cartService.removeCartItem(cartItemId);
         return "redirect:/cart-items";
     }
+
     @PostMapping("/update_cart_quantity")
     public String updateCartQuantity(@RequestParam("cartItemId") Integer cartItemId,
                                      @RequestParam("quantity") Integer quantity,

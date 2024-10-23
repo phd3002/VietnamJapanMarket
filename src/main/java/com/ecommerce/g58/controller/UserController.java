@@ -171,7 +171,6 @@ public class UserController {
             return "sign-in";
         }
 //        model.addAttribute("users", new Users());
-
     }
 
     @PostMapping("/sign-in")
@@ -276,4 +275,5 @@ public class UserController {
             return "redirect:/reset-password?token=" + token;
         }
     }
+
 }

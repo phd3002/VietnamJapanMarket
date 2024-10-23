@@ -1,24 +1,34 @@
 package com.ecommerce.g58.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.ui.Model;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-@WebMvcTest(AccountController.class)
 public class AccountControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private AccountController accountController;  // Inject the controller
 
+    @Mock
+    private Model model;  // Mock the Model
+
+    @BeforeEach
+    public void setUp() {
+        // Initialize the mocks
+        MockitoAnnotations.initMocks(this);
+    }
+
+    // Test: Ensure the "my-account" view is returned correctly
     @Test
-    public void testMyAccount() throws Exception {
-        mockMvc.perform(get("/my-account"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("my-account"));
+    public void testMyAccountView() {
+        // Execute the method
+        String viewName = accountController.myAccount(model);
+
+        // Verify the result (ensure the view name is "my-account")
+        assertEquals("my-account", viewName);
     }
 }

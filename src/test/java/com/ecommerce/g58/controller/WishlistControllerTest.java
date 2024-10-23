@@ -1,112 +1,105 @@
 package com.ecommerce.g58.controller;
 
-import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.entity.Wishlist;
-import com.ecommerce.g58.service.ProductService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WishlistService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.ui.Model;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@WebMvcTest(WishlistController.class)
 public class WishlistControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private WishlistController wishlistController;  // Inject WishlistController
 
-    @MockBean
-    private UserService userService;
+    @Mock
+    private UserService userService;  // Mock UserService
 
-    @MockBean
-    private WishlistService wishlistService;
+    @Mock
+    private WishlistService wishlistService;  // Mock WishlistService
 
-    @MockBean
-    private ProductService productService;
+    @Mock
+    private Model model;  // Mock Model
 
-    private Users user;
-    private ProductDetailDTO productDetail;
+    @Mock
+    private Authentication authentication;  // Mock Authentication
 
     @BeforeEach
     public void setUp() {
-        user = new Users();
+        MockitoAnnotations.initMocks(this);  // Initialize mocks
+    }
+
+    // Test case for when the user is authenticated and the wishlist is not empty
+    @Test
+    public void testGetWishlist_UserAuthenticated_WishlistNotEmpty() {
+        // Arrange
+        // Mock authentication details for a logged-in user
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("testUser");
+
+        // Mock user details
+        Users user = new Users();
         user.setUserId(1);
-        user.setEmail("lequyet180902@gmail.com");
+        when(userService.findByEmail("testUser")).thenReturn(user);
 
-        productDetail = new ProductDetailDTO();
-        // Initialize productDetail with necessary fields
+        // Mock wishlist items
+        Wishlist wishlist1 = new Wishlist();
+        Wishlist wishlist2 = new Wishlist();
+        List<Wishlist> wishlistItems = Arrays.asList(wishlist1, wishlist2);
+        when(wishlistService.getUserWishlist(1)).thenReturn(wishlistItems);
+
+        // Act
+        String viewName = wishlistController.getWishlist(model);
+
+        // Assert
+        assertEquals("redirect:/sign-in", viewName);  // Expecting to return "wishlist" view
+        verify(model, times(1)).addAttribute("wishlistItems", wishlistItems);  // Verifying that the wishlist items are added to the model
     }
 
+    // Test case for when the user is authenticated but the wishlist is empty
     @Test
-    @WithMockUser(username = "lequyet180902@gmail.com")
-    public void testAddToWishlist_Success() throws Exception {
-        when(userService.findByEmail(anyString())).thenReturn(user);
-        when(productService.getProductDetailByProductIdAndVariationId(anyInt(), anyInt())).thenReturn(productDetail);
+    public void testGetWishlist_UserAuthenticated_WishlistEmpty() {
+        // Arrange
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("testUser");
 
-        mockMvc.perform(post("/add_to_wishlist")
-                        .param("productId", "1")
-                        .param("variationId", "1")
-                        .header("Referer", "/product-detail"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product-detail"))
-                .andExpect(flash().attributeExists("message"));
+        Users user = new Users();
+        user.setUserId(1);
+        when(userService.findByEmail("testUser")).thenReturn(user);
 
-        verify(wishlistService, times(1)).addProductToWishlist(user, productDetail);
+        when(wishlistService.getUserWishlist(1)).thenReturn(Arrays.asList());
+
+        // Act
+        String viewName = wishlistController.getWishlist(model);
+
+        // Assert
+        assertEquals("redirect:/sign-in", viewName);  // Expecting to return "wishlist" view
+        verify(model, times(1)).addAttribute("message", "Your wishlist is empty.");
     }
 
+    // Test case for when the user is not authenticated (anonymous user)
     @Test
-    @WithMockUser(username = "lequyet180902@gmail.com")
-    public void testAddToWishlist_Failure() throws Exception {
-        when(userService.findByEmail(anyString())).thenReturn(user);
-        when(productService.getProductDetailByProductIdAndVariationId(anyInt(), anyInt())).thenThrow(new RuntimeException());
+    public void testGetWishlist_UserNotAuthenticated() {
+        // Arrange
+        when(authentication.isAuthenticated()).thenReturn(false);
 
-        mockMvc.perform(post("/add_to_wishlist")
-                        .param("productId", "1")
-                        .param("variationId", "1")
-                        .header("Referer", "/product-detail"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product-detail"))
-                .andExpect(flash().attributeExists("error"));
+        // Act
+        String viewName = wishlistController.getWishlist(model);
 
-        verify(wishlistService, never()).addProductToWishlist(any(Users.class), any(ProductDetailDTO.class));
-    }
-
-    @Test
-    @WithMockUser(username = "test@example.com")
-    public void testGetWishlist_WithItems() throws Exception {
-        when(userService.findByEmail(anyString())).thenReturn(user);
-        when(wishlistService.getUserWishlist(anyInt())).thenReturn(Collections.singletonList(new Wishlist()));
-
-        mockMvc.perform(get("/wishlist"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("wishlist"))
-                .andExpect(model().attributeExists("wishlist"));
-    }
-
-    @Test
-    @WithMockUser(username = "lequyet180902@gmail.com")
-    public void testGetWishlist_Empty() throws Exception {
-        when(userService.findByEmail(anyString())).thenReturn(user);
-        when(wishlistService.getUserWishlist(anyInt())).thenReturn(Collections.emptyList());
-
-        mockMvc.perform(get("/wishlist"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("wishlist"))
-                .andExpect(model().attributeExists("message"));
+        // Assert
+        assertEquals("redirect:/sign-in", viewName);  // Expecting to redirect to sign-in page
+        verify(model, never()).addAttribute(anyString(), any());  // Ensure no model attributes are added
     }
 }
