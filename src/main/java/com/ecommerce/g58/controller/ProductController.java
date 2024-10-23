@@ -4,7 +4,8 @@ import com.ecommerce.g58.entity.Feedback;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.Color;
 import com.ecommerce.g58.entity.Products;
-import com.ecommerce.g58.entity.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.service.FeedbackService;
 import com.ecommerce.g58.service.ProductService;
@@ -26,12 +27,7 @@ public class ProductController {
     private final ProductService productService;
     private final FeedbackService feedbackService;
 
-//    @GetMapping("/product-list")
-//    public String productList(Model model) {
-//        var products = productService.getAllProducts();
-//        model.addAttribute("products", products);
-//        return "product-list";
-//    }
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     @GetMapping("/product-list")
     public String getAllProducts(
@@ -100,11 +96,11 @@ public class ProductController {
         return "seller/product-manager";
     }
 
-
-
     @GetMapping("/products")
     public String getProductsByCategory(@RequestParam("categoryId") Long categoryId, Model model) {
+        logger.info("Fetching products for category ID: {}", categoryId);
         List<Products> products = productService.getProductsByCategory(categoryId);
+        logger.info("Number of products found: {}", products.size());
         model.addAttribute("products", products);
         return "product-list";
     }

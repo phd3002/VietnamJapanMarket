@@ -45,7 +45,9 @@
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
                             <a th:href="@{/product-detail/{productId}(productId=${product.productId})}">
-                                <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
+                                <img th:if="${product.productVariations != null && product.productVariations.size() > 0}"
+                                     th:src="${product.productVariations[0].imageId != null ? product.productVariations[0].imageId.thumbnail : '/images/default-thumbnail.png'}"
+                                     alt="Product Image">
                             </a>
                             <div class="label-block label-right">
                                 <div class="product-badget">20% OFF</div>
@@ -63,7 +65,8 @@
                         <div class="product-content">
                             <div class="inner">
                                 <h5 class="title">
-                                    <a th:href="@{/product-detail/{productId}(productId=${product.productId})}" th:text="${product.productName}"></a>
+                                    <a th:href="@{/product-detail/{productId}(productId=${product.productId})}"
+                                       th:text="${product.productName}"></a>
                                 </h5>
                                 <div class="product-price-variant">
                                     <span class="price current-price" th:text="${product.price}"></span>
@@ -77,14 +80,14 @@
             <!-- Pagination Controls -->
             <div class="pagination-controls text-center pt--30">
                 <ul class="pagination">
-                    <li th:if="${currentPage > 0}">
+                    <li th:if="${currentPage != null && currentPage > 0}">
                         <a th:href="@{/product-list(page=${currentPage - 1})}" class="prev">Previous</a>
                     </li>
-                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <li th:each="i : ${#numbers.sequence(0, (totalPages != null ? totalPages - 1 : 0))}">
                         <a th:href="@{/product-list(page=${i})}" th:text="${i + 1}"
                            th:classappend="${i == currentPage} ? 'active'"></a>
                     </li>
-                    <li th:if="${currentPage < totalPages - 1}">
+                    <li th:if="${currentPage != null && currentPage < totalPages - 1}">
                         <a th:href="@{/product-list(page=${currentPage + 1})}" class="next">Next</a>
                     </li>
                 </ul>
