@@ -22,9 +22,7 @@ async function updateCartItemCount() {
         const response = await fetch('/api/cart/count');
         if (response.ok) {
             const count = await response.json();
-            console.log("Fetched count:", count);  // Log the fetched count
             const cartCountElement = document.getElementById('cart-count');
-            console.log("Cart count element:", cartCountElement);  // Log the element to ensure it exists
             if (cartCountElement) {
                 cartCountElement.textContent = count; // Update the cart count on the page
             }
@@ -38,9 +36,69 @@ async function updateCartItemCount() {
 
 // Ensure the function runs when the page loads
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("DOM content is loaded, script is running...");
     updateCartItemCount();  // Update cart count on page load
 });
+
+// Search functionality
+async function performSearch() {
+    const searchInput = document.getElementById('prod-search').value.trim();
+
+    if (searchInput.length === 0) {
+        return false;  // Exit if there's no input
+    }
+
+    try {
+        // Send the search request to the backend
+        const response = await fetch(`/api/search?query=${encodeURIComponent(searchInput)}`);
+
+        if (response.ok) {
+            const searchResults = await response.json();
+            console.log('Search results:', searchResults);  // Log the search results
+            updateSearchResults(searchResults);  // Function to update the UI
+        } else {
+            console.error('Search request failed:', response.status);
+        }
+    } catch (error) {
+        console.error('Error fetching search results:', error);
+    }
+
+    return false;  // Prevent form submission and page reload
+}
+
+function updateSearchResults(results) {
+    const resultContainer = document.querySelector('.search-results');
+    resultContainer.innerHTML = '';  // Clear previous results
+
+    if (results.length === 0) {
+        document.getElementById('result-count').textContent = '0';
+        document.getElementById('search-results').style.display = 'none';
+        return;
+    }
+
+    document.getElementById('result-count').textContent = results.length;
+    document.getElementById('search-results').style.display = 'block';
+
+    results.forEach(result => {
+        const resultItem = document.createElement('div');
+        resultItem.classList.add('result-item');
+        resultItem.innerHTML = `
+        <div class="axil-product-list">
+            <div class="thumbnail">
+                <a href="#">
+                    <img src="${result.thumbnail}" alt="Product Image" class="product-thumbnail">
+                </a>
+            </div>
+            <div class="product-content">
+                <h6 class="product-title">${result.productName}</h6>
+                <div class="product-price-variant">
+                    <span class="price current-price">$${result.price}</span>
+                </div>
+            </div>
+        </div>
+    `;
+        resultContainer.appendChild(resultItem);
+    });
+}
 
 // Save changes button
 document.getElementById('saveChangesBtn').addEventListener('click', function (event) {
@@ -134,64 +192,3 @@ window.addEventListener('click', function (event) {
         confirmationPopup.style.display = 'none';
     }
 });
-
-// Search functionality
-async function performSearch() {
-    const searchInput = document.getElementById('prod-search').value.trim();
-
-    if (searchInput.length === 0) {
-        return false;  // Exit if there's no input
-    }
-
-    try {
-        // Send the search request to the backend
-        const response = await fetch(`/api/search?query=${encodeURIComponent(searchInput)}`);
-
-        if (response.ok) {
-            const searchResults = await response.json();
-            console.log('Search results:', searchResults);  // Log the search results
-            updateSearchResults(searchResults);  // Function to update the UI
-        } else {
-            console.error('Search request failed:', response.status);
-        }
-    } catch (error) {
-        console.error('Error fetching search results:', error);
-    }
-
-    return false;  // Prevent form submission and page reload
-}
-
-function updateSearchResults(results) {
-    const resultContainer = document.querySelector('.psearch-results');
-    resultContainer.innerHTML = '';  // Clear previous results
-
-    if (results.length === 0) {
-        document.getElementById('result-count').textContent = '0';
-        document.getElementById('search-results').style.display = 'none';
-        return;
-    }
-
-    document.getElementById('result-count').textContent = results.length;
-    document.getElementById('search-results').style.display = 'block';
-
-    results.forEach(result => {
-        const resultItem = document.createElement('div');
-        resultItem.classList.add('result-item');
-        resultItem.innerHTML = `
-        <div class="axil-product-list">
-            <div class="thumbnail">
-                <a href="#">
-                    <img src="${result.thumbnail}" alt="Product Image" class="product-thumbnail">
-                </a>
-            </div>
-            <div class="product-content">
-                <h6 class="product-title">${result.productName}</h6>
-                <div class="product-price-variant">
-                    <span class="price current-price">$${result.price}</span>
-                </div>
-            </div>
-        </div>
-    `;
-        resultContainer.appendChild(resultItem);
-    });
-}
