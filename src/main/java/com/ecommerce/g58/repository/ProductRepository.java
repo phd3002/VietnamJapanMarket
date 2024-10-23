@@ -2,10 +2,8 @@ package com.ecommerce.g58.repository;
 
 import com.ecommerce.g58.dto.ProductDTO;
 import com.ecommerce.g58.dto.ProductDetailDTO;
-import com.ecommerce.g58.entity.Color;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.entity.Products;
-import com.ecommerce.g58.entity.Products;
-import com.ecommerce.g58.entity.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -18,6 +16,8 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends PagingAndSortingRepository<Products, Integer> {
     List<Products> findAll();
+
+    List<Products> findByStoreId(Stores storeId);
 
     List<Products> findTop5ByOrderByCreatedAtDesc();
 

@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-    <title th:text="${pageTitle} ?: 'Home Page'"></title>
+    <title th:text="${pageTitle} ?: 'Product List'"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Including CSS Files from base.html -->
@@ -15,7 +15,7 @@
 <div th:replace="base :: header"></div>
 
 <!-- Main Content Section -->
-<main class="main-wrapper">
+<main class="main-wrapper" th:fragment="content">
     <div class="axil-shop-area axil-section-gap bg-color-white">
         <div class="container">
             <!-- Sort  -->
@@ -44,31 +44,47 @@
                 <div th:each="product : ${products}" class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
-                            <a th:href="@{/product-detail/{id}(id=${product.productId})}">
-                                <img class="spi" th:src="${product.productVariations[0].imageId.thumbnail}"
-                                     alt="Product Image">
+                            <a th:href="@{/product-detail/{productId}(productId=${product.productId})}">
+                                <img th:src="${product.productVariations[0].imageId.thumbnail}" alt="Product Image">
                             </a>
+                            <div class="label-block label-right">
+                                <div class="product-badget">20% OFF</div>
+                            </div>
                             <div class="product-hover-action">
                                 <ul class="cart-action">
                                     <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
                                     <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             th:attr="data-bs-target=${'#quick-view-modal-' + product.productId}"><i
-                                            class="far fa-eye"></i></a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="product-content">
                             <div class="inner">
-                                <h5 class="title"><a th:href="@{/product-detail/{id}(id=${product.productId})}"
-                                                     th:text="${product.productName}"></a></h5>
+                                <h5 class="title">
+                                    <a th:href="@{/product-detail/{productId}(productId=${product.productId})}" th:text="${product.productName}"></a>
+                                </h5>
                                 <div class="product-price-variant">
-                                    <span class="price current-price" th:text="${'$' + product.price}"></span>
+                                    <span class="price current-price" th:text="${product.price}"></span>
+                                    <span class="price old-price" th:text="${product.price}"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- Pagination Controls -->
+            <div class="pagination-controls text-center pt--30">
+                <ul class="pagination">
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{/product-list(page=${currentPage - 1})}" class="prev">Previous</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{/product-list(page=${i})}" th:text="${i + 1}"
+                           th:classappend="${i == currentPage} ? 'active'"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/product-list(page=${currentPage + 1})}" class="next">Next</a>
+                    </li>
+                </ul>
             </div>
             <div class="text-center pt--30">
                 <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
@@ -76,112 +92,6 @@
         </div>
     </div>
 </main>
-
-<!-- Product Quick View Modal -->
-<div th:each="product : ${products}" class="modal fade quick-view-product"
-     th:attr="id=${'quick-view-modal-' + product.productId}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                        class="far fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="single-product-thumb">
-                    <div class="row">
-                        <div class="col-lg-7 mb--40">
-                            <div class="row">
-                                <div class="col-lg-10 order-lg-2">
-                                    <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
-                                        <div class="thumbnail" th:each="pv : ${product.productVariations}">
-                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image" style="width: 400px; height: 300px;">
-                                            <div class="product-quick-view position-view">
-                                                <a th:src="@{${pv.imageId.thumbnail}}" class="popup-zoom">
-                                                    <i class="far fa-search-plus"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 order-lg-1">
-                                    <div class="product-small-thumb small-thumb-wrapper">
-                                        <div class="small-thumb-img" th:each="pv : ${product.productVariations}">
-                                            <img th:src="@{${pv.imageId.thumbnail}}"
-                                                 alt="thumb image"
-                                                 style="width: 69px; height: 42px">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 mb--40">
-                            <div class="single-product-content">
-                                <div class="inner">
-                                    <div class="product-rating">
-                                        <div class="star-rating">
-                                            <img th:src="@{/images/icons/rate.png}" alt="Rate Images">
-                                        </div>
-                                        <div class="review-link">
-                                            <a href="#">(<span>1</span> customer reviews)</a>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-title" th:text="${product.productName}"></h3>
-                                    <span class="price-amount" th:text="${'$' + product.price}"></span>
-                                    <ul class="product-meta">
-                                        <li><i class="fal fa-check"></i>In stock</li>
-                                        <li><i class="fal fa-check"></i>Free delivery available</li>
-                                        <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
-                                    </ul>
-                                    <p class="description" th:text="${product.productDescription}"></p>
-                                    <div class="product-variations-wrapper">
-                                        <div class="product-variation">
-                                            <h6 class="title">Colors:</h6>
-                                            <div class="color-variant-wrapper">
-                                                <ul class="color-variant mt--0">
-                                                    <li th:class="${'color-extra-0' + (iter.index + 1) + (iter.first ? ' active' : '')}"
-                                                        th:each="pv,iter : ${product.productVariations}">
-                                                    <span><span class="color"
-                                                                th:style="${'background: ' + pv.color.colorName}"></span></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product-variation">
-                                            <h6 class="title">Size:</h6>
-                                            <ul class="range-variant">
-                                                <li th:each="pv : ${product.productVariations}"
-                                                    th:text="${pv.size.sizeName}"></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="product-action-wrapper d-flex-center">
-                                        <div class="pro-qty">
-                                            <label>
-                                                <input type="text" value="1">
-                                            </label>
-                                        </div>
-                                        <ul class="product-action d-flex-center mb--0">
-                                            <li class="add-to-cart">
-                                                <a href="cart-detail.html"
-                                                   class="axil-btn btn-bg-primary">Add to Cart
-                                                </a>
-                                            </li>
-                                            <li class="wishlist">
-                                                <a href="wishlist.html"
-                                                   class="axil-btn wishlist-btn"><i class="far fa-heart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>

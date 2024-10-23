@@ -3,7 +3,6 @@ package com.ecommerce.g58.entity;
 import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Data
@@ -24,20 +23,23 @@ public class Stores {
     @Column(name = "store_description")
     private String storeDescription;
 
-    @Column(name = "picture_url")
-    private String pictureUrl;
-
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
     private Users ownerId;
 
     @Column(name = "store_revenue", nullable = false)
-    private BigDecimal storeRevenue;
+    private Integer storeRevenue;
 
     @OneToOne
     @JoinColumn(name = "country_id")
     private Countries country;
 
-    @OneToMany(mappedBy = "storeId")
-    private List<Products> products;
+    @Column(name = "store_address")
+    private String storeAddress;
+
+    @Column(name = "store_mail")
+    private String storeMail;
+
+    @Column(name = "store_phone")
+    private String storePhone;
 }

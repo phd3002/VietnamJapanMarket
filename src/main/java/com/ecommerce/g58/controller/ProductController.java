@@ -1,11 +1,12 @@
 package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.entity.Feedback;
-import com.ecommerce.g58.service.FeedbackService;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.Color;
 import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.Size;
+import com.ecommerce.g58.entity.Stores;
+import com.ecommerce.g58.service.FeedbackService;
 import com.ecommerce.g58.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -47,23 +47,59 @@ public class ProductController {
         model.addAttribute("totalPages", productPage.getTotalPages());
 
         return "product-list";
-    };
+    }
 
-    @GetMapping("/product-detail/{id}")
-    public String productDetail(@PathVariable Integer id, Model model) {
-        model.addAttribute("allProducts", productService.getAllProducts());
-        model.addAttribute("product", productService.getProductById(id));
-        model.addAttribute("feedbacks", feedbackService.findByProductId(id));
+    @GetMapping("/product-detail/{productId}")
+    public String showProductDetail(@PathVariable("productId") Integer productId,
+                                    @RequestParam(value = "colorId", required = false) Integer colorId,
+                                    @RequestParam(value = "sizeId", required = false) Integer sizeId,
+                                    Model model) {
+        if (colorId == null) {
+            // Default to the lowest colorId
+            List<Color> availableColors = productService.getAvailableColors(productId);
+            if (!availableColors.isEmpty()) {
+                colorId = availableColors.get(0).getColorId(); // Get the lowest colorId
+            }
+        }
 
-        int averageRating = (int) feedbackService.findByProductId(id).stream()
+        // Fetch product details based on productId and colorId
+        ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndColorId(productId, colorId);
+
+        if (productDetail == null) {
+            return "error";  // Handle product not found
+        }
+
+        // Fetch available sizes
+        List<String> availableSizes = productService.getAvailableSizesByProductIdAndColorId(productId, colorId);
+        List<Color> availableColors = productService.getAvailableColors(productId);
+        System.out.println("Available colors: " + availableColors);
+        System.out.println("Available sizes: " + availableSizes);
+        System.out.println("Selected size: " + sizeId);
+        System.out.println(productDetail.getVariationId());
+        // Pass the product details, available colors, and sizes to the front-end
+        model.addAttribute("productDetail", productDetail);
+        model.addAttribute("availableColors", availableColors);
+        model.addAttribute("availableSizes", availableSizes);
+        model.addAttribute("selectedSize", sizeId);  // Add selected size to the model
+        model.addAttribute("feedbacks", feedbackService.findByProductId(productId));
+        model.addAttribute("product", productService.getProductById(productId));
+        int averageRating = (int) feedbackService.findByProductId(productId).stream()
                 .mapToInt(Feedback::getRating)
                 .average()
                 .orElse(0);
 
         model.addAttribute("averageRating", averageRating);
-
         return "product-detail";
     }
+
+
+    @GetMapping("/seller-products")
+    public String getProductsByStore(@RequestParam Stores storeId, Model model) {
+        List<Products> products = productService.getProductsByStoreId(storeId);
+        model.addAttribute("products", products);
+        return "seller/product-manager";
+    }
+
 
 
     @GetMapping("/products")

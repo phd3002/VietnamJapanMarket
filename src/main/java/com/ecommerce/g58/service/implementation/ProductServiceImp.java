@@ -89,6 +89,7 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findAll(); // Fetch all products
     }
 
+    @Override
     public Page<Products> findAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
@@ -151,6 +152,11 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<String> getAvailableSizesByProductIdAndColorId(Integer productId, Integer colorId) {
         return productRepository.findSizesByProductIdAndColorId(productId, colorId);
+    }
+
+    @Override
+    public List<Products> getProductsByStoreId(Stores storeId) {
+        return productRepository.findByStoreId(storeId);
     }
 
 }
