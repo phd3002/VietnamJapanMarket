@@ -1,5 +1,8 @@
 package com.ecommerce.g58.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
     ADMIN(1, "Admin"),
     CUSTOMER(3, "Customer"),
@@ -14,11 +17,4 @@ public enum Role {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

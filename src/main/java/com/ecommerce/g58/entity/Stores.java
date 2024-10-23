@@ -42,4 +42,7 @@ public class Stores {
 
     @Column(name = "store_phone")
     private String storePhone;
+
+    @Column(name = "picture_url")
+    private String pictureUrl;
 }

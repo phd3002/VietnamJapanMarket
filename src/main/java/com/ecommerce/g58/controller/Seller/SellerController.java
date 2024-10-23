@@ -87,7 +87,16 @@ public class SellerController {
     }
 
     @GetMapping("/seller/dashboard")
-    public String showSellerDashboard() {
+    public String showSellerDashboard(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDetails = (User) authentication.getPrincipal();
+        Users user = userService.findByEmail(userDetails.getUsername());
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        Optional<Stores> store = storeService.findByOwnerId(user);
+        store.ifPresent(value -> model.addAttribute("storeId", value.getStoreId()));
         return "seller/dashboard";
     }
 }

@@ -89,12 +89,12 @@ public class ProductController {
     }
 
 
-    @GetMapping("/seller-products")
-    public String getProductsByStore(@RequestParam Stores storeId, Model model) {
-        List<Products> products = productService.getProductsByStoreId(storeId);
-        model.addAttribute("products", products);
-        return "seller/product-manager";
-    }
+//    @GetMapping("/seller-products")
+//    public String getProductsByStore(@RequestParam Stores storeId, Model model) {
+//        List<Products> products = productService.getProductsByStoreId(storeId);
+//        model.addAttribute("products", products);
+//        return "seller/product-manager";
+//    }
 
     @GetMapping("/products")
     public String getProductsByCategory(@RequestParam("categoryId") Long categoryId, Model model) {

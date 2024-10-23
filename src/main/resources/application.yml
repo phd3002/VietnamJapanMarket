@@ -17,6 +17,7 @@ spring:
     show-sql: false
     properties:
       hibernate:
+        ddl-auto: update
         dialect: org.hibernate.dialect.MySQL8Dialect
         enable_lazy_load_no_trans: true
     generate-ddl: true

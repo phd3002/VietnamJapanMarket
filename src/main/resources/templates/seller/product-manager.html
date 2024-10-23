@@ -96,24 +96,28 @@
                         <tbody>
                         <tr th:each="product : ${products}">
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td th:text="${product.productId}"></td>
                             <td th:text="${product.productName}"></td>
-                            <td><img th:src="@{${product.productImages[0]?.thumbnail}}" alt="" width="100px;"></td>
-                            <td th:text="${product.productVariations[0]?.size + ' x ' + product.productVariations[0]?.color}"></td>
-                            <td th:text="${product.productVariations[0]?.stock}"></td>
-                            <td th:text="${product.price} + ' đ'"></td>
-                            <td th:text="${product.categoryId?.categoryName}"></td>
-                            <td th:text="${#dates.format(product.createdAt, 'yyyy-MM-dd')}"></td>
                             <td>
-                                <a th:href="@{'/api/seller/edit-product/' + ${product.productId}}">
+                                <img th:if="${product.productVariations != null && product.productVariations.size() > 0}"
+                                     th:src="${product.productVariations[0].imageId != null ? product.productVariations[0].imageId.thumbnail : '/images/default-thumbnail.png'}"
+                                     alt="Product Image">
+                            </td>
+                            <td th:text="${product.productVariations.size() > 0 ? product.productVariations[0].size + ' x ' + product.productVariations[0].color : 'N/A'}"></td>
+                            <td th:text="${product.productVariations.size() > 0 ? product.productVariations[0].stock : 'N/A'}"></td>
+                            <td th:text="${product.price} + ' đ'"></td>
+                            <td th:text="${product.categoryId != null ? product.categoryId.categoryName : 'N/A'}"></td>
+                            <td th:text="${product.createdAt != null ? #temporals.format(product.createdAt, 'yyyy-MM-dd') : 'N/A'}"></td>
+                            <td>
+                                <a th:href="@{'/api/seller-management/edit-product/' + ${product.productId}}">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fas fa-edit"></i></button>
                                 </a>
-                                <a th:href="@{'/api/seller/delete-product/' + ${product.productId}}" onclick="return confirm('Are you sure?')">
+                                <a th:href="@{'/api/seller-management/delete-product/' + ${product.productId}}" onclick="return confirm('Are you sure?')">
                                     <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
                                 </a>
                             </td>
                         </tr>
                         </tbody>
+
                     </table>
                 </div>
             </div>
