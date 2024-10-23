@@ -81,12 +81,25 @@
                         <div class="tab-content">
                             <!-- Orders Tab -->
                             <div class="tab-pane fade show active" id="nav-orders" role="tabpanel">
-                                <!-- Check if there is a message (no orders) -->
-                                <p th:if="${message}" th:text="${message}"></p>
-                                <!-- Display the link to the product list if there are no orders -->
-                                <a th:if="${message}" th:href="${productListLink}">Mua ngay</a>
-                                <div class="axil-dashboard-order" th:if="${message == null}">
+                                <!--                                &lt;!&ndash; Check if there is a message (no orders) &ndash;&gt;-->
+                                <!--                                <p th:if="${message}" th:text="${message}"></p>-->
+                                <!--                                &lt;!&ndash; Display the link to the product list if there are no orders &ndash;&gt;-->
+                                <!--                                <a th:if="${message}" th:href="${productListLink}">Mua ngay</a>-->
+                                <div class="axil-dashboard-order" th:if="orders != null">
                                     <div class="table-responsive">
+                                        <div class="filter-section">
+                                            <label for="statusFilter">Lọc theo trạng thái: </label>
+                                            <select id="statusFilter" name="status"
+                                                    onchange="filterOrdersByStatus(this.value)">
+                                                <option value="" th:selected="${status == 'null'}">Tất cả</option>
+                                                <!-- Thay đổi giá trị thành chuỗi trống -->
+                                                <option value="Pending" th:selected="${status == 'Pending'}">Đang chờ
+                                                </option>
+                                                <option value="Processing" th:selected="${status == 'Processing'}">Đang
+                                                    chuẩn bị
+                                                </option>
+                                            </select>
+                                        </div>
                                         <table class="table">
                                             <thead>
                                             <tr>
@@ -105,10 +118,65 @@
                                                 <td th:text="${order.status}"></td>
                                                 <td th:text="${order.totalQuantity}"></td>
                                                 <td th:text="${order.totalPrice}"></td>
-                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}" class="axil-btn view-btn">Xem</a></td>
+                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"
+                                                       class="axil-btn view-btn">Xem</a></td>
                                             </tr>
                                             </tbody>
                                         </table>
+                                        <!-- Phân trang -->
+                                        <div class="pagination-section" th:if="${totalPages > 0}">
+                                            <div class="d-flex justify-content-center">
+                                                <nav>
+                                                    <ul class="pagination">
+                                                        <!-- First -->
+                                                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                            <a class="page-link" th:href="@{/orders(page=0, size=10, status=${status != null && status != '' ? status : ''})}">
+                                                                First
+                                                            </a>
+                                                        </li>
+
+                                                        <!-- Previous -->
+                                                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                            <a class="page-link" th:href="@{/orders(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}" th:if="${currentPage > 0}">
+                                                                Previous
+                                                            </a>
+                                                        </li>
+
+                                                        <!-- Page Numbers -->
+                                                        <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
+                                                            <a class="page-link" th:href="@{/orders(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}" th:text="${pageNum + 1}">
+                                                            </a>
+                                                        </li>
+
+                                                        <!-- Next -->
+                                                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                                            <a class="page-link" th:href="@{/orders(page=${currentPage + 1}, size=10, status=${status != null && status != '' ? status : ''})}" th:if="${currentPage < totalPages - 1}">
+                                                                Next
+                                                            </a>
+                                                        </li>
+
+                                                        <!-- Last -->
+                                                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                                            <a class="page-link" th:href="@{/orders(page=${totalPages - 1}, size=10, status=${status != null && status != '' ? status : ''})}">
+                                                                Last
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+
+                                            <!-- Pagination Info -->
+                                            <div class="text-center mt-3">
+                                                <span>Showing page [[${currentPage + 1}]] of [[${totalPages}]]</span>
+                                                <br/>
+                                                <span>Total items: [[${totalItems}]]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Message when no orders -->
+                                    <div th:if="${message}" class="text-center">
+                                        <p th:text="${message}"></p>
+                                        <a th:href="${productListLink}" class="axil-btn">Mua ngay</a>
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +311,15 @@
 <!-- Main JS -->
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
-<script th:src="@{/js/script.js}"></script>
+<script>
+    function filterOrdersByStatus(status) {
+        let url = '/orders';
+        if (status !== null && status !== '') {
+            url += '?status=' + status;
+        }
+        window.location.href = url;
+    }
+</script>
 </body>
 
 
