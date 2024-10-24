@@ -37,20 +37,23 @@ public class CheckoutController {
     private UserService userService;
 
     @Autowired
-    private ProductImageRepository productImageRepository; // Inject ProductImageRepository
+    private ProductImageRepository productImageRepository; // dung de lay anh san pham
 
     @GetMapping("/session-info")
     public ResponseEntity<String> getSessionInfo(HttpSession session) {
+        // lay thong tin session
         StringBuilder sessionInfo = new StringBuilder();
         sessionInfo.append("Session ID: ").append(session.getId()).append("\n");
 
+        // lay thoi gian hien tai de kiem tra thoi gian bat dau checkout
         LocalDateTime checkoutTime = (LocalDateTime) session.getAttribute("checkoutSession");
+        // neu co thoi gian bat dau checkout, hien thi thong tin
         if (checkoutTime != null) {
             sessionInfo.append("Checkout Session Start Time: ").append(checkoutTime).append("\n");
         } else {
             sessionInfo.append("No checkout session active.\n");
         }
-
+        // tra ve thong tin session
         return new ResponseEntity<>(sessionInfo.toString(), HttpStatus.OK);
     }
 
@@ -95,7 +98,6 @@ public class CheckoutController {
 
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal) {
-        // Log the session ID at the start of checkout
         logger.info("Session ID during checkout start: {}", session.getId());
 
         if (principal == null) {
@@ -110,13 +112,12 @@ public class CheckoutController {
 
         Integer userId = user.getUserId();
 
-        // Log that the proceedToCheckout method was called successfully
         logger.info("Proceed to checkout called successfully for user: {}", userId);
 
-        // Subtract item quantities from stock
+        // tru so luong san pham trong kho
         cartService.subtractItemQuantitiesFromStock(userId);
 
-        // Create a checkout start time for 30-minute validity (instead of using session expiry)
+        // tao session de luu thoi gian bat dau checkout
         session.setAttribute("checkoutStartTime", LocalDateTime.now());
 
         return "redirect:/checkout"; // Proceed to checkout page
@@ -138,20 +139,20 @@ public class CheckoutController {
 
         Integer userId = user.getUserId();
 
-        // Restore item quantities to stock
+        // tra lai so luong san pham trong kho
         cartService.restoreItemQuantitiesToStock(userId);
 
-        // Log session attributes to verify checkout session
+        // kiem tra xem co session checkout hay khong
         if (session.getAttribute("checkoutStartTime") != null) {
             logger.info("Checkout session found, canceling checkout for user: {}", username);
         } else {
             logger.warn("No checkout session found for user: {}", username);
         }
 
-        // Remove the specific checkout session attribute
+        // xoa session checkout
         session.removeAttribute("checkoutStartTime");
 
-        return ResponseEntity.ok().build(); // Return 200 OK with no content
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/confirm-checkout")
@@ -160,24 +161,23 @@ public class CheckoutController {
             return "redirect:/sign-in";
         }
 
-        // Retrieve the checkout start time
+        // lay thoi gian bat dau checkout
         LocalDateTime checkoutStartTime = (LocalDateTime) session.getAttribute("checkoutStartTime");
 
         if (checkoutStartTime != null) {
-            // Check if the checkout has expired (more than 30 minutes)
+            // neu checkout qua 30 phut, tra lai so luong san pham trong kho
             if (Duration.between(checkoutStartTime, LocalDateTime.now()).toMinutes() > 30) {
-                // Restore item quantities to stock if the checkout session expired
                 Integer userId = userService.findByEmail(principal.getName()).getUserId();
                 cartService.restoreItemQuantitiesToStock(userId);
 
-                // Remove the checkout start time attribute
+                // xoa session checkout
                 session.removeAttribute("checkoutStartTime");
 
-                // Redirect to cart with a message indicating that checkout has expired
+                // chuyen huong ve trang gio hang voi thong bao checkout het han
                 return "redirect:/cart?checkoutExpired=true";
             }
         }
 
-        return "redirect:/payment"; // Proceed to payment page if session is valid
+        return "redirect:/payment"; // chuyen huong ve trang thanh toan ( chua co)
     }
 }
