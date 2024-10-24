@@ -63,7 +63,7 @@
                                 <!--                                &lt;!&ndash; Display the link to the product list if there are no orders &ndash;&gt;-->
                                 <!--                                <a th:if="${message}" th:href="${productListLink}">Mua ngay</a>-->
                                 <div class="axil-dashboard-order" th:if="orders != null">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive" th:if="${message == null}">
                                         <div class="filter-section">
                                             <label for="statusFilter">Lọc theo trạng thái: </label>
                                             <select id="statusFilter" name="status"
@@ -108,14 +108,14 @@
                                                         <!-- First -->
                                                         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                                                             <a class="page-link" th:href="@{/orders(page=0, size=10, status=${status != null && status != '' ? status : ''})}">
-                                                                First
+                                                                Đầu
                                                             </a>
                                                         </li>
 
                                                         <!-- Previous -->
                                                         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                                                             <a class="page-link" th:href="@{/orders(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}" th:if="${currentPage > 0}">
-                                                                Previous
+                                                                Trước
                                                             </a>
                                                         </li>
 
@@ -128,14 +128,14 @@
                                                         <!-- Next -->
                                                         <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                                                             <a class="page-link" th:href="@{/orders(page=${currentPage + 1}, size=10, status=${status != null && status != '' ? status : ''})}" th:if="${currentPage < totalPages - 1}">
-                                                                Next
+                                                                Sau
                                                             </a>
                                                         </li>
 
                                                         <!-- Last -->
                                                         <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                                                             <a class="page-link" th:href="@{/orders(page=${totalPages - 1}, size=10, status=${status != null && status != '' ? status : ''})}">
-                                                                Last
+                                                                Cuối
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -144,9 +144,9 @@
 
                                             <!-- Pagination Info -->
                                             <div class="text-center mt-3">
-                                                <span>Showing page [[${currentPage + 1}]] of [[${totalPages}]]</span>
+                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span>
                                                 <br/>
-                                                <span>Total items: [[${totalItems}]]</span>
+                                                <span>Tổng đơn: [[${totalItems}]]</span>
                                             </div>
                                         </div>
                                     </div>
