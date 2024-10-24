@@ -147,8 +147,8 @@
                                         <div class="axil-dashboard-author">
                                             <div class="media">
                                                 <div class="thumbnail">
-                                                    <a href="view-store.html"><img
-                                                            th:src="@{/images/product/author1.png}"
+                                                    <a th:href="@{/view-store/{storeId}(storeId=${storeId})}"><img
+                                                            th:src="@{storeImage}" alt="Store Image"
                                                             class="author-image"></a>
                                                 </div>
                                                 <div class="media-body-1">
@@ -158,38 +158,41 @@
                                                                 th:text="${storeName}"></h3></span></a>
                                                     </div>
                                                     <div class="info-row">
-                                                        <a href="view-store.html"><i
+                                                        <a th:href="@{/view-store/{storeId}(storeId=${storeId})}"><i
                                                                 class="flaticon-shop hover-flip-item"> Xem cửa hàng</i></a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="product-detail.html">
-                                        <div class="product-card" th:each="detail : ${orderDetails}">
-                                            <div class="product-left">
-                                                <img th:src="${detail.productImage}" alt="Product Image"
-                                                     class="product-image">
-                                                <div class="product-info">
-                                                    <h2 class="product-name" th:text="${detail.productName}"></h2>
-                                                    <p class="product-brand"
-                                                       th:text="'Phân loại hàng: '+ ${detail.categoryName}"></p>
-                                                    <p class="product-category"
-                                                       th:text="'Loại: '+ ${detail.sizeAndColor}"></p>
-                                                    <p class="product-category"
-                                                       th:text="'Số lượng: '+ ${detail.quantity}"></p>
-                                                    <!--                                                <span class="product-policies">15 Days Returns | 15 Days Free Returns</span>-->
+                                    <div th:each="detail : ${orderDetails}">
+                                        <a th:href="@{/product-detail/{productId}(productId=${detail.productId})}">
+                                            <div class="product-card">
+                                                <div class="product-left">
+                                                    <img th:src="${detail.productImage}" alt="Product Image"
+                                                         class="product-image">
+                                                    <div class="product-info">
+                                                        <h2 class="product-name" th:text="${detail.productName}"></h2>
+                                                        <p class="product-brand"
+                                                           th:text="'Phân loại hàng: '+ ${detail.categoryName}"></p>
+                                                        <p class="product-category"
+                                                           th:text="'Loại: '+ ${detail.sizeAndColor}"></p>
+                                                        <p class="product-category"
+                                                           th:text="'Số lượng: '+ ${detail.quantity}"></p>
+                                                        <!--                                                <span class="product-policies">15 Days Returns | 15 Days Free Returns</span>-->
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="product-right">
+                                                <div class="product-right">
                                                 <span class="product-price"
                                                       th:text="${detail.productTotalPrice}"></span>
-                                                <span class="original-price"
-                                                      th:text="${detail.productTotalPrice}"></span><br>
-                                                <span class="shop-rating" th:text="${detail.avgRating} + ' ★'"></span>
+                                                    <span class="original-price"
+                                                          th:text="${detail.productTotalPrice}"></span><br>
+                                                    <span class="shop-rating"
+                                                          th:text="${detail.avgRating} + ' ★'"></span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    </div>
                                     <div class="summary">
                                         <div class="summary-row">
                                             <span class="summary-label">Phí sản phẩm</span>

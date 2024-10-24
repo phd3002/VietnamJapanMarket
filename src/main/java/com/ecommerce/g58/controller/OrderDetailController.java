@@ -36,6 +36,8 @@ public class OrderDetailController {
             model.addAttribute("shippingStatus", firstDetail.getShippingStatus());
             model.addAttribute("trackingNumber", firstDetail.getTrackingNumber());
             model.addAttribute("storeName", firstDetail.getStoreName());
+            model.addAttribute("storeImage", firstDetail.getStoreImage());
+            model.addAttribute("storeId", firstDetail.getStoreId());
         }
 
         return "order-detail"; // Thymeleaf template name

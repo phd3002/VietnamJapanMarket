@@ -13,6 +13,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
 
     @Query(value = "SELECT \n" +
             "    o.order_id, \n" +
+            "    p.product_id, \n" +
+            "    p.store_id, \n" +
             "    p.product_name, \n" +
             "    pi.thumbnail AS product_image, \n" +
             "    c.category_name, \n" +
@@ -23,6 +25,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    od.price AS product_price, \n" +
             "    f.rating AS avg_rating, \n" +
             "    st.store_name, \n" +
+            "    st.store_image, \n" +  // Added
             "    inv.total_amount, \n" +
             "    inv.shipping_fee, \n" +
             "    pay.payment_method, \n" +
