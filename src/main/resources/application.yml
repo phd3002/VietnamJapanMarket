@@ -48,6 +48,14 @@ spring:
           starttls:
             enable: true
 server:
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID
+        same-site: Lax
+        http-only: true
+        secure: false
+      timeout: 60m
   port: 8080
   error:
     include-stacktrace: always

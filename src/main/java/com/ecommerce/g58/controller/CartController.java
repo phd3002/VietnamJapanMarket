@@ -3,15 +3,11 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.CartItemRepository;
-import com.ecommerce.g58.repository.ProductRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
 import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.ProductService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.utils.SecurityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +27,6 @@ import java.util.stream.Collectors;
 
 @Controller
 public class CartController {
-    private static final Logger logger = LoggerFactory.getLogger(CartController.class);
 
     @Autowired
     private CartService cartService;
@@ -47,12 +42,6 @@ public class CartController {
 
     @Autowired
     private CartItemRepository cartItemRepository;
-
-    @Autowired
-    private ProductVariationRepository productVariationRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private SecurityUtils securityUtils;
@@ -174,13 +163,10 @@ public class CartController {
     @GetMapping("/api/cart/count")
     @ResponseBody
     public int getCartItemCount() {
-        logger.info("API endpoint /api/cart/count called.");
         Integer userId = securityUtils.getCurrentUserId();
         if (userId != null) {
-            logger.info("User ID found: {}", userId);
             return cartService.getCartItemCount(userId);
         }
-        logger.warn("User ID not found, returning cart count as 0");
         return 0;
     }
 }

@@ -70,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 // Public pages and resources
                 .antMatchers(
                         "/","/**", "/sign-up/confirm-code/**",
-                        "/address/**", "/cart-detail/**", "/checkout/**",
+                        "/address/**", "/cart-detail/**",
                         "/coming-soon/**", "/confirm-code/**", "/footer/**",
                         "/head/**", "/header/**",
                         "/homepage/**", "/homepageOrg/**", "/homepageTest/**",
@@ -88,6 +88,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
                 // Any other request must be authenticated
                 .anyRequest().authenticated()
+                .and()
+
+                // Session Management Configuration
+                .sessionManagement()
+                .invalidSessionUrl("/sign-in?session=invalid") // Redirect on invalid session
+                .sessionFixation().none() // Prevents creating a new session after login
                 .and()
                 // Logout configuration
                 .logout()

@@ -7,6 +7,60 @@
 
     <!-- Including CSS Files from base.html -->
     <th:block th:replace="~{base :: head}"></th:block>
+    <style>
+        .checkout-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .user-info, .order-summary {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+
+        .order-summary {
+            margin-left: 10px;
+        }
+
+        /* Make the layout stack vertically on smaller screens */
+        @media (max-width: 768px) {
+            .checkout-container {
+                flex-direction: column;
+            }
+
+            .user-info, .order-summary {
+                width: 100%;
+                margin: 0;
+            }
+        }
+
+        .checkout-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #616eff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #616eff;
+        }
+
+        .checkout-btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body class="sticky-header">
@@ -20,86 +74,65 @@
     <div class="axil-checkout-area axil-section-gap">
         <div class="container">
             <form action="#">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="axil-checkout-billing">
-                            <h4 class="title mb--40">Thông tin người mua</h4>
-                            <div class="form-group">
-                                <span>Họ tên</span>
-                                <input type="text" id="full-name">
-                            </div>
-                            <div class="form-group">
-                                <span>Số điện thoại</span>
-                                <input type="text" id="phone-number">
-                            </div>
-                            <div class="form-group">
-                                <span>Địa chỉ email</span>
-                                <input type="text" id="email-address">
-                            </div>
-                            <div class="form-group">
-                                <span>Quốc gia</span>
-                                <select id="country">
-                                    <option value="vietnam">Việt Nam</option>
-                                    <option value="nhatban">Nhật Bản</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <span>Địa chỉ chi tiết</span>
-                                <input type="text" id="address">
-                            </div>
+                <div class="checkout-container">
+                    <!-- User Information Section -->
+                    <div class="user-info">
+                        <h4 class="title mb--40">Thông tin người mua</h4>
+                        <div class="form-group">
+                            <span>Họ tên</span>
+                            <input type="text" id="full-name">
+                        </div>
+                        <div class="form-group">
+                            <span>Số điện thoại</span>
+                            <input type="text" id="phone-number">
+                        </div>
+                        <div class="form-group">
+                            <span>Địa chỉ email</span>
+                            <input type="text" id="email-address">
+                        </div>
+                        <div class="form-group">
+                            <span>Quốc gia</span>
+                            <select id="country">
+                                <option value="vietnam">Việt Nam</option>
+                                <option value="nhatban">Nhật Bản</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <span>Địa chỉ chi tiết</span>
+                            <input type="text" id="address">
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="axil-order-summery order-checkout-summery">
-                            <h5 class="title mb--20">Đơn hàng của bạn</h5>
-                            <div class="summery-table-wrap">
-                                <table class="table summery-table">
-                                    <thead>
-                                    <tr>
-                                        <th width="70%">Sản phẩm</th>
-                                        <th width="10%">Đơn giá</th>
-                                        <th width="10%">Số lượng</th>
-                                        <th width="10%">Thành tiền</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr class="order-product">
-                                        <td><img src="../static/images/product/categories/beauty.png"
-                                                 height="100" width="100"/>Áo thun nam<br>
-                                            <span>Loại: Xanh, M</span>
-                                        </td>
-                                        <td>$117.00</td>
-                                        <td>1</td>
-                                        <td>$117.00</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="shipping-method">
-                                <h5 class="title mb--20">Phương thức vận chuyển</h5>
-                                <div class="row">
-                                    <div class="col-sm-12 d-flex justify-content-between">
-                                        <div>
-                                            <button id="ghn" class="shipping-btn btn-common selected"
-                                                    data-price="30000">Giao hàng nhanh
-                                            </button>
-                                            <button id="dhl" class="shipping-btn btn-common" data-price="20000">DHL
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <span id="shipping-price-ghn" class="shipping-price">30.000đ</span>
-                                            <span id="shipping-price-dhl" class="shipping-price" style="display:none;">20.000đ</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="order-total row">
-                                <div class="col-sm-12 d-flex justify-content-end">
-                                    <h5 class="title mb-0">Tổng số tiền (<span>1</span> sản phẩm):
-                                        <span id="total-price" style="color: #bb2d3b;">$117.00</span>
-                                    </h5>
-                                </div>
-                            </div>
+
+                    <!-- Order Summary Section -->
+                    <div class="order-summary">
+                        <h5 class="title mb--20">Đơn hàng của bạn</h5>
+                        <div class="summery-table-wrap">
+                            <table class="table summery-table">
+                                <thead>
+                                <tr>
+                                    <th width="70%">Sản phẩm</th>
+                                    <th width="10%">Đơn giá</th>
+                                    <th width="10%">Số lượng</th>
+                                    <th width="10%">Thành tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Loop through the cartItems -->
+                                <tr th:each="item : ${cartItems}" class="order-product">
+                                    <td>
+                                        <img th:src="${item.variationId.imageId.thumbnail}" alt="Product Image" height="100" width="100"/>
+                                        <span th:text="${item.productId.productName}"></span><br>
+                                        <span>Loại:
+                                            <span th:text="${item.variationId.color.colorName}"></span>,
+                                            <span th:text="${item.variationId.size.sizeName}"></span>
+                                        </span>
+                                    </td>
+                                    <td th:text="${item.price}"></td>
+                                    <td th:text="${item.quantity}"></td>
+                                    <td th:text="${item.price * item.quantity}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="order-payment-method">
                             <h5 class="title mb--20">Phương thức thanh toán</h5>
@@ -163,6 +196,12 @@
 
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>
+
+<script>
+    window.addEventListener("beforeunload", function(event) {
+        navigator.sendBeacon('/checkout/cancel'); // No need to handle response in 'beforeunload'
+    });
+</script>
 
 <!-- JS
 ============================================ -->

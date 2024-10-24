@@ -31,5 +31,7 @@ public interface CartService {
 
     int getCartItemCount(Integer userId); // lay so luong mon hang trong gio hang
 
+    void subtractItemQuantitiesFromStock(Integer userId);
 
+    void restoreItemQuantitiesToStock(Integer userId);
 }
