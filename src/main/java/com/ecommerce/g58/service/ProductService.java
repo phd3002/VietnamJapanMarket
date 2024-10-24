@@ -50,4 +50,8 @@ public interface ProductService {
 
     List<Products> getProductsByStoreId(Stores storeId);
 
+    Products saveProduct(Products product);
+
+    void deleteProductById(Integer productId);
+
 }

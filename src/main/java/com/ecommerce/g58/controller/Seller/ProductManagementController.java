@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -29,9 +30,18 @@ public class ProductManagementController {
         return "seller/product-manager";
     }
 
-//    @PostMapping("/add-product")
-//    public String addProduct(@ModelAttribute Products product) {
-//        productService.saveProduct(product);
-//        return "redirect:/api/seller-management/seller-products?storeId=" + product.getStoreId().getStoreId();
-//    }
+    @PostMapping("/add-product")
+    public String addProduct(@ModelAttribute Products product) {
+        productService.saveProduct(product);
+        return "redirect:/seller-products/" + product.getStoreId().getStoreId();
+    }
+
+    @GetMapping("/delete-product/{productId}")
+    public String deleteProduct(@PathVariable Integer productId, HttpServletRequest request) {
+        productService.deleteProductById(productId);
+        String referer = request.getHeader("Referer");
+//        return "redirect:" + referer;
+        return "redirect:" + (referer != null ? referer : "/seller-products");
+    }
+
 }
