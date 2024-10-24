@@ -2,12 +2,10 @@ package com.ecommerce.g58.controller;
 
 
 import com.ecommerce.g58.dto.ProductDTO;
-import com.ecommerce.g58.entity.Categories;
-import com.ecommerce.g58.entity.Products;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.ProductVariation;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.service.CategoriesService;
 import com.ecommerce.g58.service.ProductService;
+import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,21 +22,25 @@ public class HomeController {
     @Autowired
     private CategoriesService categoriesService;
 
-    @GetMapping({"/","/homepage"})
+    @Autowired
+    private UserService userService;
+
+    @GetMapping({"/", "/homepage"})
     public String showHomePage(Model model, Principal principal) {
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         if (principal != null) {
+            Users user = userService.findByEmail(principal.getName());  // Fetch user details by email
             model.addAttribute("isLoggedIn", true);
-            model.addAttribute("username", principal.getName());  // Tên người dùng
+            model.addAttribute("username", user.getFirstName());  // Pass firstName instead of email
         } else {
             model.addAttribute("isLoggedIn", false);
         }
-//        List<Products> products = productService.getAllProducts();
-//        List<Categories> categories = categoriesService.getAllCategories();
+        List<Categories> categories = categoriesService.getAllCategories();
         List<ProductDTO> productDetails = productService.getProductDetails();
+        List<ProductDTO> searchProduct = productService.getSearchProduct();
         model.addAttribute("productDetails", productDetails);
-        model.addAttribute("categories", categoriesService.getAllCategories());
-
+        model.addAttribute("searchProduct", searchProduct);
+        model.addAttribute("categories", categories);
         return "homepage";
     }
 }

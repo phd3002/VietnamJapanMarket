@@ -1,9 +1,7 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import javax.persistence.*;
 @Entity
 @Data
 @Builder

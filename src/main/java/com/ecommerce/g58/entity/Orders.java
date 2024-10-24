@@ -1,7 +1,7 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,6 +59,9 @@ public class Orders {
     @JoinColumn(name = "unit_id")
     private ShippingUnit unitId;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
     private List<OrderDetails> orderDetails;
+
+    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
+    private List<ShippingStatus> shippingStatus;
 }

@@ -1,8 +1,7 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
-import java.math.BigDecimal;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -19,10 +18,10 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
-    private Cart cartId;
+    private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Products productId;
 
     @ManyToOne
@@ -33,5 +32,5 @@ public class CartItem {
     private int quantity;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Integer price;
 }

@@ -1,371 +1,21 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:16 GMT -->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Home Page</title>
-    <meta name="robots" content="noindex, follow"/>
-    <meta name="description" content="">
+    <title th:text="${pageTitle} ?: 'My Orders'"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
 
-    <!-- CSS
-    ============================================ -->
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../static/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/font-awesome.css">
-    <link rel="stylesheet" href="../static/css/vendor/flaticon/flaticon.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick.css">
-    <link rel="stylesheet" href="../static/css/vendor/slick-theme.css">
-    <link rel="stylesheet" href="../static/css/vendor/jquery-ui.min.css">
-    <link rel="stylesheet" href="../static/css/vendor/sal.css">
-    <link rel="stylesheet" href="../static/css/vendor/magnific-popup.css">
-    <link rel="stylesheet" href="../static/css/vendor/base.css">
-    <link rel="stylesheet" href="../static/css/style.min.css">
-    <link rel="stylesheet" href="../static/css/style-2.css">
+    <!-- Including CSS Files from base.html -->
+    <th:block th:replace="~{base :: head}"></th:block>
 </head>
 
-
 <body class="sticky-header">
-<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
-<!-- Start Header -->
-<header class="header axil-header header-style-1">
-    <div class="axil-header-top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <div class="header-top-dropdown">
-                        <div class="dropdown">
-                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                English
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">English</a></li>
-                                <li><a class="dropdown-item" href="#">Japanese</a></li>
-                                <li><a class="dropdown-item" href="#">Vietnamese</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="header-top-link">
-                        <ul class="quick-link">
-                            <li><a href="sign-up.html">Join Us</a></li>
-                            <li><a href="sign-in.html">Sign In</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Start Mainmenu Area  -->
-    <div id="axil-sticky-placeholder"></div>
-    <div class="axil-mainmenu">
-        <div class="container">
-            <div class="header-navbar">
-                <div class="header-brand">
-                    <a href="homepage.html" class="logo logo-dark">
-                        <img src="../static/images/logo/vj-market.png" alt="Site Logo">
-                    </a>
-                </div>
-                <div class="header-main-nav">
-                    <!-- Start Mainmanu Nav -->
-                    <nav class="mainmenu-nav">
-                        <button class="mobile-close-btn mobile-nav-toggler"><i class="fas fa-times"></i></button>
-                        <div class="mobile-nav-brand">
-                            <a href="homepage.html" class="logo">
-                                <img src="../static/images/logo/vj-market.png" alt="Site Logo">
-                            </a>
-                        </div>
-                        <ul class="mainmenu">
-                            <li>
-                                <img src="../static/images/logo/baner.png">
-                            </li>
-                        </ul>
-                    </nav>
-                    <!-- End Mainmanu Nav -->
-                </div>
-                <div class="header-action">
-                    <ul class="action-list">
-                        <li class="axil-search">
-                            <a href="javascript:void(0)" class="header-search-icon" title="Search">
-                                <i class="flaticon-magnifying-glass"></i>
-                            </a>
-                        </li>
-                        <li class="wishlist">
-                            <a href="wishlist.html">
-                                <i class="flaticon-heart"></i>
-                            </a>
-                        </li>
-                        <li class="notification">
-                            <a href="my-account.html#nav-notification" class="notification-dropdown-btn">
-                                <i class="flaticon-envelope"></i>
-                                <span class="notification-count"></span>
-                            </a>
 
-                            <!-- Notification Dropdown -->
-                            <div id="notification-dropdown" class="notification-dropdown">
-                                <div class="notification-content-wrap">
-                                    <div class="notification-header">
-                                        <p>New notifications</p>
-                                    </div>
-                                    <div class="notification-body">
-                                        <!-- Notification Item -->
-                                        <div class="notification-item">
-                                            <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png"
-                                                     alt="Notification Icon">
-                                            </div>
-                                            <div class="item-content">
-                                                <h3 class="item-title">New message from John</h3>
-                                                <p class="item-text">Hey, how's it going?</p>
-                                                <span class="item-time">2 minutes ago</span>
-                                            </div>
-                                        </div>
-                                        <div class="notification-item">
-                                            <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png"
-                                                     alt="Notification Icon">
-                                            </div>
-                                            <div class="item-content">
-                                                <h3 class="item-title">New message from John</h3>
-                                                <p class="item-text">Hey, how's it going?</p>
-                                                <span class="item-time">2 minutes ago</span>
-                                            </div>
-                                        </div>
-                                        <!-- Repeat for more notification items -->
-                                    </div>
-                                    <div class="notification-footer">
-                                        <a href="my-account.html#nav-notification">View All Notifications</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="shopping-cart">
-                            <a href="#" class="cart-dropdown-btn">
-                                <span class="cart-count">3</span>
-                                <i class="flaticon-shopping-cart"></i>
-                            </a>
-                        </li>
-                        <li class="my-account">
-                            <a href="javascript:void(0)">
-                                <i class="flaticon-person"></i>
-                            </a>
-                            <div class="my-account-dropdown">
-                                <span class="title">QUICKLINKS</span>
-                                <ul>
-                                    <li>
-                                        <a href="my-account.html">My Account</a>
-                                    </li>
-                                    <li>
-                                        <a href="order.html">My Orders</a>
-                                    </li>
-                                </ul>
-                                <div class="login-btn">
-                                    <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
-                                </div>
-                                <div class="reg-footer text-center">No account yet? <a href="sign-up.html"
-                                                                                       class="btn-link">REGISTER
-                                    HERE.</a></div>
-                            </div>
-                        </li>
-                        <li class="axil-mobile-toggle">
-                            <button class="menu-btn mobile-nav-toggler">
-                                <i class="flaticon-menu-2"></i>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Mainmenu Area -->
-    <div class="header-search-modal" id="header-search-modal">
-        <button class="card-close sidebar-close"><i class="fas fa-times"></i></button>
-        <div class="header-search-wrap">
-            <div class="card-header">
-                <form action="#">
-                    <div class="input-group">
-                        <input type="search" class="form-control" name="prod-search" id="prod-search"
-                               placeholder="Write Something....">
-                        <button type="submit" class="axil-btn btn-bg-primary"><i class="far fa-search"></i></button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-body">
-                <div class="search-result-header">
-                    <h6 class="title">24 Result Found</h6>
-                    <a href="product-list.html" class="view-all">View All</a>
-                </div>
-                <div class="psearch-results">
-                    <div class="axil-product-list">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-rating">
-                                <span class="rating-icon">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fal fa-star"></i>
-                            </span>
-                                <span class="rating-number"><span>100+</span> Reviews</span>
-                            </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
-                            <div class="product-price-variant">
-                                <span class="price current-price">$29.99</span>
-                                <span class="price old-price">$49.99</span>
-                            </div>
-                            <div class="product-cart">
-                                <a href="cart-detail.html" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
-                                <a href="wishlist.html" class="cart-btn"><i class="fal fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="axil-product-list">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-rating">
-                                <span class="rating-icon">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fal fa-star"></i>
-                            </span>
-                                <span class="rating-number"><span>100+</span> Reviews</span>
-                            </div>
-                            <h6 class="product-title"><a href="product-detail.html">Media Remote</a></h6>
-                            <div class="product-price-variant">
-                                <span class="price current-price">$29.99</span>
-                                <span class="price old-price">$49.99</span>
-                            </div>
-                            <div class="product-cart">
-                                <a href="cart-detail.html" class="cart-btn"><i class="fal fa-shopping-cart"></i></a>
-                                <a href="wishlist.html" class="cart-btn"><i class="fal fa-heart"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Header Search Modal End -->
+<!-- Include Header Fragment -->
+<div th:replace="base :: header"></div>
 
-
-    <div class="cart-dropdown" id="cart-dropdown">
-        <div class="cart-content-wrap">
-            <div class="cart-header">
-                <h2 class="header-title">Cart review</h2>
-                <button class="cart-close sidebar-close"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="cart-body">
-                <ul class="cart-item-list">
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-01.png"
-                                                               alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</span>
-                                <span class="rating-number">(64)</span>
-                            </div>
-                            <h3 class="item-title"><a href="product-detail.html">Wireless PS Handler</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>155.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="15">
-                            </div>
-                        </div>
-                    </li>
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-02.png"
-                                                               alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</span>
-                                <span class="rating-number">(4)</span>
-                            </div>
-                            <h3 class="item-title"><a href="product-detail.html">Gradient Light Keyboard</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>255.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="5">
-                            </div>
-                        </div>
-                    </li>
-                    <li class="cart-item">
-                        <div class="item-img">
-                            <a href="product-detail.html"><img src="../static/images/product/electric/product-03.png"
-                                                               alt="Commodo Blown Lamp"></a>
-                            <button class="close-btn"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="item-content">
-                            <div class="product-rating">
-                                <span class="icon">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</span>
-                                <span class="rating-number">(6)</span>
-                            </div>
-                            <h3 class="item-title"><a href="product-detail.html">HD CC Camera</a></h3>
-                            <div class="item-price"><span class="currency-symbol">$</span>200.00</div>
-                            <div class="pro-qty item-quantity">
-                                <input type="number" class="quantity-input" value="100">
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="cart-footer">
-                <h3 class="cart-subtotal">
-                    <span class="subtotal-title">Subtotal:</span>
-                    <span class="subtotal-amount">$610.00</span>
-                </h3>
-                <div class="group-btn">
-                    <a href="cart-detail.html" class="axil-btn btn-bg-primary viewcart-btn">View Cart</a>
-                    <a href="checkout.html" class="axil-btn btn-bg-secondary checkout-btn">Checkout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<!-- End Header -->
-
+<!-- Main Content Section -->
 <main class="main-wrapper">
-
     <!-- Start My Account Area  -->
     <div class="axil-dashboard-area axil-section-gap">
         <div class="container">
@@ -374,7 +24,7 @@
                 <div class="axil-dashboard-author">
                     <div class="media">
                         <div class="thumbnail">
-                            <img src="../static/images/product/author1.png">
+                            <img th:src="@{/images/product/author1.png}">
                         </div>
                         <div class="media-body">
                             <h5 class="title mb-0">Hello ....</h5>
@@ -408,30 +58,102 @@
                         <div class="tab-content">
                             <!-- Orders Tab -->
                             <div class="tab-pane fade show active" id="nav-orders" role="tabpanel">
-                                <div class="axil-dashboard-order">
-                                    <div class="table-responsive">
+                                <!--                                &lt;!&ndash; Check if there is a message (no orders) &ndash;&gt;-->
+                                <!--                                <p th:if="${message}" th:text="${message}"></p>-->
+                                <!--                                &lt;!&ndash; Display the link to the product list if there are no orders &ndash;&gt;-->
+                                <!--                                <a th:if="${message}" th:href="${productListLink}">Mua ngay</a>-->
+                                <div class="axil-dashboard-order" th:if="orders != null">
+                                    <div class="table-responsive" th:if="${message == null}">
+                                        <div class="filter-section">
+                                            <label for="statusFilter">Lọc theo trạng thái: </label>
+                                            <select id="statusFilter" name="status"
+                                                    onchange="filterOrdersByStatus(this.value)">
+                                                <option value="" th:selected="${status == 'null'}">Tất cả</option>
+                                                <!-- Thay đổi giá trị thành chuỗi trống -->
+                                                <option value="Pending" th:selected="${status == 'Pending'}">Đang chờ
+                                                </option>
+                                                <option value="Processing" th:selected="${status == 'Processing'}">Đang
+                                                    chuẩn bị
+                                                </option>
+                                            </select>
+                                        </div>
                                         <table class="table">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Order</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Total</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">Đơn hàng</th>
+                                                <th scope="col">Ngày tạo đơn</th>
+                                                <th scope="col">Trạng thái</th>
+                                                <th scope="col">Số lượng</th>
+                                                <th scope="col">Tổng</th>
+                                                <th scope="col">Hành động</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr th:each="order : ${orders}">
-                                                <th scope="row" th:text="'#' + ${order.orderId}"></th>
+                                                <td th:text="${order.orderId}"></td>
                                                 <td th:text="${order.orderDate}"></td>
                                                 <td th:text="${order.status}"></td>
-                                                <td th:text="${order.orderDetails.size()} + ' items'"></td>
+                                                <td th:text="${order.totalQuantity}"></td>
                                                 <td th:text="${order.totalPrice}"></td>
-                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}" class="axil-btn view-btn">View</a></td>
+                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"
+                                                       class="axil-btn view-btn">Xem</a></td>
                                             </tr>
                                             </tbody>
                                         </table>
+                                        <!-- Phân trang -->
+                                        <div class="pagination-section" th:if="${totalPages > 0}">
+                                            <div class="d-flex justify-content-center">
+                                                <nav>
+                                                    <ul class="pagination">
+                                                        <!-- First -->
+                                                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                            <a class="page-link" th:href="@{/orders(page=0, size=10, status=${status != null && status != '' ? status : ''})}">
+                                                                Đầu
+                                                            </a>
+                                                        </li>
+
+                                                        <!-- Previous -->
+                                                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                            <a class="page-link" th:href="@{/orders(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}" th:if="${currentPage > 0}">
+                                                                Trước
+                                                            </a>
+                                                        </li>
+
+                                                        <!-- Page Numbers -->
+                                                        <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
+                                                            <a class="page-link" th:href="@{/orders(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}" th:text="${pageNum + 1}">
+                                                            </a>
+                                                        </li>
+
+                                                        <!-- Next -->
+                                                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                                            <a class="page-link" th:href="@{/orders(page=${currentPage + 1}, size=10, status=${status != null && status != '' ? status : ''})}" th:if="${currentPage < totalPages - 1}">
+                                                                Sau
+                                                            </a>
+                                                        </li>
+
+                                                        <!-- Last -->
+                                                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                                            <a class="page-link" th:href="@{/orders(page=${totalPages - 1}, size=10, status=${status != null && status != '' ? status : ''})}">
+                                                                Cuối
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+
+                                            <!-- Pagination Info -->
+                                            <div class="text-center mt-3">
+                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span>
+                                                <br/>
+                                                <span>Tổng đơn: [[${totalItems}]]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Message when no orders -->
+                                    <div th:if="${message}" class="text-center">
+                                        <p th:text="${message}"></p>
+                                        <a th:href="${productListLink}" class="axil-btn">Mua ngay</a>
                                     </div>
                                 </div>
                             </div>
@@ -443,132 +165,36 @@
     </div>
 </main>
 
+<!-- Include Footer Fragment -->
+<div th:replace="base :: footer"></div>
 
-<div class="service-area">
-    <div class="container">
-        <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img src="../static/images/icons/service1.png" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Fast &amp; Secure Delivery</h6>
-                        <p>Tell about your service.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img src="../static/images/icons/service2.png" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Money Back Guarantee</h6>
-                        <p>Within 10 days.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img src="../static/images/icons/service3.png" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">24 Hour Return Policy</h6>
-                        <p>No question ask.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img src="../static/images/icons/service4.png" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Pro Quality Support</h6>
-                        <p>24/7 Live support.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Start Footer Area  -->
-<footer class="axil-footer-area footer-style-2">
-    <!-- Start Footer Top Area  -->
-    <div class="footer-top separator-top">
-        <div class="container">
-            <div class="row">
-                <!-- Start Single Widget  -->
-                <div class="col-lg-6 col-sm-6">
-                    <div class="axil-footer-widget">
-                        <h5 class="widget-title">Support</h5>
-                        <div class="inner">
-                            <p>685 Market Street, Las Vegas, LA 95820</p>
-                            <ul class="support-list-item">
-                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
-                                    example@domain.com</a></li>
-                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
-                                </li>
-                                <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Widget  -->
-                <!-- Start Single Widget  -->
-                <div class="col-lg-6 col-sm-6">
-                    <div class="axil-footer-widget">
-                        <h5 class="widget-title">Account</h5>
-                        <div class="inner">
-                            <ul>
-                                <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="sign-up.html">Login / Register</a></li>
-                                <li><a href="cart-detail.html">Cart</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="product-list.html">Shop</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Widget  -->
-            </div>
-        </div>
-    </div>
-    <!-- End Footer Top Area  -->
-</footer>
-<!-- End Footer Area  -->
-
-<!-- Header Search Modal End -->
 <!-- JS
 ============================================ -->
-<!-- Modernizer JS -->
-<script src="../static/js/vendor/modernizr.min.js"></script>
-<!-- jQuery JS -->
-<script src="../static/js/vendor/jquery.js"></script>
-<!-- Bootstrap JS -->
-<script src="../static/js/vendor/popper.min.js"></script>
-<script src="../static/js/vendor/bootstrap.min.js"></script>
-<script src="../static/js/vendor/slick.min.js"></script>
-<script src="../static/js/vendor/js.cookie.js"></script>
-<!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
-<script src="../static/js/vendor/jquery-ui.min.js"></script>
-<script src="../static/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="../static/js/vendor/jquery.countdown.min.js"></script>
-<script src="../static/js/vendor/sal.js"></script>
-<script src="../static/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="../static/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="../static/js/vendor/isotope.pkgd.min.js"></script>
-<script src="../static/js/vendor/counterup.js"></script>
-<script src="../static/js/vendor/waypoints.min.js"></script>
-
-<!-- Main JS -->
-<script src="../static/js/main.js"></script>
-<script src="../static/js/script.js"></script>
-<script src="../static/js/script.js"></script>
+<script th:src="@{/js/vendor/modernizr.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.js}"></script>
+<script th:src="@{/js/vendor/popper.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/js/vendor/slick.min.js}"></script>
+<script th:src="@{/js/vendor/js.cookie.js}"></script>
+<script th:src="@{/js/vendor/jquery-ui.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.ui.touch-punch.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.countdown.min.js}"></script>
+<script th:src="@{/js/vendor/sal.js}"></script>
+<script th:src="@{/js/vendor/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/vendor/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/counterup.js}"></script>
+<script th:src="@{/js/vendor/waypoints.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+<script>
+    function filterOrdersByStatus(status) {
+        let url = '/orders';
+        if (status !== null && status !== '') {
+            url += '?status=' + status;
+        }
+        window.location.href = url;
+    }
+</script>
 </body>
-
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:17 GMT -->
 </html>

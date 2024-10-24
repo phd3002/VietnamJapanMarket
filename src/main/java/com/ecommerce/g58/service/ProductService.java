@@ -1,71 +1,53 @@
 package com.ecommerce.g58.service;
 
 import com.ecommerce.g58.dto.ProductDTO;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.ProductVariation;
-import com.ecommerce.g58.entity.Products;
+import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ProductRepository;
 import com.ecommerce.g58.repository.ProductVariationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductService {
+public interface ProductService {
+    List<ProductDTO> getProductDetails();
 
-    @Autowired
-    private ProductRepository productRepository;
+    List<Products> getProductsByCategory(Long categoryId);
 
-    @Autowired
-    private ProductImageRepository productImageRepository;
+    List<ProductDTO> getSearchProduct();
 
-    @Autowired
-    private ProductVariationRepository productVariationRepository;
+    ProductVariation getProductVariationById(Integer variationId);
 
-    public List<ProductDTO> getProductDetails() {
-        List<Object[]> results = productRepository.findProductDetailsNative();
-        List<ProductDTO> productDetails = new ArrayList<>();
+    ProductDetailDTO getProductDetailByProductIdAndVariationId(Integer productId, Integer variationId);
 
-        for (Object[] result : results) {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setThumbnail((String) result[1]);
-            productDTO.setProductName((String) result[2]);
-            productDTO.setPrice((BigDecimal) result[3]);
+    List<Products> getAllProducts();
 
-            productDetails.add(productDTO);
-        }
+    Page<Products> findAllProducts(Pageable pageable);
 
-        return productDetails;
-    }
+    List<Products> getLatest5Products();
 
-    //    public List<ProductDTO> findProductDetails() {
-//        return productRepository.findProductDetails();
-//    }
-    public List<Products> getAllProducts() {
-        return productRepository.findAll(); // Fetch all products
-    }
+    List<ProductImage> getProductImagesByProductId(Integer productId);
 
-    public List<Products> getLatest5Products() {
-        return productRepository.findTop5ByOrderByCreatedAtDesc(); // Fetch latest 5 products
-    }
+    List<ProductVariation> getProductVariationsByProductId(Integer productId);
 
-    // Fetch product images by productId
-    public List<ProductImage> getProductImagesByProductId(Integer productId) {
-        return productImageRepository.findByProductProductId(productId);
-    }
+    Products getProductById(Integer productId);
 
-    // Fetch product variations by productId
-    public List<ProductVariation> getProductVariationsByProductId(Integer productId) {
-        return productVariationRepository.findByProductIdProductId(productId);
-    }
+    List<ProductDTO> searchProducts(String query);
 
-    public Products getProductById(Long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found!")); // Fetch product by id
-    }
+    ProductDetailDTO getProductDetailByProductIdAndColorId(Integer productId, Integer colorId);
 
+    List<Color> getAvailableColors(Integer productId);
+
+    List<String> getAvailableSizesByProductIdAndColorId(Integer productId, Integer colorId);
+
+    List<Products> getProductsByStoreId(Stores storeId);
 
 }

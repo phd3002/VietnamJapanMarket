@@ -213,6 +213,12 @@ img {
     height: auto
 }
 
+.product-thumbnail {
+    width: 200px;  /* Set an appropriate width */
+    height: 200px; /* Set an appropriate height */
+    object-fit: cover;  /* Crop the image to fit, while preserving aspect ratio */
+}
+
 svg:not(:root) {
     overflow: hidden
 }
@@ -2434,15 +2440,12 @@ input[type=submit]:hover {
     }
 }
 
-.axil-breadcrumb-area .inner .bradcrumb-thumb::after {
+.axil-breadcrumb-area .inner .bradcrumb-thumb img {
     content: "";
     height: 110px;
     width: 110px;
     background-color: var(--color-white);
     border-radius: 50%;
-    position: absolute;
-    top: -10px;
-    right: 60px;
     z-index: -1
 }
 
@@ -7906,7 +7909,6 @@ a.axil-btn.btn-size-md i, button.axil-btn.btn-size-md i {
     border-radius: 10px;
     padding: 40px 30px;
     width: 800px;
-    height: 575px;
     max-height: 90vh;
     overflow: auto
 }
@@ -11593,7 +11595,7 @@ body.open .closeMask {
     position: relative;
     overflow: hidden;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     cursor: pointer;
     transition: all .4s
 }

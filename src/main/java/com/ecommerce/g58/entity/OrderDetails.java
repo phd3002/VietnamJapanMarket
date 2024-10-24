@@ -1,8 +1,7 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
-import java.math.BigDecimal;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -22,10 +21,6 @@ public class OrderDetails {
     private Orders orderId;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Orders order;
-
-    @ManyToOne
     @JoinColumn(name = "product_id")
     private Products productId;
 
@@ -37,5 +32,5 @@ public class OrderDetails {
     private int quantity;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Integer price;
 }

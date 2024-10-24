@@ -1,12 +1,13 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
-
-import java.math.BigDecimal;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Data
 @Builder
 @NoArgsConstructor
@@ -34,7 +35,7 @@ public class Products {
     private String productDescription;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Integer price;
 
     @Column(name = "weight")
     private float weight;
@@ -44,6 +45,12 @@ public class Products {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
+    private List<ProductVariation> productVariations;
+
+//    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+//    private List<ProductImage> productImages;
 
 }
 

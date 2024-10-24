@@ -1,8 +1,9 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
-import jakarta.persistence.*;
-import java.math.BigDecimal;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,8 +20,16 @@ public class Cart {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users userId;
+    private Users user;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Getter @Setter
+    private List<CartItem> cartItems = new ArrayList<>();
 
     @Column(name = "total_price", nullable = false)
-    private BigDecimal totalPrice;
+    private Integer totalPrice;
+
+    @Column(name = "total_amount", nullable = false)
+    private Integer totalAmount;
+
 }

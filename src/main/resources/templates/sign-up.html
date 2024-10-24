@@ -39,12 +39,12 @@
     <div class="signin-header">
         <div class="row align-items-center">
             <div class="col-md-6">
-                <a href="homepage.html" class="site-logo"><img src="../static/images/logo/vj-market.png" alt="logo"></a>
+                <a href="/homepage" class="site-logo"><img th:src="@{/images/logo/vj-market.png}" alt="logo"></a>
             </div>
             <div class="col-md-6">
                 <div class="singin-header-btn">
                     <p>Already a member?</p>
-                    <a href="sign-in.html" class="axil-btn btn-bg-secondary sign-up-btn">Sign In</a>
+                    <a href="/sign-in" class="axil-btn btn-bg-secondary sign-up-btn">Sign In</a>
                 </div>
             </div>
         </div>
@@ -100,10 +100,11 @@
                 <div class="axil-signin-form">
                     <h3 class="title">I'm New Here</h3>
                     <p class="b2 mb--55">Enter your detail below</p>
-
+                    <!-- Hiển thị thông báo lỗi nếu có -->
+                    <div th:if="${errorMessage}" class="error-message">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
                     <form th:action="@{/sign-up}" th:object="${users}" method="post" class="singin-form">
-                        <!-- CSRF Token -->
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                         <div class="form-group">
                             <label>User Name</label>
@@ -119,9 +120,7 @@
                         </div>
                         <div class="form-group">
                             <label>Confirm Password</label>
-                            <input type="password" name="confirmPassword" class="form-control" placeholder="Confirm your password">  <!-- Thêm trường confirmPassword -->
-<!--                            <label>Confirm Password</label>-->
-<!--                            <input type="password" th:field="*{confirmPassword}" name="confirmPassword" id="confirm-password" class="form-control" placeholder="Confirm your password">-->
+                            <input type="password" th:field="*{confirmPassword}" name="confirmPassword" id="confirm-password" class="form-control" placeholder="Confirm your password">
                         </div>
 
                         <div class="form-group mb--0">
