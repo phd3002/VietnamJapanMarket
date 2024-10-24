@@ -74,15 +74,21 @@ public class CheckoutController {
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
 
-        double totalPrice = 0.0;
-        for (CartItem item : cartItems) {
-            double itemPrice = item.getPrice();
-            int quantity = item.getQuantity();
-            totalPrice += itemPrice * quantity;
-        }
+        // tinh tong tien cua gio hang
+        double totalPrice = cartItems.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
 
+        // dat gia van chuyen la 50k
+        double shippingFee = 50000.0;
+
+        // tinh tong tien cua gio hang va van chuyen
+        double totalWithShipping = totalPrice + shippingFee;
+
+        // truyen thong tin gio hang va tong tien sang view
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("totalWithShipping", totalWithShipping);
 
         Map<Integer, String> productImages = new HashMap<>();
         for (CartItem item : cartItems) {
