@@ -13,12 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ProductServiceImp implements ProductService {
     @Autowired
     private ProductRepository productRepository;
@@ -157,6 +159,29 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<Products> getProductsByStoreId(Stores storeId) {
         return productRepository.findByStoreId(storeId);
+    }
+
+    @Override
+    public Products saveProduct(Products product) {
+        return productRepository.save(product);
+    }
+
+    @Override
+    public void deleteProductById(Integer productId) {
+        Products product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // Xóa biến thể sản phẩm và xóa hình ảnh liên quan đến biến thể
+        List<ProductVariation> variations = productVariationRepository.findByProductId(product);
+        for (ProductVariation variation : variations) {
+            if (variation.getImageId() != null) {
+                productImageRepository.deleteByImageId(variation.getImageId().getImageId());
+            }
+            productVariationRepository.delete(variation);
+        }
+
+        // Xóa sản phẩm
+        productRepository.deleteByProductId(productId);
     }
 
 }
