@@ -137,17 +137,21 @@ public class CartServiceImp implements CartService {
     @Transactional
     public void subtractItemQuantitiesFromStock(Integer userId) {
         logger.info("Called subtractItemQuantitiesFromStock for user ID: {}", userId);
-        List<CartItem> cartItems = getCartItemsByUserId(userId); // Get the cart items by user ID
+        List<CartItem> cartItems = getCartItemsByUserId(userId); // lấy các mặt hàng trong giỏ hàng theo ID người dùng
+        // Lặp qua các mặt hàng trong giỏ hàng và kiểm tra số lượng hàng tồn kho
         for (CartItem item : cartItems) {
             ProductVariation variation = productVariationRepository.findById(item.getVariationId().getVariationId())
                     .orElseThrow(() -> new EntityNotFoundException("Product variation not found"));
+            // Kiểm tra xem có đủ hàng tồn kho không
             if (variation.getStock() < item.getQuantity()) {
                 throw new IllegalArgumentException("Not enough stock available for product: " + variation.getVariationId());
             }
-            // Subtract the quantity
+            // Trừ số lượng hàng
             variation.setStock(variation.getStock() - item.getQuantity());
+            // Lưu thay đổi
             productVariationRepository.save(variation);
         }
+        // log dữ liệu
         logger.info("Successfully subtracted item quantities for user ID: {}", userId);
     }
 
@@ -155,11 +159,11 @@ public class CartServiceImp implements CartService {
     @Transactional
     public void restoreItemQuantitiesToStock(Integer userId) {
         logger.info("Called restoreItemQuantitiesToStock for user ID: {}", userId);
-        List<CartItem> cartItems = getCartItemsByUserId(userId); // Get the cart items by user ID
+        List<CartItem> cartItems = getCartItemsByUserId(userId); // lấy các mặt hàng trong giỏ hàng theo ID người dùng
         for (CartItem item : cartItems) {
             ProductVariation variation = productVariationRepository.findById(item.getVariationId().getVariationId())
                     .orElseThrow(() -> new EntityNotFoundException("Product variation not found"));
-            // Add the quantity back
+            // Tăng số lượng hàng trở lại
             variation.setStock(variation.getStock() + item.getQuantity());
             productVariationRepository.save(variation);
         }

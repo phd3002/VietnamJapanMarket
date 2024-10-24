@@ -13,8 +13,6 @@ import java.util.List;
 public interface CartService {
     Cart getOrCreateCart(Users user);
 
-//    void addToCart(Cart cart, Integer variantId, Integer productId, String productName, Integer imageId, int quantity, Integer price);
-
     void addProductToCart(Users user, ProductDetailDTO productDetail, int quantity, Cart cart);
 
     void removeCartItem(Integer cartItemId);
@@ -31,7 +29,7 @@ public interface CartService {
 
     int getCartItemCount(Integer userId); // lay so luong mon hang trong gio hang
 
-    void subtractItemQuantitiesFromStock(Integer userId);
+    void subtractItemQuantitiesFromStock(Integer userId); // tru so luong mon hang trong kho
 
-    void restoreItemQuantitiesToStock(Integer userId);
+    void restoreItemQuantitiesToStock(Integer userId); // phuc hoi so luong mon hang trong kho
 }

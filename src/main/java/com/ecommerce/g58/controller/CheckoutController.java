@@ -37,33 +37,18 @@ public class CheckoutController {
     private UserService userService;
 
     @Autowired
-    private ProductImageRepository productImageRepository; // dung de lay anh san pham
+    private ProductImageRepository productImageRepository;
 
-    @GetMapping("/session-info")
-    public ResponseEntity<String> getSessionInfo(HttpSession session) {
-        // lay thong tin session
-        StringBuilder sessionInfo = new StringBuilder();
-        sessionInfo.append("Session ID: ").append(session.getId()).append("\n");
-
-        // lay thoi gian hien tai de kiem tra thoi gian bat dau checkout
-        LocalDateTime checkoutTime = (LocalDateTime) session.getAttribute("checkoutSession");
-        // neu co thoi gian bat dau checkout, hien thi thong tin
-        if (checkoutTime != null) {
-            sessionInfo.append("Checkout Session Start Time: ").append(checkoutTime).append("\n");
-        } else {
-            sessionInfo.append("No checkout session active.\n");
-        }
-        // tra ve thong tin session
-        return new ResponseEntity<>(sessionInfo.toString(), HttpStatus.OK);
-    }
-
-
+    // hien thi trang checkout
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal) {
+
+        // neu chua dang nhap, chuyen huong ve trang dang nhap
         if (principal == null) {
             return "redirect:/sign-in";
         }
 
+        // lay thong tin user
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
@@ -102,14 +87,17 @@ public class CheckoutController {
         return "checkout";
     }
 
+    // khi nguoi dung bam nut "checkout" tren trang gio hang
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal) {
         logger.info("Session ID during checkout start: {}", session.getId());
 
+        // neu chua dang nhap, chuyen huong ve trang dang nhap
         if (principal == null) {
             return "redirect:/sign-in";
         }
 
+        // lay thong tin user
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
@@ -117,8 +105,6 @@ public class CheckoutController {
         }
 
         Integer userId = user.getUserId();
-
-        logger.info("Proceed to checkout called successfully for user: {}", userId);
 
         // tru so luong san pham trong kho
         cartService.subtractItemQuantitiesFromStock(userId);
@@ -129,14 +115,17 @@ public class CheckoutController {
         return "redirect:/checkout"; // Proceed to checkout page
     }
 
+    // khi nguoi dung huy bo checkout
     @PostMapping("/checkout/cancel")
     public ResponseEntity<Void> cancelCheckout(HttpSession session, Principal principal) {
         logger.info("Session ID during cancel: {}", session.getId());
 
+        // neu chua dang nhap, tra ve loi 401 Unauthorized
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        // lay thong tin user
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
@@ -148,21 +137,17 @@ public class CheckoutController {
         // tra lai so luong san pham trong kho
         cartService.restoreItemQuantitiesToStock(userId);
 
-        // kiem tra xem co session checkout hay khong
-        if (session.getAttribute("checkoutStartTime") != null) {
-            logger.info("Checkout session found, canceling checkout for user: {}", username);
-        } else {
-            logger.warn("No checkout session found for user: {}", username);
-        }
-
         // xoa session checkout
         session.removeAttribute("checkoutStartTime");
 
+        // tra ve 200 OK
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/confirm-checkout")
     public String confirmCheckout(HttpSession session, Principal principal) {
+
+        // neu chua dang nhap, chuyen huong ve trang dang nhap
         if (principal == null) {
             return "redirect:/sign-in";
         }
@@ -170,6 +155,7 @@ public class CheckoutController {
         // lay thoi gian bat dau checkout
         LocalDateTime checkoutStartTime = (LocalDateTime) session.getAttribute("checkoutStartTime");
 
+        // neu da co thoi gian bat dau checkout
         if (checkoutStartTime != null) {
             // neu checkout qua 30 phut, tra lai so luong san pham trong kho
             if (Duration.between(checkoutStartTime, LocalDateTime.now()).toMinutes() > 30) {
@@ -183,7 +169,6 @@ public class CheckoutController {
                 return "redirect:/cart?checkoutExpired=true";
             }
         }
-
-        return "redirect:/payment"; // chuyen huong ve trang thanh toan ( chua co)
+        return "redirect:/complete-checkout"; // chuyen huong ve trang hoan tat checkout (chua co)
     }
 }
