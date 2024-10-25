@@ -2,19 +2,13 @@ package com.ecommerce.g58.service;
 
 import com.ecommerce.g58.dto.ProductDTO;
 import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.dto.ProductWithVariationsDTO;
 import com.ecommerce.g58.entity.*;
-import com.ecommerce.g58.repository.ProductImageRepository;
-import com.ecommerce.g58.repository.ProductRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public interface ProductService {
@@ -50,7 +44,7 @@ public interface ProductService {
 
     List<Products> getProductsByStoreId(Stores storeId);
 
-    Products saveProduct(Products product);
+    void saveProduct(Products product);
 
     void deleteProductById(Integer productId);
 
