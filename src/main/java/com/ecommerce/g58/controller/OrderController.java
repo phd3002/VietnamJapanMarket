@@ -85,7 +85,7 @@ public class OrderController {
     @GetMapping("/orders")
     public String getOrders(@RequestParam(value = "status", required = false) String status,
                             @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int size,
+                            @RequestParam(defaultValue = "5") int size,
                             Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
@@ -98,7 +98,7 @@ public class OrderController {
 
         Page<OrdersDTO> orderPage = orderService.getOrdersByUserIdAndStatus(userId, status, PageRequest.of(page, size));
 
-        if (orderPage.isEmpty()) {
+        if (orderService.getOrdersByUserIdAndStatus(userId, null, PageRequest.of(page, size)).isEmpty()) {
             model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
             model.addAttribute("productListLink", "/product-detail");
         } else {

@@ -88,7 +88,8 @@
                                             id="status-order" th:text="${shippingStatus}"></span></h4>
                                     <div class="order-progress">
                                         <!--                                        <div class="order-progress-step active" (chi su dung khi da qua buoc nay, cac the o duoi tuong tu)>-->
-                                        <div class="order-progress-step">
+                                        <div th:classappend="${shippingStatus == 'Order Placed'} ? 'active' : ''"
+                                             class="order-progress-step">
                                             <i class="flaticon-calendar"></i>
                                             <p th:text="'Đơn hàng đã đặt'" style="color: black;"></p>
                                             <small id="order-placed-date">00:13 05-05-2022</small>
@@ -100,17 +101,20 @@
                                             <p th:text="'Thanh toán đã xác nhận'" style="color: black;"></p>
                                             <small id="payment-confirmed-date">00:43 05-05-2022</small>
                                         </div>
-                                        <div class="order-progress-step">
+                                        <div th:classappend="${shippingStatus == 'Shipping'} ? 'active' : ''"
+                                             class="order-progress-step">
                                             <i class="flaticon-truck"></i>
                                             <p th:text="'Đang giao hàng'" style="color: black;"></p>
                                             <small id="shipped-date">11:03 05-05-2022</small>
                                         </div>
-                                        <div class="order-progress-step">
+                                        <div th:classappend="${shippingStatus == 'Delivered'} ? 'active' : ''"
+                                             class="order-progress-step">
                                             <i class="flaticon-box"></i>
                                             <p th:text="'Đã giao hàng'" style="color: black;"></p>
                                             <small id="delivered-date">15:22 09-05-2022</small>
                                         </div>
-                                        <div class="order-progress-step">
+                                        <div th:classappend="${shippingStatus == 'Order Completed'} ? 'active' : ''"
+                                             class="order-progress-step">
                                             <i class="flaticon-star"></i>
                                             <p th:text="'Đơn hàng đã hoàn thành'" style="color: black;"></p>
                                             <small id="completed-date">15:23 09-05-2022</small>
