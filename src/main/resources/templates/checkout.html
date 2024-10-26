@@ -198,10 +198,30 @@
 <div th:replace="base :: footer"></div>
 
 <script>
-    window.addEventListener("beforeunload", function(event) {
-        navigator.sendBeacon('/checkout/cancel'); // No need to handle response in 'beforeunload'
+    // Function to check session status every 1 minute (60000 milliseconds)
+    let sessionCheckInterval = setInterval(function() {
+        console.log('Checking session status...');
+        fetch('/session-status')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.sessionValid) {
+                    console.log('Session expired, redirecting to homepage...');
+                    clearInterval(sessionCheckInterval); // Stop further checks before redirecting
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                console.error('Error checking session status:', error);
+                clearInterval(sessionCheckInterval); // Stop polling if an error occurs
+            });
+    }, 60000); // Check every 60 seconds
+
+    // Stop the interval if the user navigates away from the checkout page
+    window.addEventListener('beforeunload', function() {
+        clearInterval(sessionCheckInterval);
     });
 </script>
+
 
 <!-- JS
 ============================================ -->

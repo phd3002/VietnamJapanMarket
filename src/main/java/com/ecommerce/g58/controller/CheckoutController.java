@@ -24,11 +24,14 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class CheckoutController {
 
     private static final Logger logger = LoggerFactory.getLogger(CheckoutController.class);
+
+    private static final int SESSION_TIMEOUT_MINUTES = 30; // Set to 1 for testing, change to 30 for production
 
     @Autowired
     private CartService cartService;
@@ -39,16 +42,34 @@ public class CheckoutController {
     @Autowired
     private ProductImageRepository productImageRepository;
 
-    // hien thi trang checkout
+    // Display the checkout page
     @GetMapping("/checkout")
-    public String showCheckoutPage(Model model, Principal principal) {
+    public String showCheckoutPage(Model model, Principal principal, HttpSession session) {
+        LocalDateTime sessionStartTime = (LocalDateTime) session.getAttribute("sessionStartTime");
 
-        // neu chua dang nhap, chuyen huong ve trang dang nhap
+        if (sessionStartTime == null) {
+            sessionStartTime = LocalDateTime.now();
+            session.setAttribute("sessionStartTime", sessionStartTime);
+        }
+
+        Duration duration = Duration.between(sessionStartTime, LocalDateTime.now());
+        logger.info("Session duration for ID {}: {} minutes", session.getId(), duration.toMinutes());
+
+        if (duration.toMinutes() > SESSION_TIMEOUT_MINUTES) {
+            Integer userId = (Integer) session.getAttribute("userId");
+            if (userId != null) {
+                logger.info("Restoring item quantities for user ID: {}", userId);
+                cartService.restoreItemQuantitiesToStock(userId);
+            }
+            session.invalidate();
+            logger.info("Session expired and invalidated. Redirecting to homepage.");
+            return "redirect:/";
+        }
+
         if (principal == null) {
             return "redirect:/sign-in";
         }
 
-        // lay thong tin user
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
@@ -56,21 +77,17 @@ public class CheckoutController {
         }
 
         Integer userId = user.getUserId();
+        session.setAttribute("userId", userId);
+
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
 
-        // tinh tong tien cua gio hang
         double totalPrice = cartItems.stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
-
-        // dat gia van chuyen la 50k
         double shippingFee = 50000.0;
-
-        // tinh tong tien cua gio hang va van chuyen
         double totalWithShipping = totalPrice + shippingFee;
 
-        // truyen thong tin gio hang va tong tien sang view
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("totalWithShipping", totalWithShipping);
@@ -87,17 +104,17 @@ public class CheckoutController {
         return "checkout";
     }
 
-    // khi nguoi dung bam nut "checkout" tren trang gio hang
+    // When user clicks "checkout" on the cart page
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal) {
         logger.info("Session ID during checkout start: {}", session.getId());
 
-        // neu chua dang nhap, chuyen huong ve trang dang nhap
+        // If not logged in, redirect to login page
         if (principal == null) {
             return "redirect:/sign-in";
         }
 
-        // lay thong tin user
+        // Get user information
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
@@ -106,26 +123,27 @@ public class CheckoutController {
 
         Integer userId = user.getUserId();
 
-        // tru so luong san pham trong kho
+        // Subtract item quantities from stock
         cartService.subtractItemQuantitiesFromStock(userId);
 
-        // tao session de luu thoi gian bat dau checkout
+        // Store user ID in session for item restoration if needed
+        session.setAttribute("userId", userId);
         session.setAttribute("checkoutStartTime", LocalDateTime.now());
 
         return "redirect:/checkout"; // Proceed to checkout page
     }
 
-    // khi nguoi dung huy bo checkout
+    // When user cancels checkout
     @PostMapping("/checkout/cancel")
     public ResponseEntity<Void> cancelCheckout(HttpSession session, Principal principal) {
         logger.info("Session ID during cancel: {}", session.getId());
 
-        // neu chua dang nhap, tra ve loi 401 Unauthorized
+        // If not logged in, return 401 Unauthorized
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        // lay thong tin user
+        // Get user information
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
@@ -134,41 +152,84 @@ public class CheckoutController {
 
         Integer userId = user.getUserId();
 
-        // tra lai so luong san pham trong kho
+        // Restore item quantities in stock
         cartService.restoreItemQuantitiesToStock(userId);
 
-        // xoa session checkout
+        // Remove checkout session attributes
         session.removeAttribute("checkoutStartTime");
+        session.removeAttribute("userId");
 
-        // tra ve 200 OK
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/confirm-checkout")
     public String confirmCheckout(HttpSession session, Principal principal) {
 
-        // neu chua dang nhap, chuyen huong ve trang dang nhap
+        // If not logged in, redirect to login page
         if (principal == null) {
             return "redirect:/sign-in";
         }
 
-        // lay thoi gian bat dau checkout
+        // Get checkout start time
         LocalDateTime checkoutStartTime = (LocalDateTime) session.getAttribute("checkoutStartTime");
 
-        // neu da co thoi gian bat dau checkout
+        // If checkout start time exists, check for expiration
         if (checkoutStartTime != null) {
-            // neu checkout qua 30 phut, tra lai so luong san pham trong kho
             if (Duration.between(checkoutStartTime, LocalDateTime.now()).toMinutes() > 30) {
                 Integer userId = userService.findByEmail(principal.getName()).getUserId();
                 cartService.restoreItemQuantitiesToStock(userId);
 
-                // xoa session checkout
+                // Remove checkout session attributes
                 session.removeAttribute("checkoutStartTime");
+                session.removeAttribute("userId");
 
-                // chuyen huong ve trang gio hang voi thong bao checkout het han
+                // Redirect to cart with expiration notice
                 return "redirect:/cart?checkoutExpired=true";
             }
         }
-        return "redirect:/complete-checkout"; // chuyen huong ve trang hoan tat checkout (chua co)
+        return "redirect:/complete-checkout"; // Redirect to checkout completion (not implemented)
+    }
+
+    // Endpoint to check session status for JavaScript polling
+    @GetMapping("/session-status")
+    @ResponseBody
+    public Map<String, Boolean> checkSessionStatus(HttpSession session) {
+        Map<String, Boolean> response = new HashMap<>();
+        LocalDateTime sessionStartTime = (LocalDateTime) session.getAttribute("sessionStartTime");
+
+        logger.info("Checking session status for session ID: {}", session.getId());
+
+        if (sessionStartTime == null) {
+            logger.info("Session start time is null. Clearing checkout attributes.");
+            session.removeAttribute("sessionStartTime");
+            session.removeAttribute("userId");
+            response.put("sessionValid", false);
+            return response;
+        }
+
+        logger.info("Session started at: {}", sessionStartTime);
+        Duration duration = Duration.between(sessionStartTime, LocalDateTime.now());
+        logger.info("Session duration: {} minutes", duration.toMinutes());
+
+        // Check if the session duration has exceeded the timeout
+        if (duration.toMinutes() >= SESSION_TIMEOUT_MINUTES) {
+            Integer userId = (Integer) session.getAttribute("userId");
+            if (userId != null) {
+                logger.info("Session expired for user ID: {}. Restoring item quantities.", userId);
+                cartService.restoreItemQuantitiesToStock(userId);
+                logger.info("Items restored for user ID: {}", userId);
+            } else {
+                logger.warn("User ID not found in session. Unable to restore items.");
+            }
+            // Clear checkout-related session attributes but do not invalidate the entire session
+            session.removeAttribute("sessionStartTime");
+            session.removeAttribute("userId");
+            response.put("sessionValid", false);
+            logger.info("Cleared checkout attributes for session ID: {}", session.getId());
+        } else {
+            response.put("sessionValid", true);
+        }
+
+        return response;
     }
 }
