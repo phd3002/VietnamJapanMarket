@@ -38,6 +38,11 @@ public class OrderDetailController {
             model.addAttribute("storeName", firstDetail.getStoreName());
             model.addAttribute("storeImage", firstDetail.getStoreImage());
             model.addAttribute("storeId", firstDetail.getStoreId());
+            model.addAttribute("orderPlacedTime", firstDetail.getOrderPlacedTime());
+            model.addAttribute("paymentTime", firstDetail.getPaymentTime());
+            model.addAttribute("shippingTime", firstDetail.getShippingTime());
+            model.addAttribute("deliveredTime", firstDetail.getDeliveredTime());
+            model.addAttribute("completedTime", firstDetail.getCompletedTime());
         }
 
         return "order-detail"; // Thymeleaf template name

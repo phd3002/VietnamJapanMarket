@@ -88,36 +88,45 @@
                                             id="status-order" th:text="${shippingStatus}"></span></h4>
                                     <div class="order-progress">
                                         <!--                                        <div class="order-progress-step active" (chi su dung khi da qua buoc nay, cac the o duoi tuong tu)>-->
-                                        <div th:classappend="${shippingStatus == 'Order Placed'} ? 'active' : ''"
+                                        <div th:classappend="${orderPlacedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-calendar"></i>
-                                            <p th:text="'Đơn hàng đã đặt'" style="color: black;"></p>
-                                            <small id="order-placed-date">00:13 05-05-2022</small>
+                                            <p style="color: black;" th:text="${orderPlacedTime != null} ? 'Đơn hàng đã đặt' : 'Đang xử lý'"></p>
+                                            <small id="order-placed-date" th:if="${orderPlacedTime != null}"
+                                                   th:text="${#temporals.format(orderPlacedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${paymentStatus == 'Paid'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <!--                                            <i class="fas fa-credit-card"></i>-->
                                             <i class="flaticon-cashback"></i>
-                                            <p th:text="'Thanh toán đã xác nhận'" style="color: black;"></p>
-                                            <small id="payment-confirmed-date">00:43 05-05-2022</small>
+<!--                                            <p th:text="'Thanh toán đã xác nhận'" style="color: black;"></p>-->
+                                            <p style="color: black;" th:text="${paymentStatus == 'Paid'} ? 'Thanh toán đã xác nhận' : 'Chưa thanh toán'"></p>
+                                            <small id="payment-confirmed-date" th:if="${paymentTime != null}"
+                                                   th:text="${#temporals.format(paymentTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div th:classappend="${shippingStatus == 'Shipping'} ? 'active' : ''"
+                                        <div th:classappend="${shippingTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-truck"></i>
-                                            <p th:text="'Đang giao hàng'" style="color: black;"></p>
-                                            <small id="shipped-date">11:03 05-05-2022</small>
+<!--                                            <p th:text="'Đang giao hàng'" style="color: black;"></p>-->
+                                            <p style="color: black;" th:text="${shippingTime != null} ? 'Đang giao hàng' : 'Chờ giao hàng'"></p>
+                                            <small id="shipped-date" th:if="${shippingTime != null}"
+                                                   th:text="${#temporals.format(shippingTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div th:classappend="${shippingStatus == 'Delivered'} ? 'active' : ''"
+                                        <div th:classappend="${deliveredTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-box"></i>
-                                            <p th:text="'Đã giao hàng'" style="color: black;"></p>
-                                            <small id="delivered-date">15:22 09-05-2022</small>
+<!--                                            <p th:text="'Đã giao hàng'" style="color: black;"></p>-->
+                                            <p style="color: black;" th:text="${deliveredTime != null} ? 'Đã giao hàng' : 'Chờ giao hàng'"></p>
+                                            <small id="delivered-date" th:if="${deliveredTime != null}"
+                                                   th:text="${#temporals.format(deliveredTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div th:classappend="${shippingStatus == 'Order Completed'} ? 'active' : ''"
+                                        <div th:classappend="${completedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-star"></i>
-                                            <p th:text="'Đơn hàng đã hoàn thành'" style="color: black;"></p>
-                                            <small id="completed-date">15:23 09-05-2022</small>
+<!--                                            <p th:text="'Đơn hàng đã hoàn thành'" style="color: black;"></p>-->
+                                            <p style="color: black;" th:text="${completedTime != null} ? 'Đơn hàng đã hoàn thành' : 'Chờ giao hàng'"></p>
+                                            <small id="completed-date" th:if="${completedTime != null}"
+                                                   th:text="${#temporals.format(completedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                     </div>
                                     <div class="row">

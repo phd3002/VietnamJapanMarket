@@ -3,6 +3,9 @@ package com.ecommerce.g58.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class OrderDetailDTO {
@@ -26,4 +29,9 @@ public class OrderDetailDTO {
     private String shippingAddress;
     private String shippingStatus;
     private String trackingNumber;
+    private LocalDateTime orderPlacedTime;
+    private LocalDateTime paymentTime;
+    private LocalDateTime shippingTime;
+    private LocalDateTime deliveredTime;
+    private LocalDateTime completedTime;
 }

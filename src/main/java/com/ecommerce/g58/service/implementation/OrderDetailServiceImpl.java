@@ -54,6 +54,30 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             dto.setShippingAddress((String) result[17]);
             dto.setShippingStatus((String) result[18]);
             dto.setTrackingNumber((String) result[19]);
+            if (result[20] instanceof Timestamp) {
+                Timestamp orderPlacedTimestamp = (Timestamp) result[20];
+                dto.setOrderPlacedTime(orderPlacedTimestamp.toLocalDateTime());
+            }
+
+            if (result[21] instanceof Timestamp) {
+                Timestamp paymentTimestamp = (Timestamp) result[21];
+                dto.setPaymentTime(paymentTimestamp.toLocalDateTime());
+            }
+
+            if (result[22] instanceof Timestamp) {
+                Timestamp shippingTimestamp = (Timestamp) result[22];
+                dto.setShippingTime(shippingTimestamp.toLocalDateTime());
+            }
+
+            if (result[23] instanceof Timestamp) {
+                Timestamp deliveredTimestamp = (Timestamp) result[23];
+                dto.setDeliveredTime(deliveredTimestamp.toLocalDateTime());
+            }
+
+            if (result[24] instanceof Timestamp) {
+                Timestamp completedTimestamp = (Timestamp) result[24];
+                dto.setCompletedTime(completedTimestamp.toLocalDateTime());
+            }
             orderDetails.add(dto);
         }
 
