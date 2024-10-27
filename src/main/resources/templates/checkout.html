@@ -198,25 +198,26 @@
 <div th:replace="base :: footer"></div>
 
 <script>
-    // Function to check session status every 1 minute (60000 milliseconds)
+    // kiem tra session co con ton tai hay khong
     let sessionCheckInterval = setInterval(function() {
         console.log('Checking session status...');
         fetch('/session-status')
             .then(response => response.json())
             .then(data => {
+                // Neu session het han thi chuyen huong ve trang chu
                 if (!data.sessionValid) {
                     console.log('Session expired, redirecting to homepage...');
-                    clearInterval(sessionCheckInterval); // Stop further checks before redirecting
+                    clearInterval(sessionCheckInterval); // dung kiem tra session neu het han
                     window.location.href = '/';
                 }
             })
             .catch(error => {
                 console.error('Error checking session status:', error);
-                clearInterval(sessionCheckInterval); // Stop polling if an error occurs
+                clearInterval(sessionCheckInterval); // dung kiem tra session neu gap loi
             });
-    }, 60000); // Check every 60 seconds
+    }, 60000); // kiem tra session moi 60 giay
 
-    // Stop the interval if the user navigates away from the checkout page
+    // Dung kiem tra session khi nguoi dung roi khoi trang
     window.addEventListener('beforeunload', function() {
         clearInterval(sessionCheckInterval);
     });
