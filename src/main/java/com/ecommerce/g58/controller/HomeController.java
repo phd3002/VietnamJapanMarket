@@ -31,7 +31,7 @@ public class HomeController {
         if (principal != null) {
             Users user = userService.findByEmail(principal.getName());  // Fetch user details by email
             model.addAttribute("isLoggedIn", true);
-            model.addAttribute("username", user.getFirstName());  // Pass firstName instead of email
+            model.addAttribute("username", user.getUsername());  // Pass firstName instead of email
         } else {
             model.addAttribute("isLoggedIn", false);
         }
