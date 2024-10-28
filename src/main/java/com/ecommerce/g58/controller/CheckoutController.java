@@ -1,9 +1,8 @@
 package com.ecommerce.g58.controller;
 
-import com.ecommerce.g58.entity.Cart;
-import com.ecommerce.g58.entity.CartItem;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.entity.*;
+import com.ecommerce.g58.repository.OrderDetailRepository;
+import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.UserService;
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
@@ -41,6 +41,12 @@ public class CheckoutController {
 
     @Autowired
     private ProductImageRepository productImageRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     // Hien thi man checkout
     @GetMapping("/checkout")
@@ -231,5 +237,54 @@ public class CheckoutController {
         }
 
         return response;
+    }
+
+    @PostMapping("/process-checkout")
+    public String processCheckout(@ModelAttribute Orders order, Principal principal, HttpSession session, Model model) {
+        Users user = userService.findByEmail(principal.getName());
+        if (user == null) {
+            return "redirect:/sign-in";
+        }
+
+        // Set user details and order metadata
+        order.setUserId(user);
+        order.setOrderDate(LocalDateTime.now());
+        order.setStatus("Pending");
+
+        // Retrieve total price from the session or calculate if needed
+        Double totalWithShipping = (Double) model.getAttribute("totalWithShipping");
+        if (totalWithShipping == null) {
+            List<CartItem> cartItems = cartService.getCartByUserId(user.getUserId()).getCartItems();
+            double totalPrice = cartItems.stream()
+                    .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                    .sum();
+            double shippingFee = 50000.0;
+            totalWithShipping = totalPrice + shippingFee;
+        }
+        order.setTotalPrice(totalWithShipping);
+
+        // Save the order to the database
+        orderRepository.save(order);
+
+        // Save order details for each cart item
+        List<CartItem> cartItems = cartService.getCartByUserId(user.getUserId()).getCartItems();
+        for (CartItem item : cartItems) {
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.setOrderId(order);
+            orderDetails.setProductId(item.getProductId());
+            orderDetails.setVariationId(item.getVariationId());
+            orderDetails.setQuantity(item.getQuantity());
+            orderDetails.setPrice(item.getPrice());
+            orderDetailRepository.save(orderDetails);
+        }
+
+        // Clear the user's cart after the order is placed
+        cartService.clearCart(user.getUserId());
+
+        // Add order details to the model for the confirmation page
+        model.addAttribute("order", order);
+
+        // Redirect to the confirmation page or render the template directly
+        return "checkout-complete";
     }
 }

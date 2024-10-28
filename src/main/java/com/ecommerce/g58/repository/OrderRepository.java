@@ -16,26 +16,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-//    @Query(value = "SELECT \n" +
-//            "    o.order_id AS orderId, \n" +
-//            "    o.order_date AS orderDate, \n" +
-//            "    ss.status AS status, \n" +
-//            "    SUM(orders.quantity) AS totalQuantity, \n" +
-//            "    (o.total_price + i.shipping_fee) AS totalPrice \n" +
-//            "FROM \n" +
-//            "    orders o \n" +
-//            "JOIN \n" +
-//            "    order_details od ON o.order_id = orders.order_id \n" +
-//            "JOIN \n" +
-//            "    shipping_status ss ON o.order_id = ss.order_id \n" +
-//            "JOIN \n" +
-//            "    invoice i ON o.order_id = i.order_id \n" +
-//            "WHERE o.user_id = :userId " +
-//            "GROUP BY \n" +
-//            "    o.order_id, o.order_date, ss.status, o.total_price, i.shipping_fee",
-//            nativeQuery = true)
-//    List<Object[]> findOrdersByUserId(@Param("userId") Integer userId);
-
+    @Query("SELECT o FROM Orders o WHERE o.userId.userId = :userId")
     List<Orders> findByUserId(Users user);
 
     // Add new methods to handle shipping address
@@ -46,52 +27,25 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query("UPDATE Orders o SET o.shippingAddress = :newAddress WHERE o.orderId = :orderId")
     void updateShippingAddressByOrderId(@Param("orderId") Integer orderId, @Param("newAddress") String newAddress);
 
-//    @Query(value = "SELECT \n" +
-//            "    o.order_id AS orderId, \n" +
-//            "    o.order_date AS orderDate, \n" +
-//            "    ss.status AS status, \n" +
-//            "    SUM(od.quantity) AS totalQuantity, \n" +
-//            "    (o.total_price + i.shipping_fee) AS totalPrice \n" +
-//            "FROM \n" +
-//            "    orders o \n" +
-//            "JOIN \n" +
-//            "    order_details od ON o.order_id = od.order_id \n" +
-//            "JOIN \n" +
-//            "    shipping_status ss ON o.order_id = ss.order_id \n" +
-//            "JOIN \n" +
-//            "    invoice i ON o.order_id = i.order_id \n" +
-//            "WHERE o.user_id = :userId " +
-//            "AND (:status IS NULL OR ss.status = :status)\n" +
-//            "GROUP BY \n" +
-//            "    o.order_id, o.order_date, ss.status, o.total_price, i.shipping_fee",
-//            nativeQuery = true)
-//    Page<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId, @Param("status") String status, Pageable pageable);
-
-    @Query(value = "SELECT \n" +
-            "    o.order_id AS orderId, \n" +
-            "    o.order_date AS orderDate, \n" +
-            "    ss.status AS status, \n" +
-            "    SUM(od.quantity) AS totalQuantity, \n" +
-            "    (o.total_price + i.shipping_fee) AS totalPrice \n" +
-            "FROM \n" +
-            "    orders o \n" +
-            "JOIN \n" +
-            "    order_details od ON o.order_id = od.order_id \n" +
-            "JOIN \n" +
-            "    shipping_status ss ON o.order_id = ss.order_id \n" +
-            "JOIN \n" +
-            "    invoice i ON o.order_id = i.order_id \n" +
+    @Query(value = "SELECT " +
+            "    o.order_id AS orderId, " +
+            "    o.order_date AS orderDate, " +
+            "    COALESCE(ss.status, '') AS status, " +
+            "    SUM(od.quantity) AS totalQuantity, " +
+            "    (o.total_price + i.shipping_fee) AS totalPrice " +
+            "FROM orders o " +
+            "LEFT JOIN order_details od ON o.order_id = od.order_id " +
+            "LEFT JOIN shipping_status ss ON o.order_id = ss.order_id " +
+            "LEFT JOIN invoice i ON o.order_id = i.order_id " +
             "WHERE o.user_id = :userId " +
-            "AND (COALESCE(:status, '') = '' OR ss.status = :status)\n" +
-            "GROUP BY \n" +
-            "    o.order_id, o.order_date, ss.status, o.total_price, i.shipping_fee",
+            "AND (:status IS NULL OR :status = '' OR ss.status = :status) " +
+            "GROUP BY o.order_id, o.order_date, ss.status, o.total_price, i.shipping_fee",
             countQuery = "SELECT COUNT(DISTINCT o.order_id) " +
                     "FROM orders o " +
-                    "JOIN shipping_status ss ON o.order_id = ss.order_id " +
+                    "LEFT JOIN shipping_status ss ON o.order_id = ss.order_id " +
                     "WHERE o.user_id = :userId " +
-                    "AND (COALESCE(:status, '') = '' OR ss.status = :status)",
+                    "AND (:status IS NULL OR :status = '' OR ss.status = :status)",
             nativeQuery = true)
-    Page<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId,
-                                               @Param("status") String status,
-                                               Pageable pageable);
+    Page<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId, @Param("status") String status, Pageable pageable);
+
 }

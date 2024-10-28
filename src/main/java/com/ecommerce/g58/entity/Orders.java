@@ -27,7 +27,7 @@ public class Orders {
     private LocalDateTime orderDate = LocalDateTime.now();
 
     @Column(name = "total_price", nullable = false)
-    private BigDecimal totalPrice;
+    private Double totalPrice;
 
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;
@@ -64,4 +64,7 @@ public class Orders {
 
     @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
     private List<ShippingStatus> shippingStatus;
+
+    @Column(name = "status")
+    private String status;
 }

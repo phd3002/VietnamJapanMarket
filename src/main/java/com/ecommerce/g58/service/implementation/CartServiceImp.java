@@ -169,4 +169,11 @@ public class CartServiceImp implements CartService {
         }
         logger.info("Successfully restored item quantities for user ID: {}", userId);
     }
+
+    @Override
+    public void clearCart(Integer userId) {
+        Cart cart = getCartByUserId(userId);
+        cart.getCartItems().clear(); // Or use a repository method to delete all items.
+        cartRepository.save(cart); // Ensure changes are saved.
+    }
 }
