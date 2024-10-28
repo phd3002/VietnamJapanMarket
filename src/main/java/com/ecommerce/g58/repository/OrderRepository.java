@@ -30,7 +30,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query(value = "SELECT " +
             "    o.order_id AS orderId, " +
             "    o.order_date AS orderDate, " +
-            "    COALESCE(ss.status, '') AS status, " +
+            "    COALESCE(ss.status, '') AS shippingStatus, " +
             "    SUM(od.quantity) AS totalQuantity, " +
             "    (o.total_price + i.shipping_fee) AS totalPrice " +
             "FROM orders o " +
@@ -47,5 +47,4 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                     "AND (:status IS NULL OR :status = '' OR ss.status = :status)",
             nativeQuery = true)
     Page<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId, @Param("status") String status, Pageable pageable);
-
 }

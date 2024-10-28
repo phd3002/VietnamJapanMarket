@@ -4,6 +4,7 @@ import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.OrderDetailRepository;
 import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
+import com.ecommerce.g58.repository.ShippingStatusRepository;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,10 @@ public class CheckoutController {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private ShippingStatusRepository shippingStatusRepository;
+
 
     // Hien thi man checkout
     @GetMapping("/checkout")
@@ -249,7 +255,6 @@ public class CheckoutController {
         // Set user details and order metadata
         order.setUserId(user);
         order.setOrderDate(LocalDateTime.now());
-        order.setStatus("Pending");
 
         // Retrieve total price from the session or calculate if needed
         Double totalWithShipping = (Double) model.getAttribute("totalWithShipping");
@@ -264,6 +269,22 @@ public class CheckoutController {
         order.setTotalPrice(totalWithShipping);
 
         // Save the order to the database
+        orderRepository.save(order);
+
+        // Create and save the initial shipping status for the order
+        ShippingStatus initialShippingStatus = ShippingStatus.builder()
+                .orderId(order)
+                .status("Pending")
+                .updatedAt(LocalDateTime.now())
+                .build();
+        shippingStatusRepository.save(initialShippingStatus);
+
+        // Add the initial shipping status to the order's list of shipping statuses
+        List<ShippingStatus> shippingStatuses = new ArrayList<>();
+        shippingStatuses.add(initialShippingStatus);
+        order.setShippingStatus(shippingStatuses);
+
+        // Update the order with the new shipping status list
         orderRepository.save(order);
 
         // Save order details for each cart item

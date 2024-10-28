@@ -64,7 +64,4 @@ public class Orders {
 
     @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
     private List<ShippingStatus> shippingStatus;
-
-    @Column(name = "status")
-    private String status;
 }
