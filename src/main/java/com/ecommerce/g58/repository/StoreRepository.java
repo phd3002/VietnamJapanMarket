@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Stores, Integer> {
     Optional<Stores> findByStoreName(String storeName);
+
     Page<Stores> findByStoreNameContainingIgnoreCase(String storeName, Pageable pageable);
+
     Optional<Stores> findByOwnerId(Users ownerId);
 }

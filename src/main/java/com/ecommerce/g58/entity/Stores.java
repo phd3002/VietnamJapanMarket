@@ -3,6 +3,7 @@ package com.ecommerce.g58.entity;
 import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
@@ -54,4 +55,7 @@ public class Stores {
 
     @Column(name = "postal_code")
     private String postalCode;
+
+    @OneToMany(mappedBy = "storeId")
+    private List<Products> products;
 }
