@@ -48,4 +48,10 @@ public interface ProductService {
 
     void deleteProductById(Integer productId);
 
+    void addProduct(Products product);
+
+    void addProductImage(ProductImage productImage);
+
+    void addProductVariation(ProductVariation productVariation);
+
 }

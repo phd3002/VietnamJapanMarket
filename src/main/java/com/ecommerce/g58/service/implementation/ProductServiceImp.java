@@ -209,6 +209,24 @@ public class ProductServiceImp implements ProductService {
         productRepository.deleteById(productId);
     }
 
+    @Override
+    @Transactional
+    public void addProduct(Products product) {
+        productRepository.save(product);
+    }
+
+    @Override
+    @Transactional
+    public void addProductImage(ProductImage productImage) {
+        productImageRepository.save(productImage);
+    }
+
+    @Override
+    @Transactional
+    public void addProductVariation(ProductVariation productVariation) {
+        productVariationRepository.save(productVariation);
+    }
+
 }
 
 

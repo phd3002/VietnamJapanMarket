@@ -64,12 +64,20 @@ public class SellerController {
     @PostMapping("/sign-up-seller")
     public String registerStore(@ModelAttribute Stores store,
                                 @RequestParam("countryId") Integer countryId,
+                                @RequestParam("city") String city,
+                                @RequestParam("district") String district,
+                                @RequestParam("postalCode") String postalCode,
                                 RedirectAttributes redirectAttributes,
                                 HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         Users user = userService.findByEmail(userDetails.getUsername());
         store.setOwnerId(user);
+        store.setStoreMail(user.getEmail()); // Automatically assign the store's email to the user's email
+        store.setCity(city != null ? city.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
+        store.setDistrict(district != null ? district.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
+        store.setPostalCode(postalCode != null ? postalCode.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
+
         Countries country = countryService.getCountryById(countryId);
         store.setCountry(country); // Set country
         Optional<Stores> existingStoreByName = storeService.findByStoreName(store.getStoreName());

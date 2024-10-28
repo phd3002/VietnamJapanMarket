@@ -45,4 +45,13 @@ public class Stores {
 
     @Column(name = "picture_url")
     private String pictureUrl;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "district")
+    private String district;
+
+    @Column(name = "postal_code")
+    private String postalCode;
 }
