@@ -1,6 +1,7 @@
 package com.ecommerce.g58.repository;
 
 import com.ecommerce.g58.entity.ProductVariation;
+import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.entity.Wishlist;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +20,8 @@ public interface WishlistRepository extends JpaRepository<Wishlist, Integer> {
 
     @Query("SELECT w FROM Wishlist w WHERE w.userId = :user")
     List<Wishlist> findByUser(@Param("user") Users user);
+
+    void deleteByProduct(Products productId);
+    void deleteByProductVariation(ProductVariation variationId);
 
 }

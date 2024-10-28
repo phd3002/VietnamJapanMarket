@@ -105,8 +105,13 @@
                                      th:src="${product.productVariations[0].imageId != null ? product.productVariations[0].imageId.thumbnail : '/images/default-thumbnail.png'}"
                                      alt="Product Image" width="150px">
                             </td>
-                            <td th:if="${product.productVariations != null && product.productVariations.size() > 0}"
-                                th:text="${product.productVariations[0].size?.sizeName} + ' x ' + ${product.productVariations[0].color?.colorName}"></td>
+                            <td>
+                                <ul>
+                                    <li th:each="variation : ${product.productVariations}">
+                                        <span th:text="${variation.size?.sizeName} + ' x ' + ${variation.color?.colorName}"></span>
+                                    </li>
+                                </ul>
+                            </td>
                             <td th:text="${product.productVariations.size() > 0 ? product.productVariations[0].stock : 'N/A'}"></td>
                             <td th:text="${product.price} + ' đ'"></td>
                             <td th:text="${product.categoryId != null ? product.categoryId.categoryName : 'N/A'}"></td>
@@ -124,6 +129,7 @@
                             </td>
                         </tr>
                         </tbody>
+
                     </table>
                 </div>
             </div>

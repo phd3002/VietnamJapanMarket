@@ -1,6 +1,8 @@
 package com.ecommerce.g58.repository;
 
 import com.ecommerce.g58.entity.OrderDetails;
+import com.ecommerce.g58.entity.ProductVariation;
+import com.ecommerce.g58.entity.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,4 +48,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "WHERE o.order_id = :orderId",
             nativeQuery = true)
     List<Object[]> getOrderDetails(@Param("orderId") Long orderId);
+
+    void deleteByProductId(Products productId);
+    void deleteByVariationId(ProductVariation variationId);
 }

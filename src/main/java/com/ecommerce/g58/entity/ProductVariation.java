@@ -31,7 +31,7 @@ public class ProductVariation {
     private Color color;
 
     @Column(name = "stock", nullable = false)
-    private int stock;
+    private Integer stock;
 
     @ManyToOne
     @JoinColumn(name = "image_id", referencedColumnName = "image_id") // Added referencedColumnName

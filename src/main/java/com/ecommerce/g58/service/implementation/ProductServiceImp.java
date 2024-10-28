@@ -2,10 +2,9 @@ package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.ProductDTO;
 import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.dto.ProductWithVariationsDTO;
 import com.ecommerce.g58.entity.*;
-import com.ecommerce.g58.repository.ProductImageRepository;
-import com.ecommerce.g58.repository.ProductRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
+import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +15,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +28,18 @@ public class ProductServiceImp implements ProductService {
 
     @Autowired
     private ProductVariationRepository productVariationRepository;
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @Autowired
+    private WishlistRepository wishlistRepository;
+
+    @Autowired
+    private UserActivityRepository userActivityRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     public List<ProductDTO> getProductDetails() {
         List<Object[]> results = productRepository.findProductDetailsNative();
@@ -161,9 +171,13 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findByStoreId(storeId);
     }
 
+    public List<ProductDetailDTO> getProductDetailsByStoreId(Stores storeId) {
+        return productRepository.findAllProductDetailsByStoreId(storeId);
+    }
+
     @Override
-    public Products saveProduct(Products product) {
-        return productRepository.save(product);
+    public void saveProduct(Products product) {
+        productRepository.save(product);
     }
 
     @Override
@@ -178,10 +192,39 @@ public class ProductServiceImp implements ProductService {
                 productImageRepository.deleteByImageId(variation.getImageId().getImageId());
             }
             productVariationRepository.delete(variation);
+
+            // Xóa variationId khỏi các bảng liên quan
+            cartItemRepository.deleteByVariationId(variation);
+            wishlistRepository.deleteByProductVariation(variation);
+            orderDetailRepository.deleteByVariationId(variation);
         }
 
+        // Xóa productId khỏi các bảng liên quan nếu tồn tại
+        cartItemRepository.deleteByProductId(product);
+        wishlistRepository.deleteByProduct(product);
+        userActivityRepository.deleteByProductId(product);
+        orderDetailRepository.deleteByProductId(product);
+
         // Xóa sản phẩm
-        productRepository.deleteByProductId(productId);
+        productRepository.deleteById(productId);
+    }
+
+    @Override
+    @Transactional
+    public void addProduct(Products product) {
+        productRepository.save(product);
+    }
+
+    @Override
+    @Transactional
+    public void addProductImage(ProductImage productImage) {
+        productImageRepository.save(productImage);
+    }
+
+    @Override
+    @Transactional
+    public void addProductVariation(ProductVariation productVariation) {
+        productVariationRepository.save(productVariation);
     }
 
 }
