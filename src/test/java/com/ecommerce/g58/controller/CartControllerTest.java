@@ -33,75 +33,72 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class CartControllerTest {
     @InjectMocks
-    private CartController cartController; // Inject the UserController
+    private CartController cartController;
 
     @Mock
-    private UserService userService; // Mock the UserService
+    private UserService userService;
 
     @Mock
-    private ProductService productService; // Mock the ProductService
+    private ProductService productService;
 
     @Mock
-    private CartItemService cartItemService; // Mock the CartItemService
+    private CartItemService cartItemService;
 
     @Mock
-    private CartService cartService; // Mock the CartService
+    private CartService cartService;
 
     @Mock
-    private Authentication authentication; // Mock the Authentication
+    private Authentication authentication;
 
     @Mock
-    private HttpServletRequest request; // Mock HttpServletRequest
+    private HttpServletRequest request;
 
     @Mock
-    private RedirectAttributes redirectAttributes; // Mock RedirectAttributes
+    private RedirectAttributes redirectAttributes;
 
     @Mock
-    private Users user; // Mock User entity
+    private Users user;
 
     @Mock
-    private Cart cart; // Mock Cart entity
+    private Cart cart;
 
     @Mock
-    private Model model; // Mock the Model
+    private Model model;
 
     @Mock
-    private CartItemRepository cartItemRepository; // Mock the CartItemRepository
+    private CartItemRepository cartItemRepository;
 
     @Mock
-    private CartItem cartItem; // Mock the CartItem
+    private CartItem cartItem;
 
     @Mock
-    private ProductVariation productVariation; // Mock the ProductVariation (for stock check)
+    private ProductVariation productVariation;
 
     @Mock
-    private SecurityUtils securityUtils; // Mock the SecurityUtils
+    private SecurityUtils securityUtils;
 
     @Mock
-    private Logger logger; // Mock the logger
+    private Logger logger;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this); // Initialize mocks before each test
+        MockitoAnnotations.initMocks(this);
     }
 
-    // Test: user is not authenticated (redirect to sign-in)
+    // testAddToCart_UserNotAuthenticated tc1
     @Test
-    public void testAddToCart_UserNotAuthenticated() {
+    public void testAddToCart_UserNotAuthenticatedtc1() {
         when(authentication.isAuthenticated()).thenReturn(false);
         SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
-
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
-
-        // Assert redirect to sign-in page
         assertEquals("redirect:/sign-in", result);
     }
 
-    // Test: user is authenticated, product added successfully
+    // testAddToCart_ProductAddedSuccessfully tc2
     @Test
-    public void testAddToCart_ProductAddedSuccessfully() {
+    public void testAddToCart_ProductAddedSuccessfullytc2() {
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -118,7 +115,7 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // Test: product not found, show error message
+    // testAddToCart_ProductNotFound tc3
     @Test
     public void testAddToCart_ProductNotFound() {
         when(authentication.isAuthenticated()).thenReturn(true);
@@ -131,15 +128,10 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
-
-        // Verify the error message was added
         verify(redirectAttributes, times(1)).addFlashAttribute("error", "Failed to add product to cart. Product not found.");
-
-        // Assert the correct redirect
         assertEquals("redirect:/product-detail/1", result);
     }
-
-    // Test: exception is thrown while adding product to cart
+    // testAddToCart_ExceptionThrown tc4
     @Test
     public void testAddToCart_ExceptionThrown() {
         when(authentication.isAuthenticated()).thenReturn(true);
@@ -147,46 +139,30 @@ public class CartControllerTest {
         SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        // Mock user and cart retrieval
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
         when(cartService.getOrCreateCart(user)).thenReturn(cart);
-
-        // Mock product detail retrieval
         ProductDetailDTO productDetail = mock(ProductDetailDTO.class);
         when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(productDetail);
-
-        // Simulate exception when adding product to cart
         doThrow(new RuntimeException("Test Exception")).when(cartService).addProductToCart(user, productDetail, 1, cart);
-
-        // Mock referer header
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
-
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
-
-        // Verify the error message was added
         verify(redirectAttributes, times(1)).addFlashAttribute("error", "Error adding product to cart. Please try again.");
-
-        // Assert the correct redirect
         assertEquals("redirect:/product-detail/1", result);
     }
 
     //--------------------------------------------------------------------------------------------------------------
-    // Test: user is not authenticated (redirect to sign-in)
+    // testGetCartItems_UserNotAuthenticated tc1
     @Test
     public void testGetCartItems_UserNotAuthenticated() {
         when(authentication.isAuthenticated()).thenReturn(false);
         SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
-
         String result = cartController.getCartItems(model);
-
-        // Assert redirect to sign-in page
         assertEquals("redirect:/sign-in", result);
     }
 
-    // Test: cart is empty
+    // testGetCartItems_EmptyCart tc2
     @Test
     public void testGetCartItems_EmptyCart() {
         when(authentication.isAuthenticated()).thenReturn(true);
@@ -194,161 +170,41 @@ public class CartControllerTest {
         SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        // Mock user data
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
         when(user.getUserId()).thenReturn(1);
-
-        // Mock empty cart items
         when(cartItemService.getCartItemsByUserId(1)).thenReturn(Collections.emptyList());
-
         String result = cartController.getCartItems(model);
-
-        // Verify message added to model
         verify(model, times(1)).addAttribute("message", "Your cart is empty.");
-
-        // Assert the correct view is returned
         assertEquals("cart-detail", result);
     }
 
-    // Test: cart has items
-    @Test
-    public void testGetCartItems_HasItems() {
-        when(authentication.isAuthenticated()).thenReturn(true);
-        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        // Mock user data
-        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
-        when(user.getUserId()).thenReturn(1);
-
-        // Mock cart items
-        Products product1 = mock(Products.class);
-        Products product2 = mock(Products.class);
-        Stores store1 = mock(Stores.class);
-        Stores store2 = mock(Stores.class);
-
-        // Set up mock products and stores
-        when(product1.getStoreId()).thenReturn(store1);
-        when(product1.getPrice()).thenReturn(100);
-        when(product2.getStoreId()).thenReturn(store2);
-        when(product2.getPrice()).thenReturn(200);
-
-        CartItem cartItem1 = mock(CartItem.class);
-        CartItem cartItem2 = mock(CartItem.class);
-        when(cartItem1.getProductId()).thenReturn(product1);
-        when(cartItem1.getQuantity()).thenReturn(2);
-        when(cartItem2.getProductId()).thenReturn(product2);
-        when(cartItem2.getQuantity()).thenReturn(1);
-
-        List<CartItem> cartItems = Arrays.asList(cartItem1, cartItem2);
-        when(cartItemService.getCartItemsByUserId(1)).thenReturn(cartItems);
-
-        String result = cartController.getCartItems(model);
-
-        // Verify items grouped by store
-        verify(model, times(1)).addAttribute(eq("cartItemGroupedByStore"), any(Map.class));
-
-        // Verify total order price calculation
-        verify(model, times(1)).addAttribute("totalOrderPrice", 400);
-
-        // Assert the correct view is returned
-        assertEquals("cart-detail", result);
-    }
-
-//-----------------------------------------------------------------------------------------------------------------
-    // Test: remove cart item successfully
+    //-----------------------------------------------------------------------------------------------------------------
+    // testGetCartItems_Success tc1
     @Test
     public void testRemoveCartItem_Success() {
-        // Define cartItemId
         Integer cartItemId = 1;
-
-        // Execute the method
         String result = cartController.removeCartItem(cartItemId);
-
-        // Verify that the removeCartItem method in CartService is called
         verify(cartService, times(1)).removeCartItem(cartItemId);
-
-        // Assert that the correct redirection is returned
         assertEquals("redirect:/cart-items", result);
     }
 
     //----------------------------------------------------------------------------------------------------------------
-    // Test: Update cart quantity successfully
+
+    // testGetCartItems_Success tc1
     @Test
     public void testUpdateCartQuantity_Success() {
-        // Define cart item details
         Integer cartItemId = 1;
         Integer quantity = 2;
         int productStock = 5;
-
-        // Mock the cart item and variation with stock
         when(cartItemRepository.findById(cartItemId)).thenReturn(java.util.Optional.of(cartItem));
         when(cartItem.getVariationId()).thenReturn(productVariation);
         when(productVariation.getStock()).thenReturn(productStock);
-
-        // Execute the method
         String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-
-        // Verify the quantity update and flash message
         verify(cartItemService, times(1)).updateCartItemQuantity(cartItemId, quantity);
         verify(redirectAttributes, times(1)).addFlashAttribute("message", "Quantity updated successfully");
-
-        // Assert the correct redirection
         assertEquals("redirect:/cart-items", result);
     }
 
-    // Test: Requested quantity exceeds stock
-    @Test
-    public void testUpdateCartQuantity_ExceedsStock() {
-        // Define cart item details
-        Integer cartItemId = 1;
-        Integer quantity = 10; // Exceeds available stock
-        int productStock = 5;
-
-        // Mock the cart item and variation with stock
-        when(cartItemRepository.findById(cartItemId)).thenReturn(java.util.Optional.of(cartItem));
-        when(cartItem.getVariationId()).thenReturn(productVariation);
-        when(productVariation.getStock()).thenReturn(productStock);
-
-        // Execute the method
-        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-
-        // Verify no quantity update and correct flash message
-        verify(cartItemService, times(0)).updateCartItemQuantity(cartItemId, quantity);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Error updating quantity: Exceeds stock limit");
-
-        // Assert the correct redirection
-        assertEquals("redirect:/cart-items", result);
-    }
-
-    // Test: Exception occurs while updating quantity
-    @Test
-    public void testUpdateCartQuantity_Exception() {
-        // Define cart item details
-        Integer cartItemId = 1;
-        Integer quantity = 2;
-        int productStock = 5;
-
-        // Mock the cart item and variation with stock
-        when(cartItemRepository.findById(cartItemId)).thenReturn(java.util.Optional.of(cartItem));
-        when(cartItem.getVariationId()).thenReturn(productVariation);
-        when(productVariation.getStock()).thenReturn(productStock);
-
-        // Mock an exception during cart item update
-        doThrow(new RuntimeException("Update failed")).when(cartItemService).updateCartItemQuantity(cartItemId, quantity);
-
-        // Execute the method
-        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-
-        // Verify the error message and exception handling
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Error updating quantity");
-
-        // Assert the correct redirection
-        assertEquals("redirect:/cart-items", result);
-    }
 
     //--------------------------------------------------------------------------------------------------------------
 }

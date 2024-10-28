@@ -8,10 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.security.Principal;
 import java.util.Collections;
-
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,7 +26,7 @@ public class HomeControllerTest {
     private CategoriesService categoriesService;
 
     @Test
-    @WithMockUser(username = "testuser")
+    @WithMockUser(username = "lequyet180902@gmail.com")
     public void testShowHomePage_LoggedIn() throws Exception {
         when(productService.getAllProducts()).thenReturn(Collections.emptyList());
         when(categoriesService.getAllCategories()).thenReturn(Collections.emptyList());
@@ -40,7 +37,7 @@ public class HomeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("homepage"))
                 .andExpect(model().attribute("isLoggedIn", true))
-                .andExpect(model().attribute("username", "testuser"))
+                .andExpect(model().attribute("username", "lequyet180902@gmail.com"))
                 .andExpect(model().attribute("productDetails", Collections.emptyList()))
                 .andExpect(model().attribute("searchProduct", Collections.emptyList()))
                 .andExpect(model().attribute("categories", Collections.emptyList()));

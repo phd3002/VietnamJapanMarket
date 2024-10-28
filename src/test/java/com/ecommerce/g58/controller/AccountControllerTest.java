@@ -9,26 +9,18 @@ import org.springframework.ui.Model;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountControllerTest {
-
     @InjectMocks
-    private AccountController accountController;  // Inject the controller
-
+    private AccountController accountController;
     @Mock
     private Model model;  // Mock the Model
-
     @BeforeEach
     public void setUp() {
-        // Initialize the mocks
         MockitoAnnotations.initMocks(this);
     }
 
-    // Test: Ensure the "my-account" view is returned correctly
     @Test
     public void testMyAccountView() {
-        // Execute the method
         String viewName = accountController.myAccount(model);
-
-        // Verify the result (ensure the view name is "my-account")
         assertEquals("my-account", viewName);
     }
 }
