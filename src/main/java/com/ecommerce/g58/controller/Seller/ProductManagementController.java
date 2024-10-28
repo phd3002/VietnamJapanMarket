@@ -1,5 +1,7 @@
 package com.ecommerce.g58.controller.Seller;
 
+import com.ecommerce.g58.entity.ProductImage;
+import com.ecommerce.g58.entity.ProductVariation;
 import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.service.ProductService;
@@ -35,6 +37,21 @@ public class ProductManagementController {
     public String addProduct(@ModelAttribute Products product) {
         productService.saveProduct(product);
         return "redirect:/seller-products/" + product.getStoreId().getStoreId();
+    }
+
+    @PostMapping("/addProductImage")
+    public String addProductImage(@ModelAttribute ProductImage productImage) {
+        ProductVariation productVariation = productService.findProductVariationById(productImage.getImageId());
+        Products product = productVariation.getProductId();
+        productService.addProductImage(productImage);
+        return "redirect:/seller-products/" + product.getStoreId();
+    }
+
+    @PostMapping("/addProductVariation")
+    public String addProductVariation(@ModelAttribute ProductVariation productVariation) {
+        Products product = productService.findProductById(productVariation.getProductId());
+        productService.addProductVariation(productVariation);
+        return "redirect:/seller-products/" + product.getStoreId();
     }
 
     @GetMapping("/delete-product/{productId}")

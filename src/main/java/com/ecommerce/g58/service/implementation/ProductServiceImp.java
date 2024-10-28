@@ -227,6 +227,16 @@ public class ProductServiceImp implements ProductService {
         productVariationRepository.save(productVariation);
     }
 
+    @Override
+    public Products findProductById(Products productId) {
+        return productRepository.findById(productId.getProductId()).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
+
+    @Override
+    public ProductVariation findProductVariationById(int variationId) {
+        return productVariationRepository.findById(variationId).orElseThrow(() -> new IllegalArgumentException("Product variation not found"));
+    }
+
 }
 
 

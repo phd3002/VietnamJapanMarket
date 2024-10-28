@@ -54,4 +54,7 @@ public interface ProductService {
 
     void addProductVariation(ProductVariation productVariation);
 
+    Products findProductById(Products productId);
+
+    ProductVariation findProductVariationById(int variationId);
 }
