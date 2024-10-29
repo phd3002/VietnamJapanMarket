@@ -87,44 +87,43 @@
                                     <h4 style="text-align: center">Trạng thái: <span
                                             id="status-order" th:text="${shippingStatus}"></span></h4>
                                     <div class="order-progress" th:if="${shippingStatus} != 'Cancelled'">
-                                        <!--                                        <div class="order-progress-step active" (chi su dung khi da qua buoc nay, cac the o duoi tuong tu)>-->
                                         <div th:classappend="${orderPlacedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-calendar"></i>
-                                            <p style="color: black;" th:text="${orderPlacedTime != null} ? 'Đơn hàng đã đặt' : 'Đang xử lý'"></p>
+                                            <p style="color: black;"
+                                               th:text="${orderPlacedTime != null} ? 'Đơn hàng đã đặt' : 'Chờ xác nhận'"></p>
                                             <small id="order-placed-date" th:if="${orderPlacedTime != null}"
                                                    th:text="${#temporals.format(orderPlacedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${paymentStatus == 'Paid'} ? 'active' : ''"
                                              class="order-progress-step">
-                                            <!--                                            <i class="fas fa-credit-card"></i>-->
                                             <i class="flaticon-cashback"></i>
-<!--                                            <p th:text="'Thanh toán đã xác nhận'" style="color: black;"></p>-->
-                                            <p style="color: black;" th:text="${paymentStatus == 'Paid'} ? 'Thanh toán đã xác nhận' : 'Chưa thanh toán'"></p>
+                                            <p style="color: black;"
+                                               th:text="${paymentStatus == 'Paid'} ? 'Thanh toán đã xác nhận' : 'Chưa thanh toán'"></p>
                                             <small id="payment-confirmed-date" th:if="${paymentTime != null}"
                                                    th:text="${#temporals.format(paymentTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${shippingTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-truck"></i>
-<!--                                            <p th:text="'Đang giao hàng'" style="color: black;"></p>-->
-                                            <p style="color: black;" th:text="${shippingTime != null} ? 'Đang giao hàng' : 'Chờ giao hàng'"></p>
+                                            <p style="color: black;"
+                                               th:text="${shippingTime != null} ? 'Đang giao hàng' : 'Chờ xác nhận'"></p>
                                             <small id="shipped-date" th:if="${shippingTime != null}"
                                                    th:text="${#temporals.format(shippingTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${deliveredTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-box"></i>
-<!--                                            <p th:text="'Đã giao hàng'" style="color: black;"></p>-->
-                                            <p style="color: black;" th:text="${deliveredTime != null} ? 'Đã giao hàng' : 'Chờ giao hàng'"></p>
+                                            <p style="color: black;"
+                                               th:text="${deliveredTime != null} ? 'Đã giao hàng' : 'Chờ xác nhận'"></p>
                                             <small id="delivered-date" th:if="${deliveredTime != null}"
                                                    th:text="${#temporals.format(deliveredTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${completedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-star"></i>
-<!--                                            <p th:text="'Đơn hàng đã hoàn thành'" style="color: black;"></p>-->
-                                            <p style="color: black;" th:text="${completedTime != null} ? 'Đơn hàng đã hoàn thành' : 'Chờ giao hàng'"></p>
+                                            <p style="color: black;"
+                                               th:text="${completedTime != null} ? 'Đơn hàng đã hoàn thành' : 'Chờ xác nhận'"></p>
                                             <small id="completed-date" th:if="${completedTime != null}"
                                                    th:text="${#temporals.format(completedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
@@ -161,7 +160,7 @@
                                             <div class="media">
                                                 <div class="thumbnail">
                                                     <a th:href="@{/view-store/{storeId}(storeId=${storeId})}"><img
-                                                            th:src="@{storeImage}" alt="Store Image"
+                                                            th:src="${storeImage}" alt="Store Image"
                                                             class="author-image"></a>
                                                 </div>
                                                 <div class="media-body-1">
