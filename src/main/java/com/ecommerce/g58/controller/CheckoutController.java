@@ -1,16 +1,15 @@
 package com.ecommerce.g58.controller;
 
-import com.ecommerce.g58.entity.Cart;
-import com.ecommerce.g58.entity.CartItem;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.ProductImageRepository;
-import com.ecommerce.g58.service.CartService;
-import com.ecommerce.g58.service.UserService;
+import com.ecommerce.g58.service.*;
+import com.ecommerce.g58.service.implementation.ShippingUnitServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -29,38 +28,48 @@ public class CheckoutController {
     @Autowired
     private ProductImageRepository productImageRepository; // Inject ProductImageRepository
 
+    @Autowired
+    private ShippingRateService shippingRateService;
+
+    @Autowired
+    private CountriesService countriesSerive;
+    @Autowired
+    private ShippingUnitService shippingUnitService;
+
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal) {
-        // lay thong tin user dang dang nhap
         if (principal == null) {
             return "redirect:/sign-in";
         }
 
-        // neu user chua login thi chuyen huong den trang dang nhap
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
             return "redirect:/sign-in";
         }
 
-        // lay id, gio hang cua user, va danh sach cac mon hang trong cua hang
         Integer userId = user.getUserId();
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
 
-        // vong lap de tinh tong gia tri cua gio hang
+        // Calculate total price based on quantity of each cart item
         double totalPrice = 0.0;
         for (CartItem item : cartItems) {
-            double itemPrice = item.getPrice();
-            int quantity = item.getQuantity();
-            totalPrice += itemPrice * quantity; // tong gia tri moi = tong gia tri cu + gia tri moi
+            double itemPrice = item.getPrice(); // Assuming item.getPrice() returns the price of a single unit
+            int quantity = item.getQuantity(); // Assuming item.getQuantity() returns the quantity of the item in the cart
+            totalPrice += itemPrice * quantity;
         }
-
-        // them cac thuoc tinh vao model de hien thi tren trang checkout
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        List<ShippingRate> shippingRates = shippingRateService.getAllShippingRates();
+        model.addAttribute("shippingRates", shippingRates);
+        model.addAttribute("countries", countriesSerive.getAllCountries());
+        model.addAttribute("users", user);
+        model.addAttribute("shippingUnits", shippingUnits);
+        // Add cart items and total price to the model
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
 
-        // lay thong tin anh cua san pham
+        // Use existing function to get images for each cart item
         Map<Integer, String> productImages = new HashMap<>();
         for (CartItem item : cartItems) {
             List<ProductImage> images = productImageRepository.findByProductProductId(item.getProductId().getProductId());

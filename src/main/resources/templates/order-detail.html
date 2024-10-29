@@ -88,32 +88,45 @@
                                             id="status-order" th:text="${shippingStatus}"></span></h4>
                                     <div class="order-progress">
                                         <!--                                        <div class="order-progress-step active" (chi su dung khi da qua buoc nay, cac the o duoi tuong tu)>-->
-                                        <div class="order-progress-step">
+                                        <div th:classappend="${orderPlacedTime != null} ? 'active' : ''"
+                                             class="order-progress-step">
                                             <i class="flaticon-calendar"></i>
-                                            <p th:text="'Đơn hàng đã đặt'" style="color: black;"></p>
-                                            <small id="order-placed-date">00:13 05-05-2022</small>
+                                            <p style="color: black;" th:text="${orderPlacedTime != null} ? 'Đơn hàng đã đặt' : 'Đang xử lý'"></p>
+                                            <small id="order-placed-date" th:if="${orderPlacedTime != null}"
+                                                   th:text="${#temporals.format(orderPlacedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${paymentStatus == 'Paid'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <!--                                            <i class="fas fa-credit-card"></i>-->
                                             <i class="flaticon-cashback"></i>
-                                            <p th:text="'Thanh toán đã xác nhận'" style="color: black;"></p>
-                                            <small id="payment-confirmed-date">00:43 05-05-2022</small>
+<!--                                            <p th:text="'Thanh toán đã xác nhận'" style="color: black;"></p>-->
+                                            <p style="color: black;" th:text="${paymentStatus == 'Paid'} ? 'Thanh toán đã xác nhận' : 'Chưa thanh toán'"></p>
+                                            <small id="payment-confirmed-date" th:if="${paymentTime != null}"
+                                                   th:text="${#temporals.format(paymentTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div class="order-progress-step">
+                                        <div th:classappend="${shippingTime != null} ? 'active' : ''"
+                                             class="order-progress-step">
                                             <i class="flaticon-truck"></i>
-                                            <p th:text="'Đang giao hàng'" style="color: black;"></p>
-                                            <small id="shipped-date">11:03 05-05-2022</small>
+<!--                                            <p th:text="'Đang giao hàng'" style="color: black;"></p>-->
+                                            <p style="color: black;" th:text="${shippingTime != null} ? 'Đang giao hàng' : 'Chờ giao hàng'"></p>
+                                            <small id="shipped-date" th:if="${shippingTime != null}"
+                                                   th:text="${#temporals.format(shippingTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div class="order-progress-step">
+                                        <div th:classappend="${deliveredTime != null} ? 'active' : ''"
+                                             class="order-progress-step">
                                             <i class="flaticon-box"></i>
-                                            <p th:text="'Đã giao hàng'" style="color: black;"></p>
-                                            <small id="delivered-date">15:22 09-05-2022</small>
+<!--                                            <p th:text="'Đã giao hàng'" style="color: black;"></p>-->
+                                            <p style="color: black;" th:text="${deliveredTime != null} ? 'Đã giao hàng' : 'Chờ giao hàng'"></p>
+                                            <small id="delivered-date" th:if="${deliveredTime != null}"
+                                                   th:text="${#temporals.format(deliveredTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div class="order-progress-step">
+                                        <div th:classappend="${completedTime != null} ? 'active' : ''"
+                                             class="order-progress-step">
                                             <i class="flaticon-star"></i>
-                                            <p th:text="'Đơn hàng đã hoàn thành'" style="color: black;"></p>
-                                            <small id="completed-date">15:23 09-05-2022</small>
+<!--                                            <p th:text="'Đơn hàng đã hoàn thành'" style="color: black;"></p>-->
+                                            <p style="color: black;" th:text="${completedTime != null} ? 'Đơn hàng đã hoàn thành' : 'Chờ giao hàng'"></p>
+                                            <small id="completed-date" th:if="${completedTime != null}"
+                                                   th:text="${#temporals.format(completedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -147,8 +160,8 @@
                                         <div class="axil-dashboard-author">
                                             <div class="media">
                                                 <div class="thumbnail">
-                                                    <a href="view-store.html"><img
-                                                            th:src="@{/images/product/author1.png}"
+                                                    <a th:href="@{/view-store/{storeId}(storeId=${storeId})}"><img
+                                                            th:src="@{storeImage}" alt="Store Image"
                                                             class="author-image"></a>
                                                 </div>
                                                 <div class="media-body-1">
@@ -158,38 +171,41 @@
                                                                 th:text="${storeName}"></h3></span></a>
                                                     </div>
                                                     <div class="info-row">
-                                                        <a href="view-store.html"><i
+                                                        <a th:href="@{/view-store/{storeId}(storeId=${storeId})}"><i
                                                                 class="flaticon-shop hover-flip-item"> Xem cửa hàng</i></a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="product-detail.html">
-                                        <div class="product-card" th:each="detail : ${orderDetails}">
-                                            <div class="product-left">
-                                                <img th:src="${detail.productImage}" alt="Product Image"
-                                                     class="product-image">
-                                                <div class="product-info">
-                                                    <h2 class="product-name" th:text="${detail.productName}"></h2>
-                                                    <p class="product-brand"
-                                                       th:text="'Phân loại hàng: '+ ${detail.categoryName}"></p>
-                                                    <p class="product-category"
-                                                       th:text="'Loại: '+ ${detail.sizeAndColor}"></p>
-                                                    <p class="product-category"
-                                                       th:text="'Số lượng: '+ ${detail.quantity}"></p>
-                                                    <!--                                                <span class="product-policies">15 Days Returns | 15 Days Free Returns</span>-->
+                                    <div th:each="detail : ${orderDetails}">
+                                        <a th:href="@{/product-detail/{productId}(productId=${detail.productId})}">
+                                            <div class="product-card">
+                                                <div class="product-left">
+                                                    <img th:src="${detail.productImage}" alt="Product Image"
+                                                         class="product-image">
+                                                    <div class="product-info">
+                                                        <h2 class="product-name" th:text="${detail.productName}"></h2>
+                                                        <p class="product-brand"
+                                                           th:text="'Phân loại hàng: '+ ${detail.categoryName}"></p>
+                                                        <p class="product-category"
+                                                           th:text="'Loại: '+ ${detail.sizeAndColor}"></p>
+                                                        <p class="product-category"
+                                                           th:text="'Số lượng: '+ ${detail.quantity}"></p>
+                                                        <!--                                                <span class="product-policies">15 Days Returns | 15 Days Free Returns</span>-->
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="product-right">
+                                                <div class="product-right">
                                                 <span class="product-price"
                                                       th:text="${detail.productTotalPrice}"></span>
-                                                <span class="original-price"
-                                                      th:text="${detail.productTotalPrice}"></span><br>
-                                                <span class="shop-rating" th:text="${detail.avgRating} + ' ★'"></span>
+                                                    <span class="original-price"
+                                                          th:text="${detail.productTotalPrice}"></span><br>
+                                                    <span class="shop-rating"
+                                                          th:text="${detail.avgRating} + ' ★'"></span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    </div>
                                     <div class="summary">
                                         <div class="summary-row">
                                             <span class="summary-label">Phí sản phẩm</span>

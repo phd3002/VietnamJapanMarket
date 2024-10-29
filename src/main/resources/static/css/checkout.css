@@ -1,0 +1,47 @@
+/* Common button styles for both shipping and payment */
+.btn-common {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.btn-common.selected {
+    background-color: #bb2d3b;
+    color: #fff;
+    border-color: #bb2d3b;
+}
+
+/* Flexbox to align buttons on the left and prices/details on the right */
+.shipping-method .row,
+.payment-method .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Align prices for shipping and details for payment on the right */
+.shipping-price,
+.payment-details {
+    margin-left: auto;
+    padding-left: 20px;
+    text-align: right;
+}
+
+/* Flexbox to align the content in two columns */
+.order-price .d-flex.justify-content-between {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0; /* Add spacing between rows */
+}
+
+.order-price {
+    top: 10%; /* Position it in the top half of the screen */
+    right: 10%; /* Position it in the right half of the screen */
+    width: 40%; /* Set the width of the container */
+    margin-left: auto; /* Optional: Align the container to the right */
+}
