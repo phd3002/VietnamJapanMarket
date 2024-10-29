@@ -86,7 +86,7 @@
                                             id="order-id" th:text="${trackingNumber}"></span></h4>
                                     <h4 style="text-align: center">Trạng thái: <span
                                             id="status-order" th:text="${shippingStatus}"></span></h4>
-                                    <div class="order-progress">
+                                    <div class="order-progress" th:if="${shippingStatus} != 'Cancelled'">
                                         <!--                                        <div class="order-progress-step active" (chi su dung khi da qua buoc nay, cac the o duoi tuong tu)>-->
                                         <div th:classappend="${orderPlacedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
