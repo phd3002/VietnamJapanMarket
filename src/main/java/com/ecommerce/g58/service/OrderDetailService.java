@@ -7,5 +7,7 @@ public interface OrderDetailService {
 
     // Method to fetch order details by orderId
     List<OrderDetailDTO> getOrderDetails(Long orderId);
+
+    void rateOrder(Long orderId, String userEmail, String rateText, Integer rateStar);
 }
 
