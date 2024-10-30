@@ -25,7 +25,7 @@
                             <img th:src="@{https://i.pravatar.cc/150?img=12}" alt="" width="120px" height="120px">
                         </div>
                         <div class="media-body">
-                            <h5 class="title mb-0" th:text="'Hello ' + ${user.firstName}"></h5>
+                            <h5 class="title mb-0" th:text="'Hello ' + ${user.getUsername()}"></h5>
                             <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                                        aria-selected="true"><i class="fas fa-user"></i>Account Details</a>
                                     <a class="nav-item nav-link" href="my-shop.html"
                                        aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
-                                    <a class="nav-item nav-link" href="order.html"
+                                    <a class="nav-item nav-link" href="/orders"
                                        aria-selected="false"><i class="fas fa-shopping-basket"></i>Orders</a>
                                     <a class="nav-item nav-link" href="wallet.html"
                                        aria-selected="false"><i class="fas fa-wallet"></i>Wallet</a>
