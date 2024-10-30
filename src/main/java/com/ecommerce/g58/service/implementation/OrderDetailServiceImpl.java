@@ -1,14 +1,20 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.OrderDetailDTO;
+import com.ecommerce.g58.entity.Feedback;
+import com.ecommerce.g58.repository.FeedbackRepository;
 import com.ecommerce.g58.repository.OrderDetailRepository;
+import com.ecommerce.g58.repository.ProductVariationRepository;
+import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +22,16 @@ import java.util.List;
 public class OrderDetailServiceImpl implements OrderDetailService {
 
     private final OrderDetailRepository orderDetailRepository;
+    private final FeedbackRepository feedbackRepository;
+    private final ProductVariationRepository productVariationRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository) {
+    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository, FeedbackRepository feedbackRepository, ProductVariationRepository productVariationRepository, UserRepository userRepository) {
         this.orderDetailRepository = orderDetailRepository;
+        this.feedbackRepository = feedbackRepository;
+        this.productVariationRepository = productVariationRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -82,6 +94,32 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         }
 
         return orderDetails;
+    }
+
+    @Transactional
+    @Override
+    public void rateOrder(Long orderId, String userEmail, String rateText, Integer rateStar) {
+        List<OrderDetailDTO> orderDetails = getOrderDetails(orderId);
+        if (orderDetails.isEmpty()) throw new RuntimeException();
+
+        var user = userRepository.findByEmail(userEmail);
+        if (user == null) throw new RuntimeException();
+
+        var orderDetail = orderDetails.get(0);
+        var productId = orderDetail.getProductId();
+        var productVariants = productVariationRepository.findByProductIdProductId(productId.intValue());
+
+        for (var pv : productVariants) {
+            var storeId = pv.getProductId().getStoreId();
+            var feedback = new Feedback();
+            feedback.setStoreId(storeId);
+            feedback.setUserId(user);
+            feedback.setRating(rateStar);
+            feedback.setComment(rateText);
+            feedback.setVariationId(pv);
+            feedback.setCreatedAt(LocalDateTime.now());
+            feedbackRepository.save(feedback);
+        }
     }
 }
 
