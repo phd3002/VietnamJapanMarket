@@ -86,44 +86,45 @@
                                             id="order-id" th:text="${trackingNumber}"></span></h4>
                                     <h4 style="text-align: center">Trạng thái: <span
                                             id="status-order" th:text="${shippingStatus}"></span></h4>
-                                    <div class="order-progress" th:if="${shippingStatus} != 'Cancelled'">
-                                        <div th:classappend="${orderPlacedTime != null} ? 'active' : ''"
+                                    <div class="order-progress" th:if="${shippingStatus} != 'Cancelled' and ${shippingStatus} != 'Returned'">
+                                        <div th:classappend="${pendingTime != null or confirmedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-calendar"></i>
-                                            <p style="color: black;"
-                                               th:text="${orderPlacedTime != null} ? 'Đơn hàng đã đặt' : 'Chờ xác nhận'"></p>
-                                            <small id="order-placed-date" th:if="${orderPlacedTime != null}"
-                                                   th:text="${#temporals.format(orderPlacedTime, 'HH:mm dd-MM-yyyy')}"></small>
+                                            <p class="order-status">Đơn hàng</p>
+                                            <small th:text="${confirmedTime == null} ? 'Chờ xác nhận' : 'Đơn hàng đã đặt'"></small><br>
+                                            <small id="order-placed-date"
+                                                   th:text="${confirmedTime == null ? #temporals.format(pendingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(confirmedTime, 'HH:mm dd-MM-yyyy')}">
+                                            </small>
                                         </div>
-                                        <div th:classappend="${paymentStatus == 'Paid'} ? 'active' : ''"
+                                        <div th:classappend="${processingTime != null or dispatchedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
-                                            <i class="flaticon-cashback"></i>
-                                            <p style="color: black;"
-                                               th:text="${paymentStatus == 'Paid'} ? 'Thanh toán đã xác nhận' : 'Chưa thanh toán'"></p>
-                                            <small id="payment-confirmed-date" th:if="${paymentTime != null}"
-                                                   th:text="${#temporals.format(paymentTime, 'HH:mm dd-MM-yyyy')}"></small>
+                                            <i class="flaticon-box"></i>
+                                            <p class="order-status">Xử lý</p>
+                                            <small th:if="${processingTime != null}" th:text="${dispatchedTime == null} ? 'Đang gói hàng' : 'Đã giao cho vận chuyển'"></small><br>
+                                            <small id="payment-confirmed-date"
+                                                   th:text="${dispatchedTime == null ? #temporals.format(processingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(dispatchedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div th:classappend="${shippingTime != null} ? 'active' : ''"
+                                        <div th:classappend="${shippingTime != null or failedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-truck"></i>
-                                            <p style="color: black;"
-                                               th:text="${shippingTime != null} ? 'Đang giao hàng' : 'Chờ xác nhận'"></p>
-                                            <small id="shipped-date" th:if="${shippingTime != null}"
-                                                   th:text="${#temporals.format(shippingTime, 'HH:mm dd-MM-yyyy')}"></small>
+                                            <p class="order-status">Vận chuyển</p>
+                                            <small th:if="${shippingTime != null}" th:text="${failedTime == null} ? 'Đang giao hàng' : 'Giao hàng thất bại'"></small><br>
+                                            <small id="shipped-date"
+                                                   th:text="${failedTime == null ? #temporals.format(shippingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(failedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${deliveredTime != null} ? 'active' : ''"
                                              class="order-progress-step">
-                                            <i class="flaticon-box"></i>
-                                            <p style="color: black;"
-                                               th:text="${deliveredTime != null} ? 'Đã giao hàng' : 'Chờ xác nhận'"></p>
-                                            <small id="delivered-date" th:if="${deliveredTime != null}"
+                                            <i class="flaticon-quality"></i>
+                                            <p class="order-status">Đã giao</p>
+                                            <small th:if="${deliveredTime != null}" th:text="'Đã giao hàng'"></small><br>
+                                            <small id="delivered-date"
                                                    th:text="${#temporals.format(deliveredTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${completedTime != null} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-star"></i>
-                                            <p style="color: black;"
-                                               th:text="${completedTime != null} ? 'Đơn hàng đã hoàn thành' : 'Chờ xác nhận'"></p>
+                                            <p class="order-status">Hoàn tất</p>
+                                            <small th:if="${completedTime != null}" th:text="'Đơn hàng đã hoàn thành'"></small><br>
                                             <small id="completed-date" th:if="${completedTime != null}"
                                                    th:text="${#temporals.format(completedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>

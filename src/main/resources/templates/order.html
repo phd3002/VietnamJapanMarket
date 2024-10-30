@@ -92,13 +92,20 @@
                                             <select id="statusFilter" name="status"
                                                     onchange="filterOrdersByStatus(this.value)">
                                                 <option value="" th:selected="${status == 'null'}">Tất cả</option>
-                                                <!-- Thay đổi giá trị thành chuỗi trống -->
-                                                <option value="Pending" th:selected="${status == 'Pending'}">Đang chờ
+                                                <option value="Pending" th:selected="${status == 'Pending'}">
+                                                    Chờ xử lý
                                                 </option>
-                                                <option value="Processing" th:selected="${status == 'Processing'}">Đang
-                                                    chuẩn bị
+                                                <option value="Processing" th:selected="${status == 'Processing'}">
+                                                    Đang gói hàng
                                                 </option>
-                                                <option value="Shipped" th:selected="${status == 'Shipped'}">Đã vận chuyển
+                                                <option value="Shipping" th:selected="${status == 'Shipping'}">
+                                                    Đang chuẩn bị
+                                                </option>
+                                                <option value="Delivered" th:selected="${status == 'Delivered'}">
+                                                    Đã giao
+                                                </option>
+                                                <option value="Cancelled" th:selected="${status == 'Cancelled'}">
+                                                    Đã hủy
                                                 </option>
                                             </select>
                                         </div>

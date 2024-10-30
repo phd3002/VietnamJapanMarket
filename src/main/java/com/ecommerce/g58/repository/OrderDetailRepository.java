@@ -33,11 +33,16 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    o.shipping_address, \n" +
             "    latest_status.status AS shipping_status,\n" +
             "    latest_status.tracking_number,\n" +
-            "    (status_times.order_placed_time) AS order_placed_time,\n" +
-            "    (status_times.payment_time) AS payment_time,\n" +
-            "    (status_times.shipping_time) AS shipping_time,\n" +
-            "    (status_times.delivered_time) AS delivered_time,\n" +
-            "    (status_times.completed_time) AS completed_time\n" +
+            "    status_times.pending_time AS pending_time,\n" +
+            "    status_times.confirmed_time AS confirmed_time,\n" +
+            "    status_times.processing_time AS processing_time,\n" +
+            "    status_times.dispatched_time AS dispatched_time,\n" +
+            "    status_times.shipping_time AS shipping_time,\n" +
+            "    status_times.failed_time AS failed_time,\n" +
+            "    status_times.delivered_time AS delivered_time,\n" +
+            "    status_times.completed_time AS completed_time,\n" +
+            "    status_times.cancelled_time AS cancelled_time,\n" +
+            "    status_times.returned_time AS returned_time\n" +
             "FROM orders o\n" +
             "LEFT JOIN order_details od ON o.order_id = od.order_id\n" +
             "LEFT JOIN products p ON od.product_id = p.product_id\n" +
@@ -65,11 +70,16 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "LEFT JOIN (\n" +
             "    SELECT \n" +
             "        order_id,\n" +
-            "        MAX(CASE WHEN status = 'Order Placed' THEN updated_at END) as order_placed_time,\n" +
-            "        MAX(CASE WHEN status = 'Paid' THEN updated_at END) as payment_time,\n" +
+            "        MAX(CASE WHEN status = 'Pending' THEN updated_at END) as pending_time,\n" +
+            "        MAX(CASE WHEN status = 'Confirmed' THEN updated_at END) as confirmed_time,\n" +
+            "        MAX(CASE WHEN status = 'Processing' THEN updated_at END) as processing_time,\n" +
+            "        MAX(CASE WHEN status = 'Dispatched' THEN updated_at END) as dispatched_time,\n" +
             "        MAX(CASE WHEN status = 'Shipping' THEN updated_at END) as shipping_time,\n" +
+            "        MAX(CASE WHEN status = 'Failed' THEN updated_at END) as failed_time,\n" +
             "        MAX(CASE WHEN status = 'Delivered' THEN updated_at END) as delivered_time,\n" +
-            "        MAX(CASE WHEN status = 'Order Completed' THEN updated_at END) as completed_time\n" +
+            "        MAX(CASE WHEN status = 'Completed' THEN updated_at END) as completed_time,\n" +
+            "        MAX(CASE WHEN status = 'Cancelled' THEN updated_at END) as cancelled_time,\n" +
+            "        MAX(CASE WHEN status = 'Returned' THEN updated_at END) as returned_time\n" +
             "    FROM shipping_status\n" +
             "    GROUP BY order_id\n" +
             ") status_times ON o.order_id = status_times.order_id\n" +
