@@ -1,0 +1,40 @@
+<div th:fragment="sidebar">
+    <div class="axil-dashboard-author">
+        <div class="media">
+            <div class="thumbnail">
+                <img th:src="@{/images/product/author1.png}">
+            </div>
+            <div class="media-body">
+                <h5 class="title mb-0" th:text="'Hello ' + ${user.getUsername()}"></h5>
+                <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-3 col-md-4">
+            <aside class="axil-dashboard-aside">
+                <nav class="axil-dashboard-nav">
+                    <div class="nav nav-tabs" role="tablist">
+                        <a class="nav-item nav-link" href="/my-account"
+                           aria-selected="false"><i class="fas fa-user"></i>Account Details</a>
+                        <a class="nav-item nav-link" th:if="${hasStore}" href="/seller/dashboard" aria-selected="false">
+                            <i class="fas fa-store"></i>Your Shop
+                        </a>
+                        <a class="nav-item nav-link" th:unless="${hasStore}" href="#" aria-selected="false"
+                           onclick="showSignupModal()">
+                            <i class="fas fa-store"></i>Your Shop
+                        </a>
+                        <a class="nav-item nav-link" href="/orders"
+                           aria-selected="false"><i class="fas fa-shopping-basket"></i>Orders</a>
+                        <a class="nav-item nav-link" href="/wallet"
+                           aria-selected="false"><i class="fas fa-wallet"></i>Wallet</a>
+                        <a class="nav-item nav-link" href="/address"
+                           aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
+                        <a class="nav-item nav-link" href="/notification"
+                           aria-selected="false"><i class="fas fa-bell"></i>Notification</a>
+                    </div>
+                </nav>
+            </aside>
+        </div>
+    </div>
+</div>
