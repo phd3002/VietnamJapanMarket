@@ -15,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -225,6 +226,30 @@ public class ProductServiceImp implements ProductService {
     @Transactional
     public void addProductVariation(ProductVariation productVariation) {
         productVariationRepository.save(productVariation);
+    }
+
+    @Override
+    public Products findProductById(Products productId) {
+        return productRepository.findById(productId.getProductId()).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
+
+    @Override
+    public ProductVariation findProductVariationById(int variationId) {
+        return productVariationRepository.findById(variationId).orElseThrow(() -> new IllegalArgumentException("Product variation not found"));
+    }
+
+    public Optional<Products> findById(Integer productId) {
+        return productRepository.findById(productId);
+    }
+
+    @Override
+    public Products getMaxProductId() {
+        return productRepository.findTopByOrderByProductIdDesc();
+    }
+
+    @Override
+    public ProductImage getMaxImageId() {
+        return productImageRepository.findTopByOrderByImageIdDesc();
     }
 
 }

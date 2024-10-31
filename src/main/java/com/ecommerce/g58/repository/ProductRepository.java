@@ -17,6 +17,8 @@ import java.util.Optional;
 public interface ProductRepository extends PagingAndSortingRepository<Products, Integer> {
     void deleteByProductId(Integer productId);
 
+    Products findTopByOrderByProductIdDesc();
+
     List<Products> findAll();
 
     List<Products> findByStoreId(Stores storeId);

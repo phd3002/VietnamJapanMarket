@@ -9,7 +9,16 @@ import java.util.Optional;
 @Service
 public interface StoreService {
     void registerStore(Stores store);
+
     Optional<Stores> findByOwnerId(Users ownerId);
+
     Optional<Stores> findByStoreName(String storeName);
+
     void updateUserRoleToSeller(Users user);
+
+    Stores findStoreById(Integer storeId);
+
+    void saveStore(Stores store);
+
+    Optional<Stores> findById(Integer storeId);
 }

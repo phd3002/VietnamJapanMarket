@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface ProductService {
@@ -54,4 +55,13 @@ public interface ProductService {
 
     void addProductVariation(ProductVariation productVariation);
 
+    Products findProductById(Products productId);
+
+    Optional<Products> findById(Integer productId);
+
+    ProductVariation findProductVariationById(int variationId);
+
+    Products getMaxProductId();
+
+    ProductImage getMaxImageId();
 }

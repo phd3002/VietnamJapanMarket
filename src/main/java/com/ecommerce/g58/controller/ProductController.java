@@ -100,22 +100,4 @@ public class ProductController {
         model.addAttribute("products", products);
         return "product-list";
     }
-
-    @PostMapping("/addProduct")
-    public ResponseEntity<String> addProduct(@RequestBody Products product) {
-        productService.addProduct(product);
-        return ResponseEntity.ok("Product added successfully");
-    }
-
-    @PostMapping("/addProductImage")
-    public ResponseEntity<String> addProductImage(@RequestBody ProductImage productImage) {
-        productService.addProductImage(productImage);
-        return ResponseEntity.ok("Product image added successfully");
-    }
-
-    @PostMapping("/addProductVariation")
-    public ResponseEntity<String> addProductVariation(@RequestBody ProductVariation productVariation) {
-        productService.addProductVariation(productVariation);
-        return ResponseEntity.ok("Product variation added successfully");
-    }
 }

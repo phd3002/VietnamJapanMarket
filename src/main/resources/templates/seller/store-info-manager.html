@@ -7,17 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" th:href="@{/seller/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 
-    <!-- Font-icon seller-->
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Font-icon seller -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
 
 </head>
 
@@ -44,7 +44,8 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item active" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
+        <li><a class="app-menu__item active" href="store-info-manager.html"><i
+                class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
@@ -72,60 +73,85 @@
             <div class="tile">
                 <h3 class="tile-title">Thông tin cửa hàng</h3>
                 <div class="tile-body">
-                    <form class="row">
-                        <div class="form-group  col-md-6">
+                    <!-- Update the form to support file upload -->
+                    <form class="row" th:action="@{/store-save}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="storeId" th:value="${store.storeId}">
+                        <div class="form-group col-md-6">
                             <label class="control-label">Tên cửa hàng</label>
-                            <input class="form-control" type="text" value="Shop vippro">
+                            <input class="form-control" type="text" name="storeName" th:value="${store.storeName}">
                         </div>
-                        <div class="form-group  col-md-6">
+                        <div class="form-group col-md-6">
                             <label class="control-label">Điện thoại</label>
-                            <input class="form-control" type="text" value="0123123">
+                            <input class="form-control" type="text" name="storePhone" th:value="${store.storePhone}">
                         </div>
-                        <div class="form-group  col-md-6">
+                        <div class="form-group col-md-6">
                             <label class="control-label">Email</label>
-                            <input class="form-control" type="text" value="123123@123132">
+                            <input class="form-control" type="text" name="storeMail" th:value="${store.storeMail}" readonly>
                         </div>
-                        <div class="form-group  col-md-6">
-                            <label class="control-label">Địa chỉ</label>
-                            <input class="form-control" type="text" value="VietNamNumber1">
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Địa Chỉ</label>
+                            <input class="form-control" type="text" name="storeAddress" th:value="${store.storeAddress}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Thành Phố</label>
+                            <input class="form-control" type="text" name="storeCity" th:value="${store.city}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Quận/Huyện</label>
+                            <input class="form-control" type="text" name="storeDistrict" th:value="${store.district}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Mã Bưu Điện</label>
+                            <input class="form-control" type="text" name="postalCode" th:value="${store.postalCode}">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="countrySelected" class="control-label">Quốc gia</label>
-                            <select class="form-control" id="countrySelected">
-                                <option selected>Việt Nam</option>
-                                <option>Nhật Bản</option>
+                            <select class="form-control" id="countrySelected" name="countryId">
+                                <option th:each="country : ${countries}"
+                                        th:value="${country.countryId}"
+                                        th:text="${country.countryName}"
+                                        th:selected="${country.countryId == store.country?.countryId}">
+                                </option>
                             </select>
                         </div>
                         <div class="form-group col-md-12">
-                            <!-- Main Image Upload -->
                             <label class="control-label">Ảnh cửa hàng</label>
                             <div id="mainImageUpload">
-                                <input type="file" id="mainImage" name="mainImage" accept="image/*"
-                                       onchange="readMainImage(this);"/>
+                                <input type="file" id="mainImage" name="storeImg" accept="image/*" onchange="readMainImage(this);">
                             </div>
                             <div id="mainThumbbox">
-                                <!-- Main image thumbnail will be displayed here -->
+                                <img th:src="${store.pictureUrl}" height="200" width="200" style="object-fit:cover;">
                             </div>
                         </div>
                         <div class="form-group col-md-12">
                             <label class="control-label">Mô tả cửa hàng</label>
-                            <textarea class="form-control" name="mota" id="mota"></textarea>
+                            <textarea class="form-control" name="storeDescription" id="mota" th:text="${store.storeDescription}"></textarea>
                             <script>CKEDITOR.replace('mota');</script>
                         </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-save" type="submit">Lưu lại</button>
+                            <div th:if="${message}" class="alert alert-success mt-2" role="alert">
+                                <span th:text="${message}"></span>
+                            </div>
+                            <div th:if="${error}" class="alert alert-danger mt-2" role="alert">
+                                <span th:text="${error}"></span>
+                            </div>
+                        </div>
                     </form>
+
                 </div>
-                <button class="btn btn-save" type="button" id="saveButton">Lưu lại</button>
             </div>
         </div>
+
     </div>
 </main>
 <!-- Essential javascripts for application to work-->
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
-<script src="../../static/seller/js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
+<!-- The javascript plugin to display page loading on top -->
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
 <script>
     let additionalImageFiles = [];  // Store additional image files for deletion handling
 

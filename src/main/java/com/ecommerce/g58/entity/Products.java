@@ -49,8 +49,5 @@ public class Products {
     @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
     private List<ProductVariation> productVariations;
 
-//    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-//    private List<ProductImage> productImages;
-
 }
 
