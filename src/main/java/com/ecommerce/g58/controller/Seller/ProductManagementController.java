@@ -79,10 +79,12 @@ public class ProductManagementController {
     }
 
     // Method to update product information
-    @PostMapping("/edit-product/{productId}")
+    @PostMapping("/update-product/{productId}")
     public String updateProduct(@PathVariable("productId") Integer productId, @RequestParam String productName,
                                 @RequestParam String productDescription, @RequestParam Integer price,
-                                @RequestParam float weight, @RequestParam Integer categoryId,
+                                @RequestParam float weight,
+//                                @RequestParam String category,
+                                @RequestParam(required = false) Integer categoryId,
                                 RedirectAttributes redirectAttributes) {
         Optional<Products> optionalProduct = productService.findById(productId);
         if (optionalProduct.isPresent()) {
@@ -91,7 +93,11 @@ public class ProductManagementController {
             product.setProductDescription(productDescription);
             product.setPrice(price);
             product.setWeight(weight);
-            product.setCategoryId(categoriesService.findById(categoryId).orElse(null));
+//            product.setCategoryId(categoriesService.findById(categoryId).orElse(null));
+            if (categoryId != null) {
+                Categories categoryEntity = categoriesService.findById(categoryId).orElse(null);
+                product.setCategoryId(categoryEntity);
+            }
             productService.saveProduct(product);
             redirectAttributes.addFlashAttribute("message", "Cập nhật sản phẩm thành công.");
         } else {
@@ -125,6 +131,7 @@ public class ProductManagementController {
 
     @PostMapping("/addProduct")
     public String addProduct(@ModelAttribute Products product, HttpSession session, Model model,
+//                             @RequestParam("categoryId") Integer categoryId,
                              RedirectAttributes redirectAttributes) {
         Integer storeId = (Integer) session.getAttribute("storeId");
         if (storeId != null) {
@@ -184,7 +191,7 @@ public class ProductManagementController {
 
         // Repopulate form data
         model.addAttribute("productImage", productImage);
-        model.addAttribute("categories", categoriesService.getAllCategories());
+
         redirectAttributes.addFlashAttribute("successMessageImg", "Thêm ảnh sản phẩm thành công!");
         return "redirect:/addProductForm/" + storeId;
     }
@@ -207,11 +214,11 @@ public class ProductManagementController {
     }
 
     @GetMapping("/delete-product/{productId}")
-    public String deleteProduct(@PathVariable Integer productId, @RequestParam Integer storeId, HttpServletRequest request) {
-//        Optional<Stores> optionalStore = storeService.findById(storeId);
+    public String deleteProduct(@PathVariable Integer productId, HttpServletRequest request,
+                                HttpSession session) {
+        Integer storeId = (Integer) session.getAttribute("storeId");
         productService.deleteProductById(productId);
         String referer = request.getHeader("Referer");
-//        return "redirect:" + referer;
         return "redirect:" + (referer != null ? referer : "/seller-products/" + storeId);
     }
 
