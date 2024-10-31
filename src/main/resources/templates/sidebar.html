@@ -1,17 +1,6 @@
 <div th:fragment="sidebar">
-    <div class="axil-dashboard-author">
-        <div class="media">
-            <div class="thumbnail">
-                <img th:src="@{/images/product/author1.png}">
-            </div>
-            <div class="media-body">
-                <h5 class="title mb-0" th:text="'Hello ' + ${user.getUsername()}"></h5>
-                <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
-            </div>
-        </div>
-    </div>
     <div class="row">
-        <div class="col-xl-3 col-md-4">
+        <div>
             <aside class="axil-dashboard-aside">
                 <nav class="axil-dashboard-nav">
                     <div class="nav nav-tabs" role="tablist">

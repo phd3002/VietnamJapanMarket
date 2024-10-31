@@ -16,12 +16,29 @@
 
 <!-- Main Content Section -->
 <main class="main-wrapper">
+    <!-- Start My Account Area  -->
     <div class="axil-dashboard-area axil-section-gap">
         <div class="container">
             <div class="axil-dashboard-warp">
-                <!-- Dashboard Sidebar -->
-                <div th:insert="~{sidebar :: sidebar}"></div>
-                <!-- Dashboard Content -->
+                <!-- Dashboard Sidebar and Content Container -->
+                <div class="row">
+                    <div class="axil-dashboard-author">
+                        <div class="media">
+                            <div class="thumbnail">
+                                <img th:src="@{/images/product/author1.png}">
+                            </div>
+                            <div class="media-body">
+                                <h5 class="title mb-0" th:text="'Hello ' + ${user.getUsername()}"></h5>
+                                <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sidebar -->
+                    <div class="col-xl-3 col-md-4">
+                        <aside th:insert="~{sidebar :: sidebar}">
+                        </aside>
+                    </div>
+                    <!-- Dashboard Content -->
                     <div class="col-xl-9 col-md-8">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
@@ -88,6 +105,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <div id="signupModal" style="display: none;">
         <p>Bạn đang chưa có cửa hàng, bạn có muốn đăng ký làm người bán hàng?</p>
