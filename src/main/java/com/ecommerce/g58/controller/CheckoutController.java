@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -245,18 +246,43 @@ public class CheckoutController {
         return response;
     }
 
+    // endpoint lay thoi gian con lai cua session
+    @GetMapping("/checkout-time-remaining")
+    @ResponseBody
+    public Map<String, Object> getTimeRemaining(HttpSession session) {
+        // lay thoi gian bat dau session
+        Map<String, Object> response = new HashMap<>();
+        LocalDateTime sessionStartTime = (LocalDateTime) session.getAttribute("sessionStartTime");
+
+        // neu sessionStartTime != null, tinh thoi gian con lai va tra ve ket qua
+        if (sessionStartTime != null) {
+            Duration duration = Duration.between(sessionStartTime, LocalDateTime.now());
+            long minutesElapsed = duration.toMinutes();
+
+            // kiem tra thoi gian da qua 25 phut, hien thi warning
+            response.put("minutesElapsed", minutesElapsed);
+            response.put("showWarning", minutesElapsed >= 25 && minutesElapsed < SESSION_TIMEOUT_MINUTES);
+        } else {
+            response.put("showWarning", false);
+        }
+        // tra ve ket qua
+        return response;
+    }
+
+    // endpoint xac nhan checkout
     @PostMapping("/process-checkout")
     public String processCheckout(@ModelAttribute Orders order, Principal principal, HttpSession session, Model model) {
+        // kiem tra xem nguoi dung da dang nhap
         Users user = userService.findByEmail(principal.getName());
         if (user == null) {
             return "redirect:/sign-in";
         }
 
-        // Set user details and order metadata
+        // set thong tin cho order
         order.setUserId(user);
         order.setOrderDate(LocalDateTime.now());
 
-        // Retrieve total price from the session or calculate if needed
+        // lay tong tien cua don hang
         Double totalWithShipping = (Double) model.getAttribute("totalWithShipping");
         if (totalWithShipping == null) {
             List<CartItem> cartItems = cartService.getCartByUserId(user.getUserId()).getCartItems();
@@ -268,26 +294,27 @@ public class CheckoutController {
         }
         order.setTotalPrice(totalWithShipping);
 
-        // Save the order to the database
+        // luu order vao database
         orderRepository.save(order);
 
-        // Create and save the initial shipping status for the order
+        // tao shipping status moi cho order (mac dinh la pending)
         ShippingStatus initialShippingStatus = ShippingStatus.builder()
                 .orderId(order)
                 .status("Pending")
                 .updatedAt(LocalDateTime.now())
                 .build();
+        // luu shipping status vao database
         shippingStatusRepository.save(initialShippingStatus);
 
-        // Add the initial shipping status to the order's list of shipping statuses
+        // them shipping status vao order
         List<ShippingStatus> shippingStatuses = new ArrayList<>();
         shippingStatuses.add(initialShippingStatus);
         order.setShippingStatus(shippingStatuses);
 
-        // Update the order with the new shipping status list
+        // luu order voi trang thai don hang vao database
         orderRepository.save(order);
 
-        // Save order details for each cart item
+        // luu order details vao database
         List<CartItem> cartItems = cartService.getCartByUserId(user.getUserId()).getCartItems();
         for (CartItem item : cartItems) {
             OrderDetails orderDetails = new OrderDetails();
@@ -299,13 +326,13 @@ public class CheckoutController {
             orderDetailRepository.save(orderDetails);
         }
 
-        // Clear the user's cart after the order is placed
+        // xoa tat ca san pham trong gio hang sau khi da dat hang
         cartService.clearCart(user.getUserId());
 
-        // Add order details to the model for the confirmation page
+        // set order cho model de hien thi thong tin don hang
         model.addAttribute("order", order);
 
-        // Redirect to the confirmation page or render the template directly
+        // chuyen huong ve trang checkout-complete
         return "checkout-complete";
     }
 }

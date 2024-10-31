@@ -37,23 +37,23 @@
 <!-- Main Content Section -->
 <main class="main-wrapper">
     <div class="confirmation-container">
-        <h2>Thank you for your purchase!</h2>
-        <p>Your order has been placed successfully.</p>
-        <p>Order ID: <span th:text="${order.orderId}"></span></p>
+        <h2>Cảm ơn vì bạn đã mua hàng!</h2>
+        <p>Đã tạo đơn thành công.</p>
+        <p>Mã đơn hàng là: <span th:text="${order.orderId}"></span></p>
 
         <div class="order-summary">
-            <h3>Order Summary</h3>
+            <h3>Thông tin đơn hàng</h3>
             <table>
                 <tr>
-                    <th>Total Price:</th>
+                    <th>Tổng giá:</th>
                     <td th:text="${order.totalPrice}"></td>
                 </tr>
                 <tr>
-                    <th>Order Date:</th>
+                    <th>Ngày tạo đơn:</th>
                     <td th:text="${order.orderDate}"></td>
                 </tr>
                 <tr>
-                    <th>Status:</th>
+                    <th>Trạng thái:</th>
                     <td th:text="${order.shippingStatus[0].status}"></td>
                 </tr>
             </table>
