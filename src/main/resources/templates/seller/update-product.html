@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/seller/css/main.css}">
     <!-- Font-icon seller-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
@@ -175,138 +175,56 @@
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb">
             <li class="breadcrumb-item">Danh sách sản phẩm</li>
-            <li class="breadcrumb-item">Thêm sản phẩm</li>
+            <li class="breadcrumb-item">Cập nhật sản phẩm</li>
         </ul>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="tile">
-                <h3 class="tile-title">Tạo mới sản phẩm</h3>
+                <h3 class="tile-title">Cập nhật sản phẩm</h3>
                 <div class="tile-body">
-                    <form class="row">
+                    <form class="row" action="/edit-product/{productId}" method="post" th:action="@{/edit-product/{productId}(productId=${product.productId})}" th:object="${product}">
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên sản phẩm</label>
-                            <input class="form-control" type="text" value="abc">
-                        </div>
-
-
-                        <div class="form-group  col-md-3">
-                            <label class="control-label">Số lượng</label>
-                            <input class="form-control" type="number" value="12">
-                        </div>
-                        <div class="form-group col-md-3 ">
-                            <label for="status-products" class="control-label">Tình trạng</label>
-                            <select class="form-control" id="status-products">
-                                <option>-- Chọn tình trạng --</option>
-                                <option selected>Còn hàng</option>
-                                <option>Hết hàng</option>
-                            </select>
+                            <input class="form-control" type="text" name="productName" th:value="*{productName}">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="categories-product" class="control-label">Danh mục</label>
-                            <select class="form-control" id="categories-product">
-                                <option>-- Chọn danh mục --</option>
-                                <option selected>Electronic</option>
-                                <option>Beauty</option>
-                                <option>Gaming</option>
+                            <select class="form-control" id="categories-product" name="categoryId" th:field="*{categoryId}">
+                                <option value="" disabled>-- Chọn danh mục --</option>
+                                <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.categoryName}" th:selected="${category.categoryId == product.categoryId.categoryId}"></option>
                             </select>
-                        </div>
-                        <div class="form-group col-md-3 ">
-                            <label class="control-label">Nhà cung cấp</label>
-                            <input class="form-control" type="text">
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Giá bán(VND)</label>
-                            <input class="form-control" type="text" value="120.000">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Giảm giá(%)</label>
-                            <input class="form-control" type="text" value="20">
+                            <input class="form-control" type="number" name="price" th:value="*{price}">
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Khối lượng(gram)</label>
-                            <input class="form-control" type="text" value="100">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Nhóm sản phẩm</label>
-                            <input class="form-control" type="text" value="1">
-                        </div>
-                        <div class="form-group col-md-12">
-                            <!-- Main Image Upload -->
-                            <label class="control-label">Ảnh chính</label>
-                            <div id="mainImageUpload">
-                                <input type="file" id="mainImage" name="mainImage" accept="image/*"
-                                       onchange="readMainImage(this);"/>
-                            </div>
-                            <div id="mainThumbbox">
-                                <!-- Main image thumbnail will be displayed here -->
-                            </div>
-
-                            <!--                            &lt;!&ndash; Additional Images Upload (4 max) &ndash;&gt;-->
-                            <!--                            <label class="control-label">Ảnh phụ (tối đa 4 ảnh)</label>-->
-                            <!--                            <div id="additionalImageUpload">-->
-                            <!--                                <input type="file" id="additionalImages" name="additionalImages[]" accept="image/*"-->
-                            <!--                                       multiple onchange="readAdditionalImages(this);"/>-->
-                            <!--                            </div>-->
-                            <!--                            <div id="additionalThumbbox" style="display: flex; flex-wrap: wrap;">-->
-                            <!--                                &lt;!&ndash; Additional image thumbnails will be displayed here &ndash;&gt;-->
-                            <!--                            </div>-->
-                        </div>
-                        <div class="col-12 mt-4">
-                            <h4>Biến thể sản phẩm</h4>
-                        </div>
-
-                        <div id="variants-container" class="col-12 mt-4">
-                            <!-- Mẫu cho mỗi biến thể sản phẩm -->
-                            <div class="variant-item row mt-12">
-                                <div class="form-group col-md-3">
-                                    <label for="size-product" class="control-label">Kích thước</label>
-                                    <select class="form-control" id="size-product">
-                                        <option>-- Chọn kích thước --</option>
-                                        <option selected>S</option>
-                                        <option>M</option>
-                                        <option>L</option>
-                                        <option>XL</option>
-                                        <option>XXL</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="color-product" class="control-label">Màu sắc</label>
-                                    <select class="form-control" id="color-product">
-                                        <option>-- Chọn kích thước --</option>
-                                        <option selected>Xanh</option>
-                                        <option>Đỏ</option>
-                                        <option>Vàng</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="control-label">Số lượng</label>
-                                    <input type="number" class="form-control stock-input" required min="0">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="control-label">Hình ảnh</label>
-                                    <input type="file" class="form-control-file image-input" accept="image/*">
-                                </div>
-                            </div>
+                            <input class="form-control" type="number" name="weight" th:value="*{weight}">
                         </div>
                         <div class="form-group col-md-12">
                             <label class="control-label">Mô tả sản phẩm</label>
-                            <textarea class="form-control" name="mota" id="mota"></textarea>
+                            <textarea class="form-control" name="productDescription" th:text="*{productDescription}" id="mota"></textarea>
                             <script>CKEDITOR.replace('mota');</script>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-save" type="submit">Cập nhật</button>
+                            <a class="btn btn-cancel" href="/seller-products">Hủy bỏ</a>
                         </div>
                     </form>
                 </div>
-                <button class="btn btn-save" type="button" id="saveButton">Cập nhật</button>
-                <a class="btn btn-cancel" href="product-manager.html">Hủy bỏ</a>
             </div>
         </div>
     </div>
+
 </main>
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
-<script src="../../static/seller/js/main.js"></script>
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+
 <script>
     let additionalImageFiles = [];  // Store additional image files for deletion handling
 

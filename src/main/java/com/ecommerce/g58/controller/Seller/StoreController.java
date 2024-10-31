@@ -3,7 +3,9 @@ package com.ecommerce.g58.controller.Seller;
 import com.ecommerce.g58.entity.Countries;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.exception.SpringBootFileUploadException;
 import com.ecommerce.g58.service.CountryService;
+import com.ecommerce.g58.service.FileS3Service;
 import com.ecommerce.g58.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +24,9 @@ import java.util.Optional;
 public class StoreController {
     @Autowired
     private StoreService storeService;
+
+    @Autowired
+    private FileS3Service fileS3Service;
 
     @Autowired
     private CountryService countryService;
@@ -44,7 +51,8 @@ public class StoreController {
                                 @RequestParam Integer countryId, @RequestParam String storeDescription,
                                 @RequestParam String storeCity, @RequestParam String storeDistrict,
                                 @RequestParam String postalCode, @RequestParam String storeMail,
-                                Model model) {
+                                @RequestParam MultipartFile storeImg,
+                                Model model) throws SpringBootFileUploadException, IOException {
         Optional<Stores> optionalStore = storeService.findById(storeId);
         Optional<Countries> optionalCountry = countryService.findById(countryId);
         if (optionalStore.isPresent() && optionalCountry.isPresent()) {
@@ -58,6 +66,12 @@ public class StoreController {
             store.setCity(storeCity);
             store.setDistrict(storeDistrict);
             store.setPostalCode(postalCode);
+            if(storeImg != null && !storeImg.isEmpty()) {
+                String storeImgUrl = fileS3Service.uploadFile(storeImg);
+                store.setPictureUrl(storeImgUrl);
+            }else {
+                store.setPictureUrl(store.getPictureUrl());
+            }
             storeService.saveStore(store);
             model.addAttribute("store", store);
             model.addAttribute("message", "Store information saved successfully.");

@@ -16,4 +16,6 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Inte
     // Query to fetch images by joining product_variation and product_image using image_id
     @Query("SELECT pi FROM ProductImage pi JOIN ProductVariation pv ON pi.imageId = pv.imageId.imageId WHERE pv.productId.productId = :productId")
     List<ProductImage> findByProductProductId(@Param("productId") Integer productId);
+
+    ProductImage findTopByOrderByImageIdDesc();
 }

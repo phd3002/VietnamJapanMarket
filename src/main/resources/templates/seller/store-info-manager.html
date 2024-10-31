@@ -73,7 +73,8 @@
             <div class="tile">
                 <h3 class="tile-title">Thông tin cửa hàng</h3>
                 <div class="tile-body">
-                    <form class="row" action="/store-save" method="post">
+                    <!-- Update the form to support file upload -->
+                    <form class="row" th:action="@{/store-save}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="storeId" th:value="${store.storeId}">
                         <div class="form-group col-md-6">
                             <label class="control-label">Tên cửa hàng</label>
@@ -85,8 +86,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Email</label>
-                            <input class="form-control" type="text" name="storeMail" th:value="${store.storeMail}"
-                                   readonly>
+                            <input class="form-control" type="text" name="storeMail" th:value="${store.storeMail}" readonly>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Địa Chỉ</label>
@@ -117,8 +117,7 @@
                         <div class="form-group col-md-12">
                             <label class="control-label">Ảnh cửa hàng</label>
                             <div id="mainImageUpload">
-                                <input type="file" id="mainImage" name="mainImage" accept="image/*"
-                                       onchange="readMainImage(this);"/>
+                                <input type="file" id="mainImage" name="storeImg" accept="image/*" onchange="readMainImage(this);">
                             </div>
                             <div id="mainThumbbox">
                                 <img th:src="${store.pictureUrl}" height="200" width="200" style="object-fit:cover;">
@@ -126,8 +125,7 @@
                         </div>
                         <div class="form-group col-md-12">
                             <label class="control-label">Mô tả cửa hàng</label>
-                            <textarea class="form-control" name="storeDescription" id="mota"
-                                      th:text="${store.storeDescription}"></textarea>
+                            <textarea class="form-control" name="storeDescription" id="mota" th:text="${store.storeDescription}"></textarea>
                             <script>CKEDITOR.replace('mota');</script>
                         </div>
                         <div class="col-md-12">
@@ -140,11 +138,11 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
-
-
         </div>
+
     </div>
 </main>
 <!-- Essential javascripts for application to work-->

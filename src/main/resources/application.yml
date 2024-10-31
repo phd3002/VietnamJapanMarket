@@ -48,6 +48,12 @@ spring:
           auth: true
           starttls:
             enable: true
+aws:
+  bucket:
+    name: vietnamjapanmarket
+  region: ap-southeast-2
+  accessKey: AKIAU6VTTYKZOJMREN7U
+  secretKey: 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
 server:
   port: 8080
   error:
