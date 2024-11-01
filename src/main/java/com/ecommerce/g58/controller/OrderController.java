@@ -39,7 +39,7 @@ public class OrderController {
     @GetMapping("/orders")
     public String getOrders(@RequestParam(value = "status", required = false) String status,
                             @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int size,
+                            @RequestParam(defaultValue = "5") int size,
                             Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {

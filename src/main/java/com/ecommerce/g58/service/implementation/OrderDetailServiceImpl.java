@@ -1,13 +1,20 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.OrderDetailDTO;
+import com.ecommerce.g58.entity.Feedback;
+import com.ecommerce.g58.repository.FeedbackRepository;
 import com.ecommerce.g58.repository.OrderDetailRepository;
+import com.ecommerce.g58.repository.ProductVariationRepository;
+import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +22,16 @@ import java.util.List;
 public class OrderDetailServiceImpl implements OrderDetailService {
 
     private final OrderDetailRepository orderDetailRepository;
+    private final FeedbackRepository feedbackRepository;
+    private final ProductVariationRepository productVariationRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository) {
+    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository, FeedbackRepository feedbackRepository, ProductVariationRepository productVariationRepository, UserRepository userRepository) {
         this.orderDetailRepository = orderDetailRepository;
+        this.feedbackRepository = feedbackRepository;
+        this.productVariationRepository = productVariationRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -28,26 +41,85 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         for (Object[] result : results) {
             OrderDetailDTO dto = new OrderDetailDTO();
-            dto.setProductName((String) result[1]);
-            dto.setProductImage((String) result[2]);
-            dto.setCategoryName((String) result[3]);
-            dto.setSizeAndColor((String) result[4]);
-            dto.setOrderTotalPrice(((BigInteger) result[5]).intValue());
-            dto.setQuantity((Integer) result[6]);
-            dto.setProductTotalPrice((Integer) result[7]);
-            dto.setAvgRating((Integer) result[8]);
-            dto.setStoreName((String) result[9]);
-            dto.setTotalAmount((Integer) result[10]);
-            dto.setShippingFee((Integer) result[11]);
-            dto.setPaymentMethod((String) result[12]);
-            dto.setPaymentStatus((String) result[13]);
-            dto.setShippingAddress((String) result[14]);
-            dto.setShippingStatus((String) result[15]);
-            dto.setTrackingNumber((String) result[16]);
+            dto.setOrderId(orderId);
+            dto.setProductId(((Integer) result[1]).longValue());
+            dto.setStoreId(((Integer) result[2]).longValue());
+            dto.setProductName((String) result[3]);
+            dto.setProductImage((String) result[4]);
+            dto.setCategoryName((String) result[5]);
+            dto.setSizeAndColor((String) result[6]);
+//            dto.setOrderTotalPrice(((Integer) result[7]));
+            if (result[7] instanceof BigInteger) {
+                dto.setOrderTotalPrice(((BigInteger) result[7]).intValue());
+            } else if (result[7] instanceof Integer) {
+                dto.setOrderTotalPrice((Integer) result[7]);
+            }
+            dto.setQuantity((Integer) result[8]);
+            dto.setProductTotalPrice((Integer) result[9]);
+            dto.setAvgRating((Integer) result[10]);
+            dto.setStoreName((String) result[11]);
+            dto.setStoreImage((String) result[12]);  // Added
+            dto.setTotalAmount((Integer) result[13]);
+            dto.setShippingFee((Integer) result[14]);
+            dto.setPaymentMethod((String) result[15]);
+            dto.setPaymentStatus((String) result[16]);
+            dto.setShippingAddress((String) result[17]);
+            dto.setShippingStatus((String) result[18]);
+            dto.setTrackingNumber((String) result[19]);
+            if (result[20] instanceof Timestamp) {
+                Timestamp orderPlacedTimestamp = (Timestamp) result[20];
+                dto.setOrderPlacedTime(orderPlacedTimestamp.toLocalDateTime());
+            }
+
+            if (result[21] instanceof Timestamp) {
+                Timestamp paymentTimestamp = (Timestamp) result[21];
+                dto.setPaymentTime(paymentTimestamp.toLocalDateTime());
+            }
+
+            if (result[22] instanceof Timestamp) {
+                Timestamp shippingTimestamp = (Timestamp) result[22];
+                dto.setShippingTime(shippingTimestamp.toLocalDateTime());
+            }
+
+            if (result[23] instanceof Timestamp) {
+                Timestamp deliveredTimestamp = (Timestamp) result[23];
+                dto.setDeliveredTime(deliveredTimestamp.toLocalDateTime());
+            }
+
+            if (result[24] instanceof Timestamp) {
+                Timestamp completedTimestamp = (Timestamp) result[24];
+                dto.setCompletedTime(completedTimestamp.toLocalDateTime());
+            }
             orderDetails.add(dto);
         }
 
         return orderDetails;
+    }
+
+    @Transactional
+    @Override
+    public void rateOrder(Long orderId, String userEmail, String rateText, Integer rateStar) {
+        List<OrderDetailDTO> orderDetails = getOrderDetails(orderId);
+        if (orderDetails.isEmpty()) throw new RuntimeException();
+
+        var user = userRepository.findByEmail(userEmail);
+        if (user == null) throw new RuntimeException();
+
+        var orderDetail = orderDetails.get(0);
+        var productId = orderDetail.getProductId();
+        var productVariants = productVariationRepository.findByProductIdProductId(productId.intValue());
+
+        for (var pv : productVariants) {
+            var storeId = pv.getProductId().getStoreId();
+            var feedback = new Feedback();
+            feedback.setStoreId(storeId);
+            feedback.setUserId(user);
+            feedback.setRating(rateStar);
+            feedback.setComment(rateText);
+            feedback.setVariationId(pv);
+            feedback.setCreatedAt(LocalDateTime.now());
+            feedbackRepository.save(feedback);
+        }
     }
 }
 
