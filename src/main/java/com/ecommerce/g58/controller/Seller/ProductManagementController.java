@@ -131,7 +131,6 @@ public class ProductManagementController {
 
     @PostMapping("/addProduct")
     public String addProduct(@ModelAttribute Products product, HttpSession session, Model model,
-//                             @RequestParam("categoryId") Integer categoryId,
                              RedirectAttributes redirectAttributes) {
         Integer storeId = (Integer) session.getAttribute("storeId");
         if (storeId != null) {
