@@ -67,28 +67,44 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             dto.setShippingStatus((String) result[18]);
             dto.setTrackingNumber((String) result[19]);
             if (result[20] instanceof Timestamp) {
-                Timestamp orderPlacedTimestamp = (Timestamp) result[20];
-                dto.setOrderPlacedTime(orderPlacedTimestamp.toLocalDateTime());
+                Timestamp pendingTimestamp = (Timestamp) result[20];
+                dto.setPendingTime(pendingTimestamp.toLocalDateTime());
             }
-
             if (result[21] instanceof Timestamp) {
-                Timestamp paymentTimestamp = (Timestamp) result[21];
-                dto.setPaymentTime(paymentTimestamp.toLocalDateTime());
+                Timestamp confirmedTimestamp = (Timestamp) result[21];
+                dto.setConfirmedTime(confirmedTimestamp.toLocalDateTime());
             }
-
             if (result[22] instanceof Timestamp) {
-                Timestamp shippingTimestamp = (Timestamp) result[22];
+                Timestamp processingTimestamp = (Timestamp) result[22];
+                dto.setProcessingTime(processingTimestamp.toLocalDateTime());
+            }
+            if (result[23] instanceof Timestamp) {
+                Timestamp dispatchedTimestamp = (Timestamp) result[23];
+                dto.setDispatchedTime(dispatchedTimestamp.toLocalDateTime());
+            }
+            if (result[24] instanceof Timestamp) {
+                Timestamp shippingTimestamp = (Timestamp) result[24];
                 dto.setShippingTime(shippingTimestamp.toLocalDateTime());
             }
-
-            if (result[23] instanceof Timestamp) {
-                Timestamp deliveredTimestamp = (Timestamp) result[23];
+            if(result[25] instanceof Timestamp) {
+                Timestamp failedTimestamp = (Timestamp) result[25];
+                dto.setFailedTime(failedTimestamp.toLocalDateTime());
+            }
+            if (result[26] instanceof Timestamp) {
+                Timestamp deliveredTimestamp = (Timestamp) result[26];
                 dto.setDeliveredTime(deliveredTimestamp.toLocalDateTime());
             }
-
-            if (result[24] instanceof Timestamp) {
-                Timestamp completedTimestamp = (Timestamp) result[24];
+            if (result[27] instanceof Timestamp) {
+                Timestamp completedTimestamp = (Timestamp) result[27];
                 dto.setCompletedTime(completedTimestamp.toLocalDateTime());
+            }
+            if (result[28] instanceof Timestamp) {
+                Timestamp cancelledTimestamp = (Timestamp) result[28];
+                dto.setCancelledTime(cancelledTimestamp.toLocalDateTime());
+            }
+            if (result[29] instanceof Timestamp) {
+                Timestamp returnedTimestamp = (Timestamp) result[29];
+                dto.setReturnedTime(returnedTimestamp.toLocalDateTime());
             }
             orderDetails.add(dto);
         }

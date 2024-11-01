@@ -102,19 +102,24 @@ input[type=number] {
 .order-progress-step i {
     font-size: 24px;
     color: #888; /* Default icon color */
+    border: 1px solid #888;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 6px 8px 4px 8px;
 }
 
 .order-progress-step p, .order-progress-step small {
     margin: 5px 0;
-    color: #fff;
+    color: black;
 }
 
 .order-progress-step.active i {
-    color: #4CAF50; /* Green for active step */
+    color: #007b01; /* Green for active step */
+    border-color: #007b01;
 }
 
-.order-progress-step.completed i {
-    color: #00C853; /* Darker green for completed steps */
+.order-progress-step.active p {
+    color: #007b01; /* Darker green for completed steps */
 }
 
 .order-progress-step small {
@@ -461,30 +466,38 @@ input[type=number] {
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Offset to center */
     overflow: hidden; /* Prevent scroll */
     background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    padding: 20px; /* Optional padding */
+    border-radius: 8px; /* Optional rounded corners */
+    z-index: 1000; /* Ensures it's on top */
 }
 
 /* Modal content box */
 .modal-content {
+    max-width: 500px;
     background-color: #fff;
     margin: auto; /* Centered horizontally */
     position: absolute; /* To make the positioning easier */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); /* Center it vertically and horizontally */
-    padding: 20px;
     border: 1px solid #888;
-    /*width: 400px; !* Small fixed width *!*/
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
+    padding: 0 20px 20px 20px;
 }
 
 /* Close button style */
 .close {
     color: #aaa;
-    float: right;
+    float: left;
     font-weight: bold;
+    margin-left: 95%;
+    font-size: 28px;
 }
 
 .close:hover,

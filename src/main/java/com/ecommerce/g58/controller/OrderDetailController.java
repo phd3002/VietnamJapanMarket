@@ -41,11 +41,16 @@ public class OrderDetailController {
             model.addAttribute("storeName", firstDetail.getStoreName());
             model.addAttribute("storeImage", firstDetail.getStoreImage());
             model.addAttribute("storeId", firstDetail.getStoreId());
-            model.addAttribute("orderPlacedTime", firstDetail.getOrderPlacedTime());
-            model.addAttribute("paymentTime", firstDetail.getPaymentTime());
+            model.addAttribute("pendingTime", firstDetail.getPendingTime());
+            model.addAttribute("confirmedTime", firstDetail.getConfirmedTime());
+            model.addAttribute("processingTime", firstDetail.getProcessingTime());
+            model.addAttribute("dispatchedTime", firstDetail.getDispatchedTime());
             model.addAttribute("shippingTime", firstDetail.getShippingTime());
+            model.addAttribute("failedTime", firstDetail.getFailedTime());
             model.addAttribute("deliveredTime", firstDetail.getDeliveredTime());
             model.addAttribute("completedTime", firstDetail.getCompletedTime());
+            model.addAttribute("cancelledTime", firstDetail.getCancelledTime());
+            model.addAttribute("returnedTime", firstDetail.getReturnedTime());
         }
 
         return "order-detail"; // Thymeleaf template name
