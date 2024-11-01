@@ -3,15 +3,11 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.CartItemRepository;
-import com.ecommerce.g58.repository.ProductRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
 import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.ProductService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.utils.SecurityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +27,6 @@ import java.util.stream.Collectors;
 
 @Controller
 public class CartController {
-    private static final Logger logger = LoggerFactory.getLogger(CartController.class);
 
     @Autowired
     private CartService cartService;
@@ -49,12 +44,6 @@ public class CartController {
     private CartItemRepository cartItemRepository;
 
     @Autowired
-    private ProductVariationRepository productVariationRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
     private SecurityUtils securityUtils;
 
 
@@ -69,6 +58,7 @@ public class CartController {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
             return "redirect:/sign-in";
         }
 
@@ -86,14 +76,14 @@ public class CartController {
                 cartService.addProductToCart(user, productDetail, quantity,cart);
 
                 // Success message
-                redirectAttributes.addFlashAttribute("message", "Product successfully added to your cart!");
+                redirectAttributes.addFlashAttribute("message", "Sản phâ đã được thêm vào giỏ hàng của bạn");
             } else {
                 // Error message if the product detail is not found
-                redirectAttributes.addFlashAttribute("error", "Failed to add product to cart. Product not found.");
+                redirectAttributes.addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
             }
         } catch (Exception e) {
             // Handle exceptions and add an error message
-            redirectAttributes.addFlashAttribute("error", "Error adding product to cart. Please try again.");
+            redirectAttributes.addFlashAttribute("error", "Đã có lỗi xảy ra khi thêm vào giỏ hảng");
         }
 
         // Redirect to the same product-detail page (stay on the same page)
@@ -174,13 +164,10 @@ public class CartController {
     @GetMapping("/api/cart/count")
     @ResponseBody
     public int getCartItemCount() {
-        logger.info("API endpoint /api/cart/count called.");
         Integer userId = securityUtils.getCurrentUserId();
         if (userId != null) {
-            logger.info("User ID found: {}", userId);
             return cartService.getCartItemCount(userId);
         }
-        logger.warn("User ID not found, returning cart count as 0");
         return 0;
     }
 }

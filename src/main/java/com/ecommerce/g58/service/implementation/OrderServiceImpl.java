@@ -1,27 +1,23 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.OrdersDTO;
-import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.service.OrderService;
-import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    @Autowired
-    private UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository) {
@@ -29,45 +25,37 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrdersDTO> getOrderSummariesByUserId(Integer userId) {
-        // Use the query that filters by userId
-        List<Object[]> results = orderRepository.findOrdersByUserId(userId);
-        List<OrdersDTO> orders = new java.util.ArrayList<>();
+    public Page<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable) {
+        logger.info("Fetching orders for userId: {}, status: {}, page: {}", userId, status, pageable.getPageNumber());
 
-        for (Object[] result : results) {
+        Page<Object[]> results = orderRepository.findOrdersByUserIdAndStatus(userId, status, pageable);
+
+        logger.info("Fetched {} records from the database.", results.getTotalElements());
+
+        return results.map(result -> {
             OrdersDTO dto = new OrdersDTO();
             dto.setOrderId((int) result[0]);
+
             Timestamp orderDateTimestamp = (Timestamp) result[1];
             dto.setOrderDate(orderDateTimestamp.toLocalDateTime());
             dto.setStatus((String) result[2]);
-            if (result[3] instanceof BigInteger) {
-                dto.setTotalQuantity(new BigDecimal((BigInteger) result[3]));
-            } else if (result[3] instanceof BigDecimal) {
-                dto.setTotalQuantity((BigDecimal) result[3]);
+
+            // Convert total quantity directly to Integer
+            if (result[3] instanceof Integer) {
+                dto.setTotalQuantity((Integer) result[3]);
+            } else if (result[3] instanceof Long) {
+                dto.setTotalQuantity(((Long) result[3]).intValue());
             }
-            if (result[4] instanceof BigInteger) {
-                dto.setTotalPrice(new BigDecimal((BigInteger) result[4]));
-            } else if (result[4] instanceof BigDecimal) {
-                dto.setTotalPrice((BigDecimal) result[4]);
+
+            // Convert total price directly to Long
+            if (result[4] instanceof Integer) {
+                dto.setTotalPrice(((Integer) result[4]).longValue());
+            } else if (result[4] instanceof Long) {
+                dto.setTotalPrice((Long) result[4]);
             }
-            orders.add(dto);
-        }
-        return orders;
-    }
 
-    @Override
-    public Integer getLoggedInUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName(); // Assuming you use email for login
-
-        // Call your user service to get the user by email
-        Users user = userService.findByEmail(email);
-        return user.getUserId();
-    }
-
-    @Override
-    public List<OrdersDTO> getOrderSummariesForLoggedInUser() {
-        Integer userId = getLoggedInUserId(); // Get the user ID of the logged-in user
-        return getOrderSummariesByUserId(userId);
+            logger.debug("Mapped result to OrdersDTO: {}", dto);
+            return dto;
+        });
     }
 }

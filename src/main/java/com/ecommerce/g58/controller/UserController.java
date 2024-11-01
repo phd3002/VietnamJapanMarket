@@ -92,7 +92,7 @@ public class UserController {
 
         } catch (Exception e) {
             e.printStackTrace(); // Thêm dòng in ra lỗi để kiểm tra
-            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại.");
+            redirectAttributes.addFlashAttribute("error", "Email không tồn tại");
             return "redirect:/sign-up"; // Chuyển hướng lại trang đăng ký nếu lỗi
         }
     }

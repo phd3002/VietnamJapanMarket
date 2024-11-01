@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title th:text="${pageTitle} ?: 'Checkout'"></title>
@@ -7,6 +7,60 @@
 
     <!-- Including CSS Files from base.html -->
     <th:block th:replace="~{base :: head}"></th:block>
+    <style>
+        .checkout-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .user-info, .order-summary {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+
+        .order-summary {
+            margin-left: 10px;
+        }
+
+        /* Make the layout stack vertically on smaller screens */
+        @media (max-width: 768px) {
+            .checkout-container {
+                flex-direction: column;
+            }
+
+            .user-info, .order-summary {
+                width: 100%;
+                margin: 0;
+            }
+        }
+
+        .checkout-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #616eff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #616eff;
+        }
+
+        .checkout-btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body class="sticky-header">
@@ -16,94 +70,126 @@
 
 <!-- Main Content Section -->
 <main class="main-wrapper" th:fragment="content">
-
     <!-- Start Checkout Area  -->
     <div class="axil-checkout-area axil-section-gap">
         <div class="container">
-            <form action="#">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="axil-checkout-billing">
-                            <h4 class="title mb--40">Chi tiết thanh toán</h4>
-                            <div class="form-group">
-                                <label>Họ tên <span>*</span></label>
-                                <input type="text" id="fullname">
-                            </div>
-                            <div class="form-group">
-                                <label>Điện thoại <span>*</span></label>
-                                <input type="tel" id="phone">
-                            </div>
-                            <div class="form-group">
-                                <label>Địa chỉ Email <span>*</span></label>
-                                <input type="email" id="email">
-                            </div>
-                            <h4 class="title mb--40">Địa chỉ giao hàng</h4>
-                            <div class="form-group">
-                                <label>Quốc gia <span>*</span></label>
-                                <select id="Region">
-                                    <option value="3">Việt Nam</option>
-                                    <option value="4">Nhật Bản</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Địa chỉ chi tiết <span>*</span></label>
-                                <input type="text" id="new-address" class="mb--15">
-                            </div>
+            <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
+            </div>
+            <form action="/process-checkout" method="post">
+                <div class="checkout-container">
+                    <!-- User Information Section -->
+                    <div class="user-info">
+                        <h4 class="title mb--40">Thông tin người mua</h4>
+                        <div class="form-group">
+                            <span>Họ tên</span>
+                            <input type="text" id="full-name">
+                        </div>
+                        <div class="form-group">
+                            <span>Số điện thoại</span>
+                            <input type="text" name="phoneNumber" id="phone-number" required>
+                        </div>
+                        <div class="form-group">
+                            <span>Địa chỉ email</span>
+                            <input type="text" id="email-address">
+                        </div>
+                        <div class="form-group">
+                            <span>Quốc gia</span>
+                            <select id="country">
+                                <option value="vietnam">Việt Nam</option>
+                                <option value="nhatban">Nhật Bản</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <span>Địa chỉ chi tiết</span>
+                            <input type="text" name="shippingAddress" id="shipping-address" required>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="axil-order-summery order-checkout-summery">
-                            <h5 class="title mb--20">Đơn hàng của bạn</h5>
-                            <div class="summery-table-wrap">
-                                <table class="table summery-table">
-                                    <thead>
-                                    <tr>
-                                        <th>Sản phẩm</th>
-                                        <th>Giá</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="item : ${cartItems}">
-                                        <td>
-                                            <img th:src="${productImages[item.productId.productId]}" alt="Product Image" height="100" width="100" />
-                                            <span th:text="${item.productId.productName}"></span> x<span th:text="${item.quantity}"></span>
-                                        </td>
-                                        <td th:text="${item.price}">Price</td>
-                                    </tr>
-                                    <tr class="order-total">
-                                        <td>Tổng</td>
-                                        <td th:text="${totalPrice}" class="order-total-amount"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <h5 class="title mb--20">Phương thức thanh toán</h5>
-                            <div class="order-payment-method">
-                                <div class="single-payment">
-                                    <div class="input-group">
-                                        <input type="radio" id="walletPayment" name="paymentMethod" value="Wallet" required>
-                                        <label for="walletPayment">Thanh toán bằng ví</label>
-                                    </div>
-                                    <p>Thanh toán trực tiếp từ ví của bạn.</p>
-                                </div>
-                                <div class="single-payment">
-                                    <div class="input-group justify-content-between align-items-center">
-                                        <input type="radio" id="onlinePayment" name="paymentMethod" value="Online">
-                                        <label for="onlinePayment">Thanh toán online</label>
-                                    </div>
-                                    <p>Thanh toán qua ngân hàng hoặc thẻ tín dụng.</p>
-                                </div>
-                                <div class="single-payment">
-                                    <div class="input-group justify-content-between align-items-center">
-                                        <input type="radio" id="codPayment" name="paymentMethod" value="Cash on Delivery">
-                                        <label for="codPayment">Thanh toán khi nhận hàng</label>
-                                    </div>
-                                    <p>Trả tiền mặt khi nhận hàng.</p>
-                                </div>
-                            </div>
-                            <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Checkout
-                            </button>
+
+                    <!-- Order Summary Section -->
+                    <div class="order-summary">
+                        <h5 class="title mb--20">Đơn hàng của bạn</h5>
+                        <div class="summery-table-wrap">
+                            <table class="table summery-table">
+                                <thead>
+                                <tr>
+                                    <th width="70%">Sản phẩm</th>
+                                    <th width="10%">Đơn giá</th>
+                                    <th width="10%">Số lượng</th>
+                                    <th width="10%">Thành tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Loop through the cartItems -->
+                                <tr th:each="item : ${cartItems}" class="order-product">
+                                    <td>
+                                        <img th:src="${item.variationId.imageId.thumbnail}" alt="Product Image"
+                                             height="100" width="100"/>
+                                        <span th:text="${item.productId.productName}"></span><br>
+                                        <span>Loại:
+                                            <span th:text="${item.variationId.color.colorName}"></span>,
+                                            <span th:text="${item.variationId.size.sizeName}"></span>
+                                        </span>
+                                    </td>
+                                    <td th:text="${item.price}"></td>
+                                    <td th:text="${item.quantity}"></td>
+                                    <td th:text="${item.price * item.quantity}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
+                        <div class="order-payment-method">
+                            <h5 class="title mb--20">Phương thức thanh toán</h5>
+                            <div class="row">
+                                <div class="col-sm-12 d-flex justify-content-between">
+                                    <div>
+                                        <button id="wallet" class="payment-btn btn-common selected"
+                                                data-method="wallet">Ví VJ-Market
+                                        </button>
+                                        <button id="credit-card" class="payment-btn btn-common"
+                                                data-method="credit-card">Thanh toán qua ngân hàng
+                                        </button>
+                                        <button id="cod" class="payment-btn btn-common" data-method="cod">Thanh toán khi
+                                            nhận hàng
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <div class="payment-details" id="walletDetails">
+                                            <p>Số dư ví của bạn: <strong>1,500,000đ</strong></p>
+                                        </div>
+                                        <div class="payment-details" id="credit-cardDetails" style="display:none;">
+                                            <select name="bank" id="bank-select">
+                                                <option value="">Chọn ngân hàng</option>
+                                                <option value="vietcombank">Vietcombank</option>
+                                                <option value="techcombank">Techcombank</option>
+                                                <option value="bidv">BIDV</option>
+                                                <option value="acb">ACB</option>
+                                            </select>
+                                        </div>
+                                        <div class="payment-details" id="codDetails" style="display:none;">
+                                            <p>Trả tiền mặt khi nhận hàng.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="order-price">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="title mb-0">Tổng tiền hàng:</h6>
+                                    <span id="total-product-price" th:text="${totalPrice}"></span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="title mb-0">Tổng tiền phí vận chuyển:</h6>
+                                    <span id="total-shipping-fee">50000</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="title mb-0">Tổng thanh toán:</h5>
+                                    <h6 id="total-order-price" style="color: #bb2d3b;"
+                                        th:text="${totalWithShipping}"></h6>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán
+                        </button>
                     </div>
                 </div>
             </form>
@@ -114,6 +200,55 @@
 
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>
+
+<script>
+    // kiem tra session co con ton tai hay khong
+    let sessionCheckInterval = setInterval(function () {
+        console.log('Checking session status...');
+        fetch('/session-status')
+            .then(response => response.json())
+            .then(data => {
+                // Neu session het han thi chuyen huong ve trang chu
+                if (!data.sessionValid) {
+                    console.log('Session expired, redirecting to homepage...');
+                    clearInterval(sessionCheckInterval); // dung kiem tra session neu het han
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                console.error('Error checking session status:', error);
+                clearInterval(sessionCheckInterval); // dung kiem tra session neu gap loi
+            });
+    }, 60000); // kiem tra session moi 60 giay
+
+    // Dung kiem tra session khi nguoi dung roi khoi trang
+    window.addEventListener('beforeunload', function () {
+        clearInterval(sessionCheckInterval);
+    });
+</script>
+
+<script>
+    // kiem tra thoi gian con lai de thanh toan
+    function checkTimeRemaining() {
+        // lay thoi gian con lai tu server
+        fetch('/checkout-time-remaining')
+            .then(response => response.json())
+            .then(data => {
+                // neu thoi gian con lai < 5 phut thi hien thi thong bao
+                if (data.showWarning) {
+                    document.getElementById("timeoutWarning").style.display = "block";
+                } else {
+                    document.getElementById("timeoutWarning").style.display = "none";
+                }
+            })
+            .catch(error => console.error('Error checking time remaining:', error));
+    }
+
+    // kiem tra moi 10 giay
+    setInterval(checkTimeRemaining, 10000);
+    // ban dau an thong bao
+    document.getElementById("timeoutWarning").style.display = "none";
+</script>
 
 <!-- JS
 ============================================ -->
@@ -134,5 +269,6 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/checkout.js}"></script>
 </body>
 </html>

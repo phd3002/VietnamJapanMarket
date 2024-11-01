@@ -17,6 +17,7 @@ spring:
     show-sql: false
     properties:
       hibernate:
+        ddl-auto: update
         dialect: org.hibernate.dialect.MySQL8Dialect
         enable_lazy_load_no_trans: true
     generate-ddl: true
@@ -47,7 +48,21 @@ spring:
           auth: true
           starttls:
             enable: true
+aws:
+  bucket:
+    name: vietnamjapanmarket
+  region: ap-southeast-2
+  accessKey: AKIAU6VTTYKZOJMREN7U
+  secretKey: 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
 server:
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID
+        same-site: Lax
+        http-only: true
+        secure: false
+      timeout: 60m
   port: 8080
   error:
     include-stacktrace: always

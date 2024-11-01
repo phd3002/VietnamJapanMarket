@@ -67,7 +67,7 @@
         <div class="container">
             <div class="header-navbar">
                 <div class="header-brand">
-                    <a href="homepage" class="logo logo-dark">
+                    <a href="/homepage" class="logo logo-dark">
                         <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                     </a>
                 </div>
@@ -96,7 +96,7 @@
                             </a>
                         </li>
                         <li class="wishlist">
-                            <a href="wishlist">
+                            <a href="/wishlist">
                                 <i class="flaticon-heart"></i>
                             </a>
                         </li>
@@ -150,18 +150,20 @@
                                 <span class="title">QUICKLINKS</span>
                                 <ul>
                                     <li>
-                                        <a href="my-account.html">My Account</a>
+                                        <a href="/my-account">My Account</a>
                                     </li>
                                     <li>
-                                        <a href="order.html">My Orders</a>
+                                        <a href="/orders">My Orders</a>
                                     </li>
                                 </ul>
-                                <div class="login-btn">
-                                    <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
+                                <div th:if="${#authentication.name == 'anonymousUser'}">
+                                    <div class="login-btn">
+                                        <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
+                                    </div>
+                                    <div class="reg-footer text-center">
+                                        No account yet? <a href="sign-up.html" class="btn-link">REGISTER HERE.</a>
+                                    </div>
                                 </div>
-                                <div class="reg-footer text-center">No account yet? <a href="sign-up.html"
-                                                                                       class="btn-link">REGISTER
-                                    HERE.</a></div>
                             </div>
                         </li>
                         <li class="axil-mobile-toggle">

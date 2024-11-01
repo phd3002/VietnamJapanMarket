@@ -164,7 +164,6 @@
                                     </li>
                                     <!-- Other list items here if needed -->
                                 </ul>
-
                                 <!-- Place the form separately, outside the ul -->
                                 <div class="wishlist-form-container">
                                     <form th:action="@{/add_to_wishlist}" method="post">
@@ -179,7 +178,36 @@
                 </div>
             </div>
         </div>
-        <!-- Description -->
+        <!-- Store Detail  -->
+        <div class="axil-breadcrumb-area">
+            <div class="container">
+                <div class="axil-dashboard-author">
+                    <div class="media">
+                        <div class="thumbnail">
+                            <a href="#"><img th:src="@{${product.storeId.pictureUrl}}"
+                                             alt="Hello Annie"
+                                             class="author-image"></a>
+                        </div>
+                        <div class="media-body-1">
+                            <div class="info-row">
+                                <span class="name"><h3 style="margin-bottom: 8px;"
+                                                       th:text="${product.storeId.storeName}"></h3></span>
+                                <span class="joining-date">Register Since Sep 2020</span>
+                                <span class="email">Email: annie@example.com</span>
+                            </div>
+                            <div class="info-row">
+                                <a href="#"><i class="flaticon-chat hover-flip-item"> Chat with shop</i></a>
+                                <span class="address">Address: 123 Street Name</span>
+                                <a th:href="@{/view-store/{id}(id=${product.storeId.storeId})}"><i
+                                        class="flaticon-shop hover-flip-item"> View Shop</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <!-- Description & Review  -->
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
@@ -192,6 +220,48 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="reviews-wrapper">
+                    <h4 class="mb--60">Reviews</h4>
+                    <div class="row">
+                        <div class="col-lg-12 mb--40">
+                            <div class="axil-comment-area pro-desc-commnet-area">
+                                <h5 class="title" th:text="${feedbacks.size() + ' Review for this product'}"></h5>
+                                <ul class="comment-list" th:each="feedback : ${feedbacks}">
+                                    <li class="comment">
+                                        <div class="comment-body">
+                                            <div class="single-comment">
+                                                <div class="comment-img">
+                                                    <img th:src="@{/images/others/author1.png}"
+                                                         alt="Author Images">
+                                                </div>
+                                                <div class="comment-inner">
+                                                    <h6 class="commenter">
+                                                        <a class="hover-flip-item-wrapper" href="#">
+                                                                <span class="hover-flip-item">
+                                                                    <span data-text="Cameron Williamson"
+                                                                          th:text="${feedback.userId.firstName + ' ' + feedback.userId.lastName}"></span>
+                                                                </span>
+                                                        </a>
+                                                        <span class="commenter-rating rating-four-star">
+                                                                <a href="#" th:each="r : ${#numbers.sequence(1, 5)}"><i
+                                                                        th:class="${'fas fa-star' + (r > feedback.rating ? ' empty-rating' : '')}"></i></a>
+                                                        </span>
+                                                    </h6>
+                                                    <div class="comment-text">
+                                                        <p th:text="${'“' + feedback.comment + '”'}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center pt--30">
+                    <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
                 </div>
             </div>
         </div>

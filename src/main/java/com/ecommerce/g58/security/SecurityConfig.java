@@ -4,7 +4,6 @@ import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     @Autowired
-    @Lazy
     private UserService userService;
 
     @Bean
@@ -71,13 +69,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
                 // Public pages and resources
                 .antMatchers(
-                        "/products/**", "/category/**", "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**",
-                        "/", "/sign-up/confirm-code/**", "/address/**", "/cart-detail/**", "/checkout/**", "/coming-soon/**",
-                        "/confirm-code/**", "/footer/**", "/head/**", "/header/**", "/homepage/**", "/homepageOrg/**",
-                        "/homepageTest/**", "/my-account", "/my-shop/**", "/notification/**", "/order/**",
-                        "/order-detail/**", "/privacy-policy/**", "/product-detail/**", "/product-list/**", "/sign-in/**",
-                        "/sign-up/**", "/sign-up-seller/**", "/terms-of-service/**", "/view-store/**", "/wallet/**",
-                        "/wishlist/**", "/forgot-password/**", "/reset-password/**", "/add_to_cart", "/cart-items","/api/cart/**"
+                        "/","/**", "/sign-up/confirm-code/**",
+                        "/address/**", "/cart-detail/**",
+                        "/coming-soon/**", "/confirm-code/**", "/footer/**",
+                        "/head/**", "/header/**",
+                        "/homepage/**", "/homepageOrg/**", "/homepageTest/**",
+                        "/my-account", "/my-shop/**", "/notification/**",
+                        "/order/**", "/order-detail/**", "/privacy-policy/**",
+                        "/product-detail/**", "/product-list/**",
+                        "/sign-in/**", "/sign-up/**", "/sign-up-seller/**",
+                        "/terms-of-service/**", "/view-store/**", "/wallet/**",
+                        "/wishlist/**", "/forgot-password/**", "/reset-password/**",
+                        "/add_to_cart", "/cart-items", "/product/**",
+                        "/store-info/**", "/store-save/**"
                 ).permitAll()
 
                 // Checkout page requires authentication
@@ -85,6 +89,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
                 // Any other request must be authenticated
                 .anyRequest().authenticated()
+                .and()
+
+                // Session Management Configuration
+                .sessionManagement()
+                .invalidSessionUrl("/sign-in?session=invalid") // Redirect on invalid session
+                .sessionFixation().none() // Prevents creating a new session after login
                 .and()
                 // Logout configuration
                 .logout()

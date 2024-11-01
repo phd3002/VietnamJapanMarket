@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-@Table(name = "tokens")
+//@Table(name = "tokens")
 public class ResetToken {
 
     @Id
