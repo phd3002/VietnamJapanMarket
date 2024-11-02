@@ -21,14 +21,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.slf4j.Logger;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class CartControllerTest {
@@ -83,6 +84,7 @@ public class CartControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        redirectAttributes = new RedirectAttributesModelMap();
     }
 
     // testAddToCart_UserNotAuthenticated tc1
@@ -454,4 +456,212 @@ public class CartControllerTest {
 
 
     //--------------------------------------------------------------------------------------------------------------
+    // testUpdateCartQuantity_SuccessfulUpdate tc1
+    @Test
+    public void testUpdateCartQuantity_SuccessfulUpdatetc1() {
+        Integer cartItemId = 1;
+        Integer quantity = 2;
+        CartItem mockCartItem = new CartItem();
+        ProductVariation productVariation = new ProductVariation();
+        productVariation.setStock(5);
+        mockCartItem.setVariationId(productVariation);
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(mockCartItem));
+        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        assertEquals("redirect:/cart-items", result);
+        verify(cartItemService, times(1)).updateCartItemQuantity(cartItemId, quantity);
+        assertEquals("Quantity updated successfully", redirectAttributes.getFlashAttributes().get("message"));
+    }
+
+    // testUpdateCartQuantity_ExceedsStock tc2
+    @Test
+    public void testUpdateCartQuantity_ExceedsStocktc2() {
+        // Given
+        Integer cartItemId = 1;
+        Integer quantity = 0;
+        CartItem mockCartItem = new CartItem();
+        ProductVariation productVariation = new ProductVariation();
+        productVariation.setStock(5);
+        mockCartItem.setVariationId(productVariation);
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(mockCartItem));
+        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        assertEquals("redirect:/cart-items", result);
+        verify(cartItemService, never()).updateCartItemQuantity(anyInt(), anyInt());
+        assertEquals("Error updating quantity: Exceeds stock limit", redirectAttributes.getFlashAttributes().get("error"));
+    }
+
+    // testUpdateCartQuantity_ExceedsStock tc3
+    @Test
+    public void testUpdateCartQuantity_ExceedsStocktc3() {
+        // Given
+        Integer cartItemId = 1;
+        Integer quantity = -1;
+        CartItem mockCartItem = new CartItem();
+        ProductVariation productVariation = new ProductVariation();
+        productVariation.setStock(5);
+        mockCartItem.setVariationId(productVariation);
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(mockCartItem));
+        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        assertEquals("redirect:/cart-items", result);
+        verify(cartItemService, never()).updateCartItemQuantity(anyInt(), anyInt());
+        assertEquals("Error updating quantity: Exceeds stock limit", redirectAttributes.getFlashAttributes().get("error"));
+    }
+
+    // testUpdateCartQuantity_ExceedsStock tc4
+    @Test
+    public void testUpdateCartQuantity_ExceedsStocktc4() {
+        // Given
+        Integer cartItemId = 1;
+        Integer quantity = 999999999;
+        CartItem mockCartItem = new CartItem();
+        ProductVariation productVariation = new ProductVariation();
+        productVariation.setStock(5);
+        mockCartItem.setVariationId(productVariation);
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(mockCartItem));
+        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        assertEquals("redirect:/cart-items", result);
+        verify(cartItemService, never()).updateCartItemQuantity(anyInt(), anyInt());
+        assertEquals("Error updating quantity: Exceeds stock limit", redirectAttributes.getFlashAttributes().get("error"));
+    }
+
+    // testUpdateCartQuantity_ExceedsStock tc5
+    @Test
+    public void testUpdateCartQuantity_ExceedsStocktc5() {
+        // Given
+        Integer cartItemId = 1;
+        Integer quantity = null;
+        CartItem mockCartItem = new CartItem();
+        ProductVariation productVariation = new ProductVariation();
+        productVariation.setStock(5);
+        mockCartItem.setVariationId(productVariation);
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(mockCartItem));
+        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        assertEquals("redirect:/cart-items", result);
+        verify(cartItemService, never()).updateCartItemQuantity(anyInt(), anyInt());
+        assertEquals("Error updating quantity", redirectAttributes.getFlashAttributes().get("error"));
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc6
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc6() {
+        Integer cartItemId = 0;
+        Integer quantity = 2;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc7
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc7() {
+        Integer cartItemId = 0;
+        Integer quantity = 0;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc8
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc8() {
+        Integer cartItemId = 0;
+        Integer quantity = -1;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc9
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc9() {
+        Integer cartItemId = 0;
+        Integer quantity = 999999999;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc10
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc10() {
+        Integer cartItemId = 0;
+        Integer quantity = null;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc11
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc11() {
+        Integer cartItemId = -1;
+        Integer quantity = 2;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc12
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc12() {
+        Integer cartItemId = -1;
+        Integer quantity = 0;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc13
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc13() {
+        Integer cartItemId = -1;
+        Integer quantity = -1;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc14
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc14() {
+        Integer cartItemId = -1;
+        Integer quantity = 999999999;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+    // testUpdateCartQuantity_CartItemNotFound tc15
+    @Test
+    public void testUpdateCartQuantity_CartItemNotFoundtc15() {
+        Integer cartItemId = -1;
+        Integer quantity = null;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+        });
+        assertEquals("Cart item not found", exception.getMessage());
+    }
+
+
+
+
+
 }
