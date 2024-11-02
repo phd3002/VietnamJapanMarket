@@ -93,6 +93,7 @@ public class CartControllerTest {
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("errorMessage", "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
         assertEquals("redirect:/sign-in", result);
     }
 
@@ -111,13 +112,13 @@ public class CartControllerTest {
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
         verify(cartService, times(1)).addProductToCart(user, productDetail, 1, cart);
-        verify(redirectAttributes, times(1)).addFlashAttribute("message", "Product successfully added to your cart!");
+        verify(redirectAttributes, times(1)).addFlashAttribute("message", "Sản phẩm đã được thêm vào giỏ hàng của bạn");
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc3
     @Test
-    public void testAddToCart_ProductNotFound() {
+    public void testAddToCart_ProductNotFoundtc3() {
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -125,12 +126,258 @@ public class CartControllerTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
         when(cartService.getOrCreateCart(user)).thenReturn(cart);
-        when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(null);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Failed to add product to cart. Product not found.");
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
         assertEquals("redirect:/product-detail/1", result);
     }
+
+    // testAddToCart_ProductQuantitytc4
+    @Test
+    public void testAddToCart_ProductQuantitytc4() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        ProductDetailDTO productDetail = mock(ProductDetailDTO.class);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(productDetail);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(1, 1, 0, redirectAttributes, request);
+        verify(cartService, times(1)).addProductToCart(user, productDetail, 0, cart);
+        verify(redirectAttributes, times(1)).addFlashAttribute("message", "");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductQuantitytc5
+    @Test
+    public void testAddToCart_ProductQuantitytc5() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        ProductDetailDTO productDetail = mock(ProductDetailDTO.class);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(productDetail);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(1, 1, -1, redirectAttributes, request);
+        verify(cartService, times(1)).addProductToCart(user, productDetail, -1, cart);
+        verify(redirectAttributes, times(1)).addFlashAttribute("message", "");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // ttestAddToCart_ProductQuantitytc6
+    @Test
+    public void testAddToCart_ProductQuantitytc6() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        ProductDetailDTO productDetail = mock(ProductDetailDTO.class);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(productDetail);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(1, 1, 999999999, redirectAttributes, request);
+        verify(cartService, times(1)).addProductToCart(user, productDetail, 999999999, cart);
+        verify(redirectAttributes, times(1)).addFlashAttribute("message", "Sản phẩm đã được thêm vào giỏ hàng của bạn");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc7
+    @Test
+    public void testAddToCart_ProductNotFoundtc7() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(0, 1, 1, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc8
+    @Test
+    public void testAddToCart_ProductNotFoundtc8() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(0, 0, 1, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc9
+    @Test
+    public void testAddToCart_ProductNotFoundtc9() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(0, 1, 0, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc10
+    @Test
+    public void testAddToCart_ProductNotFoundtc10() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(0, 1, -1, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc11
+    @Test
+    public void testAddToCart_ProductNotFoundtc11() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(0, 1, 999999999, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc12
+    @Test
+    public void testAddToCart_ProductNotFoundtc12() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(0, 0, 0, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc13
+    @Test
+    public void testAddToCart_ProductNotFoundtc13() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(0, 0, -1, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc14
+    @Test
+    public void testAddToCart_ProductNotFoundtc14() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(0, 0, 999999999, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc15
+    @Test
+    public void testAddToCart_ProductNotFoundtc15() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc16
+    @Test
+    public void testAddToCart_ProductNotFoundtc16() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+    // testAddToCart_ProductNotFound tc17
+    @Test
+    public void testAddToCart_ProductNotFoundtc17() {
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
+        when(cartService.getOrCreateCart(user)).thenReturn(cart);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
+        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
+        String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("redirect:/product-detail/1", result);
+    }
+
+
     // testAddToCart_ExceptionThrown tc4
     @Test
     public void testAddToCart_ExceptionThrown() {
@@ -146,7 +393,7 @@ public class CartControllerTest {
         doThrow(new RuntimeException("Test Exception")).when(cartService).addProductToCart(user, productDetail, 1, cart);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Error adding product to cart. Please try again.");
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Đã có lỗi xảy ra khi thêm vào giỏ hảng");
         assertEquals("redirect:/product-detail/1", result);
     }
 

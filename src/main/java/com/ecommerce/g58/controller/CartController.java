@@ -76,7 +76,7 @@ public class CartController {
                 cartService.addProductToCart(user, productDetail, quantity,cart);
 
                 // Success message
-                redirectAttributes.addFlashAttribute("message", "Sản phâ đã được thêm vào giỏ hàng của bạn");
+                redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được thêm vào giỏ hàng của bạn");
             } else {
                 // Error message if the product detail is not found
                 redirectAttributes.addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
