@@ -83,26 +83,20 @@ public class ProductManagementController {
     public String updateProduct(@PathVariable("productId") Integer productId, @RequestParam String productName,
                                 @RequestParam String productDescription, @RequestParam Integer price,
                                 @RequestParam float weight,
-//                                @RequestParam String category,
-                                @RequestParam(required = false) Integer categoryId,
                                 RedirectAttributes redirectAttributes) {
         Optional<Products> optionalProduct = productService.findById(productId);
-        if (optionalProduct.isPresent()) {
+        if (productName.isEmpty() || productDescription.isEmpty() || price == null || price < 20000 || weight < 0.1 || weight > 20.0) {
+            redirectAttributes.addFlashAttribute("error", "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại các trường thông tin.");
+            return "redirect:/edit-product/" + productId;
+        }
             Products product = optionalProduct.get();
             product.setProductName(productName);
             product.setProductDescription(productDescription);
             product.setPrice(price);
             product.setWeight(weight);
-//            product.setCategoryId(categoriesService.findById(categoryId).orElse(null));
-            if (categoryId != null) {
-                Categories categoryEntity = categoriesService.findById(categoryId).orElse(null);
-                product.setCategoryId(categoryEntity);
-            }
             productService.saveProduct(product);
             redirectAttributes.addFlashAttribute("message", "Cập nhật sản phẩm thành công.");
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Không tìm thấy sản phẩm");
-        }
+
         return "redirect:/edit-product/" + productId;
     }
 

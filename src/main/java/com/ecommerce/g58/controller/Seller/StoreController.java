@@ -53,6 +53,37 @@ public class StoreController {
                                 @RequestParam String postalCode, @RequestParam String storeMail,
                                 @RequestParam MultipartFile storeImg,
                                 Model model) throws SpringBootFileUploadException, IOException {
+        // Kiểm tra thông tin nhập vào
+        if (storeName == null || storeName.isEmpty() || storeName.length() > 100) {
+            model.addAttribute("error", "Tên cửa hàng không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/store-info/" + storeId;
+        }
+        if (storePhone == null || storePhone.isEmpty() || storePhone.length() > 10) {
+            model.addAttribute("error", "Số điện thoại không được để trống và không được vượt quá 10 ký tự.");
+            return "redirect:/store-info/" + storeId;
+        }
+        if (storeAddress == null || storeAddress.isEmpty() || storeAddress.length() > 255) {
+            model.addAttribute("error", "Địa chỉ không được để trống và không được vượt quá 255 ký tự.");
+            return "redirect:/store-info/" + storeId;
+        }
+        if (countryId == null) {
+            model.addAttribute("error", "Quốc gia không được để trống.");
+            return "redirect:/store-info/" + storeId;
+        }
+        if (storeMail == null || storeMail.isEmpty() || storeMail.length() > 100) {
+            model.addAttribute("error", "Email cửa hàng không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/store-info/" + storeId;
+        }
+        if (storeDescription != null && storeDescription.length() > 500) {
+            model.addAttribute("error", "Mô tả cửa hàng không được vượt quá 500 ký tự.");
+            return "redirect:/store-info/" + storeId;
+        }
+        if (postalCode != null && postalCode.length() > 20) {
+            model.addAttribute("error", "Mã bưu chính không được vượt quá 20 ký tự.");
+            return "redirect:/store-info/" + storeId;
+        }
+
+        // Xác thực quốc gia và cửa hàng
         Optional<Stores> optionalStore = storeService.findById(storeId);
         Optional<Countries> optionalCountry = countryService.findById(countryId);
         if (optionalStore.isPresent() && optionalCountry.isPresent()) {
@@ -66,18 +97,19 @@ public class StoreController {
             store.setCity(storeCity);
             store.setDistrict(storeDistrict);
             store.setPostalCode(postalCode);
-            if(storeImg != null && !storeImg.isEmpty()) {
+            if (storeImg != null && !storeImg.isEmpty()) {
                 String storeImgUrl = fileS3Service.uploadFile(storeImg);
                 store.setPictureUrl(storeImgUrl);
-            }else {
+            } else {
                 store.setPictureUrl(store.getPictureUrl());
             }
             storeService.saveStore(store);
             model.addAttribute("store", store);
-            model.addAttribute("message", "Store information saved successfully.");
+            model.addAttribute("message", "Thông tin cửa hàng đã được lưu thành công.");
         } else {
-            model.addAttribute("error", "Store or country information not found.");
+            model.addAttribute("error", "Không tìm thấy thông tin cửa hàng hoặc quốc gia.");
         }
         return "redirect:/store-info/" + storeId;
     }
+
 }

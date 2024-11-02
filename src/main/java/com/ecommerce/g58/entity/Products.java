@@ -43,6 +43,9 @@ public class Products {
     @Column(name = "product_type", nullable = false)
     private String productType;
 
+    @Column(name = "product_code", length = 10)
+    private String productCode;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
