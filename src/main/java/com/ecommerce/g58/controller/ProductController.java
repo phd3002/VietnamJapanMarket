@@ -84,7 +84,6 @@ public class ProductController {
         return "product-detail";
     }
 
-
 //    @GetMapping("/seller-products")
 //    public String getProductsByStore(@RequestParam Stores storeId, Model model) {
 //        List<Products> products = productService.getProductsByStoreId(storeId);

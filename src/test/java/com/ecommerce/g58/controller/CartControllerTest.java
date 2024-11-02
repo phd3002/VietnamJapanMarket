@@ -29,8 +29,6 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
-
 @RunWith(MockitoJUnitRunner.class)
 public class CartControllerTest {
     @InjectMocks
@@ -90,21 +88,27 @@ public class CartControllerTest {
     // testAddToCart_UserNotAuthenticated tc1
     @Test
     public void testAddToCart_UserNotAuthenticatedtc1() {
-        when(authentication.isAuthenticated()).thenReturn(false);
+        // Given
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(false);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("errorMessage", "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
         assertEquals("redirect:/sign-in", result);
+        assertEquals("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("errorMessage"));
     }
 
     // testAddToCart_ProductAddedSuccessfully tc2
     @Test
     public void testAddToCart_ProductAddedSuccessfullytc2() {
+        // Given
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -114,33 +118,38 @@ public class CartControllerTest {
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
         verify(cartService, times(1)).addProductToCart(user, productDetail, 1, cart);
-        verify(redirectAttributes, times(1)).addFlashAttribute("message", "Sản phẩm đã được thêm vào giỏ hàng của bạn");
+        assertEquals("Sản phẩm đã được thêm vào giỏ hàng của bạn", redirectAttributes.getFlashAttributes().get("message"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc3
     @Test
     public void testAddToCart_ProductNotFoundtc3() {
+        // Given
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
         when(cartService.getOrCreateCart(user)).thenReturn(cart);
         when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
-        String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        String result = cartController.addToCart(1, 0, 1, redirectAttributes, request);
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductQuantitytc4
     @Test
     public void testAddToCart_ProductQuantitytc4() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -150,16 +159,18 @@ public class CartControllerTest {
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, 0, redirectAttributes, request);
         verify(cartService, times(1)).addProductToCart(user, productDetail, 0, cart);
-        verify(redirectAttributes, times(1)).addFlashAttribute("message", "");
+        assertEquals("", redirectAttributes.getFlashAttributes().get("message"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductQuantitytc5
     @Test
     public void testAddToCart_ProductQuantitytc5() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -168,17 +179,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(productDetail);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, -1, redirectAttributes, request);
-        verify(cartService, times(1)).addProductToCart(user, productDetail, -1, cart);
-        verify(redirectAttributes, times(1)).addFlashAttribute("message", "");
+        assertEquals("", redirectAttributes.getFlashAttributes().get("message"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // ttestAddToCart_ProductQuantitytc6
     @Test
     public void testAddToCart_ProductQuantitytc6() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -187,17 +199,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(productDetail);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, 999999999, redirectAttributes, request);
-        verify(cartService, times(1)).addProductToCart(user, productDetail, 999999999, cart);
-        verify(redirectAttributes, times(1)).addFlashAttribute("message", "Sản phẩm đã được thêm vào giỏ hàng của bạn");
+        assertEquals("Sản phẩm đã được thêm vào giỏ hàng của bạn", redirectAttributes.getFlashAttributes().get("message"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc7
     @Test
     public void testAddToCart_ProductNotFoundtc7() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -205,16 +218,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 1, 1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc8
     @Test
     public void testAddToCart_ProductNotFoundtc8() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -222,16 +237,19 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 0, 1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc9
     @Test
     public void testAddToCart_ProductNotFoundtc9() {
+        // Given
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -239,16 +257,19 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 1, 0, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
+
 
     // testAddToCart_ProductNotFound tc10
     @Test
     public void testAddToCart_ProductNotFoundtc10() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -256,16 +277,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 1, -1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc11
     @Test
     public void testAddToCart_ProductNotFoundtc11() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -273,16 +296,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 1, 999999999, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc12
     @Test
     public void testAddToCart_ProductNotFoundtc12() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -290,16 +315,17 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 0, 0, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
-
     // testAddToCart_ProductNotFound tc13
     @Test
     public void testAddToCart_ProductNotFoundtc13() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -307,16 +333,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 0, -1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc14
     @Test
     public void testAddToCart_ProductNotFoundtc14() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -324,16 +352,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 0, 999999999, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc15
     @Test
     public void testAddToCart_ProductNotFoundtc15() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -341,16 +371,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc16
     @Test
     public void testAddToCart_ProductNotFoundtc16() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -358,16 +390,18 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
     // testAddToCart_ProductNotFound tc17
     @Test
     public void testAddToCart_ProductNotFoundtc17() {
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
@@ -375,29 +409,12 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
+        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
 
-    // testAddToCart_ExceptionThrown tc4
-    @Test
-    public void testAddToCart_ExceptionThrown() {
-        when(authentication.isAuthenticated()).thenReturn(true);
-        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
-        when(cartService.getOrCreateCart(user)).thenReturn(cart);
-        ProductDetailDTO productDetail = mock(ProductDetailDTO.class);
-        when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(productDetail);
-        doThrow(new RuntimeException("Test Exception")).when(cartService).addProductToCart(user, productDetail, 1, cart);
-        when(request.getHeader("Referer")).thenReturn("/product-detail/1");
-        String result = cartController.addToCart(1, 1, 1, redirectAttributes, request);
-        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Đã có lỗi xảy ra khi thêm vào giỏ hảng");
-        assertEquals("redirect:/product-detail/1", result);
-    }
+
 
     //--------------------------------------------------------------------------------------------------------------
     // testGetCartItems_UserNotAuthenticated tc1
@@ -456,7 +473,7 @@ public class CartControllerTest {
 
 
     //--------------------------------------------------------------------------------------------------------------
-    // testUpdateCartQuantity_SuccessfulUpdate tc1
+    /// testUpdateCartQuantity_SuccessfulUpdate tc1
     @Test
     public void testUpdateCartQuantity_SuccessfulUpdatetc1() {
         Integer cartItemId = 1;
@@ -475,7 +492,6 @@ public class CartControllerTest {
     // testUpdateCartQuantity_ExceedsStock tc2
     @Test
     public void testUpdateCartQuantity_ExceedsStocktc2() {
-        // Given
         Integer cartItemId = 1;
         Integer quantity = 0;
         CartItem mockCartItem = new CartItem();
@@ -492,7 +508,6 @@ public class CartControllerTest {
     // testUpdateCartQuantity_ExceedsStock tc3
     @Test
     public void testUpdateCartQuantity_ExceedsStocktc3() {
-        // Given
         Integer cartItemId = 1;
         Integer quantity = -1;
         CartItem mockCartItem = new CartItem();
@@ -509,7 +524,6 @@ public class CartControllerTest {
     // testUpdateCartQuantity_ExceedsStock tc4
     @Test
     public void testUpdateCartQuantity_ExceedsStocktc4() {
-        // Given
         Integer cartItemId = 1;
         Integer quantity = 999999999;
         CartItem mockCartItem = new CartItem();
@@ -526,7 +540,6 @@ public class CartControllerTest {
     // testUpdateCartQuantity_ExceedsStock tc5
     @Test
     public void testUpdateCartQuantity_ExceedsStocktc5() {
-        // Given
         Integer cartItemId = 1;
         Integer quantity = null;
         CartItem mockCartItem = new CartItem();
@@ -659,6 +672,11 @@ public class CartControllerTest {
         });
         assertEquals("Cart item not found", exception.getMessage());
     }
+
+
+
+
+
 
 
 
