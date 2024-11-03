@@ -85,10 +85,26 @@ public class ProductManagementController {
                                 @RequestParam float weight,
                                 RedirectAttributes redirectAttributes) {
         Optional<Products> optionalProduct = productService.findById(productId);
-        if (productName.isEmpty() || productDescription.isEmpty() || price == null || price < 20000 || weight < 0.1 || weight > 20.0) {
-            redirectAttributes.addFlashAttribute("error", "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại các trường thông tin.");
+
+        // Kiểm tra các thông tin đầu vào
+        if (productName == null || productName.isEmpty() || productName.length() > 100) {
+            redirectAttributes.addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự.");
             return "redirect:/edit-product/" + productId;
         }
+        if (productDescription == null || productDescription.isEmpty() || productDescription.length() > 500) {
+            redirectAttributes.addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự.");
+            return "redirect:/edit-product/" + productId;
+        }
+        if (price == null || price < 20000) {
+            redirectAttributes.addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000.");
+            return "redirect:/edit-product/" + productId;
+        }
+        if (weight < 0.1 || weight > 20.0) {
+            redirectAttributes.addFlashAttribute("error", "Khối lượng sản phẩm phải trong khoảng từ 0.1kg đến 20kg.");
+            return "redirect:/edit-product/" + productId;
+        }
+
+        if (optionalProduct.isPresent()) {
             Products product = optionalProduct.get();
             product.setProductName(productName);
             product.setProductDescription(productDescription);
@@ -96,6 +112,9 @@ public class ProductManagementController {
             product.setWeight(weight);
             productService.saveProduct(product);
             redirectAttributes.addFlashAttribute("message", "Cập nhật sản phẩm thành công.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy sản phẩm.");
+        }
 
         return "redirect:/edit-product/" + productId;
     }

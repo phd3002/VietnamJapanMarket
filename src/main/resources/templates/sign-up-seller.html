@@ -55,6 +55,9 @@
             <div class="axil-signin-form-wrap">
                 <div class="axil-signin-form">
                     <form class="signin-form" th:action="@{/sign-up-seller}" method="post">
+                        <div th:if="${errorMessage}" class="alert alert-danger mt-2" role="alert">
+                            <span th:text="${errorMessage}"></span>
+                        </div>
                         <p class="b2 mb--55">Nhập thông tin cửa hàng</p>
 
                         <div class="form-group">
