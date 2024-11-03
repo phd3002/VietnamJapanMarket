@@ -1,23 +1,21 @@
 package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.dto.WalletDTO;
-import com.ecommerce.g58.entity.Transactions;
 import com.ecommerce.g58.entity.Users;
-import com.ecommerce.g58.entity.Wallet;
-import com.ecommerce.g58.repository.WalletRepository;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
+import com.ecommerce.g58.service.implementation.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -30,7 +28,7 @@ public class WalletController {
     private UserService userService;
 
     @Autowired
-    private WalletRepository walletRepository;
+    private ProfileService profileService;
 
     @Autowired
     public WalletController(WalletService walletService) {
@@ -38,21 +36,22 @@ public class WalletController {
     }
 
     @GetMapping
-    public String getWallet(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-            return "redirect:/sign-in";
+    public String myAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null || userDetails.getUsername() == null) {
+            return "redirect:/sign-in"; // Use redirect to avoid returning a relative path
         }
-        String email = authentication.getName();
-        Users user = userService.findByEmail(email);
-        Integer userId = user.getUserId();
-        List<WalletDTO> wallet = walletService.getTransactionsForUserId(userId);
+
+        var email = userDetails.getUsername();
+        var user = profileService.getUserByEmail(email);
+        model.addAttribute("user", user);
+        model.addAttribute("createdAtFormatted", DateTimeFormatter.ofPattern("MMM yyyy").format(user.getCreatedAt()));
+        List<WalletDTO> wallet = walletService.getTransactionsForUserId(user.getUserId());
         if(wallet.isEmpty()) {
             model.addAttribute("message", "Không có giao dịch nào");
         }else {
             WalletDTO firstTransaction = wallet.get(0);
             model.addAttribute("balance", firstTransaction.getWalletBalance());
-            model.addAttribute("userId", userId);
+            model.addAttribute("userId", user.getUserId());
         }
         model.addAttribute("wallets", wallet);
         return "wallet";

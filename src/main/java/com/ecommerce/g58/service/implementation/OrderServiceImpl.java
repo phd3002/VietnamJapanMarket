@@ -48,8 +48,6 @@ public class OrderServiceImpl implements OrderService {
                     dto.setTotalPrice(((Number) result[4]).longValue());
                 }
             }
-
-            logger.info("Order ID: {}, Total Quantity: {}, Total Price: {}", dto.getOrderId(), dto.getTotalQuantity(), dto.getTotalPrice());
             return dto;
         });
     }
