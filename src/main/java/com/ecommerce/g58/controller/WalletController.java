@@ -1,7 +1,10 @@
 package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.dto.WalletDTO;
+import com.ecommerce.g58.entity.Transactions;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.entity.Wallet;
+import com.ecommerce.g58.repository.WalletRepository;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class WalletController {
     private UserService userService;
 
     @Autowired
+    private WalletRepository walletRepository;
+
+    @Autowired
     public WalletController(WalletService walletService) {
         this.walletService = walletService;
     }
@@ -50,37 +56,5 @@ public class WalletController {
         }
         model.addAttribute("wallets", wallet);
         return "wallet";
-    }
-
-    @PostMapping("/deposit")
-    @ResponseBody
-    public ResponseEntity<String> deposit(
-            @RequestParam("userId") Integer userId,
-            @RequestParam("amount") BigDecimal amount,
-            @RequestParam("bankName") String bankName,
-            @RequestParam("accountNumber") String accountNumber) {
-        try {
-            walletService.deposit(userId, amount, bankName, accountNumber);
-            return ResponseEntity.ok("Nạp tiền thành công");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Lỗi: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/withdraw")
-    @ResponseBody
-    public ResponseEntity<String> withdraw(
-            @RequestParam("userId") Integer userId,
-            @RequestParam("amount") BigDecimal amount,
-            @RequestParam("bankName") String bankName,
-            @RequestParam("accountNumber") String accountNumber) {
-        try {
-            walletService.withdraw(userId, amount, bankName, accountNumber);
-            return ResponseEntity.ok("Rút tiền thành công");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Lỗi: " + e.getMessage());
-        }
     }
 }
