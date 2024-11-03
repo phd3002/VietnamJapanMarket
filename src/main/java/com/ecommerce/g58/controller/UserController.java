@@ -35,7 +35,7 @@ import java.util.Random;
 
 @Controller
 public class UserController {
-    private Map<String, Users> temporaryUsers = new HashMap<>(); // Khai báo một bản đồ tạm thời để lưu trữ người dùng và OTP
+    private final Map<String, Users> temporaryUsers = new HashMap<>(); // Khai báo một bản đồ tạm thời để lưu trữ người dùng và OTP
     @Autowired
     private UserService userService;
 
@@ -65,6 +65,23 @@ public class UserController {
                                HttpServletRequest request) throws Exception {
 
         try {
+            // Kiểm tra xem username có trống không
+            if (users.getUsername() == null || users.getUsername().isEmpty()) {
+                model.addAttribute("errorMessage", "Username không được để trống.");
+                return "sign-up";
+            }
+
+            // Kiểm tra xem email có trống không
+            if (users.getEmail() == null || users.getEmail().isEmpty()) {
+                model.addAttribute("errorMessage", "Email không được để trống.");
+                return "sign-up";
+            }
+
+            // Kiểm tra xem mật khẩu có trống không
+            if (users.getPassword() == null || users.getPassword().isEmpty()) {
+                model.addAttribute("errorMessage", "Mật khẩu không được để trống.");
+                return "sign-up";
+            }
             // Kiểm tra xem mật khẩu và confirmPassword có khớp không
             if (!users.getPassword().equals(confirmPassword)) {
                 model.addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
@@ -76,10 +93,6 @@ public class UserController {
                 model.addAttribute("errorMessage", "Email đã tồn tại.");
                 return "sign-up";
             }
-
-            // Đăng ký người dùng mới
-//            userService.registerUser(users);
-//            model.addAttribute("successMessage", "Đăng ký thành công!");
 
             // Tạo OTP và lưu vào session
             String otp = generateOTP(6); // Tạo mã OTP
@@ -181,7 +194,7 @@ public class UserController {
         try {
             UserDetails userDetails = userService.loadUserByUsername(email);
             if (userDetails == null) {
-                model.addAttribute("errorMessage", "Email không tồn tại");
+                model.addAttribute("errorMessage", "Email chưa được đăng kí");
                 return "sign-in";
             }
             // Check if the password matches
@@ -199,14 +212,13 @@ public class UserController {
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("Dang nhap duoc roi cmm");
             return "redirect:/homepage"; // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
 
         } catch (BadCredentialsException e) {
             model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
             return "sign-in";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Đã xảy ra lỗi. Vui lòng thử lại.");
+            model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
             return "sign-in";
         }
     }
