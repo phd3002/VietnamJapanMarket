@@ -69,7 +69,10 @@
 <div th:replace="base :: header"></div>
 <!-- End Header -->
 
-<main class="main-wrapper" th:attr="order-id=${orderId}">
+<input type="hidden" id="data-user-id" th:value="${userId}" />
+<input type="hidden" id="data-order-id" th:value="${orderId}" />
+
+<main class="main-wrapper">
 
     <!-- Start My Account Area  -->
     <div class="axil-dashboard-area axil-section-gap">
@@ -490,7 +493,7 @@
         const feedbackText = document.getElementById('feedback-text').value;
         const rating = document.getElementById('rating').value;
 
-        const orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id")
+        const orderId = document.getElementById('data-order-id').value
 
         fetch(`http://localhost:8080/order-detail/${orderId}/rating?rateText=${feedbackText}&rateStar=${rating}`, {
             method: "GET",
@@ -507,6 +510,13 @@
                 document.getElementById('feedback-text').value = "";
                 document.getElementById('rating').value = "";
                 document.getElementById('rate-product').disabled = true;
+                const ratingStore = JSON.parse(localStorage.getItem('ratingStore'))
+                if (!ratingStore[userId]) {
+                    ratingStore[userId] = [];
+                }
+                const ratedOrders = ratingStore[userId]
+                ratedOrders.push(orderId)
+                localStorage.setItem('ratingStore', JSON.stringify(ratingStore))
             } else {
                 Swal.fire({
                     icon: "error",
@@ -548,6 +558,19 @@
         closeButtons[i].onclick = function () {
             closeAllModals();
         };
+    }
+
+    const userId = document.getElementById('data-user-id').value
+    const orderId = document.getElementById('data-order-id').value
+    const ratingStoreJson = localStorage.getItem('ratingStore')
+    if (!ratingStoreJson) {
+        localStorage.setItem('ratingStore', '{}')
+    } else {
+        let ratingStore = JSON.parse(ratingStoreJson)
+        const ratedOrders = [...ratingStore[userId]]
+        if (ratedOrders && ratedOrders.find(item => item === orderId)) {
+            document.getElementById('rate-product').disabled = true
+        }
     }
 </script>
 </body>
