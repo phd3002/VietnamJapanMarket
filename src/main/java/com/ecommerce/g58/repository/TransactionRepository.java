@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transactions, Integer> {
-    List<Transactions> findByWallet_WalletId(Integer walletId);
+    List<Transactions> findByFromWalletIdOrToWalletId(Integer fromWalletId, Integer toWalletId);
 }

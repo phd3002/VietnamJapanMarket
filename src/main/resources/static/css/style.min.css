@@ -12822,6 +12822,12 @@ body.open .closeMask {
     padding: 40px
 }
 
+.axil-wallet{
+    background-color: #f9f3f0;
+    border-radius: 6px;
+    padding: 20px 60px
+}
+
 @media only screen and (max-width: 479px) {
     .axil-order-summery {
         padding: 30px 20px
