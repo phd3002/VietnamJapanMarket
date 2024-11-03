@@ -1,41 +1,79 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
+
+<!-- Mirrored from new.axilthemes.com/demo/template/etrade/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:16 GMT -->
 <head>
-    <title th:text="${pageTitle} ?: 'My Wallet'"></title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Home Page</title>
+    <meta name="robots" content="noindex, follow"/>
+    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 
-    <!-- Including CSS Files from base.html -->
-    <th:block th:replace="~{base :: head}"></th:block>
+    <!-- CSS
+    ============================================ -->
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
+    <link rel="stylesheet" th:href="@{/css/style.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style-2.css}">
 </head>
 
-<body class="sticky-header newsletter-popup-modal">
 
-<!-- Include Header Fragment -->
+<body class="sticky-header">
+<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+<!-- Start Header -->
 <div th:replace="base :: header"></div>
+<!-- End Header -->
 
-<!-- Main Content Section -->
 <main class="main-wrapper">
+
     <!-- Start My Account Area  -->
     <div class="axil-dashboard-area axil-section-gap">
         <div class="container">
             <div class="axil-dashboard-warp">
-                <!-- Dashboard Sidebar and Content Container -->
+                <!-- Dashboard Sidebar -->
+                <!--                <div class="axil-dashboard-author">-->
+                <!--                    <div class="media">-->
+                <!--                        <div class="thumbnail">-->
+                <!--                            <img src="../static/images/product/author1.png">-->
+                <!--                        </div>-->
+                <!--                        <div class="media-body">-->
+                <!--                            <h5 class="title mb-0">Hello ....</h5>-->
+                <!--                            <span class="joining-date">Register Since Sep 2020</span>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
                 <div class="row">
-                    <div class="axil-dashboard-author">
-                        <div class="media">
-                            <div class="thumbnail">
-                                <img th:src="@{/images/product/author1.png}">
-                            </div>
-                            <div class="media-body">
-                                <h5 class="title mb-0" th:text="'Hello ' + ${user.getUsername()}"></h5>
-                                <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Sidebar -->
                     <div class="col-xl-3 col-md-4">
-                        <aside th:insert="~{sidebar :: sidebar}">
+                        <aside class="axil-dashboard-aside">
+                            <nav class="axil-dashboard-nav">
+                                <div class="nav nav-tabs" role="tablist">
+                                    <a class="nav-item nav-link" href="my-account.html"
+                                       aria-selected="false"><i class="fas fa-user"></i>Account Details</a>
+                                    <a class="nav-item nav-link" href="my-shop.html"
+                                       aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
+                                    <a class="nav-item nav-link" href="order.html"
+                                       aria-selected="false"><i class="fas fa-shopping-basket"></i>Orders</a>
+                                    <a class="nav-item nav-link active" href="wallet.html"
+                                       aria-selected="true"><i class="fas fa-wallet"></i>Wallet</a>
+                                    <a class="nav-item nav-link" href="address.html"
+                                       aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
+                                    <a class="nav-item nav-link" href="notification.html"
+                                       aria-selected="false"><i class="fas fa-bell"></i>Notification</a>
+                                </div>
+                            </nav>
                         </aside>
                     </div>
                     <!-- Dashboard Content -->
@@ -44,39 +82,54 @@
                             <!-- Wallet Tab -->
                             <div id="nav-wallet" class="tab-pane fade show active" role="tabpanel">
                                 <div class="wallet-section axil-dashboard-order">
-                                    <h3>Wallet</h3>
-                                    <p>Số dư: <span id="wallet-balance">1,000,000 VND</span></p>
-                                    <input type="submit" class="axil-btn" value="Rút tiền"
-                                           style="background: red; border: none" id="withdraw">
-                                    <input type="submit" class="axil-btn" id="deposit"
-                                           style="background: green; border: none" value="Nạp tiền">
+                                    <h3><i class="fas fa-wallet"></i> Ví của tôi</h3>
+                                    <div class="axil-wallet row">
+                                        <div class="col-md-6">
+                                            <p style="margin: 0px">Số dư hiện tại:
+                                            <h4 style="margin: 0px" id="wallet-balance"
+                                                th:text="${balance ?: 0} + ' VND'"></h4>
+                                        </div>
+                                        <div class="col-md-6"
+                                             style="text-align: right; color: #007b01; font-size: 40px">
+                                            <i class="flaticon-cashback"></i>
+                                        </div>
+                                        </p>
+                                    </div>
+                                    <br>
+                                    <a type="submit" class="axil-btn"
+                                       style="background: blue; color: white" id="withdraw"><i
+                                            class="fas fa-arrow-alt-circle-up"></i> Rút tiền</a>
+                                    <a type="submit" class="axil-btn"
+                                       style="background: green; color: white" id="deposit"><i
+                                            class="fas fa-arrow-alt-circle-down"></i> Nạp tiền</a>
                                     <!-- Transaction History -->
-                                    <h4>Lịch sử giao dịch</h4>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Ngày</th>
-                                            <th>Loại giao dịch</th>
-                                            <th>Số tiền</th>
-                                            <th>Trạng thái</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="transaction-history">
-                                        <tr>
-                                            <td>01/10/2024</td>
-                                            <td>Nạp tiền</td>
-                                            <td>500,000 VND</td>
-                                            <td>Thành công</td>
-                                        </tr>
-                                        <tr>
-                                            <td>25/09/2024</td>
-                                            <td>Rút tiền</td>
-                                            <td>300,000 VND</td>
-                                            <td>Thành công</td>
-                                        </tr>
-                                        <!-- More transactions -->
-                                        </tbody>
-                                    </table>
+                                    <br><br>
+                                    <div th:if="${wallets == null or wallets.size() == 0}">
+                                        <h4 th:text="${message ?: 'Không có lịch sử giao dịch để hiển thị.'}"></h4>
+                                    </div>
+                                    <div th:if="${wallets != null and wallets.size() > 0}">
+                                        <h4>Lịch sử giao dịch</h4>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th width="20%">Ngày</th>
+                                                <th width="20%">Loại giao dịch</th>
+                                                <th>Số tiền</th>
+                                                <th width="20%">Nguồn</th>
+                                                <th width="30%">Nội dung</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="transaction-history">
+                                            <tr th:each="transaction : ${wallets}">
+                                                <td th:text="${transaction.transactionDate}"></td>
+                                                <td th:text="${transaction.transactionType}"></td>
+                                                <td th:text="${transaction.amount}"></td>
+                                                <td th:text="${transaction.transactionParty}"></td>
+                                                <td th:text="${transaction.description}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div> <!-- End of tab-content -->
@@ -85,7 +138,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal for Rút Tiền -->
+    <!-- Modal Rút Tiền -->
     <div id="withdrawModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -95,12 +148,14 @@
                 <input type="text" id="bank-name" name="bank-name" required><br><br>
                 <label for="account-number">Số Tài Khoản:</label>
                 <input type="text" id="account-number" name="account-number" required><br><br>
+                <label for="amount">Số Tiền Rút:</label>
+                <input type="number" id="amount" name="amount" required><br><br>
                 <button type="submit">Xác nhận</button>
             </form>
         </div>
     </div>
 
-    <!-- Modal for Nạp Tiền -->
+    <!-- Modal Nạp Tiền -->
     <div id="depositModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -127,90 +182,208 @@
     </div>
 </main>
 
-<!-- Include Footer Fragment -->
-<div th:replace="base :: footer"></div>
 
+<div class="service-area">
+    <div class="container">
+        <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
+            <div class="col">
+                <div class="service-box service-style-2">
+                    <div class="icon">
+                        <img th:src="@{/images/icons/service1.png}" alt="Service">
+                    </div>
+                    <div class="content">
+                        <h6 class="title">Fast &amp; Secure Delivery</h6>
+                        <p>Tell about your service.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box service-style-2">
+                    <div class="icon">
+                        <img th:src="@{/images/icons/service2.png}" alt="Service">
+                    </div>
+                    <div class="content">
+                        <h6 class="title">Money Back Guarantee</h6>
+                        <p>Within 10 days.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box service-style-2">
+                    <div class="icon">
+                        <img th:src="@{/images/icons/service3.png}" alt="Service">
+                    </div>
+                    <div class="content">
+                        <h6 class="title">24 Hour Return Policy</h6>
+                        <p>No question ask.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box service-style-2">
+                    <div class="icon">
+                        <img th:src="@{/images/icons/service4.png}" alt="Service">
+                    </div>
+                    <div class="content">
+                        <h6 class="title">Pro Quality Support</h6>
+                        <p>24/7 Live support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Start Footer Area  -->
+<footer class="axil-footer-area footer-style-2">
+    <!-- Start Footer Top Area  -->
+    <div class="footer-top separator-top">
+        <div class="container">
+            <div class="row">
+                <!-- Start Single Widget  -->
+                <div class="col-lg-6 col-sm-6">
+                    <div class="axil-footer-widget">
+                        <h5 class="widget-title">Support</h5>
+                        <div class="inner">
+                            <p>685 Market Street, Las Vegas, LA 95820</p>
+                            <ul class="support-list-item">
+                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
+                                    example@domain.com</a></li>
+                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
+                                </li>
+                                <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Single Widget  -->
+                <!-- Start Single Widget  -->
+                <div class="col-lg-6 col-sm-6">
+                    <div class="axil-footer-widget">
+                        <h5 class="widget-title">Account</h5>
+                        <div class="inner">
+                            <ul>
+                                <li><a href="my-account.html">My Account</a></li>
+                                <li><a href="sign-up.html">Login / Register</a></li>
+                                <li><a href="cart-detail.html">Cart</a></li>
+                                <li><a href="wishlist.html">Wishlist</a></li>
+                                <li><a href="product-list.html">Shop</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Single Widget  -->
+            </div>
+        </div>
+    </div>
+    <!-- End Footer Top Area  -->
+</footer>
+<!-- End Footer Area  -->
+
+<!-- Header Search Modal End -->
 <!-- JS
 ============================================ -->
-<script src="../static/js/vendor/modernizr.min.js"></script>
-<script src="../static/js/vendor/jquery.js"></script>
-<script src="../static/js/vendor/popper.min.js"></script>
-<script src="../static/js/vendor/bootstrap.min.js"></script>
-<script src="../static/js/vendor/slick.min.js"></script>
-<script src="../static/js/vendor/js.cookie.js"></script>
-<script src="../static/js/vendor/jquery-ui.min.js"></script>
-<script src="../static/js/vendor/jquery.ui.touch-punch.min.js"></script>
-<script src="../static/js/vendor/jquery.countdown.min.js"></script>
-<script src="../static/js/vendor/sal.js"></script>
-<script src="../static/js/vendor/jquery.magnific-popup.min.js"></script>
-<script src="../static/js/vendor/imagesloaded.pkgd.min.js"></script>
-<script src="../static/js/vendor/isotope.pkgd.min.js"></script>
-<script src="../static/js/vendor/counterup.js"></script>
-<script src="../static/js/vendor/waypoints.min.js"></script>
-<script src="../static/js/main.js"></script>
-<script src="../static/js/script.js"></script>
+<!-- Modernizer JS -->
+<script th:src="@{/js/vendor/modernizr.min.js}"></script>
+<!-- jQuery JS -->
+<script th:src="@{/js/vendor/jquery.js}"></script>
+<!-- Bootstrap JS -->
+<script th:src="@{/js/vendor/popper.min.js}"></script>
+<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/js/vendor/slick.min.js}"></script>
+<script th:src="@{/js/vendor/js.cookie.js}"></script>
+<!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
+<script th:src="@{/js/vendor/jquery-ui.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.ui.touch-punch.min.js}"></script>
+<script th:src="@{/js/vendor/jquery.countdown.min.js}"></script>
+<script th:src="@{/js/vendor/sal.js}"></script>
+<script th:src="@{/js/vendor/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/vendor/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/vendor/counterup.js}"></script>
+<script th:src="@{/js/vendor/waypoints.min.js}"></script>
 
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 <script>
-    // Get the modal elements
-    var withdrawModal = document.getElementById("withdrawModal");
-    var depositModal = document.getElementById("depositModal");
-    var successModal = document.getElementById("successModal");
+    const userId = "${userId}";
 
-    // Get the buttons that open the modal
-    var withdrawBtn = document.getElementById("withdraw");
-    var depositBtn = document.getElementById("deposit");
+    // Mở modal rút tiền
+    document.getElementById("withdraw").onclick = function () {
+        document.getElementById("withdrawModal").style.display = "block";
+    };
 
-    // Get the close buttons
-    var closeBtns = document.getElementsByClassName("close");
+    // Mở modal nạp tiền
+    document.getElementById("deposit").onclick = function () {
+        document.getElementById("depositModal").style.display = "block";
+    };
 
-    // When the user clicks on the withdraw button, open the withdraw modal
-    withdrawBtn.onclick = function () {
-        withdrawModal.style.display = "block";
-    }
-
-    // When the user clicks on the deposit button, open the deposit modal
-    depositBtn.onclick = function () {
-        depositModal.style.display = "block";
-    }
-
-    // When the user clicks on any of the close buttons, close the modal
-    for (var i = 0; i < closeBtns.length; i++) {
-        closeBtns[i].onclick = function () {
-            withdrawModal.style.display = "none";
-            depositModal.style.display = "none";
-            successModal.style.display = "none";
+    // Đóng modal
+    document.querySelectorAll(".close").forEach(btn => {
+        btn.onclick = function () {
+            document.getElementById("withdrawModal").style.display = "none";
+            document.getElementById("depositModal").style.display = "none";
         }
-    }
+    });
 
-    // Close the modal when user clicks outside of it
-    window.onclick = function (event) {
-        if (event.target == withdrawModal || event.target == depositModal || event.target == successModal) {
-            withdrawModal.style.display = "none";
-            depositModal.style.display = "none";
-            successModal.style.display = "none";
-        }
-    }
-
-    // Simulate a successful transaction and show the success modal
-    function showSuccessModal() {
-        withdrawModal.style.display = "none";
-        depositModal.style.display = "none";
-        successModal.style.display = "block";
-        setTimeout(function () {
-            location.reload(); // Reload page after success modal is closed
-        }, 2000); // Adjust delay as needed
-    }
-
-    // Handle form submission for withdraw and deposit
+    // Gửi yêu cầu rút tiền
     document.getElementById("withdrawForm").onsubmit = function (event) {
         event.preventDefault();
-        showSuccessModal(); // Show success modal on submit
-    }
+        const amount = document.getElementById("amount").value;
+        const bankName = document.getElementById("bank-name").value;
+        const accountNumber = document.getElementById("account-number").value;
 
+        fetch("/wallet/withdraw", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                userId: userId,
+                amount: amount,
+                bankName: bankName,
+                accountNumber: accountNumber
+            })
+        })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                document.getElementById("withdrawModal").style.display = "none";
+                location.reload();
+            })
+            .catch(error => console.error("Error:", error));
+    };
+
+    // Gửi yêu cầu nạp tiền
     document.getElementById("depositForm").onsubmit = function (event) {
         event.preventDefault();
-        showSuccessModal(); // Show success modal on submit
-    }
+        const amount = document.getElementById("amount").value;
+        const bankName = document.getElementById("bank-name").value;
+        const accountNumber = document.getElementById("account-number").value;
+
+        fetch("/wallet/deposit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                userId: userId,
+                amount: amount,
+                bankName: bankName,
+                accountNumber: accountNumber
+            })
+        })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                document.getElementById("depositModal").style.display = "none";
+                location.reload();
+            })
+            .catch(error => console.error("Error:", error));
+    };
 </script>
 </body>
+
+
+<!-- Mirrored from new.axilthemes.com/demo/template/etrade/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:15:17 GMT -->
 </html>
