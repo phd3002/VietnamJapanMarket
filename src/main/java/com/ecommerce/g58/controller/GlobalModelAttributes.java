@@ -26,6 +26,7 @@ public class GlobalModelAttributes {
             Users user = userService.findByEmail(email);
 
             if (user != null) {
+                model.addAttribute("firstname", user.getFirstName());  // Pass the first name
                 model.addAttribute("username", user.getUsername());  // Pass the username
                 model.addAttribute("isLoggedIn", true);  // Pass logged-in status
             } else {
