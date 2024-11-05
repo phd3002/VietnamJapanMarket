@@ -2,12 +2,10 @@ package com.ecommerce.g58.controller;
 
 
 import com.ecommerce.g58.dto.ProductDTO;
-import com.ecommerce.g58.entity.Categories;
-import com.ecommerce.g58.entity.Products;
-import com.ecommerce.g58.entity.ProductImage;
-import com.ecommerce.g58.entity.ProductVariation;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.service.CategoriesService;
 import com.ecommerce.g58.service.ProductService;
+import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,22 +22,24 @@ public class HomeController {
     @Autowired
     private CategoriesService categoriesService;
 
-    @GetMapping({"/","/homepage"})
+    @Autowired
+    private UserService userService;
+
+    @GetMapping({"/", "/homepage"})
     public String showHomePage(Model model, Principal principal) {
-        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        // Check if the user is logged in
         if (principal != null) {
+            Users user = userService.findByEmail(principal.getName());
             model.addAttribute("isLoggedIn", true);
-            model.addAttribute("username", principal.getName());  // Tên người dùng
+            model.addAttribute("firstname", user.getFirstName());
         } else {
             model.addAttribute("isLoggedIn", false);
         }
-        System.out.println(principal);
-//        List<Products> products = productService.getAllProducts();
+
+        // Use getAllProducts() method from ProductService
+        List<Products> products = productService.getAllProducts();
         List<Categories> categories = categoriesService.getAllCategories();
-        List<ProductDTO> productDetails = productService.getProductDetails();
-        List<ProductDTO> searchProduct = productService.getSearchProduct();
-        model.addAttribute("productDetails", productDetails);
-        model.addAttribute("searchProduct", searchProduct);
+        model.addAttribute("products", products);
         model.addAttribute("categories", categories);
 
         return "homepage";

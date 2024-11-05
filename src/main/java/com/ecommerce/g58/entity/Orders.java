@@ -27,7 +27,7 @@ public class Orders {
     private LocalDateTime orderDate = LocalDateTime.now();
 
     @Column(name = "total_price", nullable = false)
-    private BigDecimal totalPrice;
+    private Double totalPrice;
 
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;

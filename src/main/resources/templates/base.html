@@ -29,45 +29,12 @@
 
 <!-- Header Section -->
 <header class="header axil-header header-style-1" th:fragment="header">
-    <div class="axil-header-top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <div class="header-top-dropdown">
-                        <div class="dropdown">
-                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                English
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">English</a></li>
-                                <li><a class="dropdown-item" href="#">Japanese</a></li>
-                                <li><a class="dropdown-item" href="#">Vietnamese</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="header-top-link">
-                        <ul class="quick-link">
-                            <li th:if="${isLoggedIn}">
-                                <span>Welcome, <span th:text="${username}"></span></span>
-                                <a href="/logout">Logout</a>
-                            </li>
-                            <li th:if="${!isLoggedIn}">
-                                <a href="/sign-up">Join Us</a>
-                                <a href="/sign-in">Sign In</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="axil-header-top"></div>
     <div class="axil-mainmenu">
         <div class="container">
             <div class="header-navbar">
                 <div class="header-brand">
-                    <a href="homepage" class="logo logo-dark">
+                    <a href="/homepage" class="logo logo-dark">
                         <img th:src="@{/images/logo/vj-market.png}" alt="Site Logo">
                     </a>
                 </div>
@@ -96,7 +63,7 @@
                             </a>
                         </li>
                         <li class="wishlist">
-                            <a href="wishlist.html">
+                            <a href="/wishlist">
                                 <i class="flaticon-heart"></i>
                             </a>
                         </li>
@@ -115,9 +82,6 @@
                                     <div class="notification-body">
                                         <!-- Notification Item -->
                                         <div class="notification-item">
-                                            <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
-                                            </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
                                                 <p class="item-text">Hey, how's it going?</p>
@@ -125,9 +89,6 @@
                                             </div>
                                         </div>
                                         <div class="notification-item">
-                                            <div class="item-icon">
-                                                <img src="../static/images/product/electric/product-01.png" alt="Notification Icon">
-                                            </div>
                                             <div class="item-content">
                                                 <h3 class="item-title">New message from John</h3>
                                                 <p class="item-text">Hey, how's it going?</p>
@@ -143,8 +104,8 @@
                             </div>
                         </li>
                         <li class="shopping-cart">
-                            <a href="#" class="cart-dropdown-btn">
-                                <span class="cart-count">3</span>
+                            <a href="/cart-items" class="cart-dropdown-btn" onclick="event.stopPropagation();">
+                                <span id="cart-count" class="cart-count">0</span>
                                 <i class="flaticon-shopping-cart"></i>
                             </a>
                         </li>
@@ -153,21 +114,29 @@
                                 <i class="flaticon-person"></i>
                             </a>
                             <div class="my-account-dropdown">
-                                <span class="title">QUICKLINKS</span>
-                                <ul>
-                                    <li>
-                                        <a href="my-account.html">My Account</a>
-                                    </li>
-                                    <li>
-                                        <a href="/orders">My Orders</a>
-                                    </li>
-                                </ul>
-                                <div class="login-btn">
-                                    <a href="sign-in.html" class="axil-btn btn-bg-primary">Login</a>
+                                <div th:if="${#authentication.name != 'anonymousUser'}">
+                                    <div><span>Welcome, <span th:text="${firstname}"></span></span></div>
+                                    <ul>
+                                        <li>
+                                            <a href="/my-account">My Account</a>
+                                        </li>
+                                        <li>
+                                            <a href="/orders">My Orders</a>
+                                        </li>
+                                        <li>
+                                            <a href="/logout">Logout</a>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div class="reg-footer text-center">No account yet? <a href="sign-up.html"
-                                                                                       class="btn-link">REGISTER
-                                    HERE.</a></div>
+                                <div th:if="${#authentication.name == 'anonymousUser'}">
+                                    <p style="font-size: smaller;">You are currently not logged in.</p>
+                                    <div class="login-btn">
+                                        <a href="/sign-in" class="axil-btn btn-bg-primary">Login</a>
+                                    </div>
+                                    <div class="reg-footer text-center">
+                                        No account yet? <a href="/sign-up" class="btn-link">REGISTER HERE.</a>
+                                    </div>
+                                </div>
                             </div>
                         </li>
                         <li class="axil-mobile-toggle">
@@ -187,7 +156,7 @@
         <div class="header-search-wrap">
             <div class="card-header">
                 <form onsubmit="return performSearch()">
-                    <input type="text" id="prod-search" placeholder="Search products..." oninput="performSearch()" />
+                    <input type="text" id="prod-search" placeholder="Search products..." oninput="performSearch()"/>
                 </form>
             </div>
             <div class="card-body" id="search-results" style="display: none;">
@@ -195,7 +164,7 @@
                     <h6 class="title"><span id="result-count">0</span> Result(s) Found</h6>
                     <a href="product-list" class="view-all">View All</a>
                 </div>
-                <div class="psearch-results">
+                <div class="search-results">
                     <!-- Dynamic search result items should go here -->
                 </div>
             </div>
@@ -271,8 +240,10 @@
                         <div class="inner">
                             <p>685 Market Street, Las Vegas, LA 95820</p>
                             <ul class="support-list-item">
-                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i> example@domain.com</a></li>
-                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a></li>
+                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
+                                    example@domain.com</a></li>
+                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
+                                </li>
                             </ul>
                         </div>
                     </div>

@@ -1,6 +1,8 @@
 package com.ecommerce.g58.repository;
 
 import com.ecommerce.g58.entity.OrderDetails;
+import com.ecommerce.g58.entity.ProductVariation;
+import com.ecommerce.g58.entity.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,7 +27,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    od.price AS product_price, \n" +
             "    f.rating AS avg_rating, \n" +
             "    st.store_name, \n" +
-            "    st.store_image, \n" +
+            "    st.picture_url, \n" +
             "    inv.total_amount, \n" +
             "    inv.shipping_fee, \n" +
             "    pay.payment_method, \n" +
@@ -86,4 +88,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "WHERE o.order_id = :orderId",
             nativeQuery = true)
     List<Object[]> getOrderDetails(@Param("orderId") Long orderId);
+
+    void deleteByProductId(Products productId);
+    void deleteByVariationId(ProductVariation variationId);
 }

@@ -31,5 +31,4 @@ public class Cart {
 
     @Column(name = "total_amount", nullable = false)
     private Integer totalAmount;
-
 }

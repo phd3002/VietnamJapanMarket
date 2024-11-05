@@ -2,10 +2,8 @@ package com.ecommerce.g58.repository;
 
 import com.ecommerce.g58.dto.ProductDTO;
 import com.ecommerce.g58.dto.ProductDetailDTO;
-import com.ecommerce.g58.entity.Color;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.entity.Products;
-import com.ecommerce.g58.entity.Products;
-import com.ecommerce.g58.entity.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -17,7 +15,24 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends PagingAndSortingRepository<Products, Integer> {
+    void deleteByProductId(Integer productId);
+
+    Products findTopByOrderByProductIdDesc();
+
     List<Products> findAll();
+
+    List<Products> findByStoreId(Stores storeId);
+
+    @Query("SELECT new com.ecommerce.g58.dto.ProductDetailDTO(p.productId, p.productName, p.price, p.categoryId.categoryId, p.storeId.storeId, v.size.sizeName, v.color.colorName, v.stock, v.imageId.imageId) " +
+            "FROM Products p LEFT JOIN ProductVariation v ON p.productId = v.productId.productId " +
+            "WHERE p.storeId = :storeId")
+    List<ProductDetailDTO> findAllProductDetailsByStoreId(@Param("storeId") Stores storeId);
+
+//    @Query("SELECT p FROM Products p LEFT JOIN FETCH p.productVariations pv WHERE p.storeId = :storeId")
+//    List<Products> findByStoreIdWithVariations(@Param("storeId") Stores storeId);
+
+    @Query("SELECT p, pv FROM Products p LEFT JOIN FETCH p.productVariations pv WHERE p.storeId = :storeId")
+    List<Products> findByStoreIdWithVariations(@Param("storeId") Stores storeId);
 
     List<Products> findTop5ByOrderByCreatedAtDesc();
 
@@ -53,8 +68,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
             "JOIN size s ON pv.size_id = s.size_id " +
             "WHERE pv.product_id = :productId AND pv.color_id = :colorId", nativeQuery = true)
     List<String> findSizesByProductIdAndColorId(@Param("productId") Integer productId,
-                                              @Param("colorId") Integer colorId);
-
+                                                @Param("colorId") Integer colorId);
 
 
     @Query(value = "SELECT p.product_id, p.product_name, p.product_description, p.price, p.weight, "
@@ -67,7 +81,6 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
             + "JOIN color c ON pv.color_id = c.color_id "
             + "WHERE p.product_id = :productId", nativeQuery = true)
     Object[] findProductDetailByProductIdNative(@Param("productId") Integer productId);
-
 
 
     List<Products> findByProductNameContainingIgnoreCase(String productName);

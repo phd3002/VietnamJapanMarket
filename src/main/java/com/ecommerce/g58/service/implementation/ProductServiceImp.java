@@ -2,21 +2,24 @@ package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.ProductDTO;
 import com.ecommerce.g58.dto.ProductDetailDTO;
+import com.ecommerce.g58.dto.ProductWithVariationsDTO;
 import com.ecommerce.g58.entity.*;
-import com.ecommerce.g58.repository.ProductImageRepository;
-import com.ecommerce.g58.repository.ProductRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
+import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ProductServiceImp implements ProductService {
     @Autowired
     private ProductRepository productRepository;
@@ -26,6 +29,18 @@ public class ProductServiceImp implements ProductService {
 
     @Autowired
     private ProductVariationRepository productVariationRepository;
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @Autowired
+    private WishlistRepository wishlistRepository;
+
+    @Autowired
+    private UserActivityRepository userActivityRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     public List<ProductDTO> getProductDetails() {
         List<Object[]> results = productRepository.findProductDetailsNative();
@@ -87,6 +102,11 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findAll(); // Fetch all products
     }
 
+    @Override
+    public Page<Products> findAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
     public List<Products> getLatest5Products() {
         return productRepository.findTop5ByOrderByCreatedAtDesc(); // Fetch latest 5 products
     }
@@ -145,6 +165,91 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<String> getAvailableSizesByProductIdAndColorId(Integer productId, Integer colorId) {
         return productRepository.findSizesByProductIdAndColorId(productId, colorId);
+    }
+
+    @Override
+    public List<Products> getProductsByStoreId(Stores storeId) {
+        return productRepository.findByStoreId(storeId);
+    }
+
+    public List<ProductDetailDTO> getProductDetailsByStoreId(Stores storeId) {
+        return productRepository.findAllProductDetailsByStoreId(storeId);
+    }
+
+    @Override
+    public void saveProduct(Products product) {
+        productRepository.save(product);
+    }
+
+    @Override
+    public void deleteProductById(Integer productId) {
+        Products product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // Xóa biến thể sản phẩm và xóa hình ảnh liên quan đến biến thể
+        List<ProductVariation> variations = productVariationRepository.findByProductId(product);
+        for (ProductVariation variation : variations) {
+            if (variation.getImageId() != null) {
+                productImageRepository.deleteByImageId(variation.getImageId().getImageId());
+            }
+            productVariationRepository.delete(variation);
+
+            // Xóa variationId khỏi các bảng liên quan
+            cartItemRepository.deleteByVariationId(variation);
+            wishlistRepository.deleteByProductVariation(variation);
+            orderDetailRepository.deleteByVariationId(variation);
+        }
+
+        // Xóa productId khỏi các bảng liên quan nếu tồn tại
+        cartItemRepository.deleteByProductId(product);
+        wishlistRepository.deleteByProduct(product);
+        userActivityRepository.deleteByProductId(product);
+        orderDetailRepository.deleteByProductId(product);
+
+        // Xóa sản phẩm
+        productRepository.deleteById(productId);
+    }
+
+    @Override
+    @Transactional
+    public void addProduct(Products product) {
+        productRepository.save(product);
+    }
+
+    @Override
+    @Transactional
+    public void addProductImage(ProductImage productImage) {
+        productImageRepository.save(productImage);
+    }
+
+    @Override
+    @Transactional
+    public void addProductVariation(ProductVariation productVariation) {
+        productVariationRepository.save(productVariation);
+    }
+
+    @Override
+    public Products findProductById(Products productId) {
+        return productRepository.findById(productId.getProductId()).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
+
+    @Override
+    public ProductVariation findProductVariationById(int variationId) {
+        return productVariationRepository.findById(variationId).orElseThrow(() -> new IllegalArgumentException("Product variation not found"));
+    }
+
+    public Optional<Products> findById(Integer productId) {
+        return productRepository.findById(productId);
+    }
+
+    @Override
+    public Products getMaxProductId() {
+        return productRepository.findTopByOrderByProductIdDesc();
+    }
+
+    @Override
+    public ProductImage getMaxImageId() {
+        return productImageRepository.findTopByOrderByImageIdDesc();
     }
 
 }

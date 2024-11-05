@@ -3,12 +3,11 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.CartItemRepository;
-import com.ecommerce.g58.repository.ProductRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
 import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.ProductService;
 import com.ecommerce.g58.service.UserService;
+import com.ecommerce.g58.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Controller
 public class CartController {
+
     @Autowired
     private CartService cartService;
 
@@ -41,10 +42,10 @@ public class CartController {
 
     @Autowired
     private CartItemRepository cartItemRepository;
+
     @Autowired
-    private ProductVariationRepository productVariationRepository;
-    @Autowired
-    private ProductRepository productRepository;
+    private SecurityUtils securityUtils;
+
 
     // Add to Cart
     @PostMapping("/add_to_cart")
@@ -57,6 +58,7 @@ public class CartController {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
             return "redirect:/sign-in";
         }
 
@@ -74,14 +76,14 @@ public class CartController {
                 cartService.addProductToCart(user, productDetail, quantity,cart);
 
                 // Success message
-                redirectAttributes.addFlashAttribute("message", "Product successfully added to your cart!");
+                redirectAttributes.addFlashAttribute("message", "Sản phâ đã được thêm vào giỏ hàng của bạn");
             } else {
                 // Error message if the product detail is not found
-                redirectAttributes.addFlashAttribute("error", "Failed to add product to cart. Product not found.");
+                redirectAttributes.addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
             }
         } catch (Exception e) {
             // Handle exceptions and add an error message
-            redirectAttributes.addFlashAttribute("error", "Error adding product to cart. Please try again.");
+            redirectAttributes.addFlashAttribute("error", "Đã có lỗi xảy ra khi thêm vào giỏ hảng");
         }
 
         // Redirect to the same product-detail page (stay on the same page)
@@ -108,7 +110,7 @@ public class CartController {
         List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
 
         if (cartItems.isEmpty()) {
-            model.addAttribute("message", "Your cart is empty.");
+            model.addAttribute("message", "Giỏ hàng của bạn đang trống");
             return "cart-detail";  // Return empty cart view
         }
 
@@ -131,31 +133,8 @@ public class CartController {
     @PostMapping("/remove_cart_item")
     public String removeCartItem(@RequestParam("cartItemId") Integer cartItemId) {
         cartService.removeCartItem(cartItemId);
-//        session.setAttribute("cartItemRemoved", "Sản phẩm đã được xóa khỏi giỏ hàng thành công");
         return "redirect:/cart-items";
     }
-
-    // Update Cart Item Quantity
-//    @PostMapping("/update_cart_quantity")
-//    public ResponseEntity<String> updateCartQuantity(@RequestParam("cartItemId") Integer cartItemId,
-//                                                     @RequestParam("quantity") Integer quantity) {
-//        // Fetch cart item and check product stock
-//        CartItem cartItem = cartItemRepository.findById(cartItemId)
-//                .orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
-//        int productStock = cartItem.getVariationId().getStock();
-//
-//        try {
-//            // Check if the requested quantity is within the available stock
-//            if (quantity <= productStock) {
-//                cartItemService.updateCartItemQuantity(cartItemId, quantity);
-//                return ResponseEntity.ok("Quantity updated successfully");
-//            } else {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating quantity: Exceeds stock limit");
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating quantity");
-//        }
-//    }
     @PostMapping("/update_cart_quantity")
     public String updateCartQuantity(@RequestParam("cartItemId") Integer cartItemId,
                                      @RequestParam("quantity") Integer quantity,
@@ -169,16 +148,25 @@ public class CartController {
             // Check if the requested quantity is within the available stock
             if (quantity <= productStock) {
                 cartItemService.updateCartItemQuantity(cartItemId, quantity);
-                redirectAttributes.addFlashAttribute("message", "Quantity updated successfully");
+                redirectAttributes.addFlashAttribute("message", "Cập nhật giỏ hàng thành công");
             } else {
-                redirectAttributes.addFlashAttribute("error", "Error updating quantity: Exceeds stock limit");
+                redirectAttributes.addFlashAttribute("error", "Lỗi khi cập nhật số lượng: Vượt quá số lượng tồn kho");
             }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error updating quantity");
+            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi cập nhật số lượng");
         }
 
         // Redirect back to cart detail page
         return "redirect:/cart-items";
     }
 
+    @GetMapping("/api/cart/count")
+    @ResponseBody
+    public int getCartItemCount() {
+        Integer userId = securityUtils.getCurrentUserId();
+        if (userId != null) {
+            return cartService.getCartItemCount(userId);
+        }
+        return 0;
+    }
 }

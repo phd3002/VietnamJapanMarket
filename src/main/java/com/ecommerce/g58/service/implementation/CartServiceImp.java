@@ -7,19 +7,20 @@ import com.ecommerce.g58.repository.CartRepository;
 import com.ecommerce.g58.repository.ProductRepository;
 import com.ecommerce.g58.repository.ProductVariationRepository;
 import com.ecommerce.g58.service.CartService;
-import com.ecommerce.g58.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class CartServiceImp implements CartService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CartServiceImp.class);
+
     @Autowired
     private CartRepository cartRepository;
 
@@ -125,5 +126,54 @@ public class CartServiceImp implements CartService {
     @Override
     public Cart getCartByUserId(Integer userId) {
         return cartRepository.findByUser_UserId(userId);
+    }
+
+    @Override
+    public int getCartItemCount(Integer userId) {
+        return cartItemRepository.countCartItemsByUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public void subtractItemQuantitiesFromStock(Integer userId) {
+        logger.info("Called subtractItemQuantitiesFromStock for user ID: {}", userId);
+        List<CartItem> cartItems = getCartItemsByUserId(userId); // lấy các mặt hàng trong giỏ hàng theo ID người dùng
+        // Lặp qua các mặt hàng trong giỏ hàng và kiểm tra số lượng hàng tồn kho
+        for (CartItem item : cartItems) {
+            ProductVariation variation = productVariationRepository.findById(item.getVariationId().getVariationId())
+                    .orElseThrow(() -> new EntityNotFoundException("Product variation not found"));
+            // Kiểm tra xem có đủ hàng tồn kho không
+            if (variation.getStock() < item.getQuantity()) {
+                throw new IllegalArgumentException("Not enough stock available for product: " + variation.getVariationId());
+            }
+            // Trừ số lượng hàng
+            variation.setStock(variation.getStock() - item.getQuantity());
+            // Lưu thay đổi
+            productVariationRepository.save(variation);
+        }
+        // log dữ liệu
+        logger.info("Successfully subtracted item quantities for user ID: {}", userId);
+    }
+
+    @Override
+    @Transactional
+    public void restoreItemQuantitiesToStock(Integer userId) {
+        logger.info("Called restoreItemQuantitiesToStock for user ID: {}", userId);
+        List<CartItem> cartItems = getCartItemsByUserId(userId); // lấy các mặt hàng trong giỏ hàng theo ID người dùng
+        for (CartItem item : cartItems) {
+            ProductVariation variation = productVariationRepository.findById(item.getVariationId().getVariationId())
+                    .orElseThrow(() -> new EntityNotFoundException("Product variation not found"));
+            // Tăng số lượng hàng trở lại
+            variation.setStock(variation.getStock() + item.getQuantity());
+            productVariationRepository.save(variation);
+        }
+        logger.info("Successfully restored item quantities for user ID: {}", userId);
+    }
+
+    @Override
+    public void clearCart(Integer userId) {
+        Cart cart = getCartByUserId(userId);
+        cart.getCartItems().clear(); // Or use a repository method to delete all items.
+        cartRepository.save(cart); // Ensure changes are saved.
     }
 }

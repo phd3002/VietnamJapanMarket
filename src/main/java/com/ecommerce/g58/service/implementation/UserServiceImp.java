@@ -3,9 +3,7 @@ package com.ecommerce.g58.service.implementation;
 import com.ecommerce.g58.entity.ResetToken;
 import com.ecommerce.g58.entity.Roles;
 import com.ecommerce.g58.entity.Users;
-import com.ecommerce.g58.repository.ResetTokenRepository;
-import com.ecommerce.g58.repository.RoleRepository;
-import com.ecommerce.g58.repository.UserRepository;
+import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.utils.UrlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +43,20 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private FeedbackRepository feedbackRepository;
+
+    @Autowired
+    private WalletRepository walletRepository;
+
+
     @Override
     public Users findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -158,6 +170,52 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public void updatePassword(Users user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<Users> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<Users> getAllSellers() {
+        return userRepository.findAllByRoleId(new Roles(2, "Seller"));
+    }
+
+    @Override
+    public List<Users> getAllCustomers() {
+        return userRepository.findAllByRoleId(new Roles(3, "Customer"));
+    }
+
+    @Override
+    public void deleteUser(Integer userId) {
+        userRepository.findById(userId).ifPresent(user -> {
+            cartRepository.deleteByUser_UserId(userId);
+            orderRepository.deleteByUserId_UserId(userId);
+            feedbackRepository.deleteByUserId_UserId(userId);
+            walletRepository.deleteByUserId_UserId(userId);
+            userRepository.deleteById(userId);
+        });
+    }
+
+    @Override
+    public boolean isAccountActive(String email) {
+        return userRepository.findByEmailAndStatus(email, "active").isPresent();
+    }
+
+    @Override
+    public long getTotalUsers() {
+        return userRepository.count();
+    }
+
+    @Override
+    public long getTotalSellers() {
+        return userRepository.findAllByRoleId(new Roles(2, "Seller")).size();
+    }
+
+    @Override
+    public void updateUser(Users user) {
         userRepository.save(user);
     }
 }

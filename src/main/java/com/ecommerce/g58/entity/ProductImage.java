@@ -16,10 +16,6 @@ public class ProductImage {
     @Column(name = "image_id")
     private Integer imageId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "product_id")
-//    private Products product;
-
     @Column(name = "thumbnail")
     private String thumbnail;
 

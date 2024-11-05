@@ -9,12 +9,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 public interface UserService extends UserDetailsService {
 
     Users findByEmail(String email);
+
     Users getUserById(Integer userId);
+
     UserDetails loadUserByUsername(String email);
 
     void registerUser(Users users);
@@ -33,7 +36,19 @@ public interface UserService extends UserDetailsService {
     //change pass
     void updatePassword(Users user, String newPassword);
 
-//    Users findByEmail(String email);
+    List<Users> getAllUsers();
 
+    List<Users> getAllSellers();
 
+    List<Users> getAllCustomers();
+
+    void deleteUser(Integer userId);
+
+    boolean isAccountActive(String email);
+
+    long getTotalUsers();
+
+    long getTotalSellers();
+
+    void updateUser(Users user);
 }

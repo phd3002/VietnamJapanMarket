@@ -3,11 +3,11 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.dto.OrdersDTO;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.OrderService;
+import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,73 +15,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.security.Principal;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 public class OrderController {
 
     private final OrderService orderService;
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StoreService storeService;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
-//    @GetMapping("/orders")
-//    public String getAllOrders(Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-//            return "redirect:/sign-in";
-//        }
-//
-//        // Fetch the authenticated user's email and user data
-//        String email = authentication.getName();
-//        Users user = userService.findByEmail(email);
-//        Integer userId = user.getUserId();
-//
-//        List<OrdersDTO> orders = orderService.getOrderSummariesByUserId(userId);  // Fetching the order details from the service
-//        if (orders.isEmpty()) {
-//            model.addAttribute("message", "Bạn không có đơn hàng nào.");  // Message if no orders
-//            model.addAttribute("productListLink", "/product-list");  // Link to the product list
-//        } else {
-//            model.addAttribute("orders", orders);  // Passing the list of orders to the model
-//        }
-//        return "order";  // Returning the view for the orders page (order.html)
-//    }
-
-    //    @GetMapping("/orders")
-//    public String getOrders(@RequestParam(value = "status", required = false) String status,
-//                            Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-//            return "redirect:/sign-in";
-//        }
-//
-//        // Fetch the authenticated user's email and user data
-//        String email = authentication.getName();
-//        Users user = userService.findByEmail(email);
-//        Integer userId = user.getUserId();
-//        List<OrdersDTO> orders;
-//
-//        if (status != null && !status.isEmpty()) {
-//            orders = orderService.getOrdersByUserIdAndStatus(userId, status);
-//        } else {
-//            orders = orderService.getOrdersByUserIdAndStatus(userId, null);
-//        }
-//
-//        if (orders.isEmpty()) {
-//            model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
-//            model.addAttribute("productListLink", "/product-detail");
-//        } else {
-//            model.addAttribute("orders", orders);
-//            model.addAttribute("status", status); // Truyền status nếu cần để duy trì trạng thái lọc
-//        }
-//        return "order";
-//    }
     @GetMapping("/orders")
     public String getOrders(@RequestParam(value = "status", required = false) String status,
                             @RequestParam(defaultValue = "0") int page,
@@ -94,11 +48,15 @@ public class OrderController {
 
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
-        Integer userId = user.getUserId();
+        model.addAttribute("user", user);
+        model.addAttribute("createdAtFormatted", DateTimeFormatter.ofPattern("MMM yyyy").format(user.getCreatedAt()));
 
-        Page<OrdersDTO> orderPage = orderService.getOrdersByUserIdAndStatus(userId, status, PageRequest.of(page, size));
+        boolean hasStore = storeService.findByOwnerId(user).isPresent();
+        model.addAttribute("hasStore", hasStore);
 
-        if (orderService.getOrdersByUserIdAndStatus(userId, null, PageRequest.of(page, size)).isEmpty()) {
+        Page<OrdersDTO> orderPage = orderService.getOrdersByUserIdAndStatus(user.getUserId(), status, PageRequest.of(page, size));
+
+        if (orderPage.isEmpty()) {
             model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
             model.addAttribute("productListLink", "/product-detail");
         } else {
@@ -108,6 +66,8 @@ public class OrderController {
             model.addAttribute("totalItems", orderPage.getTotalElements());
             model.addAttribute("status", status);
         }
+
         return "order";
     }
+
 }

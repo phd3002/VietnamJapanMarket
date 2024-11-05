@@ -14,17 +14,4 @@ public interface CartItemService {
     // New method to remove a single cart item by its ID
     void removeCartItemById(Integer cartItemId);
 
-//    // Get a list of cart items by their IDs
-//    List<CartItem> getCartItemsByIds(List<Integer> cartItemIds);
-//
-//    // Retrieve a cart item by its ID
-//    CartItem getCartItemById(Integer cartItemId);
-//
-//    // Remove multiple cart items by their IDs
-//    void removeCartItemsByIds(List<Integer> cartItemIds);
-//
-//    // Retrieve all cart items for a specific delivery role ID
-//    List<CartItem> getCartItemsByDeliveryRoleId(Integer deliveryRoleId);
-
-
 }

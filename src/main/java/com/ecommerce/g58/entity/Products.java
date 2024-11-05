@@ -2,8 +2,6 @@ package com.ecommerce.g58.entity;
 
 import lombok.*;
 import javax.persistence.*;
-
-//import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,6 +42,9 @@ public class Products {
 
     @Column(name = "product_type", nullable = false)
     private String productType;
+
+    @Column(name = "product_code", length = 10)
+    private String productCode;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
