@@ -60,6 +60,6 @@ public class UserManagementController {
         } else {
             model.addAttribute("error", "User or Role not found");
         }
-        return "admin/user-manager :: #ModalUP";
+        return "redirect:/admin/user-manager";
     }
 }

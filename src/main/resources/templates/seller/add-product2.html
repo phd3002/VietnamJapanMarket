@@ -154,7 +154,8 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
+        <li><a class="app-menu__item" href="store-info-manager.html"><i
+                class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
@@ -183,42 +184,95 @@
             <div class="tile">
                 <h3 class="tile-title">Tạo mới sản phẩm</h3>
                 <div class="tile-body">
-                    <form class="row" th:action="@{/addProduct}" method="post" th:object="${product}">
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Tên sản phẩm</label>
-                            <input class="form-control" type="text" th:field="*{productName}" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Mã sản phẩm</label>
-                            <input class="form-control" type="text" th:field="*{productCode}" required maxlength="10">
+                    <form class="row" th:action="@{/addProductFull}" method="post" enctype="multipart/form-data">
+                        <div th:object="${product2}">
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Tên sản phẩm</label>
+                                <input class="form-control" type="text" th:field="*{productName}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Mã sản phẩm</label>
+                                <input class="form-control" type="text" th:field="*{productCode}" required maxlength="10">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="categories-product" class="control-label">Danh mục</label>
+                                <select class="form-control" id="categories-product" name="categoryId" th:field="*{categoryId}" required>
+                                    <option value="" disabled>-- Chọn danh mục --</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.categoryId}"
+                                            th:text="${category.categoryName}"
+                                    >
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Giá bán(VND)</label>
+                                <input class="form-control" type="number" th:field="*{price}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Khối lượng(gram)</label>
+                                <input class="form-control" type="number" th:field="*{weight}" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Mô tả sản phẩm</label>
+                                <textarea class="form-control" th:field="*{productDescription}" required></textarea>
+                            </div>
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <label for="categories-product" class="control-label">Danh mục</label>
-                            <select class="form-control" id="categories-product" name="categoryId" th:field="*{categoryId}" required>
-                                <option value="" disabled>-- Chọn danh mục --</option>
-                                <option th:each="category : ${categories}"
-                                        th:value="${category.categoryId}"
-                                        th:text="${category.categoryName}"
-                                        >
-                                </option>
-                            </select>
+                        <div th:object="${productImage2}">
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Tên ảnh sản phẩm</label>
+                                <input class="form-control" type="text" th:field="*{imageName}" name="imageName" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <!-- Thumbnail Image Upload -->
+                                <label class="control-label">Thumbnail</label>
+                                <input class="form-control" type="file" id="thumbnail" name="thumbnail" accept="image/*" onchange="previewImage(this, 'thumbnailPreview')" required/>
+                                <div id="thumbnailPreview" class="image-preview"></div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <!-- 1st Image Upload -->
+                                <label class="control-label">1st Image</label>
+                                <input class="form-control" type="file" id="firstImage" name="firstImage" accept="image/*" onchange="previewImage(this, 'firstImagePreview')"/>
+                                <div id="firstImagePreview" class="image-preview"></div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <!-- 2nd Image Upload -->
+                                <label class="control-label">2nd Image</label>
+                                <input class="form-control" type="file" id="secondImage" name="secondImage" accept="image/*" onchange="previewImage(this, 'secondImagePreview')"/>
+                                <div id="secondImagePreview" class="image-preview"></div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <!-- 3rd Image Upload -->
+                                <label class="control-label">3rd Image</label>
+                                <input class="form-control" type="file" id="thirdImage" name="thirdImage" accept="image/*" onchange="previewImage(this, 'thirdImagePreview')"/>
+                                <div id="thirdImagePreview" class="image-preview"></div>
+                            </div>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Giá bán(VND)</label>
-                            <input class="form-control" type="number" th:field="*{price}" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Khối lượng(gram)</label>
-                            <input class="form-control" type="number" th:field="*{weight}" required>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Mô tả sản phẩm</label>
-                            <textarea class="form-control" th:field="*{productDescription}" required></textarea>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Mã sản phẩm</label>
-                            <input class="form-control" type="text" th:field="*{productCode}" required>
+
+                        <div th:object="${productVariation2}">
+                            <div class="form-group col-md-6">
+                                <label  class="control-label">Màu sắc</label>
+                                <select class="form-control" th:field="*{color.colorId}" required>
+                                    <option value="" disabled selected>-- Chọn màu sắc --</option>
+                                    <option th:each="color : ${colors}" th:value="${color.colorId}" th:text="${color.colorName}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label  class="control-label">Kích thước</label>
+                                <select class="form-control" th:field="*{size.sizeId}" required>
+                                    <option value="" disabled selected>-- Chọn kích thước --</option>
+                                    <option th:each="size : ${sizes}" th:value="${size.sizeId}" th:text="${size.sizeName}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Số lượng</label>
+                                <input class="form-control" type="text" th:field="*{stock}" required />
+                            </div>
                         </div>
                         <button class="btn btn-save" type="submit">Tạo sản phẩm mới</button>
                     </form>
@@ -230,86 +284,7 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tile">
-                <h3 class="tile-title">Tạo ảnh sản phẩm</h3>
-                <div class="tile-body">
-                    <form class="row" th:action="@{/addProductImage}" method="post" enctype="multipart/form-data" th:object="${productImage}">
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Tên ảnh sản phẩm</label>
-                            <input class="form-control" type="text" th:field="*{imageName}" name="imageName" required>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <!-- Thumbnail Image Upload -->
-                            <label class="control-label">Thumbnail</label>
-                            <input class="form-control" type="file" id="thumbnail" name="thumbnail" accept="image/*" onchange="previewImage(this, 'thumbnailPreview')" required/>
-                            <div id="thumbnailPreview" class="image-preview"></div>
-                        </div>
 
-                        <div class="form-group col-md-12">
-                            <!-- 1st Image Upload -->
-                            <label class="control-label">1st Image</label>
-                            <input class="form-control" type="file" id="firstImage" name="firstImage" accept="image/*" onchange="previewImage(this, 'firstImagePreview')"/>
-                            <div id="firstImagePreview" class="image-preview"></div>
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <!-- 2nd Image Upload -->
-                            <label class="control-label">2nd Image</label>
-                            <input class="form-control" type="file" id="secondImage" name="secondImage" accept="image/*" onchange="previewImage(this, 'secondImagePreview')"/>
-                            <div id="secondImagePreview" class="image-preview"></div>
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <!-- 3rd Image Upload -->
-                            <label class="control-label">3rd Image</label>
-                            <input class="form-control" type="file" id="thirdImage" name="thirdImage" accept="image/*" onchange="previewImage(this, 'thirdImagePreview')"/>
-                            <div id="thirdImagePreview" class="image-preview"></div>
-                        </div>
-                        <button class="btn btn-save" type="submit">Tạo ảnh mới</button>
-                    </form>
-                    <div th:if="${successMessageImg}" class="alert alert-success" role="alert">
-                        <span th:text="${successMessageImg}"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tile">
-                <h3 class="tile-title">Thêm sản phẩm vào cửa hàng</h3>
-                <div class="tile-body">
-                    <form class="row" th:action="@{/addProductVariation}" method="post" th:object="${productVariation}">
-                        <div class="form-group col-md-6">
-                            <label  class="control-label">Màu sắc</label>
-                            <select class="form-control" th:field="*{color}" required>
-                                <option value="" disabled selected>-- Chọn màu sắc --</option>
-                                <option th:each="color : ${colors}" th:value="${color.colorId}" th:text="${color.colorName}"></option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label  class="control-label">Kích thước</label>
-                            <select class="form-control" th:field="*{size}" required>
-                                <option value="" disabled selected>-- Chọn kích thước --</option>
-                                <option th:each="size : ${sizes}" th:value="${size.sizeId}" th:text="${size.sizeName}"></option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Số lượng</label>
-                            <input class="form-control" type="text" th:field="*{stock}" required />
-                        </div>
-                        <button class="btn btn-save" type="submit">Thêm</button>
-                    </form>
-                    <div th:if="${successMessageVar}" class="alert alert-success" role="alert">
-                        <span th:text="${successMessageVar}"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </main>
 <script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
@@ -345,7 +320,7 @@
                 removeButton.style.cursor = "pointer";
 
                 // Function to remove the image preview
-                removeButton.onclick = function() {
+                removeButton.onclick = function () {
                     input.value = "";  // Clear the input
                     previewDiv.innerHTML = "";  // Remove the preview
                 };
