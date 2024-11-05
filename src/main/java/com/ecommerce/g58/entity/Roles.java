@@ -21,14 +21,4 @@ public class Roles {
 
     @Column(name = "role_name")
     private String roleName;
-
-//    @ManyToMany(mappedBy = "roles")
-//    private Set<Users> users = new HashSet<>();
-
-    public enum RoleName {
-        CUSTOMER,
-        SELLER,
-        GUEST,
-        ADMIN
-    }
 }

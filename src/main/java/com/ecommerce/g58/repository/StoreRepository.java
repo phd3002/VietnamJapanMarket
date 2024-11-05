@@ -10,7 +10,10 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Stores, Integer> {
+    long count();
     Optional<Stores> findByStoreName(String storeName);
+
     Page<Stores> findByStoreNameContainingIgnoreCase(String storeName, Pageable pageable);
+
     Optional<Stores> findByOwnerId(Users ownerId);
 }

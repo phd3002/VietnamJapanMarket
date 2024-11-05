@@ -1,7 +1,9 @@
 package com.ecommerce.g58.controller;
 
+import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.implementation.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,15 +21,24 @@ import java.time.format.DateTimeFormatter;
 public class AccountController {
     private final ProfileService profileService;
 
+    @Autowired
+    private StoreService storeService;
+
     @GetMapping("/my-account")
     public String myAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) return "/sign-in";
-        if (userDetails.getUsername() == null) return "/sign-in";
+        if (userDetails == null || userDetails.getUsername() == null) {
+            return "redirect:/sign-in"; // Use redirect to avoid returning a relative path
+        }
 
         var email = userDetails.getUsername();
         var user = profileService.getUserByEmail(email);
         model.addAttribute("user", user);
         model.addAttribute("createdAtFormatted", DateTimeFormatter.ofPattern("MMM yyyy").format(user.getCreatedAt()));
+
+        // Pass the user object directly instead of user.getUserId()
+        boolean hasStore = storeService.findByOwnerId(user).isPresent();
+        model.addAttribute("hasStore", hasStore);
+
         return "my-account";
     }
 

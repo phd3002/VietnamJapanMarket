@@ -73,7 +73,9 @@
     <!-- Start Checkout Area  -->
     <div class="axil-checkout-area axil-section-gap">
         <div class="container">
-            <form action="#">
+            <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
+            </div>
+            <form action="/process-checkout" method="post">
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
@@ -84,7 +86,7 @@
                         </div>
                         <div class="form-group">
                             <span>Số điện thoại</span>
-                            <input type="text" id="phone-number">
+                            <input type="text" name="phoneNumber" id="phone-number" required>
                         </div>
                         <div class="form-group">
                             <span>Địa chỉ email</span>
@@ -99,7 +101,7 @@
                         </div>
                         <div class="form-group">
                             <span>Địa chỉ chi tiết</span>
-                            <input type="text" id="address">
+                            <input type="text" name="shippingAddress" id="shipping-address" required>
                         </div>
                     </div>
 
@@ -120,7 +122,8 @@
                                 <!-- Loop through the cartItems -->
                                 <tr th:each="item : ${cartItems}" class="order-product">
                                     <td>
-                                        <img th:src="${item.variationId.imageId.thumbnail}" alt="Product Image" height="100" width="100"/>
+                                        <img th:src="${item.variationId.imageId.thumbnail}" alt="Product Image"
+                                             height="100" width="100"/>
                                         <span th:text="${item.productId.productName}"></span><br>
                                         <span>Loại:
                                             <span th:text="${item.variationId.color.colorName}"></span>,
@@ -180,7 +183,8 @@
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="title mb-0">Tổng thanh toán:</h5>
-                                    <h6 id="total-order-price" style="color: #bb2d3b;" th:text="${totalWithShipping}"></h6>
+                                    <h6 id="total-order-price" style="color: #bb2d3b;"
+                                        th:text="${totalWithShipping}"></h6>
                                 </div>
                             </div>
                         </div>
@@ -198,9 +202,52 @@
 <div th:replace="base :: footer"></div>
 
 <script>
-    window.addEventListener("beforeunload", function(event) {
-        navigator.sendBeacon('/checkout/cancel'); // No need to handle response in 'beforeunload'
+    // kiem tra session co con ton tai hay khong
+    let sessionCheckInterval = setInterval(function () {
+        console.log('Checking session status...');
+        fetch('/session-status')
+            .then(response => response.json())
+            .then(data => {
+                // Neu session het han thi chuyen huong ve trang chu
+                if (!data.sessionValid) {
+                    console.log('Session expired, redirecting to homepage...');
+                    clearInterval(sessionCheckInterval); // dung kiem tra session neu het han
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                console.error('Error checking session status:', error);
+                clearInterval(sessionCheckInterval); // dung kiem tra session neu gap loi
+            });
+    }, 60000); // kiem tra session moi 60 giay
+
+    // Dung kiem tra session khi nguoi dung roi khoi trang
+    window.addEventListener('beforeunload', function () {
+        clearInterval(sessionCheckInterval);
     });
+</script>
+
+<script>
+    // kiem tra thoi gian con lai de thanh toan
+    function checkTimeRemaining() {
+        // lay thoi gian con lai tu server
+        fetch('/checkout-time-remaining')
+            .then(response => response.json())
+            .then(data => {
+                // neu thoi gian con lai < 5 phut thi hien thi thong bao
+                if (data.showWarning) {
+                    document.getElementById("timeoutWarning").style.display = "block";
+                } else {
+                    document.getElementById("timeoutWarning").style.display = "none";
+                }
+            })
+            .catch(error => console.error('Error checking time remaining:', error));
+    }
+
+    // kiem tra moi 10 giay
+    setInterval(checkTimeRemaining, 10000);
+    // ban dau an thong bao
+    document.getElementById("timeoutWarning").style.display = "none";
 </script>
 
 <!-- JS

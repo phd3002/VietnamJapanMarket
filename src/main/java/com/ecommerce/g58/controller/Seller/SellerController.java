@@ -64,12 +64,49 @@ public class SellerController {
     @PostMapping("/sign-up-seller")
     public String registerStore(@ModelAttribute Stores store,
                                 @RequestParam("countryId") Integer countryId,
+                                @RequestParam("city") String city,
+                                @RequestParam("district") String district,
+                                @RequestParam("postalCode") String postalCode,
                                 RedirectAttributes redirectAttributes,
                                 HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         Users user = userService.findByEmail(userDetails.getUsername());
+        // Kiểm tra các thông tin đầu vào
+        if (store.getStoreName() == null || store.getStoreName().isEmpty() || store.getStoreName().length() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên cửa hàng không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (store.getStorePhone() == null || store.getStorePhone().isEmpty() || store.getStorePhone().length() > 20) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại cửa hàng không được để trống và không được vượt quá 20 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (store.getStoreAddress() == null || store.getStoreAddress().isEmpty() || store.getStoreAddress().length() > 255) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Địa chỉ cửa hàng không được để trống và không được vượt quá 255 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (countryId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Quốc gia không được để trống.");
+            return "redirect:/sign-up-seller";
+        }
+        if (city == null || city.isEmpty() || city.length() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thành phố không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (district == null || district.isEmpty() || district.length() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Quận/huyện không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (postalCode != null && postalCode.length() > 20) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mã bưu chính không được vượt quá 20 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
         store.setOwnerId(user);
+        store.setStoreMail(user.getEmail()); // Automatically assign the store's email to the user's email
+        store.setCity(city != null ? city.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
+        store.setDistrict(district != null ? district.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
+        store.setPostalCode(postalCode != null ? postalCode.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
+
         Countries country = countryService.getCountryById(countryId);
         store.setCountry(country); // Set country
         Optional<Stores> existingStoreByName = storeService.findByStoreName(store.getStoreName());
@@ -87,7 +124,16 @@ public class SellerController {
     }
 
     @GetMapping("/seller/dashboard")
-    public String showSellerDashboard() {
+    public String showSellerDashboard(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDetails = (User) authentication.getPrincipal();
+        Users user = userService.findByEmail(userDetails.getUsername());
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        Optional<Stores> store = storeService.findByOwnerId(user);
+        store.ifPresent(value -> model.addAttribute("storeId", value.getStoreId()));
         return "seller/dashboard";
     }
 }

@@ -20,37 +20,11 @@
     <div class="axil-dashboard-area axil-section-gap">
         <div class="container">
             <div class="axil-dashboard-warp">
-                <!-- Dashboard Sidebar -->
-                <div class="axil-dashboard-author">
-                    <div class="media">
-                        <div class="thumbnail">
-                            <img th:src="@{/images/product/author1.png}">
-                        </div>
-                        <div class="media-body">
-                            <h5 class="title mb-0">Hello ....</h5>
-                            <span class="joining-date">Register Since Sep 2020</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Dashboard Sidebar and Content Container -->
                 <div class="row">
+                    <!-- Sidebar -->
                     <div class="col-xl-3 col-md-4">
-                        <aside class="axil-dashboard-aside">
-                            <nav class="axil-dashboard-nav">
-                                <div class="nav nav-tabs" role="tablist">
-                                    <a class="nav-item nav-link" href="my-account.html"
-                                       aria-selected="false"><i class="fas fa-user"></i>Account Details</a>
-                                    <a class="nav-item nav-link" href="my-shop.html"
-                                       aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
-                                    <a class="nav-item nav-link active" href="order.html"
-                                       aria-selected="true"><i class="fas fa-shopping-basket"></i>Orders</a>
-                                    <a class="nav-item nav-link" href="wallet.html"
-                                       aria-selected="false"><i class="fas fa-wallet"></i>Wallet</a>
-                                    <a class="nav-item nav-link" href="address.html"
-                                       aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
-                                    <a class="nav-item nav-link" href="notification.html"
-                                       aria-selected="false"><i class="fas fa-bell"></i>Notification</a>
-                                </div>
-                            </nav>
+                        <aside th:insert="~{sidebar :: sidebar}">
                         </aside>
                     </div>
                     <!-- Dashboard Content -->
@@ -58,10 +32,6 @@
                         <div class="tab-content">
                             <!-- Orders Tab -->
                             <div class="tab-pane fade show active" id="nav-orders" role="tabpanel">
-                                <!--                                &lt;!&ndash; Check if there is a message (no orders) &ndash;&gt;-->
-                                <!--                                <p th:if="${message}" th:text="${message}"></p>-->
-                                <!--                                &lt;!&ndash; Display the link to the product list if there are no orders &ndash;&gt;-->
-                                <!--                                <a th:if="${message}" th:href="${productListLink}">Mua ngay</a>-->
                                 <div class="axil-dashboard-order" th:if="orders != null">
                                     <div class="table-responsive" th:if="${message == null}">
                                         <div class="filter-section">
@@ -69,11 +39,23 @@
                                             <select id="statusFilter" name="status"
                                                     onchange="filterOrdersByStatus(this.value)">
                                                 <option value="" th:selected="${status == 'null'}">Tất cả</option>
-                                                <!-- Thay đổi giá trị thành chuỗi trống -->
-                                                <option value="Pending" th:selected="${status == 'Pending'}">Đang chờ
+                                                <option value="Pending" th:selected="${status == 'Pending'}">
+                                                    Chờ xử lý
                                                 </option>
-                                                <option value="Processing" th:selected="${status == 'Processing'}">Đang
-                                                    chuẩn bị
+                                                <option value="Processing" th:selected="${status == 'Processing'}">
+                                                    Đang gói hàng
+                                                </option>
+                                                <option value="Shipping" th:selected="${status == 'Shipping'}">
+                                                    Đang vận chuyển
+                                                </option>
+                                                <option value="Completed" th:selected="${status == 'Completed'}">
+                                                    Hoàn thành
+                                                </option>
+                                                <option value="Cancelled" th:selected="${status == 'Cancelled'}">
+                                                    Đã hủy
+                                                </option>
+                                                <option value="Returned" th:selected="${status == 'Returned'}">
+                                                    Trả hàng/Hoàn tiền nào
                                                 </option>
                                             </select>
                                         </div>
@@ -106,35 +88,49 @@
                                                 <nav>
                                                     <ul class="pagination">
                                                         <!-- First -->
-                                                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                            <a class="page-link" th:href="@{/orders(page=0, size=10, status=${status != null && status != '' ? status : ''})}">
+                                                        <li class="page-item"
+                                                            th:classappend="${currentPage == 0} ? 'disabled'">
+                                                            <a class="page-link"
+                                                               th:href="@{/orders(page=0, size=10, status=${status != null && status != '' ? status : ''})}">
                                                                 Đầu
                                                             </a>
                                                         </li>
 
                                                         <!-- Previous -->
-                                                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                                            <a class="page-link" th:href="@{/orders(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}" th:if="${currentPage > 0}">
+                                                        <li class="page-item"
+                                                            th:classappend="${currentPage == 0} ? 'disabled'">
+                                                            <a class="page-link"
+                                                               th:href="@{/orders(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}"
+                                                               th:if="${currentPage > 0}">
                                                                 Trước
                                                             </a>
                                                         </li>
 
                                                         <!-- Page Numbers -->
-                                                        <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${pageNum == currentPage} ? 'active'">
-                                                            <a class="page-link" th:href="@{/orders(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}" th:text="${pageNum + 1}">
+                                                        <li class="page-item"
+                                                            th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                                                            th:classappend="${pageNum == currentPage} ? 'active'">
+                                                            <a class="page-link"
+                                                               th:href="@{/orders(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}"
+                                                               th:text="${pageNum + 1}">
                                                             </a>
                                                         </li>
 
                                                         <!-- Next -->
-                                                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                                            <a class="page-link" th:href="@{/orders(page=${currentPage + 1}, size=10, status=${status != null && status != '' ? status : ''})}" th:if="${currentPage < totalPages - 1}">
+                                                        <li class="page-item"
+                                                            th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                                            <a class="page-link"
+                                                               th:href="@{/orders(page=${currentPage + 1}, size=10, status=${status != null && status != '' ? status : ''})}"
+                                                               th:if="${currentPage < totalPages - 1}">
                                                                 Sau
                                                             </a>
                                                         </li>
 
                                                         <!-- Last -->
-                                                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                                            <a class="page-link" th:href="@{/orders(page=${totalPages - 1}, size=10, status=${status != null && status != '' ? status : ''})}">
+                                                        <li class="page-item"
+                                                            th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                                            <a class="page-link"
+                                                               th:href="@{/orders(page=${totalPages - 1}, size=10, status=${status != null && status != '' ? status : ''})}">
                                                                 Cuối
                                                             </a>
                                                         </li>

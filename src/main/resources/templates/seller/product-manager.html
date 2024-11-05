@@ -39,12 +39,13 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="#" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="../../static/images/product/categories/electronic.png" width="50px"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
+        <li><a class="app-menu__item" href="store-info-manager.html"><i
+                class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
@@ -53,6 +54,9 @@
         </li>
         <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="feedback-manager.html"><i
+                class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
+        </li>
         <li><a class="app-menu__item" href="shipping-manager.html"><i
                 class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
         </li>
@@ -74,7 +78,8 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-2">
-                            <a class="btn btn-add btn-sm" href="add-product.html" title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+                            <a class="btn btn-add btn-sm" th:href="@{'/addProductForm/' + ${storeId}}" title="Thêm"><i
+                                    class="fas fa-plus"></i> Tạo mới sản phẩm</a>
                         </div>
                         <!-- Các button khác như Tải từ file, In, Sao chép, Xuất Excel, Xuất PDF, Xóa tất cả -->
                     </div>
@@ -98,29 +103,42 @@
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
                             <td th:text="${product.productId}"></td>
                             <td th:text="${product.productName}"></td>
-                            <td><img th:src="@{${product.productImages[0]?.thumbnail}}" alt="" width="100px;"></td>
-                            <td th:text="${product.productVariations[0]?.size + ' x ' + product.productVariations[0]?.color}"></td>
-                            <td th:text="${product.productVariations[0]?.stock}"></td>
-                            <td th:text="${product.price} + ' đ'"></td>
-                            <td th:text="${product.categoryId?.categoryName}"></td>
-                            <td th:text="${#dates.format(product.createdAt, 'yyyy-MM-dd')}"></td>
                             <td>
-                                <a th:href="@{'/api/seller/edit-product/' + ${product.productId}}">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fas fa-edit"></i></button>
+                                <img th:if="${product.productVariations != null && product.productVariations.size() > 0}"
+                                     th:src="${product.productVariations[0].imageId != null ? product.productVariations[0].imageId.thumbnail : '/images/default-thumbnail.png'}"
+                                     alt="Product Image" width="150px">
+                            </td>
+                            <td>
+                                <ul>
+                                    <li th:each="variation : ${product.productVariations}">
+                                        <span th:text="${variation.size?.sizeName} + ' x ' + ${variation.color?.colorName}"></span>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td th:text="${product.productVariations.size() > 0 ? product.productVariations[0].stock : 'N/A'}"></td>
+                            <td th:text="${product.price} + ' đ'"></td>
+                            <td th:text="${product.categoryId != null ? product.categoryId.categoryName : 'N/A'}"></td>
+                            <td th:text="${product.createdAt != null ? #temporals.format(product.createdAt, 'yyyy-MM-dd') : 'N/A'}"></td>
+                            <td>
+                                <a th:href="@{'/edit-product/' + ${product.productId}}">
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i
+                                            class="fas fa-edit"></i></button>
                                 </a>
-                                <a th:href="@{'/api/seller/delete-product/' + ${product.productId}}" onclick="return confirm('Are you sure?')">
-                                    <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                <a th:href="@{'/delete-product/' + ${product.productId}}"
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                    <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i
+                                            class="fas fa-trash-alt"></i></button>
                                 </a>
                             </td>
                         </tr>
                         </tbody>
+
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </main>
-
 
 
 <!-- Essential javascripts for application to work-->

@@ -43,14 +43,14 @@ public class Products {
     @Column(name = "product_type", nullable = false)
     private String productType;
 
+    @Column(name = "product_code", length = 10)
+    private String productCode;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
     private List<ProductVariation> productVariations;
-
-//    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-//    private List<ProductImage> productImages;
 
 }
 

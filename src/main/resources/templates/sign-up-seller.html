@@ -1,8 +1,5 @@
 <!doctype html>
 <html class="no-js" lang="en">
-
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/sign-up.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:13:36 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -12,11 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
-
     <!-- CSS
     ============================================ -->
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}">
     <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}">
@@ -28,9 +22,7 @@
     <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
     <link rel="stylesheet" th:href="@{/css/style.min.css}">
     <link rel="stylesheet" th:href="@{/css/style-2.css}">
-
 </head>
-
 
 <body>
 <div class="axil-signin-area">
@@ -55,55 +47,158 @@
             <div class="axil-signin-form-wrap">
                 <div class="axil-signin-form">
                     <form class="signin-form" th:action="@{/sign-up-seller}" method="post">
-                        <div th:if="${errorMessage}" class="alert alert-danger">
-                            <p th:text="${errorMessage}"></p>
+                        <div th:if="${errorMessage}" class="alert alert-danger mt-2" role="alert">
+                            <span th:text="${errorMessage}"></span>
                         </div>
+                        <p class="b2 mb--55">Nhập thông tin cửa hàng</p>
+
                         <div class="form-group">
-                            <label>Shop Name</label>
+                            <label>Tên cửa hàng <span>*</span></label>
                             <input type="text" class="form-control" name="storeName" required>
                         </div>
+
                         <div class="form-group">
-                            <label>Store Address</label>
-                            <input type="text" class="form-control" name="storeAddress" required>
+                            <label>Số điện thoại <span>*</span></label>
+                            <input type="text" class="form-control" name="storePhone" value="0123123" required>
                         </div>
+
                         <div class="form-group">
-                            <label>Store Email</label>
-                            <input type="email" class="form-control" name="storeMail" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Store Phone</label>
-                            <input type="text" class="form-control" name="storePhone" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Quốc gia <span>*</span></label>
-                            <select name="countryId" class="form-control" required>
-                                <option th:each="country : ${countries}"
-                                        th:value="${country.countryId}"
-                                        th:text="${country.countryName}">
-                                </option>
+                            <label>Địa chỉ giao hàng</label>
+                            <select id="countrySelect" name="countryId" onchange="updateAddressFields()" required>
+                                <option value="">Chọn quốc gia</option>
+                                <option value="1">Việt Nam</option>
+                                <option value="2">Nhật Bản</option>
                             </select>
                         </div>
+
+                        <!-- Vietnam Fields -->
+                        <div id="vietnamFields" class="address-fields hidden">
+                            <div class="form-group">
+                                <label>郵便番号 (Mã bưu điện)</label>
+                                <input type="text" id="vnPostalCode" name="postalCode" placeholder="XXX-XXXX" maxlength="8">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tỉnh/Thành phố</label>
+                                <select id="vnCity" name="city">
+                                    <option value="">Chọn tỉnh/thành phố</option>
+                                    <option value="Hà Nội">Hà Nội</option>
+                                    <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                                    <!-- More options can be added here -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Quận/Huyện</label>
+                                <select id="vnDistrict" name="district">
+                                    <option value="">Chọn quận/huyện</option>
+                                    <option value="Hoàn Kiếm">Hoàn Kiếm</option>
+                                    <option value="Ba Đình">Ba Đình</option>
+                                    <!-- More options can be added here -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Địa chỉ chi tiết</label>
+                                <input type="text" id="vnStoreAddress" name="storeAddress" placeholder="Số nhà, tên đường, phường/xã...">
+                            </div>
+                        </div>
+
+                        <!-- Japan Fields -->
+                        <div id="japanFields" class="address-fields hidden">
+                            <div class="form-group">
+                                <label>郵便番号 (Mã bưu điện)</label>
+                                <input type="text" id="jpPostalCode" name="postalCode" placeholder="XXX-XXXX" maxlength="8">
+                            </div>
+
+                            <div class="form-group">
+                                <label>都道府県 (Tỉnh)</label>
+                                <select id="jpPrefecture" name="city">
+                                    <option value="">Chọn tỉnh</option>
+                                    <option value="Tokyo">Tokyo</option>
+                                    <option value="Osaka">Osaka</option>
+                                    <!-- More options can be added here -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>市区町村 (Thành phố/Quận)</label>
+                                <select id="jpCity" name="district">
+                                    <option value="">Chọn thành phố/quận</option>
+                                    <option value="Shibuya">Shibuya</option>
+                                    <option value="Shinjuku">Shinjuku</option>
+                                    <!-- More options can be added here -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>住所 (Địa chỉ chi tiết)</label>
+                                <input type="text" id="jpStoreAddress" name="storeAddress" placeholder="Số nhà, tên đường...">
+                            </div>
+                        </div>
+
+                        <br>
                         <div class="form-group mb--0">
                             <input type="submit" class="axil-btn" value="Sign Up">
                         </div>
                     </form>
+
+                    <script>
+                        function updateAddressFields() {
+                            var countrySelect = document.getElementById("countrySelect");
+                            var selectedCountry = countrySelect.value;
+
+                            // Get the elements for Vietnam and Japan fields
+                            var vietnamFields = document.getElementById("vietnamFields");
+                            var japanFields = document.getElementById("japanFields");
+
+                            // Get all input elements within Vietnam and Japan fields
+                            var vnInputs = vietnamFields.querySelectorAll("input, select");
+                            var jpInputs = japanFields.querySelectorAll("input, select");
+
+                            // Hide all address fields initially and remove required attributes
+                            vietnamFields.classList.add("hidden");
+                            japanFields.classList.add("hidden");
+
+                            vnInputs.forEach(function(input) {
+                                input.required = false;
+                            });
+
+                            jpInputs.forEach(function(input) {
+                                input.required = false;
+                            });
+
+                            // Show fields and add required attributes based on selected country
+                            if (selectedCountry === "1") {
+                                vietnamFields.classList.remove("hidden");
+                                vnInputs.forEach(function(input) {
+                                    input.required = true;
+                                });
+                            } else if (selectedCountry === "2") {
+                                japanFields.classList.remove("hidden");
+                                jpInputs.forEach(function(input) {
+                                    input.required = true;
+                                });
+                            }
+                        }
+                    </script>
+                    <style>
+                        .hidden {
+                            display: none;
+                        }
+                    </style>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <!-- JS ============================================ -->
-<!-- Modernizer JS -->
 <script th:src="@{/js/vendor/modernizr.min.js}"></script>
-<!-- jQuery JS -->
 <script th:src="@{/js/vendor/jquery.js}"></script>
-<!-- Bootstrap JS -->
 <script th:src="@{/js/vendor/popper.min.js}"></script>
 <script th:src="@{/js/vendor/bootstrap.min.js}"></script>
 <script th:src="@{/js/vendor/slick.min.js}"></script>
 <script th:src="@{/js/vendor/js.cookie.js}"></script>
-<!-- <script th:src="@{/assets/js/vendor/jquery.style.switcher.js}"></script> -->
 <script th:src="@{/js/vendor/jquery-ui.min.js}"></script>
 <script th:src="@{/js/vendor/jquery.ui.touch-punch.min.js}"></script>
 <script th:src="@{/js/vendor/jquery.countdown.min.js}"></script>
@@ -113,13 +208,7 @@
 <script th:src="@{/js/vendor/isotope.pkgd.min.js}"></script>
 <script th:src="@{/js/vendor/counterup.js}"></script>
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
-
-<!-- Main JS -->
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
-
 </body>
-
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/sign-up.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:13:36 GMT -->
 </html>

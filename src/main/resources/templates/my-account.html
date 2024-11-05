@@ -16,41 +16,18 @@
 
 <!-- Main Content Section -->
 <main class="main-wrapper">
+    <!-- Start My Account Area  -->
     <div class="axil-dashboard-area axil-section-gap">
         <div class="container">
             <div class="axil-dashboard-warp">
-                <div class="axil-dashboard-author">
-                    <div class="media">
-                        <div class="thumbnail">
-                            <img th:src="@{https://i.pravatar.cc/150?img=12}" alt="" width="120px" height="120px">
-                        </div>
-                        <div class="media-body">
-                            <h5 class="title mb-0" th:text="'Hello ' + ${user.firstName}"></h5>
-                            <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Dashboard Sidebar and Content Container -->
                 <div class="row">
+                    <!-- Sidebar -->
                     <div class="col-xl-3 col-md-4">
-                        <aside class="axil-dashboard-aside">
-                            <nav class="axil-dashboard-nav">
-                                <div class="nav nav-tabs" role="tablist">
-                                    <a class="nav-item nav-link active" href="/my-account"
-                                       aria-selected="true"><i class="fas fa-user"></i>Account Details</a>
-                                    <a class="nav-item nav-link" href="my-shop.html"
-                                       aria-selected="false"><i class="fas fa-store"></i>Your Shop</a>
-                                    <a class="nav-item nav-link" href="order.html"
-                                       aria-selected="false"><i class="fas fa-shopping-basket"></i>Orders</a>
-                                    <a class="nav-item nav-link" href="wallet.html"
-                                       aria-selected="false"><i class="fas fa-wallet"></i>Wallet</a>
-                                    <a class="nav-item nav-link" href="address.html"
-                                       aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
-                                    <a class="nav-item nav-link" href="notification.html"
-                                       aria-selected="false"><i class="fas fa-bell"></i>Notification</a>
-                                </div>
-                            </nav>
+                        <aside th:insert="~{sidebar :: sidebar}">
                         </aside>
                     </div>
+                    <!-- Dashboard Content -->
                     <div class="col-xl-9 col-md-8">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
@@ -118,6 +95,27 @@
             </div>
         </div>
     </div>
+    </div>
+    <div id="signupModal" style="display: none;">
+        <p>Bạn đang chưa có cửa hàng, bạn có muốn đăng ký làm người bán hàng?</p>
+        <button onclick="window.location.href='/sign-up-seller'">Tôi muốn đăng kí làm người bán hàng</button>
+    </div>
+    <script>
+        function showSignupModal() {
+            Swal.fire({
+                title: 'Bạn đang chưa có cửa hàng',
+                text: 'Bạn có muốn đăng ký làm người bán hàng?',
+                showCancelButton: true,
+                confirmButtonText: 'Tôi muốn đăng kí làm người bán hàng',
+                cancelButtonText: 'Đóng'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/sign-up-seller';
+                }
+            });
+        }
+    </script>
+
 </main>
 
 <!-- Include Footer Fragment -->

@@ -27,20 +27,21 @@ public class HomeController {
 
     @GetMapping({"/", "/homepage"})
     public String showHomePage(Model model, Principal principal) {
-        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        // Check if the user is logged in
         if (principal != null) {
-            Users user = userService.findByEmail(principal.getName());  // Fetch user details by email
+            Users user = userService.findByEmail(principal.getName());
             model.addAttribute("isLoggedIn", true);
-            model.addAttribute("username", user.getFirstName());  // Pass firstName instead of email
+            model.addAttribute("firstname", user.getFirstName());
         } else {
             model.addAttribute("isLoggedIn", false);
         }
+
+        // Use getAllProducts() method from ProductService
+        List<Products> products = productService.getAllProducts();
         List<Categories> categories = categoriesService.getAllCategories();
-        List<ProductDTO> productDetails = productService.getProductDetails();
-        List<ProductDTO> searchProduct = productService.getSearchProduct();
-        model.addAttribute("productDetails", productDetails);
-        model.addAttribute("searchProduct", searchProduct);
+        model.addAttribute("products", products);
         model.addAttribute("categories", categories);
+
         return "homepage";
     }
 }

@@ -12,6 +12,8 @@ public class ProductDetailDTO {
     private String productDescription;
     private Integer price;
     private Float weight;
+    private Integer categoryId;
+    private Integer storeId;
 
     // ProductVariation table fields
     private Integer variationId;
@@ -20,6 +22,7 @@ public class ProductDetailDTO {
     private Integer stock;
 
     // ProductImage table fields
+    private Integer imageId;
     private String thumbnail;
     private String image1;
     private String image2;
@@ -62,5 +65,17 @@ public class ProductDetailDTO {
         this.image2 = image2;
         this.image3 = image3;
         this.image4 = image4;
+    }
+
+    public ProductDetailDTO(Integer productId, String productName, Integer price, Integer categoryId, Integer storeId, String size, String color, Integer stock, Integer imageId) {
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.categoryId = categoryId;
+        this.storeId = storeId;
+        this.size = size;
+        this.color = color;
+        this.stock = stock;
+        this.imageId = imageId;
     }
 }

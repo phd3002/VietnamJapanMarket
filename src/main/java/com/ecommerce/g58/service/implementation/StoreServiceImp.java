@@ -50,4 +50,23 @@ public class StoreServiceImp implements StoreService {
         user.setRoleId(sellerRole);
         userRepository.save(user);
     }
+
+    // Method to fetch store by storeId
+    public Stores findStoreById(Integer storeId) {
+        return storeRepository.findById(storeId).orElse(null);
+    }
+
+    // Method to save store information
+    public void saveStore(Stores store) {
+        storeRepository.save(store);
+    }
+
+    public Optional<Stores> findById(Integer storeId) {
+        return storeRepository.findById(storeId);
+    }
+
+    @Override
+    public long getTotalStores() {
+        return storeRepository.count();
+    }
 }

@@ -66,7 +66,7 @@
                                     </a>
                                 </td>
                                 <td class="product-title">
-                                    <a th:href="@{/product-detail(productId=${item.productId.productId})}"
+                                    <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}"
                                        th:text="${item.productId.productName}">Product Name</a>
                                 </td>
                                 <td class="product-price" data-title="Price">

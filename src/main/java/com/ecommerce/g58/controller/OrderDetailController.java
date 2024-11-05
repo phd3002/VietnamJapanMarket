@@ -3,10 +3,13 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.dto.OrderDetailDTO;
 import com.ecommerce.g58.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,8 +39,30 @@ public class OrderDetailController {
             model.addAttribute("shippingStatus", firstDetail.getShippingStatus());
             model.addAttribute("trackingNumber", firstDetail.getTrackingNumber());
             model.addAttribute("storeName", firstDetail.getStoreName());
+            model.addAttribute("storeImage", firstDetail.getStoreImage());
+            model.addAttribute("storeId", firstDetail.getStoreId());
+            model.addAttribute("pendingTime", firstDetail.getPendingTime());
+            model.addAttribute("confirmedTime", firstDetail.getConfirmedTime());
+            model.addAttribute("processingTime", firstDetail.getProcessingTime());
+            model.addAttribute("dispatchedTime", firstDetail.getDispatchedTime());
+            model.addAttribute("shippingTime", firstDetail.getShippingTime());
+            model.addAttribute("failedTime", firstDetail.getFailedTime());
+            model.addAttribute("deliveredTime", firstDetail.getDeliveredTime());
+            model.addAttribute("completedTime", firstDetail.getCompletedTime());
+            model.addAttribute("cancelledTime", firstDetail.getCancelledTime());
+            model.addAttribute("returnedTime", firstDetail.getReturnedTime());
         }
 
         return "order-detail"; // Thymeleaf template name
+    }
+
+    @GetMapping("/order-detail/{orderId}/rating")
+    @ResponseStatus(HttpStatus.OK)
+    public void rateOrder(@PathVariable Long orderId,
+                          @RequestParam String rateText,
+                          @RequestParam Integer rateStar,
+                          @AuthenticationPrincipal UserDetails userDetails) {
+        var userEmail = userDetails.getUsername();
+        orderDetailService.rateOrder(orderId, userEmail, rateText, rateStar);
     }
 }

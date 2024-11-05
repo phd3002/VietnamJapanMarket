@@ -110,7 +110,7 @@ public class CartController {
         List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
 
         if (cartItems.isEmpty()) {
-            model.addAttribute("message", "Your cart is empty.");
+            model.addAttribute("message", "Giỏ hàng của bạn đang trống");
             return "cart-detail";  // Return empty cart view
         }
 
@@ -148,12 +148,12 @@ public class CartController {
             // Check if the requested quantity is within the available stock
             if (quantity <= productStock) {
                 cartItemService.updateCartItemQuantity(cartItemId, quantity);
-                redirectAttributes.addFlashAttribute("message", "Quantity updated successfully");
+                redirectAttributes.addFlashAttribute("message", "Cập nhật giỏ hàng thành công");
             } else {
-                redirectAttributes.addFlashAttribute("error", "Error updating quantity: Exceeds stock limit");
+                redirectAttributes.addFlashAttribute("error", "Lỗi khi cập nhật số lượng: Vượt quá số lượng tồn kho");
             }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error updating quantity");
+            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi cập nhật số lượng");
         }
 
         // Redirect back to cart detail page
