@@ -31,19 +31,19 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "    o.order_id AS orderId, \n" +
             "    o.order_date AS orderDate, \n" +
             "    latest_status.status AS status, \n" +
-            "    SUM(od.quantity) AS totalQuantity, \n" +
-            "    (o.total_price + i.shipping_fee) AS totalPrice \n" +
+            "    COALESCE(SUM(od.quantity), 0) AS totalQuantity, \n" +
+            "    COALESCE(o.total_price, 0) + COALESCE(i.shipping_fee, 0) AS totalPrice \n" +
             "FROM \n" +
             "    orders o \n" +
-            "JOIN \n" +
+            "LEFT JOIN \n" +
             "    order_details od ON o.order_id = od.order_id \n" +
-            "JOIN \n" +
+            "LEFT JOIN \n" +
             "    invoice i ON o.order_id = i.order_id \n" +
-            "JOIN (\n" +
+            "LEFT JOIN (\n" +
             "    SELECT ss.order_id, ss.status\n" +
             "    FROM shipping_status ss\n" +
             "    INNER JOIN (\n" +
-            "        SELECT order_id, MAX(updated_at) as latest_update\n" +
+            "        SELECT order_id, MAX(updated_at) AS latest_update\n" +
             "        FROM shipping_status\n" +
             "        GROUP BY order_id\n" +
             "    ) latest ON ss.order_id = latest.order_id AND ss.updated_at = latest.latest_update\n" +
@@ -54,11 +54,11 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "    o.order_id, o.order_date, latest_status.status, o.total_price, i.shipping_fee",
             countQuery = "SELECT COUNT(DISTINCT o.order_id) " +
                     "FROM orders o " +
-                    "JOIN (\n" +
+                    "LEFT JOIN (\n" +
                     "    SELECT ss.order_id, ss.status\n" +
                     "    FROM shipping_status ss\n" +
                     "    INNER JOIN (\n" +
-                    "        SELECT order_id, MAX(updated_at) as latest_update\n" +
+                    "        SELECT order_id, MAX(updated_at) AS latest_update\n" +
                     "        FROM shipping_status\n" +
                     "        GROUP BY order_id\n" +
                     "    ) latest ON ss.order_id = latest.order_id AND ss.updated_at = latest.latest_update\n" +
