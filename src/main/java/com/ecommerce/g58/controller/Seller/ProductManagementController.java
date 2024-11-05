@@ -95,8 +95,8 @@ public class ProductManagementController {
             redirectAttributes.addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự.");
             return "redirect:/edit-product/" + productId;
         }
-        if (price == null || price < 20000) {
-            redirectAttributes.addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000.");
+        if (price == null || price < 20000 || price > 50000000) {
+            redirectAttributes.addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000.");
             return "redirect:/edit-product/" + productId;
         }
         if (weight < 0.1 || weight > 20.0) {
@@ -144,9 +144,27 @@ public class ProductManagementController {
 
     @PostMapping("/addProduct")
     public String addProduct(@ModelAttribute Products product, HttpSession session, Model model,
-//                             @RequestParam("categoryId") Integer categoryId,
                              RedirectAttributes redirectAttributes) {
         Integer storeId = (Integer) session.getAttribute("storeId");
+
+        // Kiểm tra thông tin đầu vào của sản phẩm
+        if (product.getProductName() == null || product.getProductName().isEmpty() || product.getProductName().length() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/addProductForm/" + storeId;
+        }
+        if (product.getProductDescription() == null || product.getProductDescription().isEmpty() || product.getProductDescription().length() > 500) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự.");
+            return "redirect:/addProductForm/" + storeId;
+        }
+        if (product.getPrice() == null || product.getPrice() < 20000 || product.getPrice() > 50000000) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000.");
+            return "redirect:/addProductForm/" + storeId;
+        }
+        if (product.getWeight() < 0.1 || product.getWeight() > 20.0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Khối lượng sản phẩm phải trong khoảng từ 0.1kg đến 20kg.");
+            return "redirect:/addProductForm/" + storeId;
+        }
+
         if (storeId != null) {
             Optional<Stores> store = storeService.findById(storeId);
             store.ifPresent(product::setStoreId);
@@ -161,7 +179,6 @@ public class ProductManagementController {
         return "redirect:/addProductForm/" + storeId;
     }
 
-
     @PostMapping("/addProductImage")
     public String addProductImage(@RequestParam("thumbnail") MultipartFile thumbnail,
                                   @RequestParam("firstImage") MultipartFile firstImage,
@@ -172,6 +189,12 @@ public class ProductManagementController {
                                   HttpSession session, Model model) {
 
         Integer storeId = (Integer) session.getAttribute("storeId");
+
+        // Kiểm tra thông tin đầu vào của hình ảnh
+        if (imageName == null || imageName.isEmpty() || imageName.length() > 255) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên hình ảnh không được để trống và không được vượt quá 255 ký tự.");
+            return "redirect:/addProductForm/" + storeId;
+        }
 
         ProductImage productImage = new ProductImage();
         productImage.setImageName(imageName);
@@ -195,36 +218,38 @@ public class ProductManagementController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("errorMessage", "Failed to upload images. Please try again.");
-            return "seller/add-product";
+            redirectAttributes.addFlashAttribute("errorMessage", "Không thể tải lên hình ảnh. Vui lòng thử lại.");
+            return "redirect:/addProductForm/" + storeId;
         }
 
-        // Save product image to the database
+        // Lưu hình ảnh sản phẩm vào cơ sở dữ liệu
         productService.addProductImage(productImage);
 
         // Repopulate form data
-        model.addAttribute("productImage", productImage);
-
         redirectAttributes.addFlashAttribute("successMessageImg", "Thêm ảnh sản phẩm thành công!");
         return "redirect:/addProductForm/" + storeId;
     }
-
 
     @PostMapping("/addProductVariation")
     public String addProductVariation(@ModelAttribute ProductVariation productVariation,
                                       HttpSession session, Model model,
                                       RedirectAttributes redirectAttributes) {
         Integer storeId = (Integer) session.getAttribute("storeId");
+
+        if (productVariation.getStock() == null || productVariation.getStock() < 0) {
+            redirectAttributes.addFlashAttribute("errorMessageVar", "Số lượng sản phẩm phải lớn hơn hoặc bằng 0.");
+            return "redirect:/addProductForm/" + storeId;
+        }
+
         Products maxProductId = productService.getMaxProductId();
         ProductImage maxImageId = productService.getMaxImageId();
         productVariation.setProductId(maxProductId);
         productVariation.setImageId(maxImageId);
         productService.addProductVariation(productVariation);
-        model.addAttribute("productVariation", productVariation);
-        model.addAttribute("categories", categoriesService.getAllCategories());
         redirectAttributes.addFlashAttribute("successMessageVar", "Thêm biến thể sản phẩm thành công!");
         return "redirect:/addProductForm/" + storeId;
     }
+
 
     @GetMapping("/delete-product/{productId}")
     public String deleteProduct(@PathVariable Integer productId, HttpServletRequest request,

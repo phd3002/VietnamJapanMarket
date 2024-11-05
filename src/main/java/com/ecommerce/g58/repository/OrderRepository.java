@@ -15,6 +15,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
+    void deleteByUserId_UserId(Integer userId);
 
     @Query("SELECT o FROM Orders o WHERE o.userId.userId = :userId")
     List<Orders> findByUserId(Users user);
