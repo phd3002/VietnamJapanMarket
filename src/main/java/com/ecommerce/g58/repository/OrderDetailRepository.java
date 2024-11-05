@@ -27,7 +27,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    od.price AS product_price, \n" +
             "    f.rating AS avg_rating, \n" +
             "    st.store_name, \n" +
-            "    st.store_image, \n" +
+            "    st.picture_url, \n" +
             "    inv.total_amount, \n" +
             "    inv.shipping_fee, \n" +
             "    pay.payment_method, \n" +
