@@ -21,4 +21,6 @@ public interface StoreService {
     void saveStore(Stores store);
 
     Optional<Stores> findById(Integer storeId);
+
+    long getTotalStores();
 }

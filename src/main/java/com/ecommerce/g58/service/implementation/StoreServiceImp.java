@@ -64,4 +64,9 @@ public class StoreServiceImp implements StoreService {
     public Optional<Stores> findById(Integer storeId) {
         return storeRepository.findById(storeId);
     }
+
+    @Override
+    public long getTotalStores() {
+        return storeRepository.count();
+    }
 }

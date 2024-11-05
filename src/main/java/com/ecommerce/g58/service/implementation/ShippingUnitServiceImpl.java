@@ -18,4 +18,9 @@ public class ShippingUnitServiceImpl implements ShippingUnitService {
     public List<ShippingUnit> getAllShippingUnits() {
         return shippingUnitRepository.findAll();
     }
+
+    @Override
+    public long getTotalShippingUnits() {
+        return shippingUnitRepository.count();
+    }
 }

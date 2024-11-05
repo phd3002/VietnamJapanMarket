@@ -13,4 +13,5 @@ import java.util.List;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     List<Feedback> findAllByVariationIdProductIdProductId(Integer variationId);
+    void deleteByUserId_UserId(Integer userId);
 }

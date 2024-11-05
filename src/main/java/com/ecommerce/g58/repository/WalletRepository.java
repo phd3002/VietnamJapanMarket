@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, Integer> {
+    void deleteByUserId_UserId(Integer userId);
     @Query(value = "SELECT \n" +
             "                t.created_at as transactionDate,\n" +
             "                t.transaction_type as transactionType,\n" +
