@@ -219,6 +219,20 @@
 <div th:replace="base :: footer"></div>
 
 <script>
+    document.getElementById("shipping-method").addEventListener("change", function () {
+        const shippingMethod = this.value;
+
+        fetch(`/calculate-shipping?shippingMethod=${shippingMethod}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("total-shipping-fee").textContent = data.shippingFee.toLocaleString() + "đ";
+                document.getElementById("total-order-price").textContent = data.totalWithShipping.toLocaleString() + "đ";
+            })
+            .catch(error => console.error("Error calculating shipping:", error));
+    });
+</script>
+
+<script>
     // kiem tra session co con ton tai hay khong
     let sessionCheckInterval = setInterval(function () {
         console.log('Checking session status...');

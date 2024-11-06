@@ -13,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -28,7 +26,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class CheckoutController {
@@ -124,6 +121,39 @@ public class CheckoutController {
         double walletBalance = walletService.getUserWalletBalance(user.getUserId());
         model.addAttribute("walletBalance", walletBalance);
         return "checkout";
+    }
+
+    @GetMapping("/calculate-shipping")
+    @ResponseBody
+    public Map<String, Double> calculateShipping(@RequestParam("shippingMethod") String shippingMethod,
+                                                 Principal principal) {
+        double shippingFee;
+        switch (shippingMethod) {
+            case "express":
+                shippingFee = 100000.0;
+                break;
+            case "same-day":
+                shippingFee = 150000.0;
+                break;
+            default: // standard
+                shippingFee = 50000.0;
+                break;
+        }
+
+        Users user = userService.findByEmail(principal.getName());
+        Integer userId = user.getUserId();
+        Cart userCart = cartService.getCartByUserId(userId);
+
+        double totalPrice = userCart.getCartItems().stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+        double totalWithShipping = totalPrice + shippingFee;
+
+        Map<String, Double> response = new HashMap<>();
+        response.put("totalWithShipping", totalWithShipping);
+        response.put("shippingFee", shippingFee);
+
+        return response;
     }
 
     // khi nguoi dung bam nut checkout
