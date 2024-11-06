@@ -79,100 +79,106 @@
             </div>
             <!-- Pagination Controls -->
             <div class="pagination-controls text-center pt--30">
-                <ul class="pagination">
-                    <li th:if="${currentPage != null && currentPage > 0}">
-                        <a th:href="@{/product-list(page=${currentPage - 1})}" class="prev">Previous</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(0, (totalPages != null ? totalPages - 1 : 0))}">
-                        <a th:href="@{/product-list(page=${i})}" th:text="${i + 1}"
-                           th:classappend="${i == currentPage} ? 'active'"></a>
-                    </li>
-                    <li th:if="${currentPage != null && currentPage < totalPages - 1}">
-                        <a th:href="@{/product-list(page=${currentPage + 1})}" class="next">Next</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="text-center pt--30">
-                <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
+                <div class="d-flex justify-content-center">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item" th:if="${currentPage != null && currentPage > 0}">
+                                <a class="page-link" th:href="@{/product-list(page=${currentPage - 1})}" >Trước</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, (totalPages != null ? totalPages - 1 : 0))}">
+                                <a class="page-link" th:href="@{/product-list(page=${i})}" th:text="${i + 1}"
+                                   th:classappend="${i == currentPage} ? 'active'"></a>
+                            </li>
+                            <li class="page-item" th:if="${currentPage != null && currentPage < totalPages - 1}">
+                                <a class="page-link" th:href="@{/product-list(page=${currentPage + 1})}" >Sau</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!--            <div class="text-center pt&#45;&#45;30">-->
+                <!--                <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>-->
+                <!--            </div>-->
             </div>
         </div>
-    </div>
 
-    <!-- Product Quick View Modal -->
-    <div th:each="product : ${products}" class="modal fade quick-view-product"
-         th:attr="id=${'quick-view-modal-' + product.productId}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                            class="far fa-times"></i></button>
-                </div>
-                <div class="modal-body">
-                    <div class="single-product-thumb">
-                        <div class="row">
-                            <div class="col-lg-7 mb--40">
-                                <div class="row">
-                                    <div class="col-lg-10 order-lg-2">
-                                        <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
-                                            <div class="thumbnail" th:each="pv : ${product.productVariations}">
-                                                <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image" style="width: 400px; height: 300px;">
-                                                <div class="product-quick-view position-view">
-                                                    <a th:src="@{${pv.imageId.thumbnail}}" class="popup-zoom">
-                                                        <i class="far fa-search-plus"></i>
-                                                    </a>
+        <!-- Product Quick View Modal -->
+        <div th:each="product : ${products}" class="modal fade quick-view-product"
+             th:attr="id=${'quick-view-modal-' + product.productId}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                class="far fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="single-product-thumb">
+                            <div class="row">
+                                <div class="col-lg-7 mb--40">
+                                    <div class="row">
+                                        <div class="col-lg-10 order-lg-2">
+                                            <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
+                                                <div class="thumbnail" th:each="pv : ${product.productVariations}">
+                                                    <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image"
+                                                         style="width: 400px; height: 300px;">
+                                                    <div class="product-quick-view position-view">
+                                                        <a th:src="@{${pv.imageId.thumbnail}}" class="popup-zoom">
+                                                            <i class="far fa-search-plus"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-2 order-lg-1">
-                                        <div class="product-small-thumb small-thumb-wrapper">
-                                            <div class="small-thumb-img" th:each="pv : ${product.productVariations}">
-                                                <img th:src="@{${pv.imageId.thumbnail}}"
-                                                     alt="thumb image"
-                                                     style="width: 69px; height: 42px">
+                                        <div class="col-lg-2 order-lg-1">
+                                            <div class="product-small-thumb small-thumb-wrapper">
+                                                <div class="small-thumb-img"
+                                                     th:each="pv : ${product.productVariations}">
+                                                    <img th:src="@{${pv.imageId.thumbnail}}"
+                                                         alt="thumb image"
+                                                         style="width: 69px; height: 42px">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-5 mb--40">
-                                <div class="single-product-content">
-                                    <div class="inner">
-                                        <div class="product-rating">
-                                            <div class="star-rating">
-                                                <img th:src="@{/images/icons/rate.png}" alt="Rate Images">
-                                            </div>
-                                            <div class="review-link">
-                                                <a href="#">(<span>1</span> customer reviews)</a>
-                                            </div>
-                                        </div>
-                                        <h3 class="product-title" th:text="${product.productName}"></h3>
-                                        <span class="price-amount" th:text="${'$' + product.price}"></span>
-                                        <ul class="product-meta">
-                                            <li><i class="fal fa-check"></i>In stock</li>
-                                            <li><i class="fal fa-check"></i>Free delivery available</li>
-                                            <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
-                                        </ul>
-                                        <p class="description" th:text="${product.productDescription}"></p>
-                                        <div class="product-variations-wrapper">
-                                            <div class="product-variation">
-                                                <h6 class="title">Colors:</h6>
-                                                <div class="color-variant-wrapper">
-                                                    <ul class="color-variant mt--0">
-                                                        <li th:class="${'color-extra-0' + (iter.index + 1) + (iter.first ? ' active' : '')}"
-                                                            th:each="pv,iter : ${product.productVariations}">
-                                                    <span><span class="color"
-                                                                th:style="${'background: ' + pv.color.colorName}"></span></span>
-                                                        </li>
-                                                    </ul>
+                                <div class="col-lg-5 mb--40">
+                                    <div class="single-product-content">
+                                        <div class="inner">
+                                            <div class="product-rating">
+                                                <div class="star-rating">
+                                                    <img th:src="@{/images/icons/rate.png}" alt="Rate Images">
+                                                </div>
+                                                <div class="review-link">
+                                                    <a href="#">(<span>1</span> customer reviews)</a>
                                                 </div>
                                             </div>
-                                            <div class="product-variation">
-                                                <h6 class="title">Size:</h6>
-                                                <ul class="range-variant">
-                                                    <li th:each="pv : ${product.productVariations}"
-                                                        th:text="${pv.size.sizeName}"></li>
-                                                </ul>
+                                            <h3 class="product-title" th:text="${product.productName}"></h3>
+                                            <span class="price-amount" th:text="${'$' + product.price}"></span>
+                                            <ul class="product-meta">
+                                                <li><i class="fal fa-check"></i>In stock</li>
+                                                <li><i class="fal fa-check"></i>Free delivery available</li>
+                                                <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
+                                            </ul>
+                                            <p class="description" th:text="${product.productDescription}"></p>
+                                            <div class="product-variations-wrapper">
+                                                <div class="product-variation">
+                                                    <h6 class="title">Colors:</h6>
+                                                    <div class="color-variant-wrapper">
+                                                        <ul class="color-variant mt--0">
+                                                            <li th:class="${'color-extra-0' + (iter.index + 1) + (iter.first ? ' active' : '')}"
+                                                                th:each="pv,iter : ${product.productVariations}">
+                                                    <span><span class="color"
+                                                                th:style="${'background: ' + pv.color.colorName}"></span></span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="product-variation">
+                                                    <h6 class="title">Size:</h6>
+                                                    <ul class="range-variant">
+                                                        <li th:each="pv : ${product.productVariations}"
+                                                            th:text="${pv.size.sizeName}"></li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -183,7 +189,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </main>
 
 <!-- Include Footer Fragment -->

@@ -237,7 +237,7 @@
                                                 </div>
                                                 <div class="comment-inner">
                                                     <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
+                                                        <a class="hover-flip-item-wrapper">
                                                                 <span class="hover-flip-item">
                                                                     <span data-text="Cameron Williamson"
                                                                           th:text="${feedback.userId.firstName + ' ' + feedback.userId.lastName}"></span>
@@ -250,6 +250,26 @@
                                                     </h6>
                                                     <div class="comment-text">
                                                         <p th:text="${'“' + feedback.comment + '”'}"></p>
+                                                    </div>
+                                                    <!-- Phần hiển thị reply -->
+                                                    <div class="comment-replies">
+                                                        <div class="single-comment reply-comment">
+                                                            <div class="comment-img">
+                                                                <img th:src="@{/images/others/author1.png}" alt="Author Images">
+                                                            </div>
+                                                            <div class="comment-inner">
+                                                                <h6 class="commenter">
+                                                                    <a class="hover-flip-item-wrapper">
+                                                                        <span class="hover-flip-item">
+                                                                            <span data-text="Reply Author">ABC Store</span>
+                                                                        </span>
+                                                                    </a>
+                                                                </h6>
+                                                                <div class="comment-text">
+                                                                    <p>"This is a reply to the comment above."</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

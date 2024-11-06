@@ -144,25 +144,36 @@
                 <h2 class="title">Explore our Products</h2>
             </div>
             <div class="row row--15">
-                <div th:each="product : ${productDetails}" class="col-xl-3 col-lg-4 col-sm-6">
+                <div th:each="product : ${products}" class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
-                            <a href="product-detail">
-                                <img th:src="@{${product.thumbnail}}" alt="Product Images">
+                            <a th:href="@{/product-detail/{productId}(productId=${product.productId})}">
+                                <img th:if="${product.productVariations != null && product.productVariations.size() > 0}"
+                                     th:src="${product.productVariations[0].imageId != null ? product.productVariations[0].imageId.thumbnail : '/images/default-thumbnail.png'}"
+                                     alt="Product Image">
                             </a>
+                            <div class="label-block label-right">
+                                <div class="product-badget">20% OFF</div>
+                            </div>
                             <div class="product-hover-action">
                                 <ul class="cart-action">
                                     <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
                                     <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             th:attr="data-bs-target=${'#quick-view-modal-' + product.productId}"><i
-                                            class="far fa-eye"></i></a></li>
+                                    <li class="quickview">
+                                        <a href="#" data-bs-toggle="modal"
+                                           th:attr="data-bs-target=${'#quick-view-modal-' + product.productId}">
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="product-content">
                             <div class="inner">
-                                <h5 class="title" th:text="${product.productName}"></h5>
+                                <h5 class="title">
+                                    <a th:href="@{/product-detail/{productId}(productId=${product.productId})}"
+                                       th:text="${product.productName}"></a>
+                                </h5>
                                 <div class="product-price-variant">
                                     <span class="price current-price" th:text="'$' + ${product.price}"></span>
                                 </div>
@@ -222,7 +233,7 @@
         </div>
     </div>
     <!-- End New Arrivals Product Area -->
-    
+
     <!-- Product Quick View Modal -->
     <div th:each="product : ${products}" class="modal fade quick-view-product"
          th:attr="id=${'quick-view-modal-' + product.productId}" tabindex="-1" aria-hidden="true">
