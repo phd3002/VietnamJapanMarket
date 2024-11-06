@@ -255,8 +255,10 @@
                                         <!--                                        </div>-->
                                         <div class="summary-row">
                                             <span class="summary-label total">Tổng chi phí</span>
-                                            <span class="summary-value total"
-                                                  th:text="${totalAmount+shippingFee}"></span>
+                                            <span th:if="${totalAmount != null and shippingFee != null}"
+                                                  th:text="${totalAmount + shippingFee}">0</span>
+                                            <span th:if="${totalAmount == null or shippingFee == null}">0</span>
+
                                         </div>
                                     </div>
                                     <div class="payment-method">
