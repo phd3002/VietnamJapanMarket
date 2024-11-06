@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách đơn hàng | Kênh người bán</title>
@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/seller/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -44,7 +44,8 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
+        <li><a class="app-menu__item" href="store-info-manager.html"><i
+                class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
@@ -95,14 +96,16 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>MD0837</td>
-                            <td>Triệu Thanh Phú</td>
-                            <td>Ghế làm việc Zuno, Bàn ăn gỗ Theresa</td>
-                            <td>2</td>
-                            <td>15.000 đ</td>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.orderId}"></td>
+                            <td th:text="${order.customerName}"></td>
+                            <td th:text="${order.productNames}"></td>
+                            <td th:text="${order.totalProducts}"></td>
+                            <td th:text="${order.totalPrice}"></td>
                             <td data-toggle="modal"
-                                data-target="#ModalUP"><span class="badge bg-success">Hoàn thành</span>
+                                data-target="#ModalUP" data-order-id="${order.orderId}"
+                                data-status="${order.latestStatus}"><span th:text="${order.latestStatus}"
+                                                                          th:class="${order.latestStatus == 'Hoàn thành' ? 'badge bg-success' : 'badge bg-warning'}"></span>
                             </td>
                             <td>
                                 <a href="order-detail.html">
@@ -156,19 +159,19 @@
     -->
 </main>
 <!-- Essential javascripts for application to work-->
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="../../static/seller/js/main.js"></script>
+<script th:src="@{/seller/js/jquery.table2excel.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top-->
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
-<!-- Page specific javascripts-->
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+<!-- Page specific javascripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="../../static/seller/js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="../../static/seller/js/plugins/dataTables.bootstrap.min.js"></script>
+<!-- Data table plugin -->
+<script th:src="@{/seller/js/plugins/jquery.dataTables.min.js}" type="text/javascript"></script>
+<script th:src="@{/seller/js/plugins/dataTables.bootstrap.min.js}" type="text/javascript"></script>
 <script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
     //Thời Gian

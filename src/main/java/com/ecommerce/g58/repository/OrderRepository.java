@@ -1,5 +1,6 @@
 package com.ecommerce.g58.repository;
 
+import com.ecommerce.g58.dto.OrderManagerDTO;
 import com.ecommerce.g58.dto.OrdersDTO;
 import com.ecommerce.g58.entity.Orders;
 import com.ecommerce.g58.entity.Users;
@@ -70,4 +71,36 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     Page<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId,
                                                @Param("status") String status,
                                                Pageable pageable);
+
+    @Query(value = "SELECT \n" +
+            "    o.order_id AS 'Mã đơn hàng',\n" +
+            "    CONCAT(u.first_name, ' ', u.last_name) AS full_name,\n" +
+            "    GROUP_CONCAT(p.product_name SEPARATOR ', ') AS product_names,\n" +
+            "    SUM(od.quantity) AS total_products,\n" +
+            "    (o.total_price + COALESCE(MAX(i.shipping_fee), 0)) AS order_price,\n" +
+            "    (SELECT status \n" +
+            "     FROM shipping_status \n" +
+            "     WHERE order_id = o.order_id\n" +
+            "     ORDER BY updated_at DESC\n" +
+            "     LIMIT 1) AS latest_status\n" +
+            "FROM \n" +
+            "    stores s\n" +
+            "JOIN \n" +
+            "    products p ON p.store_id = s.store_id\n" +
+            "JOIN \n" +
+            "    order_details od ON od.product_id = p.product_id\n" +
+            "JOIN \n" +
+            "    orders o ON o.order_id = od.order_id\n" +
+            "JOIN \n" +
+            "    users u ON u.user_id = o.user_id\n" +
+            "LEFT JOIN \n" +
+            "    invoice i ON i.order_id = o.order_id\n" +
+            "LEFT JOIN \n" +
+            "    shipping_status ss ON ss.order_id = o.order_id\n" +
+            "WHERE \n" +
+            "    s.user_id = :userId\n" +
+            "GROUP BY \n" +
+            "    o.order_id, u.first_name, u.last_name, o.total_price",
+            nativeQuery = true)
+    List<Object[]> findOrdersByStoreUserId(@Param("userId") Integer userId);
 }
