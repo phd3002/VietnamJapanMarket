@@ -95,37 +95,33 @@ public class CartController {
     // View Cart Items
     @GetMapping("/cart-items")
     public String getCartItems(Model model) {
-        // Get authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             return "redirect:/sign-in";
         }
 
-        // Fetch the authenticated user's email and user data
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
         Integer userId = user.getUserId();
 
-        // Fetch cart items by user
         List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
+        boolean isCartEmpty = cartItems.isEmpty();
 
-        if (cartItems.isEmpty()) {
-            model.addAttribute("message", "Giỏ hàng của bạn đang trống");
-            return "cart-detail";  // Return empty cart view
-        }
+        model.addAttribute("isCartEmpty", isCartEmpty);
+        model.addAttribute("cartItems", cartItems);
 
-        // Group cart items by store (assuming Product has a reference to Store)
+        // Group cart items by store if the cart is not empty
         Map<Stores, List<CartItem>> groupedItems = cartItems.stream()
                 .collect(Collectors.groupingBy(item -> item.getProductId().getStoreId()));
-
         model.addAttribute("cartItemGroupedByStore", groupedItems);
 
         // Calculate total order price
         Integer totalOrderPrice = cartItems.stream()
-                .mapToInt(item -> item.getQuantity() * item.getProductId().getPrice()).sum();
+                .mapToInt(item -> item.getQuantity() * item.getProductId().getPrice())
+                .sum();
         model.addAttribute("totalOrderPrice", totalOrderPrice);
 
-        return "cart-detail";  // Thymeleaf template for cart details
+        return "cart-detail"; // Thymeleaf template for cart details
     }
 
 
