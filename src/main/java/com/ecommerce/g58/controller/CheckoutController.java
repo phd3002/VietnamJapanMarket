@@ -158,9 +158,8 @@ public class CheckoutController {
 
     // khi nguoi dung bam nut checkout
     @PostMapping("/checkout")
-    public String proceedToCheckout(HttpSession session, Principal principal) {
-        logger.info("Session ID during checkout start: {}", session.getId());
-
+    public String proceedToCheckout(HttpSession session, Principal principal, Model model,
+                                    @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod) {
         if (principal == null) {
             return "redirect:/sign-in";
         }
@@ -172,14 +171,48 @@ public class CheckoutController {
         }
 
         Integer userId = user.getUserId();
+        Cart userCart = cartService.getCartByUserId(userId);
+        List<CartItem> cartItems = userCart.getCartItems();
 
+        double totalPrice = cartItems.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+
+        // Determine shipping fee based on the selected method
+        double shippingFee;
+        switch (shippingMethod) {
+            case "express":
+                shippingFee = 100000.0;
+                break;
+            case "same-day":
+                shippingFee = 150000.0;
+                break;
+            default: // standard
+                shippingFee = 50000.0;
+                break;
+        }
+
+        double totalWithShipping = totalPrice + shippingFee;
+
+        // Check if wallet balance is sufficient
+        double walletBalance = walletService.getUserWalletBalance(userId);
+        if (walletBalance < totalWithShipping) {
+            // Add error message and necessary data to the model to stay on the checkout page
+            model.addAttribute("errorMessage", "Bạn không đủ số dư để thực hiện giao dịch.");
+            model.addAttribute("totalWithShipping", totalWithShipping);
+            model.addAttribute("walletBalance", walletBalance);
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("shippingFee", shippingFee);
+            return "checkout"; // Stay on checkout page with error message
+        }
+
+        // Deduct items from stock and proceed with checkout if balance is sufficient
         cartService.subtractItemQuantitiesFromStock(userId);
-
-        // luu thong tin user va thoi gian bat dau checkout vao session
         session.setAttribute("userId", userId);
         session.setAttribute("checkoutStartTime", LocalDateTime.now());
 
-        return "redirect:/checkout"; // redirect ve trang checkout
+        return "redirect:/confirm-checkout"; // Redirect to confirm-checkout for final session validation
     }
 
     // khi nguoi dung bam nut cancel
