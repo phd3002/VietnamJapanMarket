@@ -7,6 +7,7 @@ import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.UserService;
+import com.ecommerce.g58.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,9 @@ public class CheckoutController {
 
     @Autowired
     private ShippingStatusRepository shippingStatusRepository;
+
+    @Autowired
+    private WalletService walletService; // Ensure WalletService is defined and injected
 
 
     // Hien thi man checkout
@@ -117,6 +121,8 @@ public class CheckoutController {
         }
         model.addAttribute("productImages", productImages);
 
+        double walletBalance = walletService.getUserWalletBalance(user.getUserId());
+        model.addAttribute("walletBalance", walletBalance);
         return "checkout";
     }
 

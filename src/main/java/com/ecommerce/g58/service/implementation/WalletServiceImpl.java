@@ -59,4 +59,9 @@ public class WalletServiceImpl implements WalletService {
         }
         return transactions;
     }
+
+    @Override
+    public long getUserWalletBalance(Integer userId) {
+        return walletRepository.findBalanceByUserId(userId).orElse(0L);
+    }
 }

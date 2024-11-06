@@ -1,6 +1,5 @@
 package com.ecommerce.g58.repository;
 
-import com.ecommerce.g58.dto.WalletDTO;
 import com.ecommerce.g58.entity.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,5 +39,6 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
             nativeQuery = true)
     List<Object[]> findTransactionsForUserId(@Param("userId") Integer userId);
 
-    Optional<Wallet> findByUserId(Integer userId);
+    @Query("SELECT w.balance FROM Wallet w WHERE w.userId.userId = :userId")
+    Optional<Long> findBalanceByUserId(@Param("userId") Integer userId);
 }
