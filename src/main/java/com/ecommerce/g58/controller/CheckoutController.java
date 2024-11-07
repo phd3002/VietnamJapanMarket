@@ -5,6 +5,7 @@ import com.ecommerce.g58.repository.OrderDetailRepository;
 import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
+import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
@@ -36,6 +37,9 @@ public class CheckoutController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private CartItemService cartItemService;
 
     @Autowired
     private UserService userService;
@@ -95,15 +99,17 @@ public class CheckoutController {
 
         Integer userId = user.getUserId();
         session.setAttribute("userId", userId);
-
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
+
+
 
         double totalPrice = cartItems.stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
         double shippingFee = 50000.0;
         double totalWithShipping = totalPrice + shippingFee;
+
 
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
