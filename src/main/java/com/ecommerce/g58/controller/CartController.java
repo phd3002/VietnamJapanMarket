@@ -65,15 +65,34 @@ public class CartController {
         // Fetch user data
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
+        Integer userId = user.getUserId();
         Cart cart = cartService.getOrCreateCart(user);
 
         try {
             // Fetch product variation details (using the variationId)
             ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndVariationId(productId, variationId);
+//            System.out.println("Product detail Store: " + productDetail.getStoreId());
 
             if (productDetail != null) {
+                List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
+                if (!cartItems.isEmpty()) {
+                    Integer newProductStoreId = productDetail.getStoreId();// Get storeId from productDetail
+//                    System.out.println("New product store ID: " + newProductStoreId);
+                    Integer currentStoreId = cartItems.get(0).getProductId().getStoreId().getStoreId();
+
+
+                // Check if the stores are different
+                    if (!currentStoreId.equals(newProductStoreId)) {
+//                        System.out.println("Current store ID: " + currentStoreId);
+//                        System.out.println("New product store ID: " + newProductStoreId);
+                        redirectAttributes.addFlashAttribute("error", "Bạn không thể thêm sản phẩm từ cửa hàng khác vào giỏ hàng. Vui lòng thanh toán hoặc xóa các sản phẩm hiện tại trong giỏ hàng trước.");
+                        String referer = request.getHeader("Referer");
+                        return "redirect:" + referer;  // Redirects to the same page
+                    }
+                }
+
                 // Add the product to the cart
-                cartService.addProductToCart(user, productDetail, quantity,cart);
+                cartService.addProductToCart(user, productDetail, quantity, cart);
 
                 // Success message
                 redirectAttributes.addFlashAttribute("message", "Sản phâ đã được thêm vào giỏ hàng của bạn");
@@ -131,6 +150,7 @@ public class CartController {
         cartService.removeCartItem(cartItemId);
         return "redirect:/cart-items";
     }
+
     @PostMapping("/update_cart_quantity")
     public String updateCartQuantity(@RequestParam("cartItemId") Integer cartItemId,
                                      @RequestParam("quantity") Integer quantity,

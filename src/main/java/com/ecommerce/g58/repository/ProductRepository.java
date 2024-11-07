@@ -40,7 +40,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
 
     @Query("SELECT new com.ecommerce.g58.dto.ProductDetailDTO(" +
             "p.productId, p.productName, p.productDescription, p.price, p.weight, " +
-            "pv.variationId, s.sizeName, c.colorName, pv.stock, pi.thumbnail) " +
+            "pv.variationId, s.sizeName, c.colorName, pv.stock, pi.thumbnail, p.storeId.storeId) " +
             "FROM Products p " +
             "JOIN ProductVariation pv ON p.productId = pv.productId.productId " +
             "JOIN Size s ON pv.size.sizeId = s.sizeId " +
@@ -52,7 +52,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
     @Query("SELECT new com.ecommerce.g58.dto.ProductDetailDTO("
             + "p.productId, p.productName, p.productDescription, p.price, p.weight, "
             + "pv.variationId, s.sizeName, c.colorName, pv.stock, "
-            + "pi.thumbnail, pi.image1, pi.image2, pi.image3, pi.image4) "
+            + "pi.thumbnail, pi.image1, pi.image2, pi.image3, pi.image4, p.storeId.storeId) "
             + "FROM Products p "
             + "JOIN ProductVariation pv ON p.productId = pv.productId.productId "
             + "JOIN ProductImage pi ON pv.imageId.imageId = pi.imageId "

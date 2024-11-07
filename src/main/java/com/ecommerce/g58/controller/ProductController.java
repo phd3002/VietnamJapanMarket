@@ -64,10 +64,11 @@ public class ProductController {
         // Fetch available sizes
         List<String> availableSizes = productService.getAvailableSizesByProductIdAndColorId(productId, colorId);
         List<Color> availableColors = productService.getAvailableColors(productId);
-        System.out.println("Available colors: " + availableColors);
-        System.out.println("Available sizes: " + availableSizes);
-        System.out.println("Selected size: " + sizeId);
-        System.out.println(productDetail.getVariationId());
+//        System.out.println("Available colors: " + availableColors);
+//        System.out.println("Available sizes: " + availableSizes);
+//        System.out.println("Selected size: " + sizeId);
+//        System.out.println(productDetail.getVariationId());
+//        System.out.println(productDetail.getStoreId());
         // Pass the product details, available colors, and sizes to the front-end
         model.addAttribute("productDetail", productDetail);
         model.addAttribute("availableColors", availableColors);
