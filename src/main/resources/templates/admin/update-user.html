@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/admin/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -69,48 +69,51 @@
             <div class="tile">
                 <h3 class="tile-title">Sửa thông tin người dùng</h3>
                 <div class="tile-body">
-                    <form class="row">
+                    <form class="row" th:action="@{/update-user}" method="post">
+                        <input type="hidden" name="userId" th:value="${user.userId}">
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên đăng nhập</label>
-                            <input class="form-control" type="text" value="abc">
+                            <input class="form-control" type="text" name="username" th:value="${user.username}" required>
                         </div>
-                        <div class="form-group  col-md-3">
+                        <div class="form-group col-md-3">
                             <label class="control-label">Họ</label>
-                            <input class="form-control" type="text" value="Liễu">
+                            <input class="form-control" type="text" name="firstName" th:value="${user.firstName}" required>
                         </div>
-                        <div class="form-group  col-md-3">
+                        <div class="form-group col-md-3">
                             <label class="control-label">Tên</label>
-                            <input class="form-control" type="text" value="Như Yên">
+                            <input class="form-control" type="text" name="lastName" th:value="${user.lastName}" required>
                         </div>
-                        <div class="form-group  col-md-3">
+                        <div class="form-group col-md-3">
                             <label class="control-label">Email</label>
-                            <input class="form-control" type="text" value="abc@gmail.com">
+                            <input class="form-control" type="email" name="email" th:value="${user.email}" required>
                         </div>
-                        <div class="form-group  col-md-3">
+                        <div class="form-group col-md-3">
                             <label class="control-label">Số điện thoại</label>
-                            <input class="form-control" type="text" value="0123456789">
+                            <input class="form-control" type="text" name="phoneNumber" th:value="${user.phoneNumber}" required>
                         </div>
-                        <div class="form-group col-md-3 ">
+                        <div class="form-group col-md-3">
                             <label for="role-user" class="control-label">Vai trò</label>
-                            <select class="form-control" id="role-user">
-                                <option>-- Chọn vai trò --</option>
-                                <option>Bán hàng</option>
-                                <option>Khách hàng</option>
-                                <option>Vận chuyển</option>
+                            <select class="form-control" id="role-user" name="roleId" required>
+                                <option value="">-- Chọn vai trò --</option>
+                                <th:block th:each="role : ${roles}">
+                                    <option th:value="${role.roleId}" th:text="${role.roleName}" th:selected="${user.roleId.roleId} == ${role.roleId}"></option>
+                                </th:block>
                             </select>
                         </div>
-                        <div class="form-group col-md-3 ">
+                        <div class="form-group col-md-3">
                             <label for="status-user" class="control-label">Trạng thái</label>
-                            <select class="form-control" id="status-user">
-                                <option>-- Chọn tình trạng --</option>
-                                <option selected>Đang hoạt động</option>
-                                <option>Khóa tài khoản</option>
+                            <select class="form-control" id="status-user" name="status" required>
+                                <option value="">-- Chọn tình trạng --</option>
+                                <option value="active" th:selected="${user.status} == 'active'">Đang hoạt động</option>
+                                <option value="inactive" th:selected="${user.status} == 'inactive'">Khóa tài khoản</option>
                             </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <button class="btn btn-save" type="submit">Cập nhật</button>
+                            <a class="btn btn-cancel" href="/admin/user-manager">Hủy bỏ</a>
                         </div>
                     </form>
                 </div>
-                <button class="btn btn-save" type="button" id="saveButton">Cập nhật</button>
-                <a class="btn btn-cancel" href="user-manager.html">Hủy bỏ</a>
             </div>
         </div>
     </div>
@@ -118,19 +121,20 @@
 
 
 <!-- Essential javascripts for application to work-->
-<script src="../../static/admin/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/admin/js/popper.min.js"></script>
-<script src="../../static/admin/js/bootstrap.min.js"></script>
+<script th:src="@{/admin/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/admin/js/popper.min.js}"></script>
+<script th:src="@{/admin/js/bootstrap.min.js}"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="../../static/admin/js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
-<script src="../../static/admin/js/plugins/pace.min.js"></script>
-<!-- Page specific javascripts-->
+<script th:src="@{/admin/js/jquery.table2excel.js}"></script>
+<script th:src="@{/admin/js/main.js}"></script>
+<!-- The javascript plugin to display page loading on top -->
+<script th:src="@{/admin/js/plugins/pace.min.js}"></script>
+<!-- Page specific javascripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="../../static/admin/js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="../../static/admin/js/plugins/dataTables.bootstrap.min.js"></script>
+<!-- Data table plugin -->
+<script th:src="@{/admin/js/plugins/jquery.dataTables.min.js}" type="text/javascript"></script>
+<script th:src="@{/admin/js/plugins/dataTables.bootstrap.min.js}" type="text/javascript"></script>
+
 <script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
     //Thời Gian

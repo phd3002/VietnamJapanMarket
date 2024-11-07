@@ -7,6 +7,8 @@ import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.utils.UrlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -174,8 +176,8 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<Users> getAllUsers() {
-        return userRepository.findAll();
+    public Page<Users> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override

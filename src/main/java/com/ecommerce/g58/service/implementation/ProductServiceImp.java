@@ -168,8 +168,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<Products> getProductsByStoreId(Stores storeId) {
-        return productRepository.findByStoreId(storeId);
+    public Page<Products> getProductsByStoreId(Stores storeId, Pageable pageable) {
+        return productRepository.findByStoreId(storeId, pageable);
     }
 
     public List<ProductDetailDTO> getProductDetailsByStoreId(Stores storeId) {

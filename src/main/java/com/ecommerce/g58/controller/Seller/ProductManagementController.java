@@ -3,6 +3,9 @@ package com.ecommerce.g58.controller.Seller;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -57,11 +60,15 @@ public class ProductManagementController {
     }
 
     @GetMapping("/seller-products/{storeId}")
-    public String getProductsByStore(@PathVariable Integer storeId, Model model) {
+    public String getProductsByStore(@PathVariable Integer storeId, Model model, @RequestParam(defaultValue = "0") int page) {
         Stores store = new Stores();
         store.setStoreId(storeId);
-        List<Products> products = productService.getProductsByStoreId(store);
-        model.addAttribute("products", products);
+        Pageable pageable = PageRequest.of(page, 4);
+        Page<Products> productsPage = productService.getProductsByStoreId(store, pageable);
+        model.addAttribute("products", productsPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productsPage.getTotalPages());
+        model.addAttribute("storeId", storeId);
         return "seller/product-manager";
     }
 
