@@ -62,6 +62,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public long getUserWalletBalance(Integer userId) {
+        // Lấy số dư ví của người dùng từ walletRepository
         return walletRepository.findBalanceByUserId(userId).orElse(0L);
     }
 
@@ -69,10 +70,9 @@ public class WalletServiceImpl implements WalletService {
     public void deductFromWallet(Integer userId, double amount) {
         // Lấy thực thể ví của người dùng từ walletRepository
         Optional<Wallet> optionalWallet = walletRepository.findById(userId);
-        if (!optionalWallet.isPresent()) {
+        if (optionalWallet.isEmpty()) {
             throw new IllegalArgumentException("Không tìm thấy ví của người dùng");
         }
-
         Wallet wallet = optionalWallet.get();
 
         // Kiểm tra nếu số dư ví đủ để thực hiện thanh toán

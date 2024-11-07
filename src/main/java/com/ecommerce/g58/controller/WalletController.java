@@ -32,29 +32,30 @@ public class WalletController {
     }
 
     @GetMapping
+    // Hiển thị trang ví
     public String showWalletPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        // Check if the user is authenticated
+        // ktra xem user đã đăng nhập chưa
         if (userDetails == null || userDetails.getUsername() == null) {
             return "redirect:/sign-in";
         }
 
-        // Get user email and retrieve user details
+        // lấy thông tin user từ email
         String email = userDetails.getUsername();
         Users user = profileService.getUserByEmail(email);
 
         if (user == null) {
-            return "redirect:/sign-in"; // Redirect if the user is not found
+            return "redirect:/sign-in";
         }
 
-        // Format creation date and add user info to the model
+        // thêm thông tin user vào model
         model.addAttribute("user", user);
         model.addAttribute("createdAtFormatted", DateTimeFormatter.ofPattern("MMM yyyy").format(user.getCreatedAt()));
 
-        // Get wallet balance using the WalletService
+        // lấy số dư ví của user và thêm vào model
         long walletBalance = walletService.getUserWalletBalance(user.getUserId());
         model.addAttribute("balance", walletBalance);
 
-        // Retrieve and add wallet transactions to the model
+        // lấy lịch sử giao dịch của user và thêm vào model
         List<WalletDTO> walletTransactions = walletService.getTransactionsForUserId(user.getUserId());
         if (walletTransactions.isEmpty()) {
             model.addAttribute("message", "Không có giao dịch nào");
@@ -63,6 +64,6 @@ public class WalletController {
         model.addAttribute("wallets", walletTransactions);
         model.addAttribute("userId", user.getUserId());
 
-        return "wallet"; // Return the view name for wallet.html
+        return "wallet";
     }
 }

@@ -123,10 +123,13 @@ public class CheckoutController {
         return "checkout";
     }
 
+    // endpoint tinh phi van chuyen
     @GetMapping("/calculate-shipping")
     @ResponseBody
     public Map<String, Double> calculateShipping(@RequestParam("shippingMethod") String shippingMethod,
                                                  Principal principal) {
+
+        // Tinh phi van chuyen dua tren phuong thuc van chuyen
         double shippingFee;
         switch (shippingMethod) {
             case "express":
@@ -140,6 +143,7 @@ public class CheckoutController {
                 break;
         }
 
+        // Lay tong tien cua gio hang
         Users user = userService.findByEmail(principal.getName());
         Integer userId = user.getUserId();
         Cart userCart = cartService.getCartByUserId(userId);
@@ -149,6 +153,7 @@ public class CheckoutController {
                 .sum();
         double totalWithShipping = totalPrice + shippingFee;
 
+        // Tra ve ket qua
         Map<String, Double> response = new HashMap<>();
         response.put("totalWithShipping", totalWithShipping);
         response.put("shippingFee", shippingFee);
@@ -179,7 +184,7 @@ public class CheckoutController {
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
 
-        // Determine shipping fee based on the selected method
+        // tinh phi van chuyen dua tren phuong thuc van chuyen
         double shippingFee;
         switch (shippingMethod) {
             case "express":
@@ -204,7 +209,7 @@ public class CheckoutController {
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
-                return "checkout"; // Stay on checkout page with error message
+                return "checkout"; // trả về trang checkout nếu số dư ví không đủ
             }
         }
 
@@ -213,7 +218,7 @@ public class CheckoutController {
         session.setAttribute("userId", userId);
         session.setAttribute("checkoutStartTime", LocalDateTime.now());
 
-        return "redirect:/confirm-checkout"; // Redirect to confirm-checkout for final session validation
+        return "redirect:/confirm-checkout"; // chuyen huong ve confirm-checkout
     }
 
     // khi nguoi dung bam nut cancel
@@ -268,7 +273,7 @@ public class CheckoutController {
                 return "redirect:/cart?checkoutExpired=true";
             }
         }
-        return "redirect:/complete-checkout"; // redirect ve trang complete-checkout (chua co)
+        return "redirect:/process-checkout";
     }
 
     // endpoint kiem tra trang thai session

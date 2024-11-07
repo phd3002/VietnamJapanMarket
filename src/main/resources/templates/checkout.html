@@ -222,6 +222,7 @@
 <div th:replace="base :: footer"></div>
 
 <script>
+    // Tính phí vận chuyển khi thay đổi phương thức vận chuyển
     document.getElementById("shipping-method").addEventListener("change", function () {
         const shippingMethod = this.value;
 
@@ -236,6 +237,7 @@
 </script>
 
 <script>
+    // Kiểm tra số dư ví trước khi thanh toán
     document.querySelector(".checkout-btn").addEventListener("click", function(event) {
         event.preventDefault(); // Ngăn chặn form gửi ngay lập tức
 
@@ -277,6 +279,7 @@
 </script>
 
 <script>
+    // Xử lý sự kiện khi trang web tải xong
     document.addEventListener("DOMContentLoaded", function() {
         const walletButton = document.getElementById("wallet");
         const codButton = document.getElementById("cod");
@@ -284,7 +287,7 @@
         const codDetails = document.getElementById("codDetails");
         const paymentMethodInput = document.getElementById("paymentMethod");
 
-        // Function to handle payment method selection
+        // Chọn phương thức thanh toán mặc định
         function selectPaymentMethod(method) {
             if (method === "wallet") {
                 walletButton.classList.add("selected");
@@ -301,14 +304,13 @@
             }
         }
 
-        // Add event listeners to payment buttons
+        // Xử lý sự kiện khi người dùng chọn phương thức thanh toán
         walletButton.addEventListener("click", function() {
             selectPaymentMethod("wallet");
         });
 
         codButton.addEventListener("click", function() {
             selectPaymentMethod("cod");
-            console.log("Phương thức thanh toán được chọn: cod");
         });
     });
 </script>
