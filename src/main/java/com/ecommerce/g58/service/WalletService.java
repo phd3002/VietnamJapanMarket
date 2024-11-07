@@ -9,4 +9,6 @@ public interface WalletService {
     List<WalletDTO> getTransactionsForUserId(Integer userId);
 
     long getUserWalletBalance(Integer userId);
+
+    void deductFromWallet(Integer userId, double amount);
 }

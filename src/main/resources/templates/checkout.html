@@ -93,6 +93,9 @@
         <div class="container">
             <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
             </div>
+            <div id="insufficient-balance-alert" class="alert alert-danger" style="display: none;">
+                Bạn không đủ số dư để thực hiện giao dịch.
+            </div>
             <form action="/checkout" method="post">
                 <div th:if="${errorMessage}" class="alert alert-danger">
                     <p th:text="${errorMessage}"></p>
@@ -234,6 +237,48 @@
             .catch(error => console.error("Error calculating shipping:", error));
     });
 </script>
+
+<script>
+    document.querySelector(".checkout-btn").addEventListener("click", function(event) {
+        event.preventDefault(); // Ngăn chặn form gửi ngay lập tức
+
+        // Lấy phương thức thanh toán
+        const paymentMethod = document.querySelector(".payment-btn.selected").getAttribute("data-method");
+
+        // Nếu thanh toán qua ví VJ-Market, kiểm tra số dư ví
+        if (paymentMethod === "wallet") {
+            const walletBalance = parseInt(document.querySelector("#walletDetails p strong").innerText.replace(/\D/g, ""));
+            const totalOrderPrice = parseInt(document.getElementById("total-order-price").innerText.replace(/\D/g, ""));
+
+            if (walletBalance < totalOrderPrice) {
+                document.getElementById("insufficient-balance-alert").style.display = "block";
+                return; // Không cho phép tiếp tục nếu không đủ số dư
+            }
+        }
+
+        // Nếu đủ điều kiện, gửi form để tiếp tục thanh toán
+        document.getElementById("insufficient-balance-alert").style.display = "none";
+        document.querySelector("form").submit();
+    });
+
+    // Cập nhật giao diện khi chọn phương thức thanh toán
+    document.querySelectorAll(".payment-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            document.querySelectorAll(".payment-btn").forEach(btn => btn.classList.remove("selected"));
+            this.classList.add("selected");
+
+            // Cập nhật hiển thị chi tiết phương thức thanh toán
+            if (this.getAttribute("data-method") === "wallet") {
+                document.getElementById("walletDetails").style.display = "block";
+                document.getElementById("codDetails").style.display = "none";
+            } else {
+                document.getElementById("walletDetails").style.display = "none";
+                document.getElementById("codDetails").style.display = "block";
+            }
+        });
+    });
+</script>
+
 
 <script>
     // kiem tra session co con ton tai hay khong

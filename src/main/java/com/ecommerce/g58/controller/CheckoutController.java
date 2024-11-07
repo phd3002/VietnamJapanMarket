@@ -197,8 +197,6 @@ public class CheckoutController {
         // Check if wallet balance is sufficient
         double walletBalance = walletService.getUserWalletBalance(userId);
         if (walletBalance < totalWithShipping) {
-            // Add error message and necessary data to the model to stay on the checkout page
-            model.addAttribute("errorMessage", "Bạn không đủ số dư để thực hiện giao dịch.");
             model.addAttribute("totalWithShipping", totalWithShipping);
             model.addAttribute("walletBalance", walletBalance);
             model.addAttribute("cartItems", cartItems);
