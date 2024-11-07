@@ -5,9 +5,14 @@ import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.RoleService;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,15 +30,18 @@ public class UserManagementController {
     }
 
     @GetMapping("/admin/user-manager")
-    public String getAllUsers(Model model) {
-        List<Users> users = userService.getAllUsers();
+    public String getAllUsers(@RequestParam(defaultValue = "0") int page, Model model) {
+        Pageable pageable = PageRequest.of(page, 6);
+        Page<Users> usersPage = userService.getAllUsers(pageable);
         List<Roles> roles = roleService.getAllRoles();
-        model.addAttribute("users", users);
+        model.addAttribute("users", usersPage.getContent());
         model.addAttribute("roles", roles);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", usersPage.getTotalPages());
         return "admin/user-manager";
     }
 
-    @GetMapping("/admin/user-manager/edit/{userId}")
+    @GetMapping("/admin/edit-user/{userId}")
     public String editUser(@PathVariable Integer userId, Model model) {
         if (userId == null) {
             throw new IllegalArgumentException("User ID must not be null");
@@ -42,11 +50,11 @@ public class UserManagementController {
         List<Roles> roles = roleService.getAllRoles();
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
-        return "admin/user-manager :: #ModalUP";
+        return "admin/update-user";
     }
 
-    @PostMapping("/admin/user-manager/update-user")
-    public String updateUser(@RequestParam Integer userId, @RequestParam String status, @RequestParam Integer roleId, Model model) {
+    @PostMapping("/update-user")
+    public String updateUser(@RequestParam Integer userId, @RequestParam String status, @RequestParam Integer roleId, @RequestParam String username, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String phoneNumber, Model model) {
         if (userId == null || roleId == null) {
             throw new IllegalArgumentException("User ID and Role ID must not be null");
         }
@@ -55,11 +63,16 @@ public class UserManagementController {
         if (user != null && role != null) {
             user.setRoleId(role);
             user.setStatus(status);
+            user.setUsername(username);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setPhoneNumber(phoneNumber);
             userService.updateUser(user);
             model.addAttribute("message", "User updated successfully");
         } else {
             model.addAttribute("error", "User or Role not found");
         }
-        return "admin/user-manager :: #ModalUP";
+        return "redirect:/admin/user-manager";
     }
 }

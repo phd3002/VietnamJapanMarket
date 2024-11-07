@@ -58,7 +58,7 @@ public class OrderController {
 
         if (orderPage.isEmpty()) {
             model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
-            model.addAttribute("productListLink", "/product-detail");
+            model.addAttribute("productListLink", "/product-list");
         } else {
             model.addAttribute("orders", orderPage.getContent());
             model.addAttribute("currentPage", page);

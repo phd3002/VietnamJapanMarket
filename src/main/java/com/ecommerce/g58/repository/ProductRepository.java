@@ -4,6 +4,8 @@ import com.ecommerce.g58.dto.ProductDTO;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.entity.Products;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -21,7 +23,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
 
     List<Products> findAll();
 
-    List<Products> findByStoreId(Stores storeId);
+    Page<Products> findByStoreId(Stores storeId, Pageable pageable);
 
     @Query("SELECT new com.ecommerce.g58.dto.ProductDetailDTO(p.productId, p.productName, p.price, p.categoryId.categoryId, p.storeId.storeId, v.size.sizeName, v.color.colorName, v.stock, v.imageId.imageId) " +
             "FROM Products p LEFT JOIN ProductVariation v ON p.productId = v.productId.productId " +
