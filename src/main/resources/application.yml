@@ -68,3 +68,7 @@ server:
     include-stacktrace: always
     include-exception: true
     include-message: always
+vnpay:
+  tmnCode: 41LRT5WB
+  hashSecret: S3J1BIDEMYA6KYWRU82T6ZFJZO2TF6J6
+  paymentUrl: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
