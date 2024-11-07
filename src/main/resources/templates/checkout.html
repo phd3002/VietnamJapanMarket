@@ -177,12 +177,8 @@
                             <div class="row">
                                 <div class="col-sm-12 d-flex justify-content-between">
                                     <div>
-                                        <button id="wallet" class="payment-btn btn-common selected"
-                                                data-method="wallet">Ví VJ-Market
-                                        </button>
-                                        <button id="cod" class="payment-btn btn-common" data-method="cod">Thanh toán khi
-                                            nhận hàng
-                                        </button>
+                                        <button id="wallet" class="payment-btn btn-common selected" data-method="wallet" type="button">Ví VJ-Market</button>
+                                        <button id="cod" class="payment-btn btn-common" data-method="cod" type="button">Thanh toán khi nhận hàng</button>
                                     </div>
                                     <div>
                                         <div class="payment-details" id="walletDetails">
@@ -194,6 +190,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Hidden input to hold selected payment method -->
+                            <input type="hidden" id="paymentMethod" name="paymentMethod" value="wallet">
                             <br><br>
                             <div class="order-price">
                                 <div class="d-flex justify-content-between">
@@ -211,8 +209,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán
-                        </button>
+                        <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán</button>
                     </div>
                 </div>
             </form>
@@ -279,6 +276,42 @@
     });
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const walletButton = document.getElementById("wallet");
+        const codButton = document.getElementById("cod");
+        const walletDetails = document.getElementById("walletDetails");
+        const codDetails = document.getElementById("codDetails");
+        const paymentMethodInput = document.getElementById("paymentMethod");
+
+        // Function to handle payment method selection
+        function selectPaymentMethod(method) {
+            if (method === "wallet") {
+                walletButton.classList.add("selected");
+                codButton.classList.remove("selected");
+                walletDetails.style.display = "block";
+                codDetails.style.display = "none";
+                paymentMethodInput.value = "wallet";
+            } else if (method === "cod") {
+                codButton.classList.add("selected");
+                walletButton.classList.remove("selected");
+                codDetails.style.display = "block";
+                walletDetails.style.display = "none";
+                paymentMethodInput.value = "cod";
+            }
+        }
+
+        // Add event listeners to payment buttons
+        walletButton.addEventListener("click", function() {
+            selectPaymentMethod("wallet");
+        });
+
+        codButton.addEventListener("click", function() {
+            selectPaymentMethod("cod");
+            console.log("Phương thức thanh toán được chọn: cod");
+        });
+    });
+</script>
 
 <script>
     // kiem tra session co con ton tai hay khong

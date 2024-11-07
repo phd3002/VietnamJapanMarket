@@ -159,7 +159,8 @@ public class CheckoutController {
     // khi nguoi dung bam nut checkout
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal, Model model,
-                                    @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod) {
+                                    @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod,
+                                    @RequestParam(value = "paymentMethod", defaultValue = "wallet") String paymentMethod) {
         if (principal == null) {
             return "redirect:/sign-in";
         }
@@ -194,18 +195,20 @@ public class CheckoutController {
 
         double totalWithShipping = totalPrice + shippingFee;
 
-        // Check if wallet balance is sufficient
-        double walletBalance = walletService.getUserWalletBalance(userId);
-        if (walletBalance < totalWithShipping) {
-            model.addAttribute("totalWithShipping", totalWithShipping);
-            model.addAttribute("walletBalance", walletBalance);
-            model.addAttribute("cartItems", cartItems);
-            model.addAttribute("totalPrice", totalPrice);
-            model.addAttribute("shippingFee", shippingFee);
-            return "checkout"; // Stay on checkout page with error message
+        // Nếu phương thức thanh toán không phải là COD, kiểm tra số dư ví
+        if (!"cod".equalsIgnoreCase(paymentMethod)) {
+            double walletBalance = walletService.getUserWalletBalance(userId);
+            if (walletBalance < totalWithShipping) {
+                model.addAttribute("totalWithShipping", totalWithShipping);
+                model.addAttribute("walletBalance", walletBalance);
+                model.addAttribute("cartItems", cartItems);
+                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("shippingFee", shippingFee);
+                return "checkout"; // Stay on checkout page with error message
+            }
         }
 
-        // Deduct items from stock and proceed with checkout if balance is sufficient
+        // Deduct items from stock and proceed with checkout
         cartService.subtractItemQuantitiesFromStock(userId);
         session.setAttribute("userId", userId);
         session.setAttribute("checkoutStartTime", LocalDateTime.now());
