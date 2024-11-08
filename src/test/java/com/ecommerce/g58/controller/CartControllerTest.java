@@ -455,7 +455,6 @@ public class CartControllerTest {
     }
 
     //----------------------------------------------------------------------------------------------------------------
-
     // testGetCartItems_Success tc1
     @Test
     public void testUpdateCartQuantity_Success() {
@@ -470,8 +469,6 @@ public class CartControllerTest {
         verify(redirectAttributes, times(1)).addFlashAttribute("message", "Quantity updated successfully");
         assertEquals("redirect:/cart-items", result);
     }
-
-
     //--------------------------------------------------------------------------------------------------------------
     /// testUpdateCartQuantity_SuccessfulUpdate tc1
     @Test
