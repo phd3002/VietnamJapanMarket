@@ -2,11 +2,13 @@ package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.UserService;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,16 +33,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 @Controller
 public class UserController {
-    private Map<String, Users> temporaryUsers = new HashMap<>(); // Khai báo một bản đồ tạm thời để lưu trữ người dùng và OTP
+    private final Map<String, Users> temporaryUsers = new HashMap<>(); // Khai báo một bản đồ tạm thời để lưu trữ người dùng và OTP
     @Autowired
     private UserService userService;
-
-//    @Autowired
-//    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -65,6 +65,23 @@ public class UserController {
                                HttpServletRequest request) throws Exception {
 
         try {
+            // Kiểm tra xem username có trống không
+            if (users.getUsername() == null || users.getUsername().isEmpty()) {
+                model.addAttribute("errorMessage", "Username không được để trống.");
+                return "sign-up";
+            }
+
+            // Kiểm tra xem email có trống không
+            if (users.getEmail() == null || users.getEmail().isEmpty()) {
+                model.addAttribute("errorMessage", "Email không được để trống.");
+                return "sign-up";
+            }
+
+            // Kiểm tra xem mật khẩu có trống không
+            if (users.getPassword() == null || users.getPassword().isEmpty()) {
+                model.addAttribute("errorMessage", "Mật khẩu không được để trống.");
+                return "sign-up";
+            }
             // Kiểm tra xem mật khẩu và confirmPassword có khớp không
             if (!users.getPassword().equals(confirmPassword)) {
                 model.addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
@@ -76,10 +93,6 @@ public class UserController {
                 model.addAttribute("errorMessage", "Email đã tồn tại.");
                 return "sign-up";
             }
-
-            // Đăng ký người dùng mới
-//            userService.registerUser(users);
-//            model.addAttribute("successMessage", "Đăng ký thành công!");
 
             // Tạo OTP và lưu vào session
             String otp = generateOTP(6); // Tạo mã OTP
@@ -96,8 +109,6 @@ public class UserController {
             return "redirect:/sign-up"; // Chuyển hướng lại trang đăng ký nếu lỗi
         }
     }
-
-
 
 
     public String generateOTP(int length) {
@@ -122,6 +133,7 @@ public class UserController {
         String otpFromSession = (String) session.getAttribute("otp"); // Lấy OTP từ session
         if (otpFromSession != null && otpFromSession.equals(request.getParameter("otp"))) { // Kiểm tra xem OTP có khớp không
             Users user = temporaryUsers.get(otpFromSession); // Lấy người dùng từ bản đồ tạm thời
+            user.setStatus("active"); // Đặt trạng thái của người dùng là "active"
             userService.registerUser(user); // Đăng ký người dùng mới
             temporaryUsers.remove(otpFromSession); // Xóa người dùng khỏi bản đồ tạm thời
             session.setAttribute("verificationSuccessMessage", "Xác minh OTP thành công!"); // Thêm thông báo thành công vào session
@@ -162,6 +174,10 @@ public class UserController {
     @GetMapping("/sign-in")
     public String showLoginForm(Authentication authentication, Model model, HttpSession session) {
         if (authentication != null && authentication.isAuthenticated()) {
+            // Redirect to the admin dashboard if the authenticated user is an admin
+            if (authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Admin"))) {
+                return "redirect:/admin/dashboard";
+            }
             return "redirect:/homepage";
         } else {
             if (session.getAttribute("verificationSuccessMessage") != null) {
@@ -170,7 +186,6 @@ public class UserController {
             }
             return "sign-in";
         }
-//        model.addAttribute("users", new Users());
     }
 
     @PostMapping("/sign-in")
@@ -178,37 +193,46 @@ public class UserController {
                               @RequestParam("password") String password,
                               Model model) {
         try {
-            UserDetails userDetails = userService.loadUserByUsername(email);
-            if (userDetails == null) {
-                model.addAttribute("errorMessage", "Email không tồn tại");
+            if (!userService.isAccountActive(email)) {
+                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa.");
                 return "sign-in";
             }
+            UserDetails userDetails = userService.loadUserByUsername(email);
+            if (userDetails == null) {
+                model.addAttribute("errorMessage", "Email chưa được đăng kí");
+                return "sign-in";
+            }
+            // Check if the user is inactive
+            // Check if the user is inactive using UserDetails methods
+//            if (!userDetails.isAccountNonLocked() || !userDetails.isEnabled()) {
+//                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa.");
+//                return "sign-in";
+//            }
             // Check if the password matches
             boolean isPasswordValid = userService.checkPassword(password, userDetails.getPassword());
             if (!isPasswordValid) {
                 model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
                 return "sign-in";
             }
-            // Tạo đối tượng Authentication token
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(email, password,userDetails.getAuthorities());
             System.out.println(email);
             System.out.println(password);
             // Xác thực người dùng bằng AuthenticationManager
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("Dang nhap duoc roi cmm");
             return "redirect:/homepage"; // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
 
         } catch (BadCredentialsException e) {
             model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
+            System.out.println("lỗi ở đây");
             return "sign-in";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Đã xảy ra lỗi. Vui lòng thử lại.");
+            model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
+            System.out.println("lỗi ở đây 2");
             return "sign-in";
         }
     }
+
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Model model) {
         if (authentication != null) {
@@ -228,6 +252,10 @@ public class UserController {
     @PostMapping("/forgot-password")
     public String processForgotPassword(@RequestParam("email") String email, RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) {
         try {
+            if (!userService.isAccountActive(email)) {
+                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa và không thể thực hiện yêu cầu đặt lại mật khẩu.");
+                return "forgot-password";
+            }
             userService.sendResetPasswordEmail(email, request);
             redirectAttributes.addFlashAttribute("successMessage", "Chúng tôi đã gửi Email về cho bạn");
         } catch (BadCredentialsException e) {
@@ -259,12 +287,12 @@ public class UserController {
                                        Model model) {
         if (password.length() < 6) {
             model.addAttribute("errorMessage", "Mật Khẩu phải dài ít nhất 6 ký tự.");
-            return "/reset-password"  ;
+            return "/reset-password";
         }
         // Check if the password and confirm password do not match
         if (!password.equals(confirmPassword)) {
             model.addAttribute("errorMessage", "Mật Khẩu và Xác Nhận Mật Khẩu không khớp.");
-            return "/reset-password" ;
+            return "/reset-password";
         }
         try {
             userService.updatePasswordReset(token, password);
@@ -275,5 +303,4 @@ public class UserController {
             return "redirect:/reset-password?token=" + token;
         }
     }
-
 }

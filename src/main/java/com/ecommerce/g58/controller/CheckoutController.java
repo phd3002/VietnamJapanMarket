@@ -5,16 +5,16 @@ import com.ecommerce.g58.repository.OrderDetailRepository;
 import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
+import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.UserService;
+import com.ecommerce.g58.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class CheckoutController {
@@ -38,6 +37,9 @@ public class CheckoutController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private CartItemService cartItemService;
 
     @Autowired
     private UserService userService;
@@ -53,6 +55,9 @@ public class CheckoutController {
 
     @Autowired
     private ShippingStatusRepository shippingStatusRepository;
+
+    @Autowired
+    private WalletService walletService; // Ensure WalletService is defined and injected
 
 
     // Hien thi man checkout
@@ -94,15 +99,17 @@ public class CheckoutController {
 
         Integer userId = user.getUserId();
         session.setAttribute("userId", userId);
-
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
+
+
 
         double totalPrice = cartItems.stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
         double shippingFee = 50000.0;
         double totalWithShipping = totalPrice + shippingFee;
+
 
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
@@ -117,14 +124,54 @@ public class CheckoutController {
         }
         model.addAttribute("productImages", productImages);
 
+        double walletBalance = walletService.getUserWalletBalance(user.getUserId());
+        model.addAttribute("walletBalance", walletBalance);
         return "checkout";
+    }
+
+    // endpoint tinh phi van chuyen
+    @GetMapping("/calculate-shipping")
+    @ResponseBody
+    public Map<String, Double> calculateShipping(@RequestParam("shippingMethod") String shippingMethod,
+                                                 Principal principal) {
+
+        // Tinh phi van chuyen dua tren phuong thuc van chuyen
+        double shippingFee;
+        switch (shippingMethod) {
+            case "express":
+                shippingFee = 100000.0;
+                break;
+            case "same-day":
+                shippingFee = 150000.0;
+                break;
+            default: // standard
+                shippingFee = 50000.0;
+                break;
+        }
+
+        // Lay tong tien cua gio hang
+        Users user = userService.findByEmail(principal.getName());
+        Integer userId = user.getUserId();
+        Cart userCart = cartService.getCartByUserId(userId);
+
+        double totalPrice = userCart.getCartItems().stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+        double totalWithShipping = totalPrice + shippingFee;
+
+        // Tra ve ket qua
+        Map<String, Double> response = new HashMap<>();
+        response.put("totalWithShipping", totalWithShipping);
+        response.put("shippingFee", shippingFee);
+
+        return response;
     }
 
     // khi nguoi dung bam nut checkout
     @PostMapping("/checkout")
-    public String proceedToCheckout(HttpSession session, Principal principal) {
-        logger.info("Session ID during checkout start: {}", session.getId());
-
+    public String proceedToCheckout(HttpSession session, Principal principal, Model model,
+                                    @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod,
+                                    @RequestParam(value = "paymentMethod", defaultValue = "wallet") String paymentMethod) {
         if (principal == null) {
             return "redirect:/sign-in";
         }
@@ -136,14 +183,48 @@ public class CheckoutController {
         }
 
         Integer userId = user.getUserId();
+        Cart userCart = cartService.getCartByUserId(userId);
+        List<CartItem> cartItems = userCart.getCartItems();
 
+        double totalPrice = cartItems.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+
+        // tinh phi van chuyen dua tren phuong thuc van chuyen
+        double shippingFee;
+        switch (shippingMethod) {
+            case "express":
+                shippingFee = 100000.0;
+                break;
+            case "same-day":
+                shippingFee = 150000.0;
+                break;
+            default: // standard
+                shippingFee = 50000.0;
+                break;
+        }
+
+        double totalWithShipping = totalPrice + shippingFee;
+
+        // Nếu phương thức thanh toán không phải là COD, kiểm tra số dư ví
+        if (!"cod".equalsIgnoreCase(paymentMethod)) {
+            double walletBalance = walletService.getUserWalletBalance(userId);
+            if (walletBalance < totalWithShipping) {
+                model.addAttribute("totalWithShipping", totalWithShipping);
+                model.addAttribute("walletBalance", walletBalance);
+                model.addAttribute("cartItems", cartItems);
+                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("shippingFee", shippingFee);
+                return "checkout"; // trả về trang checkout nếu số dư ví không đủ
+            }
+        }
+
+        // Deduct items from stock and proceed with checkout
         cartService.subtractItemQuantitiesFromStock(userId);
-
-        // luu thong tin user va thoi gian bat dau checkout vao session
         session.setAttribute("userId", userId);
         session.setAttribute("checkoutStartTime", LocalDateTime.now());
 
-        return "redirect:/checkout"; // redirect ve trang checkout
+        return "redirect:/confirm-checkout"; // chuyen huong ve confirm-checkout
     }
 
     // khi nguoi dung bam nut cancel
@@ -198,7 +279,7 @@ public class CheckoutController {
                 return "redirect:/cart?checkoutExpired=true";
             }
         }
-        return "redirect:/complete-checkout"; // redirect ve trang complete-checkout (chua co)
+        return "redirect:/process-checkout";
     }
 
     // endpoint kiem tra trang thai session

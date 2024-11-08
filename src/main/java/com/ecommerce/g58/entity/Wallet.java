@@ -26,7 +26,7 @@ public class Wallet {
     private Users userId;
 
     @Column(name = "balance", nullable = false)
-    private BigDecimal balance;
+    private Long balance;
 
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated = LocalDateTime.now();

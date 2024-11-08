@@ -31,4 +31,9 @@ public class CartItemServiceImp implements CartItemService {
         cartItemRepository.deleteById(cartItemId);
     }
 
+    @Override
+    public List<CartItem> getCartItemsByIds(List<Integer> cartItemIds) {
+        return cartItemRepository.findByCartItemIdIn(cartItemIds);
+    }
+
 }

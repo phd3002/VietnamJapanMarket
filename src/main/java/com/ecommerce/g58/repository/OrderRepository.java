@@ -15,6 +15,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
+    void deleteByUserId_UserId(Integer userId);
 
     @Query("SELECT o FROM Orders o WHERE o.userId.userId = :userId")
     List<Orders> findByUserId(Users user);
@@ -27,24 +28,46 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query("UPDATE Orders o SET o.shippingAddress = :newAddress WHERE o.orderId = :orderId")
     void updateShippingAddressByOrderId(@Param("orderId") Integer orderId, @Param("newAddress") String newAddress);
 
-    @Query(value = "SELECT " +
-            "    o.order_id AS orderId, " +
-            "    o.order_date AS orderDate, " +
-            "    COALESCE(ss.status, '') AS shippingStatus, " +
-            "    SUM(od.quantity) AS totalQuantity, " +
-            "    (o.total_price + i.shipping_fee) AS totalPrice " +
-            "FROM orders o " +
-            "LEFT JOIN order_details od ON o.order_id = od.order_id " +
-            "LEFT JOIN shipping_status ss ON o.order_id = ss.order_id " +
-            "LEFT JOIN invoice i ON o.order_id = i.order_id " +
+    @Query(value = "SELECT \n" +
+            "    o.order_id AS orderId, \n" +
+            "    o.order_date AS orderDate, \n" +
+            "    latest_status.status AS status, \n" +
+            "    COALESCE(SUM(od.quantity), 0) AS totalQuantity, \n" +
+            "    COALESCE(o.total_price, 0) + COALESCE(i.shipping_fee, 0) AS totalPrice \n" +
+            "FROM \n" +
+            "    orders o \n" +
+            "LEFT JOIN \n" +
+            "    order_details od ON o.order_id = od.order_id \n" +
+            "LEFT JOIN \n" +
+            "    invoice i ON o.order_id = i.order_id \n" +
+            "LEFT JOIN (\n" +
+            "    SELECT ss.order_id, ss.status\n" +
+            "    FROM shipping_status ss\n" +
+            "    INNER JOIN (\n" +
+            "        SELECT order_id, MAX(updated_at) AS latest_update\n" +
+            "        FROM shipping_status\n" +
+            "        GROUP BY order_id\n" +
+            "    ) latest ON ss.order_id = latest.order_id AND ss.updated_at = latest.latest_update\n" +
+            ") latest_status ON o.order_id = latest_status.order_id \n" +
             "WHERE o.user_id = :userId " +
-            "AND (:status IS NULL OR :status = '' OR ss.status = :status) " +
-            "GROUP BY o.order_id, o.order_date, ss.status, o.total_price, i.shipping_fee",
+            "AND (COALESCE(:status, '') = '' OR latest_status.status = :status)\n" +
+            "GROUP BY \n" +
+            "    o.order_id, o.order_date, latest_status.status, o.total_price, i.shipping_fee",
             countQuery = "SELECT COUNT(DISTINCT o.order_id) " +
                     "FROM orders o " +
-                    "LEFT JOIN shipping_status ss ON o.order_id = ss.order_id " +
+                    "LEFT JOIN (\n" +
+                    "    SELECT ss.order_id, ss.status\n" +
+                    "    FROM shipping_status ss\n" +
+                    "    INNER JOIN (\n" +
+                    "        SELECT order_id, MAX(updated_at) AS latest_update\n" +
+                    "        FROM shipping_status\n" +
+                    "        GROUP BY order_id\n" +
+                    "    ) latest ON ss.order_id = latest.order_id AND ss.updated_at = latest.latest_update\n" +
+                    ") latest_status ON o.order_id = latest_status.order_id " +
                     "WHERE o.user_id = :userId " +
-                    "AND (:status IS NULL OR :status = '' OR ss.status = :status)",
+                    "AND (COALESCE(:status, '') = '' OR latest_status.status = :status)",
             nativeQuery = true)
-    Page<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId, @Param("status") String status, Pageable pageable);
+    Page<Object[]> findOrdersByUserIdAndStatus(@Param("userId") Integer userId,
+                                               @Param("status") String status,
+                                               Pageable pageable);
 }

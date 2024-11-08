@@ -16,4 +16,6 @@ public interface CartItemService {
     // New method to remove a single cart item by its ID
     void removeCartItemById(Integer cartItemId);
 
+    List<CartItem> getCartItemsByIds(List<Integer> cartItemId);
+
 }

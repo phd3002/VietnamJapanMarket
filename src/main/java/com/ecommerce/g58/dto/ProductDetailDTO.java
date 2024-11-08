@@ -33,7 +33,7 @@ public class ProductDetailDTO {
     public ProductDetailDTO() {}
 
     public ProductDetailDTO(Integer productId, String productName, String productDescription, Integer price, Float weight,
-                            Integer variationId, String sizeName, String colorName, Integer stock, String thumbnail) {
+                            Integer variationId, String sizeName, String colorName, Integer stock, String thumbnail, Integer storeId) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
@@ -44,13 +44,14 @@ public class ProductDetailDTO {
         this.color = colorName;
         this.stock = stock;
         this.thumbnail = thumbnail;
+        this.storeId = storeId;
     }
 
 
     public ProductDetailDTO(Integer productId, String productName, String productDescription,
                             Integer price, Float weight, Integer variationId, String size,
                             String color, Integer stock, String thumbnail,
-                            String image1, String image2, String image3, String image4) {
+                            String image1, String image2, String image3, String image4, Integer storeId) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
@@ -65,6 +66,7 @@ public class ProductDetailDTO {
         this.image2 = image2;
         this.image3 = image3;
         this.image4 = image4;
+        this.storeId = storeId;
     }
 
     public ProductDetailDTO(Integer productId, String productName, Integer price, Integer categoryId, Integer storeId, String size, String color, Integer stock, Integer imageId) {

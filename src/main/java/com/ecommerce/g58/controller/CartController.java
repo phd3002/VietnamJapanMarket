@@ -66,15 +66,34 @@ public class CartController {
         // Fetch user data
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
+        Integer userId = user.getUserId();
         Cart cart = cartService.getOrCreateCart(user);
 
         try {
             // Fetch product variation details (using the variationId)
             ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndVariationId(productId, variationId);
+//            System.out.println("Product detail Store: " + productDetail.getStoreId());
 
             if (productDetail != null) {
+                List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
+                if (!cartItems.isEmpty()) {
+                    Integer newProductStoreId = productDetail.getStoreId();// Get storeId from productDetail
+//                    System.out.println("New product store ID: " + newProductStoreId);
+                    Integer currentStoreId = cartItems.get(0).getProductId().getStoreId().getStoreId();
+
+
+                // Check if the stores are different
+                    if (!currentStoreId.equals(newProductStoreId)) {
+//                        System.out.println("Current store ID: " + currentStoreId);
+//                        System.out.println("New product store ID: " + newProductStoreId);
+                        redirectAttributes.addFlashAttribute("error", "Bạn không thể thêm sản phẩm từ cửa hàng khác vào giỏ hàng. Vui lòng thanh toán hoặc xóa các sản phẩm hiện tại trong giỏ hàng trước.");
+                        String referer = request.getHeader("Referer");
+                        return "redirect:" + referer;  // Redirects to the same page
+                    }
+                }
+
                 // Add the product to the cart
-                cartService.addProductToCart(user, productDetail, quantity,cart);
+                cartService.addProductToCart(user, productDetail, quantity, cart);
 
                 // Success message
                 redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được thêm vào giỏ hàng của bạn");
@@ -96,37 +115,33 @@ public class CartController {
     // View Cart Items
     @GetMapping("/cart-items")
     public String getCartItems(Model model) {
-        // Get authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             return "redirect:/sign-in";
         }
 
-        // Fetch the authenticated user's email and user data
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
         Integer userId = user.getUserId();
 
-        // Fetch cart items by user
         List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
+        boolean isCartEmpty = cartItems.isEmpty();
 
-        if (cartItems.isEmpty()) {
-            model.addAttribute("message", "Your cart is empty.");
-            return "cart-detail";  // Return empty cart view
-        }
+        model.addAttribute("isCartEmpty", isCartEmpty);
+        model.addAttribute("cartItems", cartItems);
 
-        // Group cart items by store (assuming Product has a reference to Store)
+        // Group cart items by store if the cart is not empty
         Map<Stores, List<CartItem>> groupedItems = cartItems.stream()
                 .collect(Collectors.groupingBy(item -> item.getProductId().getStoreId()));
-
         model.addAttribute("cartItemGroupedByStore", groupedItems);
 
         // Calculate total order price
         Integer totalOrderPrice = cartItems.stream()
-                .mapToInt(item -> item.getQuantity() * item.getProductId().getPrice()).sum();
+                .mapToInt(item -> item.getQuantity() * item.getProductId().getPrice())
+                .sum();
         model.addAttribute("totalOrderPrice", totalOrderPrice);
 
-        return "cart-detail";  // Thymeleaf template for cart details
+        return "cart-detail"; // Thymeleaf template for cart details
     }
 
 
@@ -150,12 +165,12 @@ public class CartController {
             // Check if the requested quantity is within the available stock
             if (quantity <= productStock) {
                 cartItemService.updateCartItemQuantity(cartItemId, quantity);
-                redirectAttributes.addFlashAttribute("message", "Quantity updated successfully");
+                redirectAttributes.addFlashAttribute("message", "Cập nhật giỏ hàng thành công");
             } else {
-                redirectAttributes.addFlashAttribute("error", "Error updating quantity: Exceeds stock limit");
+                redirectAttributes.addFlashAttribute("error", "Lỗi khi cập nhật số lượng: Vượt quá số lượng tồn kho");
             }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error updating quantity");
+            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi cập nhật số lượng");
         }
 
         // Redirect back to cart detail page

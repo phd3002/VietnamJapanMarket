@@ -1,11 +1,16 @@
 package com.ecommerce.g58.enums;
 
 public enum OrderStatus {
-    PENDING("Chờ xử lý"),
-    PROGRESS("Đang giao"),
+    PENDING("Chờ xác nhận"),
+    CONFIRMED("Đã xác nhận"),
+    PROCESSING("Đang gói hàng"),
+    DISPATCHED("Đã giao cho đơn vị vận chuyển"),
+    SHIPPING("Đang giao"),
+    FAILED("Giao hàng thất bại"),
+    DELIVERED("Đã giao hàng"),
     COMPLETE("Hoàn thành"),
-    REFUND("Hoàn Tiền"),
-    REJECT("Từ chối");
+    RETURNED("Hoàn Tiền"),
+    CANCELLED("Đã hủy");
 
     private final String displayName;
 

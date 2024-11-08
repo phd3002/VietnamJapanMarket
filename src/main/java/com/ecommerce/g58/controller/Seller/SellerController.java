@@ -72,6 +72,35 @@ public class SellerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         Users user = userService.findByEmail(userDetails.getUsername());
+        // Kiểm tra các thông tin đầu vào
+        if (store.getStoreName() == null || store.getStoreName().isEmpty() || store.getStoreName().length() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên cửa hàng không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (store.getStorePhone() == null || store.getStorePhone().isEmpty() || store.getStorePhone().length() > 20) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại cửa hàng không được để trống và không được vượt quá 20 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (store.getStoreAddress() == null || store.getStoreAddress().isEmpty() || store.getStoreAddress().length() > 255) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Địa chỉ cửa hàng không được để trống và không được vượt quá 255 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (countryId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Quốc gia không được để trống.");
+            return "redirect:/sign-up-seller";
+        }
+        if (city == null || city.isEmpty() || city.length() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thành phố không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (district == null || district.isEmpty() || district.length() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Quận/huyện không được để trống và không được vượt quá 100 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
+        if (postalCode != null && postalCode.length() > 20) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mã bưu chính không được vượt quá 20 ký tự.");
+            return "redirect:/sign-up-seller";
+        }
         store.setOwnerId(user);
         store.setStoreMail(user.getEmail()); // Automatically assign the store's email to the user's email
         store.setCity(city != null ? city.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
