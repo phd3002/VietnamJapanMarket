@@ -1,6 +1,7 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.OrderDetailDTO;
+import com.ecommerce.g58.dto.OrderDetailManagerDTO;
 import com.ecommerce.g58.entity.Feedback;
 import com.ecommerce.g58.repository.FeedbackRepository;
 import com.ecommerce.g58.repository.OrderDetailRepository;
@@ -108,7 +109,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             }
             orderDetails.add(dto);
         }
-
         return orderDetails;
     }
 
@@ -136,6 +136,54 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             feedback.setCreatedAt(LocalDateTime.now());
             feedbackRepository.save(feedback);
         }
+    }
+
+    @Override
+    public List<OrderDetailManagerDTO> getOrderDetailsForManager(Long orderId) {
+        List<Object[]> results = orderDetailRepository.getOrderDetailsByOrderId(orderId);
+        List<OrderDetailManagerDTO> orderDetailManager = new ArrayList<>();
+        for (Object[] result : results) {
+            OrderDetailManagerDTO dto = new OrderDetailManagerDTO();
+            dto.setStoreName((String) result[0]);
+            dto.setStoreAddress((String) result[1]);
+            dto.setStorePhone((String) result[2]);
+            dto.setOrderStatus((String) result[3]);
+            dto.setTrackingNumber((String) result[4]);
+//            dto.setStatusTime((LocalDateTime) result[5]);
+            if (result[5] instanceof Timestamp) {
+                Timestamp statusTimestamp = (Timestamp) result[5];
+                dto.setStatusTime(statusTimestamp.toLocalDateTime());
+            }
+            dto.setCustomerName((String) result[6]);
+            dto.setCustomerAddress((String) result[7]);
+            dto.setCustomerPhone((String) result[8]);
+//            dto.setOrderDate((LocalDateTime) result[9]);
+            if (result[9] instanceof Timestamp) {
+                Timestamp orderTimestamp = (Timestamp) result[9];
+                dto.setOrderDate(orderTimestamp.toLocalDateTime());
+            }
+            dto.setProductName((String) result[10]);
+            dto.setProductType((String) result[11]);
+            dto.setQuantity((Integer) result[12]);
+            dto.setProductPrice((Integer) result[13]);
+//            dto.setTotalPrice((Integer) result[14]);
+            if (result[14] instanceof BigInteger) {
+                dto.setTotalPrice(((BigInteger) result[14]).intValue());
+            } else if (result[14] instanceof Integer) {
+                dto.setTotalPrice((Integer) result[14]);
+            }
+            dto.setShippingFee((Integer) result[15]);
+            dto.setTax((Integer) result[16]);
+            dto.setPaymentMethod((String) result[17]);
+//            dto.setTotalAmount((Integer) result[18]);
+            if (result[18] instanceof BigDecimal) {
+                dto.setTotalAmount(((BigDecimal) result[18]).intValue());
+            } else if (result[18] instanceof Integer) {
+                dto.setTotalAmount((Integer) result[18]);
+            }
+            orderDetailManager.add(dto);
+        }
+        return orderDetailManager;
     }
 }
 

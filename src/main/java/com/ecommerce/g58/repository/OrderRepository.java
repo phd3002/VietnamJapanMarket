@@ -75,8 +75,10 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query(value = "SELECT \n" +
             "    o.order_id AS 'Mã đơn hàng',\n" +
             "    CONCAT(u.first_name, ' ', u.last_name) AS full_name,\n" +
-            "    GROUP_CONCAT(p.product_name SEPARATOR ', ') AS product_names,\n" +
-            "    SUM(od.quantity) AS total_products,\n" +
+            "    GROUP_CONCAT(DISTINCT p.product_name SEPARATOR ', ') AS product_names,\n" +
+            "    (SELECT SUM(od_inner.quantity) \n" +
+            "     FROM order_details od_inner \n" +
+            "     WHERE od_inner.order_id = o.order_id) AS total_products, -- Total quantity of items in the order\n" +
             "    (o.total_price + COALESCE(MAX(i.shipping_fee), 0)) AS order_price,\n" +
             "    (SELECT status \n" +
             "     FROM shipping_status \n" +

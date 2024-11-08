@@ -3,8 +3,6 @@ package com.ecommerce.g58.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Setter
 @Getter
 public class OrderManagerDTO {

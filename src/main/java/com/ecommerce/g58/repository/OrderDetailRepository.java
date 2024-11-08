@@ -91,4 +91,38 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
 
     void deleteByProductId(Products productId);
     void deleteByVariationId(ProductVariation variationId);
+
+    @Query(value = "SELECT \n" +
+            "    s.store_name,\n" +
+            "    s.store_address,\n" +
+            "    s.store_phone,\n" +
+            "    (SELECT status FROM shipping_status WHERE order_id = o.order_id ORDER BY updated_at DESC LIMIT 1) AS shipping_status,\n" +
+            "    (SELECT tracking_number FROM shipping_status WHERE order_id = o.order_id ORDER BY updated_at DESC LIMIT 1) AS tracking_number,\n" +
+            "    (SELECT updated_at FROM shipping_status WHERE order_id = o.order_id ORDER BY updated_at DESC LIMIT 1) AS update_at,\n" +
+            "    CONCAT(u.first_name, ' ', u.last_name) AS full_name,\n" +
+            "    o.shipping_address,\n" +
+            "    u.phone_number,\n" +
+            "    o.order_date,\n" +
+            "    p.product_name,\n" +
+            "    CONCAT(c.color_name, ' x ', sz.size_name) AS product_type,\n" +
+            "    od.quantity,\n" +
+            "    od.price,\n" +
+            "    (od.quantity * od.price) AS product_price,\n" +
+            "    iv.shipping_fee,\n" +
+            "    iv.tax,\n" +
+            "    pm.payment_method,\n" +
+            "    (od.quantity * od.price) + ((od.quantity * od.price) * (iv.tax / 100)) + iv.shipping_fee AS total_price\n" +
+            "FROM orders o\n" +
+            "LEFT JOIN users u ON o.user_id = u.user_id\n" +
+            "LEFT JOIN order_details od ON o.order_id = od.order_id\n" +
+            "LEFT JOIN products p ON od.product_id = p.product_id\n" +
+            "LEFT JOIN product_variation pv ON od.variation_id = pv.variation_id\n" +
+            "LEFT JOIN color c ON c.color_id = pv.color_id\n" +
+            "LEFT JOIN size sz ON sz.size_id = pv.size_id\n" +
+            "LEFT JOIN stores s ON p.store_id = s.store_id\n" +
+            "LEFT JOIN invoice iv ON iv.order_id = o.order_id\n" +
+            "LEFT JOIN payment pm ON pm.order_id = o.order_id\n" +
+            "WHERE o.order_id = :orderId",
+            nativeQuery = true)
+    List<Object[]> getOrderDetailsByOrderId(@Param("orderId") Long orderId);
 }

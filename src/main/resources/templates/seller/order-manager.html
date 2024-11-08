@@ -108,7 +108,7 @@
                                                                           th:class="${order.latestStatus == 'Hoàn thành' ? 'badge bg-success' : 'badge bg-warning'}"></span>
                             </td>
                             <td>
-                                <a href="order-detail.html">
+                                <a th:href="@{/seller/order-detail/{orderId}(orderId=${order.orderId})}">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết"><i
                                             class="fa fa-eye"></i></button>
                                 </a>

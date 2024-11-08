@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách đơn hàng | Kênh người bán</title>
@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/seller/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -85,50 +85,46 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-body printableArea" id="sample">
-                        <h3><b>Hóa đơn</b> <span class="pull-right" name="id">#</span></h3>
+                        <h3><b>Hóa đơn</b> <span class="pull-right" name="id" th:text="'#' + ${trackingNumber}"></span></h3>
                         <hr/>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="pull-left col-4">
                                     <address>
                                         <div>Đơn vị bán:
-                                            &nbsp;<b class="text-danger text-uppercase">Name shop</b>
+                                            &nbsp;<b class="text-danger text-uppercase" th:text="${storeName}"></b>
                                         </div>
                                         <div>Địa chỉ:
-                                            <b class="text-secondary">Thạch Hòa, Thạch Thất, Hà Nội.</b>
+                                            <b class="text-secondary" th:text="${storeAddress}"></b>
                                         </div>
                                         <div>Số điện thoại:
-                                            <b class="text-secondary">0123456789</b>
+                                            <b class="text-secondary" th:text="${storePhone}"></b>
                                         </div>
                                     </address>
                                 </div>
                                 <div class="pull-right text-end">
                                     <address>
                                         <div>Người mua:
-                                            &nbsp;<b class="text-danger text-uppercase"></b>
+                                            &nbsp;<b class="text-danger text-uppercase" th:text="${customerName}"></b>
                                         </div>
                                         <div>Địa chỉ:
-                                            <b class="text-secondary"></b>
+                                            <b class="text-secondary" th:text="${customerAddress}"></b>
                                         </div>
                                         <div>Số điện thoại:
-                                            <b class="text-secondary"></b>
+                                            <b class="text-secondary" th:text="${customerPhone}"></b>
                                         </div>
-                                        <div>
-                                            <b>Ngày đặt: </b>
-                                            <i class="mdi mdi-calendar"></i>
+                                        <div>Ngày đặt:
+                                            <b class="text-secondary" th:text="${orderDate}"></b>
                                         </div>
                                     </address>
                                 </div>
                                 <div class="pull-right col-4">
                                     <address>
                                         <div>Trạng thái hiện tại:
-                                            &nbsp;<b class="text-danger text-uppercase">Đang vận chuyển</b>
-                                        </div>
-                                        <div>Số theo dõi vận đơn:
-                                            <b class="text-secondary">VN123456789</b>
+                                            &nbsp;<b class="text-danger text-uppercase" th:text="${orderStatus}"></b>
                                         </div>
                                         <div>Ngày cập nhật gần nhất:
-                                            <b class="text-secondary">05/10/2024</b>
+                                            <b class="text-secondary" th:text="${updateTime}"></b>
                                         </div>
                                     </address>
                                 </div>
@@ -138,7 +134,6 @@
                                     <table class="table table-hover">
                                         <thead>
                                         <tr>
-                                            <th class="text-center">#</th>
                                             <th class="text-end">Tên sản phẩm</th>
                                             <th class="text-end">Màu sắc x Kích thước</th>
                                             <th class="text-end">Số lượng</th>
@@ -147,30 +142,29 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td class="text-center">#</td>
-                                            <td class="text-end">Tên hàng hóa, dịch vụ</td>
-                                            <td class="text-end">Tên hàng hóa, dịch vụ</td>
-                                            <td class="text-end">Số lượng</td>
-                                            <td class="text-end">Đơn giá</td>
-                                            <td class="text-end">Thành tiền</td>
+                                        <tr th:each="order : ${orderDetails}">
+                                            <td class="text-end" th:text="${order.productName}"></td>
+                                            <td class="text-end" th:text="${order.productType}"></td>
+                                            <td class="text-end" th:text="${order.quantity}"></td>
+                                            <td class="text-end" th:text="${order.productPrice}"></td>
+                                            <td class="text-end" th:text="${order.totalPrice}"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="5" class="text-lg-right">Phí vận chuyển:</td>
-                                            <td class="text-end"></td>
+                                            <td colspan="4" class="text-lg-right">Phí vận chuyển:</td>
+                                            <td class="text-end" th:text="${shippingFee}"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="5" class="text-lg-right">Cộng tiền thuế GTGT (VAT 10%):</td>
-                                            <td class="text-end"></td>
+                                            <td colspan="4" class="text-lg-right">Cộng tiền thuế GTGT:</td>
+                                            <td class="text-end" th:text="${tax} +'%'"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="5" class="text-lg-right"><b>Phương thức thanh toán:</b></td>
-                                            <td class="text-end"><b></b></td>
+                                            <td colspan="4" class="text-lg-right"><b>Phương thức thanh toán:</b></td>
+                                            <td class="text-end"><b th:text="${paymentMethod}"></b></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="5" class="text-lg-right"><b>Tổng cộng tiền thanh toán (áp dụng
+                                            <td colspan="4" class="text-lg-right"><b>Tổng cộng tiền thanh toán (áp dụng
                                                 mã giảm giá):</b></td>
-                                            <td class="text-end"><b></b></td>
+                                            <td class="text-end"><b th:text="${totalAmount}"></b></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -185,11 +179,11 @@
 </main>
 
 <!-- Essential javascripts for application to work-->
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
-<script src="../../static/seller/js/main.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top-->
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
 </body>
 </html>
