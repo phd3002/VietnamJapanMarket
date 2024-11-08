@@ -5,7 +5,6 @@ import com.ecommerce.g58.repository.OrderDetailRepository;
 import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
-import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
@@ -39,9 +38,6 @@ public class CheckoutController {
     private CartService cartService;
 
     @Autowired
-    private CartItemService cartItemService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -57,25 +53,26 @@ public class CheckoutController {
     private ShippingStatusRepository shippingStatusRepository;
 
     @Autowired
-    private WalletService walletService; // Ensure WalletService is defined and injected
+    private WalletService walletService;
 
-
-    // Hien thi man checkout
     @GetMapping("/checkout")
-    public String showCheckoutPage(Model model, Principal principal, HttpSession session) {
-        // lay thoi gian bat dau session
+    public String showCheckoutPage(Model model, Principal principal, HttpSession session,
+                                   @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod) {
+        // Lấy thời gian bắt đầu session
         LocalDateTime sessionStartTime = (LocalDateTime) session.getAttribute("sessionStartTime");
 
+        // Nếu session chưa có thời gian bắt đầu, tạo mới và lưu vào session
         if (sessionStartTime == null) {
             sessionStartTime = LocalDateTime.now();
             session.setAttribute("sessionStartTime", sessionStartTime);
+            logger.info("Session start time set to: {}", sessionStartTime);
         }
 
-        // Tinh thoi gian session
+        // Tính toán thời gian của session
         Duration duration = Duration.between(sessionStartTime, LocalDateTime.now());
-        logger.info("Session duration for ID {}: {} minutes", session.getId(), duration.toMinutes());
+        logger.info("Session duration calculated: {} minutes", duration.toMinutes());
 
-        // Neu session qua thoi gian timeout, invalidate session va redirect ve homepage
+        // Kiểm tra nếu session vượt qua thời gian timeout
         if (duration.toMinutes() > SESSION_TIMEOUT_MINUTES) {
             Integer userId = (Integer) session.getAttribute("userId");
             if (userId != null) {
@@ -87,55 +84,39 @@ public class CheckoutController {
             return "redirect:/";
         }
 
+        // Kiểm tra nếu người dùng chưa đăng nhập
         if (principal == null) {
+            logger.warn("User not authenticated. Redirecting to sign-in.");
             return "redirect:/sign-in";
         }
 
+        // Lấy thông tin người dùng
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
+            logger.warn("User not found for username: {}. Redirecting to sign-in.", username);
             return "redirect:/sign-in";
         }
 
         Integer userId = user.getUserId();
         session.setAttribute("userId", userId);
+        logger.info("User ID set in session: {}", userId);
+
+        // Gọi hàm trừ số lượng sản phẩm trong kho khi bắt đầu quá trình thanh toán
+        cartService.subtractItemQuantitiesFromStock(userId);
+
+        // Lấy giỏ hàng của người dùng
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
+        logger.info("User cart items retrieved. Total items: {}", cartItems.size());
 
-
-
+        // Tính tổng giá giỏ hàng
         double totalPrice = cartItems.stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
-        double shippingFee = 50000.0;
-        double totalWithShipping = totalPrice + shippingFee;
+        logger.info("Total cart price calculated: {}", totalPrice);
 
-
-        model.addAttribute("cartItems", cartItems);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("totalWithShipping", totalWithShipping);
-
-        Map<Integer, String> productImages = new HashMap<>();
-        for (CartItem item : cartItems) {
-            List<ProductImage> images = productImageRepository.findByProductProductId(item.getProductId().getProductId());
-            if (!images.isEmpty()) {
-                productImages.put(item.getProductId().getProductId(), images.get(0).getThumbnail());
-            }
-        }
-        model.addAttribute("productImages", productImages);
-
-        double walletBalance = walletService.getUserWalletBalance(user.getUserId());
-        model.addAttribute("walletBalance", walletBalance);
-        return "checkout";
-    }
-
-    // endpoint tinh phi van chuyen
-    @GetMapping("/calculate-shipping")
-    @ResponseBody
-    public Map<String, Double> calculateShipping(@RequestParam("shippingMethod") String shippingMethod,
-                                                 Principal principal) {
-
-        // Tinh phi van chuyen dua tren phuong thuc van chuyen
+        // Tính phí vận chuyển dựa trên phương thức vận chuyển
         double shippingFee;
         switch (shippingMethod) {
             case "express":
@@ -148,49 +129,66 @@ public class CheckoutController {
                 shippingFee = 50000.0;
                 break;
         }
+        logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
-        // Lay tong tien cua gio hang
-        Users user = userService.findByEmail(principal.getName());
-        Integer userId = user.getUserId();
-        Cart userCart = cartService.getCartByUserId(userId);
-
-        double totalPrice = userCart.getCartItems().stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
-                .sum();
         double totalWithShipping = totalPrice + shippingFee;
+        logger.info("Total with shipping calculated: {}", totalWithShipping);
 
-        // Tra ve ket qua
-        Map<String, Double> response = new HashMap<>();
-        response.put("totalWithShipping", totalWithShipping);
-        response.put("shippingFee", shippingFee);
+        // Thêm thông tin vào model
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("totalWithShipping", totalWithShipping);
+        model.addAttribute("shippingFee", shippingFee);
+        model.addAttribute("selectedShippingMethod", shippingMethod);
 
-        return response;
+        // Lấy hình ảnh cho từng sản phẩm trong giỏ hàng
+        Map<Integer, String> productImages = new HashMap<>();
+        for (CartItem item : cartItems) {
+            List<ProductImage> images = productImageRepository.findByProductProductId(item.getProductId().getProductId());
+            if (!images.isEmpty()) {
+                productImages.put(item.getProductId().getProductId(), images.get(0).getThumbnail());
+                logger.info("Thumbnail set for product ID {}: {}", item.getProductId().getProductId(), images.get(0).getThumbnail());
+            }
+        }
+        model.addAttribute("productImages", productImages);
+
+        // Lấy số dư ví của người dùng
+        double walletBalance = walletService.getUserWalletBalance(user.getUserId());
+        model.addAttribute("walletBalance", walletBalance);
+        logger.info("Wallet balance retrieved for user ID {}: {}", user.getUserId(), walletBalance);
+
+        return "checkout";
     }
 
-    // khi nguoi dung bam nut checkout
     @PostMapping("/checkout")
-    public String proceedToCheckout(HttpSession session, Principal principal, Model model,
+    public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
                                     @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod,
                                     @RequestParam(value = "paymentMethod", defaultValue = "wallet") String paymentMethod) {
+        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (principal == null) {
+            logger.warn("User not authenticated. Redirecting to sign-in.");
             return "redirect:/sign-in";
         }
 
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
+            logger.warn("User not found for username: {}. Redirecting to sign-in.", username);
             return "redirect:/sign-in";
         }
 
         Integer userId = user.getUserId();
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
+        logger.info("User cart items retrieved for user ID {}. Total items: {}", userId, cartItems.size());
 
+        // Tính tổng giá giỏ hàng
         double totalPrice = cartItems.stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
+        logger.info("Total cart price calculated: {}", totalPrice);
 
-        // tinh phi van chuyen dua tren phuong thuc van chuyen
+        // Tính phí vận chuyển dựa trên phương thức vận chuyển
         double shippingFee;
         switch (shippingMethod) {
             case "express":
@@ -203,83 +201,118 @@ public class CheckoutController {
                 shippingFee = 50000.0;
                 break;
         }
+        logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
         double totalWithShipping = totalPrice + shippingFee;
+        logger.info("Total with shipping calculated: {}", totalWithShipping);
 
         // Nếu phương thức thanh toán không phải là COD, kiểm tra số dư ví
         if (!"cod".equalsIgnoreCase(paymentMethod)) {
             double walletBalance = walletService.getUserWalletBalance(userId);
+            logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
             if (walletBalance < totalWithShipping) {
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", walletBalance);
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
-                return "checkout"; // trả về trang checkout nếu số dư ví không đủ
+                logger.warn("Insufficient wallet balance. Returning to checkout.");
+                return "checkout"; // Return to checkout if wallet balance is insufficient
             }
         }
 
-        // Deduct items from stock and proceed with checkout
+        // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
         cartService.subtractItemQuantitiesFromStock(userId);
         session.setAttribute("userId", userId);
         session.setAttribute("checkoutStartTime", LocalDateTime.now());
+        logger.info("Stock quantities updated and checkout started for user ID {}.", userId);
 
-        return "redirect:/confirm-checkout"; // chuyen huong ve confirm-checkout
+        // Xác nhận và lưu đơn hàng
+        order.setUserId(user);
+        order.setOrderDate(LocalDateTime.now());
+        order.setTotalPrice(totalWithShipping);
+        logger.info("Order prepared for user ID {}. Total with shipping: {}", userId, totalWithShipping);
+
+        // Lưu đơn hàng vào cơ sở dữ liệu
+        orderRepository.save(order);
+        logger.info("Order saved in database with ID: {}", order.getOrderId());
+
+        // Tạo trạng thái giao hàng mới cho đơn hàng (mặc định là pending)
+        ShippingStatus initialShippingStatus = ShippingStatus.builder()
+                .orderId(order)
+                .status("Pending")
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        // Lưu trạng thái giao hàng vào cơ sở dữ liệu
+        shippingStatusRepository.save(initialShippingStatus);
+        logger.info("Initial shipping status set to 'Pending' and saved for order ID: {}", order.getOrderId());
+
+        // Thêm trạng thái giao hàng vào đơn hàng
+        List<ShippingStatus> shippingStatuses = new ArrayList<>();
+        shippingStatuses.add(initialShippingStatus);
+        order.setShippingStatus(shippingStatuses);
+
+        // Lưu đơn hàng với trạng thái đơn hàng vào cơ sở dữ liệu
+        orderRepository.save(order);
+        logger.info("Order with shipping status saved again for order ID: {}", order.getOrderId());
+
+        // Lưu chi tiết đơn hàng vào cơ sở dữ liệu
+        for (CartItem item : cartItems) {
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.setOrderId(order);
+            orderDetails.setProductId(item.getProductId());
+            orderDetails.setVariationId(item.getVariationId());
+            orderDetails.setQuantity(item.getQuantity());
+            orderDetails.setPrice(item.getPrice());
+            orderDetailRepository.save(orderDetails);
+            logger.info("Order detail saved for product ID {} with quantity {}.", item.getProductId().getProductId(), item.getQuantity());
+        }
+
+        // Xóa tất cả sản phẩm trong giỏ hàng sau khi đã đặt hàng
+        cartService.clearCart(user.getUserId());
+        logger.info("Cart cleared for user ID {} after order placement.", user.getUserId());
+
+        // Đặt đơn hàng cho model để hiển thị thông tin đơn hàng
+        model.addAttribute("order", order);
+        logger.info("Order details added to model for display on checkout-complete page.");
+
+        // Chuyển hướng về trang checkout-complete
+        return "checkout-complete";
     }
 
-    // khi nguoi dung bam nut cancel
     @PostMapping("/checkout/cancel")
     public ResponseEntity<Void> cancelCheckout(HttpSession session, Principal principal) {
+        // Log session ID khi người dùng bấm hủy
         logger.info("Session ID during cancel: {}", session.getId());
 
-        // neu chua dang nhap, tra ve 401 Unauthorized
+        // Kiểm tra nếu người dùng chưa đăng nhập, trả về 401 Unauthorized
         if (principal == null) {
+            logger.warn("Unauthorized cancel attempt. User not authenticated.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
+            logger.warn("Unauthorized cancel attempt. User not found for username: {}", username);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         Integer userId = user.getUserId();
+        logger.info("User ID {} is canceling checkout.", userId);
 
+        // Khôi phục số lượng sản phẩm trong kho cho giỏ hàng người dùng
         cartService.restoreItemQuantitiesToStock(userId);
+        logger.info("Item quantities restored for user ID {}.", userId);
 
-        // xoa cac thuoc tinh checkout khoi session
+        // Xóa các thuộc tính liên quan đến checkout khỏi session
         session.removeAttribute("checkoutStartTime");
         session.removeAttribute("userId");
+        logger.info("Checkout-related session attributes removed for user ID {}.", userId);
 
+        // Trả về phản hồi thành công 200 OK
         return ResponseEntity.ok().build();
-    }
-
-    // xac nhan checkout
-    @GetMapping("/confirm-checkout")
-    public String confirmCheckout(HttpSession session, Principal principal) {
-
-        if (principal == null) {
-            return "redirect:/sign-in";
-        }
-
-        // lay thoi gian bat dau checkout tu session
-        LocalDateTime checkoutStartTime = (LocalDateTime) session.getAttribute("checkoutStartTime");
-
-        // neu thoi gian checkout > 30 phut, restore so luong san pham
-        if (checkoutStartTime != null) {
-            if (Duration.between(checkoutStartTime, LocalDateTime.now()).toMinutes() > 30) {
-                Integer userId = userService.findByEmail(principal.getName()).getUserId();
-                cartService.restoreItemQuantitiesToStock(userId);
-
-                // Remove checkout session attributes
-                session.removeAttribute("checkoutStartTime");
-                session.removeAttribute("userId");
-
-                // Redirect to cart with expiration notice
-                return "redirect:/cart?checkoutExpired=true";
-            }
-        }
-        return "redirect:/process-checkout";
     }
 
     // endpoint kiem tra trang thai session
@@ -348,72 +381,5 @@ public class CheckoutController {
         }
         // tra ve ket qua
         return response;
-    }
-
-    // endpoint xac nhan checkout
-    @PostMapping("/process-checkout")
-    public String processCheckout(@ModelAttribute Orders order, Principal principal, HttpSession session, Model model) {
-        // kiem tra xem nguoi dung da dang nhap
-        Users user = userService.findByEmail(principal.getName());
-        if (user == null) {
-            return "redirect:/sign-in";
-        }
-
-        // set thong tin cho order
-        order.setUserId(user);
-        order.setOrderDate(LocalDateTime.now());
-
-        // lay tong tien cua don hang
-        Double totalWithShipping = (Double) model.getAttribute("totalWithShipping");
-        if (totalWithShipping == null) {
-            List<CartItem> cartItems = cartService.getCartByUserId(user.getUserId()).getCartItems();
-            double totalPrice = cartItems.stream()
-                    .mapToDouble(item -> item.getPrice() * item.getQuantity())
-                    .sum();
-            double shippingFee = 50000.0;
-            totalWithShipping = totalPrice + shippingFee;
-        }
-        order.setTotalPrice(totalWithShipping);
-
-        // luu order vao database
-        orderRepository.save(order);
-
-        // tao shipping status moi cho order (mac dinh la pending)
-        ShippingStatus initialShippingStatus = ShippingStatus.builder()
-                .orderId(order)
-                .status("Pending")
-                .updatedAt(LocalDateTime.now())
-                .build();
-        // luu shipping status vao database
-        shippingStatusRepository.save(initialShippingStatus);
-
-        // them shipping status vao order
-        List<ShippingStatus> shippingStatuses = new ArrayList<>();
-        shippingStatuses.add(initialShippingStatus);
-        order.setShippingStatus(shippingStatuses);
-
-        // luu order voi trang thai don hang vao database
-        orderRepository.save(order);
-
-        // luu order details vao database
-        List<CartItem> cartItems = cartService.getCartByUserId(user.getUserId()).getCartItems();
-        for (CartItem item : cartItems) {
-            OrderDetails orderDetails = new OrderDetails();
-            orderDetails.setOrderId(order);
-            orderDetails.setProductId(item.getProductId());
-            orderDetails.setVariationId(item.getVariationId());
-            orderDetails.setQuantity(item.getQuantity());
-            orderDetails.setPrice(item.getPrice());
-            orderDetailRepository.save(orderDetails);
-        }
-
-        // xoa tat ca san pham trong gio hang sau khi da dat hang
-        cartService.clearCart(user.getUserId());
-
-        // set order cho model de hien thi thong tin don hang
-        model.addAttribute("order", order);
-
-        // chuyen huong ve trang checkout-complete
-        return "checkout-complete";
     }
 }
