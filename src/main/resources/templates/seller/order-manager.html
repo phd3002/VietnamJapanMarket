@@ -102,12 +102,22 @@
                             <td th:text="${order.productNames}"></td>
                             <td th:text="${order.totalProducts}"></td>
                             <td th:text="${order.totalPrice}"></td>
-                            <td data-toggle="modal"
-                                data-target="#ModalUP" data-order-id="${order.orderId}"
-                                data-status="${order.latestStatus}"><span th:text="${order.latestStatus}"
-                                                                          th:class="${order.latestStatus == 'Hoàn thành' ? 'badge bg-success' : 'badge bg-warning'}"></span>
+                            <td>
+                                <select class="form-control" id="order-status">
+                                    <option value="Pending">Chờ xử lý</option>
+                                    <option value="Confirmed">Xác nhận</option>
+                                    <option value="Processing">Đang xử đóng gói</option>
+                                    <option value="Dispatched">Đã giao cho vận chuyển</option>
+                                    <option value="Shipping">Đang vận chuyển</option>
+                                    <option value="Delivered">Đã giao</option>
+                                    <option value="Completed">Hoàn tất</option>
+                                    <option value="Failed">Giao hàng thất bại</option>
+                                    <option value="Returned">Hoàn trả</option>
+                                    <option value="Canceled">Đã hủy</option>
+                                </select>
                             </td>
                             <td>
+                                <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu</button>
                                 <a th:href="@{/seller/order-detail/{orderId}(orderId=${order.orderId})}">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết"><i
                                             class="fa fa-eye"></i></button>
@@ -116,6 +126,7 @@
                         </tr>
                         </tbody>
                     </table>
+                    <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu</button>
                 </div>
             </div>
         </div>
@@ -123,37 +134,37 @@
     <!--
   MODAL
 -->
-    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
-         data-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group  col-md-12">
-                              <span class="thong-tin-thanh-toan">
-                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>
-                              </span>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>Chờ xác nhận</option>
-                                <option>Đang đóng gói</option>
-                                <option>Chờ lấy hàng</option>
-                                <option>Đã giao cho đơn vị vận chuyển</option>
-                            </select>
-                        </div>
-                    </div>
-                    <BR>
-                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>
-                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-                    <BR>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </div>
+<!--    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"-->
+<!--         data-keyboard="false">-->
+<!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="row">-->
+<!--                        <div class="form-group  col-md-12">-->
+<!--                              <span class="thong-tin-thanh-toan">-->
+<!--                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>-->
+<!--                              </span>-->
+<!--                        </div>-->
+<!--                        <div class="form-group col-md-12">-->
+<!--                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>-->
+<!--                            <select class="form-control" id="exampleSelect1">-->
+<!--                                <option>Chờ xác nhận</option>-->
+<!--                                <option>Đang đóng gói</option>-->
+<!--                                <option>Chờ lấy hàng</option>-->
+<!--                                <option>Đã giao cho đơn vị vận chuyển</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <BR>-->
+<!--                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>-->
+<!--                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>-->
+<!--                    <BR>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <!--
     MODAL
     -->
@@ -244,9 +255,9 @@
 
 
     //Modal
-    $("#show-emp").on("click", function () {
-        $("#ModalUP").modal({backdrop: false, keyboard: false})
-    });
+    // $("#show-emp").on("click", function () {
+    //     $("#ModalUP").modal({backdrop: false, keyboard: false})
+    // });
 </script>
 <script>
     // Function to handle the "Lưu lại" button click event
