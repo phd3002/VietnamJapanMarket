@@ -47,6 +47,9 @@ document.querySelectorAll('.payment-btn').forEach(function (button) {
 
         // Show the details for the selected payment method
         document.getElementById(this.id + 'Details').style.display = 'block';
+
+        // Update hidden input with selected payment method
+        document.getElementById('paymentMethod').value = this.dataset.method;
     });
 });
 

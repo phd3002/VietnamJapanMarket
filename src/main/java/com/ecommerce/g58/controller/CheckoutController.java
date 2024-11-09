@@ -111,27 +111,27 @@ public class CheckoutController {
         logger.info("User cart items retrieved. Total items: {}", cartItems.size());
 
         // Tính tổng giá giỏ hàng
-        double totalPrice = cartItems.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+        long totalPrice = cartItems.stream()
+                .mapToLong(item -> (long) item.getPrice() * item.getQuantity())
                 .sum();
         logger.info("Total cart price calculated: {}", totalPrice);
 
         // Tính phí vận chuyển dựa trên phương thức vận chuyển
-        double shippingFee;
+        long shippingFee;
         switch (shippingMethod) {
             case "express":
-                shippingFee = 100000.0;
+                shippingFee = 100000;
                 break;
             case "same-day":
-                shippingFee = 150000.0;
+                shippingFee = 150000;
                 break;
             default: // standard
-                shippingFee = 50000.0;
+                shippingFee = 50000;
                 break;
         }
         logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
-        double totalWithShipping = totalPrice + shippingFee;
+        long totalWithShipping = totalPrice + shippingFee;
         logger.info("Total with shipping calculated: {}", totalWithShipping);
 
         // Thêm thông tin vào model
@@ -153,7 +153,7 @@ public class CheckoutController {
         model.addAttribute("productImages", productImages);
 
         // Lấy số dư ví của người dùng
-        double walletBalance = walletService.getUserWalletBalance(user.getUserId());
+        long walletBalance = walletService.getUserWalletBalance(user.getUserId());
         model.addAttribute("walletBalance", walletBalance);
         logger.info("Wallet balance retrieved for user ID {}: {}", user.getUserId(), walletBalance);
 
@@ -182,33 +182,36 @@ public class CheckoutController {
         List<CartItem> cartItems = userCart.getCartItems();
         logger.info("User cart items retrieved for user ID {}. Total items: {}", userId, cartItems.size());
 
+        // Log the payment method to check its value
+        logger.info("Payment method selected: {}", paymentMethod);
+
         // Tính tổng giá giỏ hàng
-        double totalPrice = cartItems.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+        long totalPrice = cartItems.stream()
+                .mapToLong(item -> (long) item.getPrice() * item.getQuantity())
                 .sum();
         logger.info("Total cart price calculated: {}", totalPrice);
 
         // Tính phí vận chuyển dựa trên phương thức vận chuyển
-        double shippingFee;
+        long shippingFee;
         switch (shippingMethod) {
             case "express":
-                shippingFee = 100000.0;
+                shippingFee = 100000;
                 break;
             case "same-day":
-                shippingFee = 150000.0;
+                shippingFee = 150000;
                 break;
             default: // standard
-                shippingFee = 50000.0;
+                shippingFee = 50000;
                 break;
         }
         logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
-        double totalWithShipping = totalPrice + shippingFee;
+        long totalWithShipping = totalPrice + shippingFee;
         logger.info("Total with shipping calculated: {}", totalWithShipping);
 
         // Nếu phương thức thanh toán không phải là COD, kiểm tra số dư ví
         if (!"cod".equalsIgnoreCase(paymentMethod)) {
-            double walletBalance = walletService.getUserWalletBalance(userId);
+            long walletBalance = walletService.getUserWalletBalance(userId);
             logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
             if (walletBalance < totalWithShipping) {
                 model.addAttribute("totalWithShipping", totalWithShipping);
@@ -269,6 +272,14 @@ public class CheckoutController {
             logger.info("Order detail saved for product ID {} with quantity {}.", item.getProductId().getProductId(), item.getQuantity());
         }
 
+        // Trừ tiền trong số dư ví nếu phương thức thanh toán là "wallet"
+        if ("wallet".equalsIgnoreCase(paymentMethod)) {
+            walletService.deductFromWallet(userId, totalWithShipping);
+            logger.info("Wallet balance deducted for user ID {}. Amount deducted: {}", userId, totalWithShipping);
+        } else {
+            logger.info("Payment method is COD. No wallet deduction performed.");
+        }
+
         // Xóa tất cả sản phẩm trong giỏ hàng sau khi đã đặt hàng
         cartService.clearCart(user.getUserId());
         logger.info("Cart cleared for user ID {} after order placement.", user.getUserId());
@@ -276,6 +287,8 @@ public class CheckoutController {
         // Đặt đơn hàng cho model để hiển thị thông tin đơn hàng
         model.addAttribute("order", order);
         logger.info("Order details added to model for display on checkout-complete page.");
+
+        model.addAttribute("paymentMethod", paymentMethod);
 
         // Chuyển hướng về trang checkout-complete
         return "checkout-complete";

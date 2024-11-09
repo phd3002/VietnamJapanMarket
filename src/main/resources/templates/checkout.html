@@ -196,16 +196,16 @@
                             <div class="order-price">
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Tổng tiền hàng:</h6>
-                                    <span id="total-product-price" th:text="${totalPrice}"></span>
+                                    <span id="total-product-price" th:text="${totalPrice} + 'đ'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Tổng tiền phí vận chuyển:</h6>
-                                    <span id="total-shipping-fee">50000</span>
+                                    <span id="total-shipping-fee">50000đ</span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="title mb-0">Tổng thanh toán:</h5>
                                     <h6 id="total-order-price" style="color: #bb2d3b;"
-                                        th:text="${totalWithShipping}"></h6>
+                                        th:text="${totalWithShipping} + 'đ'"></h6>
                                 </div>
                             </div>
                         </div>

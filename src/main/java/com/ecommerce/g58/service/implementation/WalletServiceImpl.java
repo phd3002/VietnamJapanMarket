@@ -2,8 +2,10 @@ package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.WalletDTO;
 import com.ecommerce.g58.entity.Transactions;
+import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.entity.Wallet;
 import com.ecommerce.g58.repository.TransactionRepository;
+import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.repository.WalletRepository;
 import com.ecommerce.g58.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class WalletServiceImpl implements WalletService {
 
+    private static final Logger logger = LoggerFactory.getLogger(WalletServiceImpl.class);
+
     private final WalletRepository walletRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -68,8 +76,16 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public void deductFromWallet(Integer userId, double amount) {
+
+        // Lấy thực thể người dùng từ userRepository
+        Optional<Users> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("Không tìm thấy người dùng");
+        }
+        Users user = optionalUser.get();
+
         // Lấy thực thể ví của người dùng từ walletRepository
-        Optional<Wallet> optionalWallet = walletRepository.findById(userId);
+        Optional<Wallet> optionalWallet = walletRepository.findByUserId(user);
         if (optionalWallet.isEmpty()) {
             throw new IllegalArgumentException("Không tìm thấy ví của người dùng");
         }
@@ -77,12 +93,14 @@ public class WalletServiceImpl implements WalletService {
 
         // Kiểm tra nếu số dư ví đủ để thực hiện thanh toán
         Long currentBalance = wallet.getBalance();
-        if (currentBalance < amount) {
+        Long amountToDeduct = (long) amount; // Chuyển đổi amount thành Long
+
+        if (currentBalance < amountToDeduct) {
             throw new IllegalArgumentException("Số dư trong ví không đủ");
         }
 
         // Trừ số dư và lưu lại
-        Long newBalance = currentBalance - (long) amount;
+        Long newBalance = currentBalance - amountToDeduct;
         wallet.setBalance(newBalance);
 
         // Lưu lại ví đã cập nhật
@@ -91,7 +109,7 @@ public class WalletServiceImpl implements WalletService {
         // Ghi lại giao dịch
         Transactions transaction = new Transactions();
         transaction.setFromWalletId(wallet); // Lấy ví mà số tiền bị trừ
-        transaction.setAmount(BigDecimal.valueOf(amount).negate()); // Chuyển đổi sang BigDecimal và đặt giá trị âm
+        transaction.setAmount(-amountToDeduct); // Đặt giá trị âm để thể hiện trừ tiền
         transaction.setTransactionType("DEDUCT"); // Thiết lập loại giao dịch
         transaction.setDescription("Thanh toán khi mua hàng");
         transaction.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian giao dịch hiện tại
@@ -99,4 +117,5 @@ public class WalletServiceImpl implements WalletService {
         // Lưu lại giao dịch vào repository
         transactionRepository.save(transaction);
     }
+
 }
