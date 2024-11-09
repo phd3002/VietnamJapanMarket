@@ -92,13 +92,35 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
     void deleteByProductId(Products productId);
     void deleteByVariationId(ProductVariation variationId);
 
-    @Query(value = "SELECT \n" +
+    @Query(value = "WITH order_shipping AS (\n" +
+            "    SELECT order_id, status, tracking_number, updated_at\n" +
+            "    FROM shipping_status\n" +
+            "    WHERE (order_id, updated_at) IN (\n" +
+            "        SELECT order_id, MAX(updated_at)\n" +
+            "        FROM shipping_status\n" +
+            "        GROUP BY order_id\n" +
+            "    )\n" +
+            "),\n" +
+            "order_total AS (\n" +
+            "    SELECT \n" +
+            "        o.order_id,\n" +
+            "        SUM(od.quantity * od.price) as subtotal,\n" +
+            "        iv.shipping_fee,\n" +
+            "        iv.tax,\n" +
+            "        SUM(od.quantity * od.price * (1 + iv.tax/100)) + iv.shipping_fee as total_price\n" +
+            "    FROM orders o\n" +
+            "    LEFT JOIN order_details od ON o.order_id = od.order_id\n" +
+            "    LEFT JOIN invoice iv ON iv.order_id = o.order_id\n" +
+            "    GROUP BY o.order_id, iv.shipping_fee, iv.tax\n" +
+            ")\n" +
+            "\n" +
+            "SELECT\n" +
             "    s.store_name,\n" +
             "    s.store_address,\n" +
             "    s.store_phone,\n" +
-            "    (SELECT status FROM shipping_status WHERE order_id = o.order_id ORDER BY updated_at DESC LIMIT 1) AS shipping_status,\n" +
-            "    (SELECT tracking_number FROM shipping_status WHERE order_id = o.order_id ORDER BY updated_at DESC LIMIT 1) AS tracking_number,\n" +
-            "    (SELECT updated_at FROM shipping_status WHERE order_id = o.order_id ORDER BY updated_at DESC LIMIT 1) AS update_at,\n" +
+            "    os.status AS shipping_status,\n" +
+            "    os.tracking_number,\n" +
+            "    os.updated_at AS update_at,\n" +
             "    CONCAT(u.first_name, ' ', u.last_name) AS full_name,\n" +
             "    o.shipping_address,\n" +
             "    u.phone_number,\n" +
@@ -111,7 +133,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    iv.shipping_fee,\n" +
             "    iv.tax,\n" +
             "    pm.payment_method,\n" +
-            "    (od.quantity * od.price) + ((od.quantity * od.price) * (iv.tax / 100)) + iv.shipping_fee AS total_price\n" +
+            "    ot.total_price AS total_order_price\n" +
             "FROM orders o\n" +
             "LEFT JOIN users u ON o.user_id = u.user_id\n" +
             "LEFT JOIN order_details od ON o.order_id = od.order_id\n" +
@@ -122,6 +144,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "LEFT JOIN stores s ON p.store_id = s.store_id\n" +
             "LEFT JOIN invoice iv ON iv.order_id = o.order_id\n" +
             "LEFT JOIN payment pm ON pm.order_id = o.order_id\n" +
+            "LEFT JOIN order_shipping os ON os.order_id = o.order_id\n" +
+            "LEFT JOIN order_total ot ON ot.order_id = o.order_id\n" +
             "WHERE o.order_id = :orderId",
             nativeQuery = true)
     List<Object[]> getOrderDetailsByOrderId(@Param("orderId") Long orderId);

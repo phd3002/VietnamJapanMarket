@@ -162,6 +162,38 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="doughnutChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="polarAreaChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="radarChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -211,6 +243,51 @@
 
     var ctxb = $("#barChartDemo").get(0).getContext("2d");
     var barChart = new Chart(ctxb).Bar(data);
+    var pieData = [
+        { value: 120, color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1" },
+        { value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2" },
+        { value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3" }
+    ];
+    var ctxp = document.getElementById("pieChartDemo").getContext("2d");
+    var pieChart = new Chart(ctxp).Pie(pieData);
+    var ctxd = document.getElementById("doughnutChartDemo").getContext("2d");
+    var doughnutChart = new Chart(ctxd).Doughnut(pieData);
+    // Dữ liệu cho biểu đồ cực
+    var polarData = [
+        { value: 120, color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1" },
+        { value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2" },
+        { value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3" },
+        { value: 90, color: "#949FB1", highlight: "#A8B3C5", label: "Dữ liệu 4" }
+    ];
+
+    // Biểu đồ cực
+    var ctxpo = document.getElementById("polarAreaChartDemo").getContext("2d");
+    var polarAreaChart = new Chart(ctxpo).PolarArea(polarData);
+
+    // Dữ liệu cho biểu đồ radar
+    var radarData = {
+        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+        datasets: [
+            {
+                label: "Dữ liệu đầu tiên",
+                fillColor: "rgba(255, 213, 59, 0.7)",
+                strokeColor: "rgb(255, 212, 59)",
+                pointColor: "rgb(255, 212, 59)",
+                data: [65, 59, 90, 81, 56, 55]
+            },
+            {
+                label: "Dữ liệu kế tiếp",
+                fillColor: "rgba(9, 109, 239, 0.65)",
+                strokeColor: "rgb(9, 109, 239)",
+                pointColor: "rgb(9, 109, 239)",
+                data: [28, 48, 40, 19, 96, 27]
+            }
+        ]
+    };
+
+    // Biểu đồ radar
+    var ctxr = document.getElementById("radarChartDemo").getContext("2d");
+    var radarChart = new Chart(ctxr).Radar(radarData);
 </script>
 <script type="text/javascript">
     //Thời Gian
