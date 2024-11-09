@@ -209,19 +209,29 @@ public class CheckoutController {
         long totalWithShipping = totalPrice + shippingFee;
         logger.info("Total with shipping calculated: {}", totalWithShipping);
 
-        // Nếu phương thức thanh toán không phải là COD, kiểm tra số dư ví
-        if (!"cod".equalsIgnoreCase(paymentMethod)) {
+        // Nếu phương thức thanh toán là "wallet", kiểm tra số dư ví
+        if ("wallet".equalsIgnoreCase(paymentMethod)) {
             long walletBalance = walletService.getUserWalletBalance(userId);
             logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
+
+            // Kiểm tra nếu số dư ví không đủ
             if (walletBalance < totalWithShipping) {
+                // Thêm thông báo lỗi vào model và trả về trang checkout
+                model.addAttribute("errorMessage", "Bạn không đủ số dư để thực hiện giao dịch.");
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", walletBalance);
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
                 logger.warn("Insufficient wallet balance. Returning to checkout.");
-                return "checkout"; // Return to checkout if wallet balance is insufficient
+                return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
+
+            // Trừ tiền trong số dư ví nếu đủ số dư
+            walletService.deductFromWallet(userId, totalWithShipping);
+            logger.info("Wallet balance deducted for user ID {}. Amount deducted: {}", userId, totalWithShipping);
+        } else {
+            logger.info("Payment method is COD. No wallet deduction performed.");
         }
 
         // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
@@ -272,23 +282,14 @@ public class CheckoutController {
             logger.info("Order detail saved for product ID {} with quantity {}.", item.getProductId().getProductId(), item.getQuantity());
         }
 
-        // Trừ tiền trong số dư ví nếu phương thức thanh toán là "wallet"
-        if ("wallet".equalsIgnoreCase(paymentMethod)) {
-            walletService.deductFromWallet(userId, totalWithShipping);
-            logger.info("Wallet balance deducted for user ID {}. Amount deducted: {}", userId, totalWithShipping);
-        } else {
-            logger.info("Payment method is COD. No wallet deduction performed.");
-        }
-
         // Xóa tất cả sản phẩm trong giỏ hàng sau khi đã đặt hàng
         cartService.clearCart(user.getUserId());
         logger.info("Cart cleared for user ID {} after order placement.", user.getUserId());
 
         // Đặt đơn hàng cho model để hiển thị thông tin đơn hàng
         model.addAttribute("order", order);
-        logger.info("Order details added to model for display on checkout-complete page.");
-
         model.addAttribute("paymentMethod", paymentMethod);
+        logger.info("Order details added to model for display on checkout-complete page.");
 
         // Chuyển hướng về trang checkout-complete
         return "checkout-complete";

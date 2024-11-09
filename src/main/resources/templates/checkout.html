@@ -93,13 +93,10 @@
         <div class="container">
             <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
             </div>
-            <div id="insufficient-balance-alert" class="alert alert-danger" style="display: none;">
-                Bạn không đủ số dư để thực hiện giao dịch.
+            <div id="insufficient-balance-alert" th:if="${errorMessage}" class="alert alert-danger">
+                <p th:text="${errorMessage}"></p>
             </div>
             <form action="/checkout" method="post">
-                <div th:if="${errorMessage}" class="alert alert-danger">
-                    <p th:text="${errorMessage}"></p>
-                </div>
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
