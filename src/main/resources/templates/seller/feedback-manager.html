@@ -88,7 +88,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="feedback : ${feedbacks}" th:attr="data-id=${feedback.feedbackId}">
-                            <td>Ghế làm việc Zuno</td>
+                            <td th:text="${feedback.getVariationId().getProductId().getProductName()}"></td>
                             <td th:text="${feedback.getUserId().getEmail()}"></td>
                             <td th:text="${feedback.getRating()}"></td>
                             <td th:text="${feedback.getComment()}"></td>
