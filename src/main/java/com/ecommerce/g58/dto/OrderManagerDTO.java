@@ -12,4 +12,16 @@ public class OrderManagerDTO {
     private Integer totalProducts;
     private Integer totalPrice;
     private String latestStatus;
+
+    public OrderManagerDTO() {
+    }
+
+    public OrderManagerDTO(Integer orderId, String customerName, String productNames, Integer totalProducts, Integer totalPrice, String latestStatus) {
+        this.orderId = orderId;
+        this.customerName = customerName;
+        this.productNames = productNames;
+        this.totalProducts = totalProducts;
+        this.totalPrice = totalPrice;
+        this.latestStatus = latestStatus;
+    }
 }

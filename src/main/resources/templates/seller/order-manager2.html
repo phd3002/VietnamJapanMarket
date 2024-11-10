@@ -86,7 +86,7 @@
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                         <tr>
-                            <th>ID đơn hàng</th>
+                            <th>ID Đơn hàng</th>
                             <th>Khách hàng</th>
                             <th>Đơn hàng</th>
                             <th>Số lượng</th>
@@ -96,36 +96,90 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="order : ${orderss}">
+                        <tr th:each="order : ${orders}">
                             <td th:text="${order.orderId}"></td>
                             <td th:text="${order.customerName}"></td>
                             <td th:text="${order.productNames}"></td>
                             <td th:text="${order.totalProducts}"></td>
                             <td th:text="${order.totalPrice}"></td>
                             <td>
-                                <select class="form-control" id="order-status">
-                                    <option value="Pending">Chờ xử lý</option>
-                                    <option value="Confirmed">Xác nhận</option>
-                                    <option value="Processing">Đang xử đóng gói</option>
-                                    <option value="Dispatched">Đã giao cho vận chuyển</option>
-                                    <option value="Shipping">Đang vận chuyển</option>
-                                    <option value="Delivered">Đã giao</option>
-                                    <option value="Completed">Hoàn tất</option>
-                                    <option value="Failed">Giao hàng thất bại</option>
-                                    <option value="Returned">Hoàn trả</option>
-                                    <option value="Canceled">Đã hủy</option>
-                                </select>
+                                <form method="post" th:action="@{/seller/update-order-status}">
+                                    <input type="hidden" name="orderId" th:value="${order.orderId}" />
+                                    <select class="form-control" id="order-status" name="status" th:value="${order.latestStatus}" onchange="this.form.submit()">
+                                        <option value="Pending" th:selected="${order.latestStatus == 'Pending'}">Chờ xử lý</option>
+                                        <option value="Confirmed" th:selected="${order.latestStatus == 'Confirmed'}">Xác nhận</option>
+                                        <option value="Processing" th:selected="${order.latestStatus == 'Processing'}">Đang xử đóng gói</option>
+                                        <option value="Dispatched" th:selected="${order.latestStatus == 'Dispatched'}">Đã giao cho vận chuyển</option>
+                                        <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'}">Đang vận chuyển</option>
+                                        <option value="Delivered" th:selected="${order.latestStatus == 'Delivered'}">Đã giao</option>
+                                        <option value="Completed" th:selected="${order.latestStatus == 'Completed'}">Hoàn tất</option>
+                                        <option value="Failed" th:selected="${order.latestStatus == 'Failed'}">Giao hàng thất bại</option>
+                                        <option value="Returned" th:selected="${order.latestStatus == 'Returned'}">Hoàn trả</option>
+                                        <option value="Canceled" th:selected="${order.latestStatus == 'Canceled'}">Đã hủy</option>
+                                    </select>
+                                </form>
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu</button>
+                                <button class="btn btn-primary btn-sm btn-save" type="button" title="Chỉnh sửa"
+                                        onclick="saveOrderStatus('[[${order.orderId}]]')">Lưu
+                                </button>
                                 <a th:href="@{/seller/order-detail/{orderId}(orderId=${order.orderId})}">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết"><i
-                                            class="fa fa-eye"></i></button>
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
                                 </a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
+                    <script>
+                        function updateOrderStatus(orderId, status) {
+                            fetch(`/seller/update-order-status`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ orderId: orderId, status: status })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        console.log('Cập nhật tình trạng đơn hàng thành công');
+                                    } else {
+                                        console.error('Có lỗi khi cập nhật tình trạng đơn hàng');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                        }
+                    </script>
+                    <script>
+
+                        function saveOrderStatus(orderId) {
+                            const status = document.querySelector(`#sampleTable tr[data-order-id='${orderId}'] select#order-status`).value;
+
+                            fetch(`/seller/update-order-status`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({orderId: orderId, status: status})
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        alert('Cập nhật tình trạng đơn hàng thành công');
+                                    } else {
+                                        alert('Có lỗi khi cập nhật tình trạng đơn hàng');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('Có lỗi khi cập nhật tình trạng đơn hàng');
+                                });
+                        }
+                    </script>
                     <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu</button>
                 </div>
             </div>
@@ -134,37 +188,37 @@
     <!--
   MODAL
 -->
-<!--    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"-->
-<!--         data-keyboard="false">-->
-<!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-body">-->
-<!--                    <div class="row">-->
-<!--                        <div class="form-group  col-md-12">-->
-<!--                              <span class="thong-tin-thanh-toan">-->
-<!--                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>-->
-<!--                              </span>-->
-<!--                        </div>-->
-<!--                        <div class="form-group col-md-12">-->
-<!--                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>-->
-<!--                            <select class="form-control" id="exampleSelect1">-->
-<!--                                <option>Chờ xác nhận</option>-->
-<!--                                <option>Đang đóng gói</option>-->
-<!--                                <option>Chờ lấy hàng</option>-->
-<!--                                <option>Đã giao cho đơn vị vận chuyển</option>-->
-<!--                            </select>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <BR>-->
-<!--                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>-->
-<!--                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>-->
-<!--                    <BR>-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"-->
+    <!--         data-keyboard="false">-->
+    <!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
+    <!--            <div class="modal-content">-->
+    <!--                <div class="modal-body">-->
+    <!--                    <div class="row">-->
+    <!--                        <div class="form-group  col-md-12">-->
+    <!--                              <span class="thong-tin-thanh-toan">-->
+    <!--                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>-->
+    <!--                              </span>-->
+    <!--                        </div>-->
+    <!--                        <div class="form-group col-md-12">-->
+    <!--                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>-->
+    <!--                            <select class="form-control" id="exampleSelect1">-->
+    <!--                                <option>Chờ xác nhận</option>-->
+    <!--                                <option>Đang đóng gói</option>-->
+    <!--                                <option>Chờ lấy hàng</option>-->
+    <!--                                <option>Đã giao cho đơn vị vận chuyển</option>-->
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                    <BR>-->
+    <!--                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>-->
+    <!--                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>-->
+    <!--                    <BR>-->
+    <!--                </div>-->
+    <!--                <div class="modal-footer">-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <!--
     MODAL
     -->

@@ -14,5 +14,9 @@ public interface OrderService {
 
     List<OrderManagerDTO> getOrdersForStore(Integer userId);
 
+    List<OrderManagerDTO> getOrdersByStoreId(Integer storeId);
+
     void updateOrderStatus(Orders orderId, String newStatus);
+
+    void updateOrderStatuss(Integer orderId, String status);
 }

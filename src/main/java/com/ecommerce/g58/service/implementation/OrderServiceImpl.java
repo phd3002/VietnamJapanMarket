@@ -92,11 +92,33 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderManagerDTO> getOrdersByStoreId(Integer storeId) {
+        List<Object[]> results = orderRepository.findOrdersByStoreId(storeId);
+        List<OrderManagerDTO> orders = new ArrayList<>();
+        for (Object[] result : results) {
+            OrderManagerDTO order = new OrderManagerDTO();
+            order.setOrderId((Integer) result[0]);
+            order.setCustomerName((String) result[1]);
+            order.setProductNames((String) result[2]);
+            order.setTotalProducts(((Number) result[3]).intValue());
+            order.setTotalPrice(((Number) result[4]).intValue());
+            order.setLatestStatus((String) result[5]);
+            orders.add(order);
+        }
+        return orders;
+    }
+
+    @Override
     public void updateOrderStatus(Orders orderId, String newStatus) {
         ShippingStatus status = new ShippingStatus();
         status.setOrderId(orderId);
         status.setStatus(newStatus);
         status.setUpdatedAt(LocalDateTime.now());
         shippingStatusRepository.save(status);
+    }
+
+    @Override
+    public void updateOrderStatuss(Integer orderId, String status) {
+        shippingStatusRepository.updateOrderStatus(orderId, status);
     }
 }
