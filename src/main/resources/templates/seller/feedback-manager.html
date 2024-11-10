@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" th:href="@{/seller/css/main.css}" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -53,7 +53,7 @@
         </li>
         <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item active" href="feedback-manager.html"><i
+        <li><a class="app-menu__item active" href="/seller/feedback-manager"><i
                 class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
         </li>
         <li><a class="app-menu__item" href="shipping-manager.html"><i
@@ -87,14 +87,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr th:each="feedback : ${feedbacks}" th:attr="data-id=${feedback.feedbackId}">
                             <td>Ghế làm việc Zuno</td>
-                            <td>Triệu Thanh Phú</td>
-                            <td>5</td>
-                            <td>Vip pro 123</td>
-                            <td>07/10/2024</td>
+                            <td th:text="${feedback.getUserId().getEmail()}"></td>
+                            <td th:text="${feedback.getRating()}"></td>
+                            <td th:text="${feedback.getComment()}"></td>
+                            <td th:text="${feedback.getCreatedAt()}"></td>
                             <td>
-                                <a href="reply-feedback.html">
+                                <a href="/seller/reply-feedback" class="link-reply">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Phản hồi"><i
                                             class="fa fa-envelope-open-text"></i></button>
                                 </a>
@@ -108,19 +108,18 @@
     </div>
 </main>
 <!-- Essential javascripts for application to work-->
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="../../static/seller/js/main.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <!-- The javascript plugin to display page loading on top-->
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <!-- Data table plugin-->
-<script type="text/javascript" src="../../static/seller/js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="../../static/seller/js/plugins/dataTables.bootstrap.min.js"></script>
+<script th:src="@{/seller/js/plugins/jquery.dataTables.min.js}"></script>
+<script th:src="@{/seller/js/plugins/dataTables.bootstrap.min.js}"></script>
 <script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
     //Thời Gian
@@ -174,6 +173,12 @@
             win.print();
         }
     }
+
+    $(".link-reply").on('click', (event) => {
+        event.preventDefault();
+        const feedbackId = event.target.closest("tr").getAttribute('data-id')
+        document.location.href = "/seller/reply-feedback/" + feedbackId;
+    })
 </script>
 </body>
 

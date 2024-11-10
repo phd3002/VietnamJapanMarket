@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" th:href="@{/seller/css/main.css}" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -53,7 +53,7 @@
         </li>
         <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item active" href="feedback-manager.html"><i
+        <li><a class="app-menu__item active" href="/seller/feedback-manager"><i
                 class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
         </li>
         <li><a class="app-menu__item" href="shipping-manager.html"><i
@@ -77,14 +77,15 @@
                 <div class="tile-body">
                     <h2>Phản hồi đánh giá của khách hàng</h2>
                     <div>
-                        <p><strong>Tên sản phẩm:</strong> Ghế làm việc Zuno</p>
-                        <p><strong>Đánh giá của khách hàng:</strong> Vip pro 123</p>
-                        <p><strong>Xếp hạng:</strong> 5 sao</p>
-                        <p><strong>Ngày đánh giá:</strong> 07/10/2024</p>
+                        <p><strong>Tên sản phẩm:</strong> <span th:text="${feedback.getVariationId().getProductId().getProductName()}"></span></p>
+                        <p><strong>Đánh giá của khách hàng:</strong> <span th:text="${feedback.getComment()}"></span></p>
+                        <p><strong>Xếp hạng:</strong> <span th:text="${feedback.getRating()} + ' sao'"></span></p>
+                        <p><strong>Ngày đánh giá:</strong> <span th:text="${feedback.getCreatedAt()}"></span></p>
                     </div>
                     <form>
+                        <input type="hidden" name="feedback_id" th:value="${feedback.feedbackId}" />
                         <label for="reply">Nội dung phản hồi:</label><br>
-                        <textarea id="reply" name="reply_content" rows="4" cols="50"></textarea><br><br>
+                        <textarea id="reply" name="reply_content" rows="4" cols="50" th:text="${feedback.getSellerFeedback()}"></textarea><br><br>
                         <button class="btn btn-save" type="submit" id="saveButton">Gửi</button>
                     </form>
                 </div>
@@ -93,19 +94,19 @@
     </div>
 </main>
 <!-- Essential javascripts for application to work-->
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="src/jquery.table2excel.js"></script>
-<script src="../../static/seller/js/main.js"></script>
 <!-- The javascript plugin to display page loading on top-->
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <!-- Data table plugin-->
-<script type="text/javascript" src="../../static/seller/js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="../../static/seller/js/plugins/dataTables.bootstrap.min.js"></script>
+<script th:src="@{/seller/js/plugins/jquery.dataTables.min.js}"></script>
+<script th:src="@{/seller/js/plugins/dataTables.bootstrap.min.js}"></script>
 <script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
     //Thời Gian
@@ -161,13 +162,22 @@
             buttons: ["Hủy bỏ", "Đồng ý"],
         }).then((willSave) => {
             if (willSave) {
-                // Sau khi xác nhận, hiển thị thông báo thành công
-                swal("Phản hồi của bạn đã được gửi!", {
-                    icon: "success",
-                }).then(() => {
-                    // Sau khi thông báo thành công, chuyển hướng đến trang quản lý đánh giá
-                    window.location.href = 'feedback-manager.html';
-                });
+                const feedbackId = $("input[name='feedback_id']").val();
+                const content = $("textarea[name='reply_content']").val();
+                fetch(`/seller/seller-feedback?` + new URLSearchParams({
+                    feedback_id: feedbackId,
+                    reply_content: content,
+                }).toString()).then(res => {
+                    if (res.ok) {
+                        // Sau khi xác nhận, hiển thị thông báo thành công
+                        swal("Phản hồi của bạn đã được gửi!", {
+                            icon: "success",
+                        }).then(() => {
+                            // Sau khi thông báo thành công, chuyển hướng đến trang quản lý đánh giá
+                            window.location.href = '';
+                        });
+                    }
+                })
             }
         });
     });
