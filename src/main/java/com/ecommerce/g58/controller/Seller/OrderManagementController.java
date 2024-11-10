@@ -11,7 +11,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -33,7 +38,24 @@ public class OrderManagementController {
         Users user = userService.findByEmail(email);
         Integer userId = user.getUserId();
         List<OrderManagerDTO> orders = orderService.getOrdersForStore(userId);
-        model.addAttribute("orders", orders);
+        model.addAttribute("orderss", orders);
         return "seller/order-manager";
     }
+
+    @GetMapping("/seller/order-manager/{storeId}")
+    public String getOrderManagementPage(@PathVariable("storeId") Integer storeId, Model model, Principal principal) {
+        List<OrderManagerDTO> orders = orderService.getOrdersByStoreId(storeId);
+        model.addAttribute("orders", orders);
+        return "seller/order-manager2";
+    }
+
+    @PostMapping("/seller/update-order-status")
+    public String updateOrderStatus(@RequestParam("orderId") Integer orderId, @RequestParam("status") String status, HttpServletRequest request) {
+        orderService.updateOrderStatuss(orderId, status);
+        System.out.println("Order status updated to " + status);
+//        return "redirect:/seller/order-manager/" + storeId;
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;  // Redirects to the same URL
+    }
+
 }
