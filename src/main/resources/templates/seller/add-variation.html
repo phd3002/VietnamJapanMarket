@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Thêm sản phẩm | Kênh người bán</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <!-- Font-icon seller-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- or -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body class="app sidebar-mini rtl">
+<!-- Navbar-->
+<header class="app-header">
+    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                    aria-label="Hide Sidebar"></a>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+
+
+        <!-- User Menu-->
+        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+
+        </li>
+    </ul>
+</header>
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar">
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+                                        alt="User Image">
+    </div>
+    <hr>
+    <ul class="app-menu">
+        <li><a class="app-menu__item" href="store-info-manager.html"><i
+                class='app-menu__icon bx bx-info-square'></i><span
+                class="app-menu__label">Thông tin cửa hàng</span></a></li>
+        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+                class="app-menu__label">Bảng điều khiển</span></a></li>
+        <li><a class="app-menu__item active" href="product-manager.html"><i
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+        </li>
+        <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="feedback-manager.html"><i
+                class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
+        </li>
+        <li><a class="app-menu__item" href="shipping-manager.html"><i
+                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
+        </li>
+        <li><a class="app-menu__item" href="income-manager.html"><i
+                class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
+        </li>
+    </ul>
+</aside>
+<main class="app-content">
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item">Danh sách sản phẩm</li>
+            <li class="breadcrumb-item">Thêm biến thể</li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <h3 class="tile-title">Tạo mới biến thể</h3>
+                <div class="tile-body">
+                    <form class="row" enctype="multipart/form-data">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tên ảnh biến thể</label>
+                                <input class="form-control" type="text" name="imageName"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <!-- Thumbnail Image Upload -->
+                                <label class="control-label">Thumbnail</label>
+                                <input class="form-control" type="file" id="thumbnail" name="thumbnail" accept="image/*"
+                                       onchange="previewImage(this, 'thumbnailPreview')" required/>
+                                <div id="thumbnailPreview" class="image-preview"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <!-- 1st Image Upload -->
+                                <label class="control-label">1st Image</label>
+                                <input class="form-control" type="file" id="firstImage" name="firstImage"
+                                       accept="image/*" onchange="previewImage(this, 'firstImagePreview')"/>
+                                <div id="firstImagePreview" class="image-preview"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <!-- 2nd Image Upload -->
+                                <label class="control-label">2nd Image</label>
+                                <input class="form-control" type="file" id="secondImage" name="secondImage"
+                                       accept="image/*" onchange="previewImage(this, 'secondImagePreview')"/>
+                                <div id="secondImagePreview" class="image-preview"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <!-- 3rd Image Upload -->
+                                <label class="control-label">3rd Image</label>
+                                <input class="form-control" type="file" id="thirdImage" name="thirdImage"
+                                       accept="image/*" onchange="previewImage(this, 'thirdImagePreview')"/>
+                                <div id="thirdImagePreview" class="image-preview"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Màu sắc</label>
+                                <select class="form-control" required>
+                                    <option value="" disabled selected>-- Chọn màu sắc --</option>
+                                    <option>Đen</option>
+                                    <option>Xanh</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Kích thước</label>
+                                <select class="form-control" th:field="*{size.sizeId}" required>
+                                    <option value="" disabled selected>-- Chọn kích thước --</option>
+                                    <option>X</option>
+                                    <option>S</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Số lượng</label>
+                                <input class="form-control" type="number" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-save" type="submit">Tạo biến thể</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+<script>
+    function previewImage(input, previewId) {
+        const previewDiv = document.getElementById(previewId);
+        previewDiv.innerHTML = ""; // Clear any existing content
+
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.margin = "10px";
+                img.height = 150;
+                img.width = 150;
+                img.style.objectFit = "cover";
+
+                // Create a small "X" button to delete the image
+                const removeButton = document.createElement('span');
+                removeButton.innerHTML = "&#10006;";  // Unicode for "X"
+                removeButton.style.position = "absolute";
+                removeButton.style.top = "5px";
+                removeButton.style.right = "5px";
+                removeButton.style.color = "red";
+                removeButton.style.fontSize = "20px";
+                removeButton.style.cursor = "pointer";
+
+                // Function to remove the image preview
+                removeButton.onclick = function () {
+                    input.value = "";  // Clear the input
+                    previewDiv.innerHTML = "";  // Remove the preview
+                };
+
+                // Create a container for the image and remove button
+                const imageContainer = document.createElement('div');
+                imageContainer.style.position = "relative";
+                imageContainer.style.display = "inline-block";
+                imageContainer.appendChild(img);
+                imageContainer.appendChild(removeButton);
+
+                previewDiv.appendChild(imageContainer);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+</body>
+
+</html>
