@@ -70,7 +70,7 @@
                     <div class="row element-button">
                         <div class="col-sm-2">
 
-                            <a class="btn btn-add btn-sm" href="add-shipping.html" title="Thêm"><i
+                            <a class="btn btn-add btn-sm" href="/add-shipping-unit" title="Thêm"><i
                                     class="fas fa-plus"></i>
                                 Thêm đơn vị vận chuyển mới</a>
                         </div>
@@ -124,8 +124,7 @@
 <!--                            <td th:text="${unit.totalProcessedOrders}"></td>-->
 <!--                            <td th:text="${unit.totalPartnerStores}"></td>-->
                             <td>
-                                <form th:action="@{/delete-shipping-unit}" method="post">
-                                    <input type="hidden" name="id" th:value="${unit.unitId}" />
+                                <form th:action="@{/delete-shipping-unit/{unitId}(unitId=${unit.unitId})}" method="post">
                                     <button class="btn btn-primary btn-sm trash" type="submit" title="Xóa">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>

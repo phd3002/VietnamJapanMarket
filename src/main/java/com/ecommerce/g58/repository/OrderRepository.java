@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -137,4 +138,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "    o.order_id, u.first_name, u.last_name, o.total_price",
             nativeQuery = true)
     List<Object[]> findOrdersByStoreId(@Param("storeId") Integer storeId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE orders o SET o.unit_id = NULL WHERE o.unit_id = :unitId", nativeQuery = true)
+    void unsetShippingUnitInOrders(@Param("unitId") int unitId);
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -22,14 +23,20 @@ public class ShippingUnitManagementController {
         return "admin/shipping-manager";
     }
 
+    @GetMapping("/add-shipping-unit")
+    public String showAddShippingUnitForm(Model model) {
+        model.addAttribute("shippingUnit", new ShippingUnit());
+        return "admin/add-shipping";
+    }
+
     @PostMapping("/add-shipping-unit")
     public String addShippingUnit(ShippingUnit shippingUnit) {
         shippingUnitService.addShippingUnit(shippingUnit);
         return "redirect:/list-shipping-unit";
     }
 
-    @PostMapping("/delete-shipping-unit")
-    public String deleteShippingUnit(Integer id) {
+    @PostMapping("/delete-shipping-unit/{unitId}")
+    public String deleteShippingUnit(@PathVariable("unitId") int id) {
         if (shippingUnitService.existsById(id)) {
             shippingUnitService.deleteShippingUnit(id);
         }

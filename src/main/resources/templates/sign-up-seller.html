@@ -64,45 +64,45 @@
 
                         <div class="form-group">
                             <label>Địa chỉ giao hàng</label>
-                            <select id="countrySelect" name="countryId" onchange="updateAddressFields()" required>
-                                <option value="">Chọn quốc gia</option>
-                                <option value="1">Việt Nam</option>
-                                <option value="2">Nhật Bản</option>
-                            </select>
+<!--                            <select id="countrySelect" name="countryId" onchange="updateAddressFields()" required>-->
+<!--                                <option value="">Chọn quốc gia</option>-->
+<!--                                <option value="1">Việt Nam</option>-->
+<!--                                <option value="2">Nhật Bản</option>-->
+<!--                            </select>-->
                         </div>
 
                         <!-- Vietnam Fields -->
-                        <div id="vietnamFields" class="address-fields hidden">
-                            <div class="form-group">
-                                <label>郵便番号 (Mã bưu điện)</label>
-                                <input type="text" id="vnPostalCode" name="postalCode" placeholder="XXX-XXXX" maxlength="8">
-                            </div>
+<!--                        <div id="vietnamFields" class="address-fields hidden">-->
+<!--                            <div class="form-group">-->
+<!--                                <label>郵便番号 (Mã bưu điện)</label>-->
+<!--                                <input type="text" id="vnPostalCode" name="postalCode" placeholder="XXX-XXXX" maxlength="8">-->
+<!--                            </div>-->
 
-                            <div class="form-group">
-                                <label>Tỉnh/Thành phố</label>
-                                <select id="vnCity" name="city">
-                                    <option value="">Chọn tỉnh/thành phố</option>
-                                    <option value="Hà Nội">Hà Nội</option>
-                                    <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-                                    <!-- More options can be added here -->
-                                </select>
-                            </div>
+<!--                            <div class="form-group">-->
+<!--                                <label>Tỉnh/Thành phố</label>-->
+<!--                                <select id="vnCity" name="city">-->
+<!--                                    <option value="">Chọn tỉnh/thành phố</option>-->
+<!--                                    <option value="Hà Nội">Hà Nội</option>-->
+<!--                                    <option value="Hồ Chí Minh">Hồ Chí Minh</option>-->
+<!--                                    &lt;!&ndash; More options can be added here &ndash;&gt;-->
+<!--                                </select>-->
+<!--                            </div>-->
 
-                            <div class="form-group">
-                                <label>Quận/Huyện</label>
-                                <select id="vnDistrict" name="district">
-                                    <option value="">Chọn quận/huyện</option>
-                                    <option value="Hoàn Kiếm">Hoàn Kiếm</option>
-                                    <option value="Ba Đình">Ba Đình</option>
-                                    <!-- More options can be added here -->
-                                </select>
-                            </div>
+<!--                            <div class="form-group">-->
+<!--                                <label>Quận/Huyện</label>-->
+<!--                                <select id="vnDistrict" name="district">-->
+<!--                                    <option value="">Chọn quận/huyện</option>-->
+<!--                                    <option value="Hoàn Kiếm">Hoàn Kiếm</option>-->
+<!--                                    <option value="Ba Đình">Ba Đình</option>-->
+<!--                                    &lt;!&ndash; More options can be added here &ndash;&gt;-->
+<!--                                </select>-->
+<!--                            </div>-->
 
-                            <div class="form-group">
-                                <label>Địa chỉ chi tiết</label>
-                                <input type="text" id="vnStoreAddress" name="storeAddress" placeholder="Số nhà, tên đường, phường/xã...">
-                            </div>
-                        </div>
+<!--                            <div class="form-group">-->
+<!--                                <label>Địa chỉ chi tiết</label>-->
+<!--                                <input type="text" id="vnStoreAddress" name="storeAddress" placeholder="Số nhà, tên đường, phường/xã...">-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                         <!-- Japan Fields -->
                         <div id="japanFields" class="address-fields hidden">
@@ -143,50 +143,50 @@
                         </div>
                     </form>
 
-                    <script>
-                        function updateAddressFields() {
-                            var countrySelect = document.getElementById("countrySelect");
-                            var selectedCountry = countrySelect.value;
+<!--                    <script>-->
+<!--                        function updateAddressFields() {-->
+<!--                            var countrySelect = document.getElementById("countrySelect");-->
+<!--                            var selectedCountry = countrySelect.value;-->
 
-                            // Get the elements for Vietnam and Japan fields
-                            var vietnamFields = document.getElementById("vietnamFields");
-                            var japanFields = document.getElementById("japanFields");
+<!--                            // Get the elements for Vietnam and Japan fields-->
+<!--                            var vietnamFields = document.getElementById("vietnamFields");-->
+<!--                            var japanFields = document.getElementById("japanFields");-->
 
-                            // Get all input elements within Vietnam and Japan fields
-                            var vnInputs = vietnamFields.querySelectorAll("input, select");
-                            var jpInputs = japanFields.querySelectorAll("input, select");
+<!--                            // Get all input elements within Vietnam and Japan fields-->
+<!--                            var vnInputs = vietnamFields.querySelectorAll("input, select");-->
+<!--                            var jpInputs = japanFields.querySelectorAll("input, select");-->
 
-                            // Hide all address fields initially and remove required attributes
-                            vietnamFields.classList.add("hidden");
-                            japanFields.classList.add("hidden");
+<!--                            // Hide all address fields initially and remove required attributes-->
+<!--                            vietnamFields.classList.add("hidden");-->
+<!--                            japanFields.classList.add("hidden");-->
 
-                            vnInputs.forEach(function(input) {
-                                input.required = false;
-                            });
+<!--                            vnInputs.forEach(function(input) {-->
+<!--                                input.required = false;-->
+<!--                            });-->
 
-                            jpInputs.forEach(function(input) {
-                                input.required = false;
-                            });
+<!--                            jpInputs.forEach(function(input) {-->
+<!--                                input.required = false;-->
+<!--                            });-->
 
-                            // Show fields and add required attributes based on selected country
-                            if (selectedCountry === "1") {
-                                vietnamFields.classList.remove("hidden");
-                                vnInputs.forEach(function(input) {
-                                    input.required = true;
-                                });
-                            } else if (selectedCountry === "2") {
-                                japanFields.classList.remove("hidden");
-                                jpInputs.forEach(function(input) {
-                                    input.required = true;
-                                });
-                            }
-                        }
-                    </script>
-                    <style>
-                        .hidden {
-                            display: none;
-                        }
-                    </style>
+<!--                            // Show fields and add required attributes based on selected country-->
+<!--                            if (selectedCountry === "1") {-->
+<!--                                vietnamFields.classList.remove("hidden");-->
+<!--                                vnInputs.forEach(function(input) {-->
+<!--                                    input.required = true;-->
+<!--                                });-->
+<!--                            } else if (selectedCountry === "2") {-->
+<!--                                japanFields.classList.remove("hidden");-->
+<!--                                jpInputs.forEach(function(input) {-->
+<!--                                    input.required = true;-->
+<!--                                });-->
+<!--                            }-->
+<!--                        }-->
+<!--                    </script>-->
+<!--                    <style>-->
+<!--                        .hidden {-->
+<!--                            display: none;-->
+<!--                        }-->
+<!--                    </style>-->
                 </div>
             </div>
         </div>
