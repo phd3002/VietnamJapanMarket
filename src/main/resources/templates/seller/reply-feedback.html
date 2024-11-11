@@ -155,6 +155,14 @@
         // Ngăn chặn form tự động submit
         event.preventDefault();
 
+        const feedbackId = $("input[name='feedback_id']").val();
+        const content = $("textarea[name='reply_content']").val();
+
+        if ((!content || /^\s*$/.test(content))) {
+            alert("Your feedback should not be empty");
+            return;
+        }
+
         // Hiển thị hộp thoại xác nhận
         swal({
             title: "Xác nhận",
@@ -162,8 +170,6 @@
             buttons: ["Hủy bỏ", "Đồng ý"],
         }).then((willSave) => {
             if (willSave) {
-                const feedbackId = $("input[name='feedback_id']").val();
-                const content = $("textarea[name='reply_content']").val();
                 fetch(`/seller/seller-feedback?` + new URLSearchParams({
                     feedback_id: feedbackId,
                     reply_content: content,

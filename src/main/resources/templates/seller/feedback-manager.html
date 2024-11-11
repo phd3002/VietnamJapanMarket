@@ -95,7 +95,7 @@
                             <td th:text="${feedback.getCreatedAt()}"></td>
                             <td>
                                 <a href="/seller/reply-feedback" class="link-reply">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Phản hồi"><i
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Phản hồi" th:disabled="${!feedback.getSellerFeedback().isBlank()}"><i
                                             class="fa fa-envelope-open-text"></i></button>
                                 </a>
                             </td>
