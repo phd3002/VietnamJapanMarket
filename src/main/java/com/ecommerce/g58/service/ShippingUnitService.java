@@ -11,4 +11,10 @@ public interface ShippingUnitService {
     List<ShippingUnit> getAllShippingUnits();
 
     long getTotalShippingUnits();
+
+    void addShippingUnit(ShippingUnit shippingUnit);
+
+    void deleteShippingUnit(int id);
+
+    boolean existsById(int id);
 }

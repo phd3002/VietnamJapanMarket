@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -111,26 +111,30 @@
                             <th>Tên đơn vị vận chuyển</th>
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
-                            <th>Tổng số đơn hàng đã xử lý</th>
-                            <th>Tổng số cửa hàng hợp tác</th>
+<!--                            <th>Tổng số đơn hàng đã xử lý</th>-->
+<!--                            <th>Tổng số cửa hàng hợp tác</th>-->
                             <th>Chức năng</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Viettel Post</td>
-                            <td>0901234567</td>
-                            <td>123 Đường ABC, Quận 1, TP. HCM</td>
-                            <td>150 đơn hàng</td>
-                            <td>150</td>
+                        <tr th:each="unit : ${shippingUnits}">
+                            <td th:text="${unit.unitName}"></td>
+                            <td th:text="${unit.unitContact}"></td>
+                            <td th:text="${unit.unitAddress}"></td>
+<!--                            <td th:text="${unit.totalProcessedOrders}"></td>-->
+<!--                            <td th:text="${unit.totalPartnerStores}"></td>-->
                             <td>
-                                <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                        onclick="myFunction(this)"><i class="fas fa-trash-alt"></i>
-                                </button>
+                                <form th:action="@{/delete-shipping-unit}" method="post">
+                                    <input type="hidden" name="id" th:value="${unit.unitId}" />
+                                    <button class="btn btn-primary btn-sm trash" type="submit" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
@@ -139,19 +143,20 @@
 
 
 <!-- Essential javascripts for application to work-->
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="../../static/seller/js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
-<!-- Page specific javascripts-->
+<script th:src="@{/seller/js/jquery.table2excel.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
+<!-- The javascript plugin to display page loading on top -->
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+<!-- Page specific javascripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="../../static/seller/js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="../../static/seller/js/plugins/dataTables.bootstrap.min.js"></script>
+<!-- Data table plugin -->
+<script th:src="@{/seller/js/plugins/jquery.dataTables.min.js}" type="text/javascript"></script>
+<script th:src="@{/seller/js/plugins/dataTables.bootstrap.min.js}" type="text/javascript"></script>
+
 <script type="text/javascript">
     $('#sampleTable').DataTable();
 

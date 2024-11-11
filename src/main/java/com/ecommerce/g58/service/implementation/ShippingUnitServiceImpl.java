@@ -23,4 +23,21 @@ public class ShippingUnitServiceImpl implements ShippingUnitService {
     public long getTotalShippingUnits() {
         return shippingUnitRepository.count();
     }
+
+    @Override
+    public void addShippingUnit(ShippingUnit shippingUnit) {
+        shippingUnitRepository.save(shippingUnit);
+    }
+
+    @Override
+    public void deleteShippingUnit(int id) {
+        if (shippingUnitRepository.existsById(id)) {
+            shippingUnitRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return shippingUnitRepository.existsById(id);
+    }
 }
