@@ -128,3 +128,21 @@ window.addEventListener("beforeunload", function () {
         credentials: "same-origin" // Ensures the session is maintained
     }).catch(error => console.error("Error canceling checkout:", error));
 });
+
+// Assuming the store's country is available in a hidden field or data attribute
+const storeCountry = document.getElementById("store-country").value; // Hidden field with store country
+
+document.getElementById("country").addEventListener("change", function () {
+    const userCountry = this.value;
+    const codButton = document.getElementById("cod");
+
+    if (userCountry !== storeCountry) {
+        codButton.disabled = true;
+        codButton.classList.add("disabled"); // Optional: Add a class to style it as disabled
+        codButton.classList.remove("selected"); // Remove selection if previously selected
+        document.getElementById("paymentMethod").value = "wallet"; // Set default payment method to wallet
+    } else {
+        codButton.disabled = false;
+        codButton.classList.remove("disabled");
+    }
+});

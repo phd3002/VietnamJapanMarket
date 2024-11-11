@@ -6,6 +6,7 @@ import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
 import com.ecommerce.g58.service.CartService;
+import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +34,9 @@ public class CheckoutController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private StoreService storeService;
 
     @Autowired
     private UserService userService;
@@ -101,6 +102,15 @@ public class CheckoutController {
         Integer userId = user.getUserId();
         session.setAttribute("userId", userId);
         logger.info("User ID set in session: {}", userId);
+
+        // Retrieve store information by owner ID
+        Optional<Stores> storeOpt = storeService.findByOwnerId(user);
+        if (storeOpt.isPresent()) {
+            model.addAttribute("store", storeOpt.get());
+            logger.info("Store found for user ID {}: {}", userId, storeOpt.get().getStoreName());
+        } else {
+            logger.warn("Store not found for user ID: {}", userId);
+        }
 
         // Gọi hàm trừ số lượng sản phẩm trong kho khi bắt đầu quá trình thanh toán
         cartService.subtractItemQuantitiesFromStock(userId);

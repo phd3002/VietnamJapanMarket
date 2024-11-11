@@ -78,6 +78,12 @@
             background-color: #616eff;
             color: #ffffff;
         }
+
+        .payment-btn.disabled {
+            background-color: #ddd;
+            color: #aaa;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -97,6 +103,7 @@
                 <p th:text="${errorMessage}"></p>
             </div>
             <form action="/checkout" method="post">
+                <input type="hidden" id="store-country" th:value="${store.country.countryId}">
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
