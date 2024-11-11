@@ -129,20 +129,48 @@ window.addEventListener("beforeunload", function () {
     }).catch(error => console.error("Error canceling checkout:", error));
 });
 
-// Assuming the store's country is available in a hidden field or data attribute
-const storeCountry = document.getElementById("store-country").value; // Hidden field with store country
-
-document.getElementById("country").addEventListener("change", function () {
-    const userCountry = this.value;
+document.addEventListener("DOMContentLoaded", function() {
+    // Get elements
+    const storeCountryElement = document.getElementById("store-country");
+    const countrySelect = document.getElementById("country");
     const codButton = document.getElementById("cod");
 
-    if (userCountry !== storeCountry) {
-        codButton.disabled = true;
-        codButton.classList.add("disabled"); // Optional: Add a class to style it as disabled
-        codButton.classList.remove("selected"); // Remove selection if previously selected
-        document.getElementById("paymentMethod").value = "wallet"; // Set default payment method to wallet
-    } else {
-        codButton.disabled = false;
-        codButton.classList.remove("disabled");
+    // Ensure elements are available
+    if (!storeCountryElement) {
+        console.error("storeCountryElement (store-country) is missing.");
+        return;
     }
+    if (!countrySelect) {
+        console.error("countrySelect (country) is missing.");
+        return;
+    }
+    if (!codButton) {
+        console.error("codButton (cod) is missing.");
+        return;
+    }
+
+    const storeCountryId = storeCountryElement.value;
+
+    // Event listener for the country select dropdown
+    countrySelect.addEventListener("change", function () {
+        const selectedCountryId = this.value;
+
+        // Debugging logs to check values
+        console.log("Store Country ID:", storeCountryId);
+        console.log("Selected Country ID:", selectedCountryId);
+
+        if (selectedCountryId !== storeCountryId) {
+            // Disable COD if the selected country is different from the store's country
+            codButton.disabled = true;
+            codButton.classList.add("disabled"); // Optional: Add a class to style it as disabled
+            codButton.classList.remove("selected"); // Remove selection if previously selected
+            document.getElementById("paymentMethod").value = "wallet"; // Set default payment method to wallet
+            console.log("COD disabled due to country mismatch.");
+        } else {
+            // Enable COD if the selected country matches the store's country
+            codButton.disabled = false;
+            codButton.classList.remove("disabled");
+            console.log("COD enabled due to country match.");
+        }
+    });
 });
