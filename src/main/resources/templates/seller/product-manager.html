@@ -102,7 +102,7 @@
                         <tbody>
                         <tr th:each="product : ${products}">
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td th:text="${product.productId}"></td>
+                            <td th:text="${product.productCode}"></td>
                             <td th:text="${product.productName}"></td>
                             <td>
                                 <img th:if="${product.productVariations != null && product.productVariations.size() > 0}"

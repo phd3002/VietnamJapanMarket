@@ -15,5 +15,4 @@ public class VNPayConfig {
 
     @Value("${vnpay.paymentUrl}")
     private String vnp_PaymentUrl;
-
 }
