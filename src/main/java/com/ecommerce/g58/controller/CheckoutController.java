@@ -1,6 +1,7 @@
 package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.entity.*;
+import com.ecommerce.g58.enums.PaymentMethod;
 import com.ecommerce.g58.repository.OrderDetailRepository;
 import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
@@ -9,6 +10,7 @@ import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
+import com.ecommerce.g58.service.implementation.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +35,9 @@ public class CheckoutController {
     private static final Logger logger = LoggerFactory.getLogger(CheckoutController.class);
 
     private static final int SESSION_TIMEOUT_MINUTES = 30; // set = 1 neu test
+
+    @Autowired
+    private VNPayService vnPayService;
 
     @Autowired
     private CartService cartService;
@@ -240,7 +247,13 @@ public class CheckoutController {
             // Trừ tiền trong số dư ví nếu đủ số dư
             walletService.deductFromWallet(userId, totalWithShipping);
             logger.info("Wallet balance deducted for user ID {}. Amount deducted: {}", userId, totalWithShipping);
-        } else {
+        } else if ("vnpay".equalsIgnoreCase(paymentMethod)) {
+            String returnUrl = "http://yourdomain.com/vnpay-payment";
+            String paymentUrl = vnPayService.createPaymentUrl(order.getOrderId(), (int) totalWithShipping, PaymentMethod.VNPAY, returnUrl);
+            session.setAttribute("orderPending", order);
+            return "redirect:" + paymentUrl;
+        }
+        else {
             logger.info("Payment method is COD. No wallet deduction performed.");
         }
 
@@ -303,6 +316,28 @@ public class CheckoutController {
 
         // Chuyển hướng về trang checkout-complete
         return "checkout-complete";
+    }
+
+    @GetMapping("/vnpay-payment")
+    public String vnpayPaymentReturn(HttpSession session, HttpServletRequest request, Model model) {
+        Map<String, String> params = request.getParameterMap().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0]));
+
+        String result = vnPayService.handlePaymentReturn(params);
+        Orders order = (Orders) session.getAttribute("orderPending");
+
+        if ("Thanh toán thành công".equals(result) && order != null) {
+            orderRepository.save(order);
+            logger.info("Order confirmed and saved in database with ID: {}", order.getOrderId());
+            session.removeAttribute("orderPending");
+            cartService.clearCart(order.getUserId().getUserId());
+            logger.info("Cart cleared for user ID {} after successful payment.", order.getUserId().getUserId());
+            model.addAttribute("order", order);
+            return "checkout-complete";
+        } else {
+            model.addAttribute("errorMessage", result);
+            return "checkout";
+        }
     }
 
     @PostMapping("/checkout/cancel")

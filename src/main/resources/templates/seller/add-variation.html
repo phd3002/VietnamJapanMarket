@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/seller/css/main.css}">
     <!-- Font-icon seller-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
@@ -75,11 +75,12 @@
             <div class="tile">
                 <h3 class="tile-title">Tạo mới biến thể</h3>
                 <div class="tile-body">
-                    <form class="row" enctype="multipart/form-data">
-                        <div class="col-md-6">
+                    <form class="row" enctype="multipart/form-data" th:action="@{/addProductVariation}" method="post">
+                        <input type="hidden" name="productId" th:value="${productId}"/>
+                        <div class="col-md-6" th:object="${productImage}">
                             <div class="form-group">
                                 <label class="control-label">Tên ảnh biến thể</label>
-                                <input class="form-control" type="text" name="imageName"
+                                <input class="form-control" type="text" name="imageName" th:field="*{imageName}"
                                        required>
                             </div>
                             <div class="form-group">
@@ -89,7 +90,6 @@
                                        onchange="previewImage(this, 'thumbnailPreview')" required/>
                                 <div id="thumbnailPreview" class="image-preview"></div>
                             </div>
-
                             <div class="form-group">
                                 <!-- 1st Image Upload -->
                                 <label class="control-label">1st Image</label>
@@ -115,32 +115,38 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-6" th:object="${productVariation}">
                             <div class="form-group">
                                 <label class="control-label">Màu sắc</label>
-                                <select class="form-control" required>
+                                <select class="form-control" name="color" th:field="*{color}" required>
                                     <option value="" disabled selected>-- Chọn màu sắc --</option>
-                                    <option>Đen</option>
-                                    <option>Xanh</option>
+                                    <option th:each="color : ${colors}" th:value="${color.colorId}"
+                                            th:text="${color.colorName}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Kích thước</label>
-                                <select class="form-control" th:field="*{size.sizeId}" required>
+                                <select class="form-control" name="size" th:field="*{size}" required>
                                     <option value="" disabled selected>-- Chọn kích thước --</option>
-                                    <option>X</option>
-                                    <option>S</option>
+                                    <option th:each="size : ${sizes}" th:value="${size.sizeId}"
+                                            th:text="${size.sizeName}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Số lượng</label>
-                                <input class="form-control" type="number" required>
+                                <input class="form-control" type="number" name="stock" th:field="*{stock}" required>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <button class="btn btn-save" type="submit">Tạo biến thể</button>
                         </div>
                     </form>
+                    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                        <span th:text="${successMessage}"></span>
+                    </div>
+                    <div th:if="${errorMessage}" class="alert alert-success" role="alert">
+                        <span th:text="${errorMessage}"></span>
+                    </div>
                 </div>
             </div>
         </div>

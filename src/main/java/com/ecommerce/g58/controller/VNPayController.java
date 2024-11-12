@@ -26,7 +26,7 @@ public class VNPayController {
         return "redirect:" + paymentUrl;
     }
 
-    @GetMapping("/vnpay-payment")
+    @GetMapping("/vnpay-payments")
     public String vnpayPaymentReturn(HttpServletRequest request, Model model) {
         Map<String, String> params = request.getParameterMap().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0]));
