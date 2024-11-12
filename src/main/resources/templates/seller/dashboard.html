@@ -43,15 +43,18 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" th:href="@{'/store-info/' + ${storeId}}"><i class='app-menu__icon bx bx-info-square'></i><span
+        <li><a class="app-menu__item" th:href="@{'/store-info/' + ${storeId}}"><i
+                class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
-        <li><a class="app-menu__item active" href="/seller/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item active" href="/seller/dashboard"><i
+                class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
         <li><a class="app-menu__item" th:href="@{'/seller-products/' + ${storeId}}"><i
                 class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
         </li>
 
-        <li><a class="app-menu__item" th:href="@{'/seller/order-manager/' + ${storeId}}"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item" th:href="@{'/seller/order-manager/' + ${storeId}}"><i
+                class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="feedback-manager.html"><i
                 class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
@@ -79,13 +82,29 @@
         <!--Left-->
         <div class="col-md-12 col-lg-6">
             <div class="row">
+                <div class="col-md-12" style="text-align: right">
+                    <!-- Phần input date -->
+                    <div class="form-group d-flex align-items-center gap-3 mb-3" style="margin-left: 10%">
+                        <label class="control-label">Từ ngày:</label>
+                        <input class="form-control" style="width: 150px; margin-left: 5px; margin-right: 5px;" type="date" id="startDate">
+
+                        <label class="control-label">Đến ngày:</label>
+                        <input class="form-control" style="width: 150px; margin-left: 5px; margin-right: 5px;" type="date" id="endDate">
+                    </div>
+
+                    <!-- Button xuống dòng và căn trái -->
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="filterData()">
+                            <i class="fa fa-fw fa-lg fa-search"></i>Lọc dữ liệu
+                        </button>
+                    </div>
+                </div>
                 <!-- col-6 -->
-                <div class="col-md-6">
-                    <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'></i>
+                <div class="col-md-12">
+                    <div class="widget-small primary coloured-icon"><i class='icon fa-3x bx bxs-chart'></i>
                         <div class="info">
-                            <h4>Tổng khách hàng</h4>
-                            <p><b>56 khách hàng</b></p>
-                            <p class="info-tong">Tổng số khách hàng được quản lý.</p>
+                            <h4>Tổng thu nhập</h4>
+                            <p><b>104.890.000 đ</b></p>
                         </div>
                     </div>
                 </div>
@@ -95,7 +114,6 @@
                         <div class="info">
                             <h4>Tổng sản phẩm</h4>
                             <p><b>1850 sản phẩm</b></p>
-                            <p class="info-tong">Tổng số sản phẩm được quản lý.</p>
                         </div>
                     </div>
                 </div>
@@ -105,7 +123,6 @@
                         <div class="info">
                             <h4>Tổng đơn hàng</h4>
                             <p><b>247 đơn hàng</b></p>
-                            <p class="info-tong">Tổng số hóa đơn bán hàng trong tháng.</p>
                         </div>
                     </div>
                 </div>
@@ -115,107 +132,44 @@
                         <div class="info">
                             <h4>Sắp hết hàng</h4>
                             <p><b>4 sản phẩm</b></p>
-                            <p class="info-tong">Số sản phẩm cảnh báo hết cần nhập thêm.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="widget-small danger coloured-icon"><i class='icon fa-3x bx bxs-receipt'></i>
+                        <div class="info">
+                            <h4>Đơn hàng hủy và hoàn trả</h4>
+                            <p><b>2 đơn hàng</b></p>
                         </div>
                     </div>
                 </div>
                 <!-- col-12 -->
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Tình trạng đơn hàng</h3>
                         <div>
-                            <table class="table table-bordered">
+                            <h3 class="tile-title">SẢN PHẨM BÁN CHẠY</h3>
+                        </div>
+                        <div class="tile-body">
+                            <table class="table table-hover table-bordered" id="sampleTable">
                                 <thead>
                                 <tr>
-                                    <th>ID đơn hàng</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Trạng thái</th>
+                                    <th>Mã sản phẩm</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá tiền</th>
+                                    <th>Danh mục</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>AL3947</td>
-                                    <td>Phạm Thị Ngọc</td>
-                                    <td>
-                                        19.770.000 đ
-                                    </td>
-                                    <td><span class="badge bg-info">Chờ xử lý</span></td>
-                                </tr>
-                                <tr>
-                                    <td>ER3835</td>
-                                    <td>Nguyễn Thị Mỹ Yến</td>
-                                    <td>
-                                        16.770.000 đ
-                                    </td>
-                                    <td><span class="badge bg-warning">Đang vận chuyển</span></td>
-                                </tr>
-                                <tr>
-                                    <td>MD0837</td>
-                                    <td>Triệu Thanh Phú</td>
-                                    <td>
-                                        9.400.000 đ
-                                    </td>
-                                    <td><span class="badge bg-success">Đã hoàn thành</span></td>
-                                </tr>
-                                <tr>
-                                    <td>MT9835</td>
-                                    <td>Đặng Hoàng Phúc</td>
-                                    <td>
-                                        40.650.000 đ
-                                    </td>
-                                    <td><span class="badge bg-danger">Đã hủy	</span></td>
+                                    <td>71309005</td>
+                                    <td>Điện thoại</td>
+                                    <td>5.600.000 đ</td>
+                                    <td>Điện thoại</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <!-- / div trống-->
-                    </div>
-                </div>
-                <!-- / col-12 -->
-                <!-- col-12 -->
-                <div class="col-md-12">
-                    <div class="tile">
-                        <h3 class="tile-title">Khách hàng mới</h3>
-                        <div>
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Số điện thoại</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>#183</td>
-                                    <td>Hột vịt muối</td>
-                                    <td>21/7/1992</td>
-                                    <td><span class="tag tag-success">0921387221</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#219</td>
-                                    <td>Bánh tráng trộn</td>
-                                    <td>30/4/1975</td>
-                                    <td><span class="tag tag-warning">0912376352</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#627</td>
-                                    <td>Cút rang bơ</td>
-                                    <td>12/3/1999</td>
-                                    <td><span class="tag tag-primary">01287326654</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#175</td>
-                                    <td>Hủ tiếu nam vang</td>
-                                    <td>4/12/20000</td>
-                                    <td><span class="tag tag-danger">0912376763</span></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
                     </div>
                 </div>
                 <!-- / col-12 -->
@@ -238,6 +192,38 @@
                         <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
                         <div class="embed-responsive embed-responsive-16by9">
                             <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="doughnutChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="polarAreaChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="radarChartDemo"></canvas>
                         </div>
                     </div>
                 </div>
@@ -290,6 +276,51 @@
 
     var ctxb = $("#barChartDemo").get(0).getContext("2d");
     var barChart = new Chart(ctxb).Bar(data);
+    var pieData = [
+        {value: 120, color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1"},
+        {value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2"},
+        {value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3"}
+    ];
+    var ctxp = document.getElementById("pieChartDemo").getContext("2d");
+    var pieChart = new Chart(ctxp).Pie(pieData);
+    var ctxd = document.getElementById("doughnutChartDemo").getContext("2d");
+    var doughnutChart = new Chart(ctxd).Doughnut(pieData);
+    // Dữ liệu cho biểu đồ cực
+    var polarData = [
+        {value: 120, color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1"},
+        {value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2"},
+        {value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3"},
+        {value: 90, color: "#949FB1", highlight: "#A8B3C5", label: "Dữ liệu 4"}
+    ];
+
+    // Biểu đồ cực
+    var ctxpo = document.getElementById("polarAreaChartDemo").getContext("2d");
+    var polarAreaChart = new Chart(ctxpo).PolarArea(polarData);
+
+    // Dữ liệu cho biểu đồ radar
+    var radarData = {
+        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+        datasets: [
+            {
+                label: "Dữ liệu đầu tiên",
+                fillColor: "rgba(255, 213, 59, 0.7)",
+                strokeColor: "rgb(255, 212, 59)",
+                pointColor: "rgb(255, 212, 59)",
+                data: [65, 59, 90, 81, 56, 55]
+            },
+            {
+                label: "Dữ liệu kế tiếp",
+                fillColor: "rgba(9, 109, 239, 0.65)",
+                strokeColor: "rgb(9, 109, 239)",
+                pointColor: "rgb(9, 109, 239)",
+                data: [28, 48, 40, 19, 96, 27]
+            }
+        ]
+    };
+
+    // Biểu đồ radar
+    var ctxr = document.getElementById("radarChartDemo").getContext("2d");
+    var radarChart = new Chart(ctxr).Radar(radarData);
 </script>
 <script type="text/javascript">
     //Thời Gian
