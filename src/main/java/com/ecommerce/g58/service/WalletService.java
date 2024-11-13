@@ -13,8 +13,8 @@ public interface WalletService {
     long getUserWalletBalance(Integer userId);
 
     // tru tien tu vi
-    void deductFromWallet(Integer userId, double amount);
+    void deductFromWallet(Integer userId, double amount, String paymentType);
 
     // them tien vao vi
-    void addToWallet(Integer userId, double amount);
+    void addToWallet(Integer userId, double amount, String paymentType);
 }

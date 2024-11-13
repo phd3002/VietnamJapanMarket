@@ -129,48 +129,46 @@ window.addEventListener("beforeunload", function () {
     }).catch(error => console.error("Error canceling checkout:", error));
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Get elements
-    const storeCountryElement = document.getElementById("store-country");
-    const countrySelect = document.getElementById("country");
-    const codButton = document.getElementById("cod");
+// Add event listeners to each payment type button
+document.querySelectorAll('.payment-type-btn').forEach(function (button) {
+    button.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent default action (page jump)
 
-    // Ensure elements are available
-    if (!storeCountryElement) {
-        console.error("storeCountryElement (store-country) is missing.");
-        return;
-    }
-    if (!countrySelect) {
-        console.error("countrySelect (country) is missing.");
-        return;
-    }
-    if (!codButton) {
-        console.error("codButton (cod) is missing.");
-        return;
-    }
+        // Remove 'selected' class from all payment type buttons
+        document.querySelectorAll('.payment-type-btn').forEach(function (btn) {
+            btn.classList.remove('selected');
+        });
 
-    const storeCountryId = storeCountryElement.value;
+        // Add 'selected' class to the clicked button
+        this.classList.add('selected');
 
-    // Event listener for the country select dropdown
-    countrySelect.addEventListener("change", function () {
-        const selectedCountryId = this.value;
+        // Update hidden input with selected payment type
+        document.getElementById('paymentType').value = this.dataset.type;
 
-        // Debugging logs to check values
-        console.log("Store Country ID:", storeCountryId);
-        console.log("Selected Country ID:", selectedCountryId);
-
-        if (selectedCountryId !== storeCountryId) {
-            // Disable COD if the selected country is different from the store's country
-            codButton.disabled = true;
-            codButton.classList.add("disabled"); // Optional: Add a class to style it as disabled
-            codButton.classList.remove("selected"); // Remove selection if previously selected
-            document.getElementById("paymentMethod").value = "wallet"; // Set default payment method to wallet
-            console.log("COD disabled due to country mismatch.");
-        } else {
-            // Enable COD if the selected country matches the store's country
-            codButton.disabled = false;
-            codButton.classList.remove("disabled");
-            console.log("COD enabled due to country match.");
-        }
+        // Update total based on selected payment type
+        updateTotalAmount();
     });
 });
+
+// Function to update total amount based on payment type
+function updateTotalAmount() {
+    const totalProductPrice = parseFloat(document.getElementById("total-product-price").textContent.replace(/,/g, ''));
+    const shippingFee = parseFloat(document.getElementById("total-shipping-fee").textContent.replace(/,/g, ''));
+
+    const paymentType = document.getElementById("paymentType").value;
+    let finalOrderTotal;
+
+    if (paymentType === "deposit") {
+        // Apply 50% only to the order total (excluding shipping fee)
+        finalOrderTotal = (totalProductPrice * 0.5) + shippingFee;
+    } else {
+        // Full payment includes the entire order total and shipping fee
+        finalOrderTotal = totalProductPrice + shippingFee;
+    }
+
+    // Update the displayed total amount
+    document.getElementById("total-order-price").textContent = finalOrderTotal.toLocaleString() + "đ";
+}
+
+// Initialize total amount on page load
+updateTotalAmount();

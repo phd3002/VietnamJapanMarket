@@ -180,7 +180,8 @@ public class CheckoutController {
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
                                     @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod,
-                                    @RequestParam(value = "paymentMethod", defaultValue = "wallet") String paymentMethod) {
+                                    @RequestParam(value = "paymentMethod", defaultValue = "wallet") String paymentMethod,
+                                    @RequestParam(value = "paymentType", defaultValue = "full") String paymentType) {
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (principal == null) {
             logger.warn("User not authenticated. Redirecting to sign-in.");
@@ -223,8 +224,15 @@ public class CheckoutController {
         }
         logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
-        long totalWithShipping = totalPrice + shippingFee;
-        logger.info("Total with shipping calculated: {}", totalWithShipping);
+        // Calculate the final total based on payment type
+        long totalWithShipping;
+        if ("deposit".equalsIgnoreCase(paymentType)) {
+            totalWithShipping = (totalPrice / 2) + shippingFee; // 50% of total price, full shipping fee
+        } else {
+            totalWithShipping = totalPrice + shippingFee; // Full payment
+        }
+        logger.info("Total with shipping calculated based on payment type '{}': {}", paymentType, totalWithShipping);
+
 
         // Nếu phương thức thanh toán là "wallet", kiểm tra số dư ví
         if ("wallet".equalsIgnoreCase(paymentMethod)) {
@@ -244,8 +252,8 @@ public class CheckoutController {
             }
 
             // Trừ tiền trong ví của người mua
-            walletService.deductFromWallet(userId, totalWithShipping);
-            logger.info("Wallet balance deducted for user ID {}. Amount deducted: {}", userId, totalWithShipping);
+            walletService.deductFromWallet(userId, totalWithShipping, paymentType);
+            logger.info("Đã trừ số dư ví cho người dùng ID {}. Số tiền trừ: {}. Loại thanh toán: {}", userId, totalWithShipping, paymentType);
 
             // Lấy thực thể Stores từ sản phẩm trong giỏ hàng
             Stores store = cartItems.get(0).getProductId().getStoreId(); // Lấy đối tượng Stores
@@ -257,8 +265,8 @@ public class CheckoutController {
             // Cộng số tiền thanh toán vào ví của cửa hàng
             if (optionalStore.isPresent()) {
                 Stores foundStore = optionalStore.get();
-                walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping); // Sử dụng ownerId để cộng vào ví của chủ cửa hàng
-                logger.info("Cộng {} vào ví của cửa hàng có ID {}", totalWithShipping, storeId);
+                walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping, paymentType);
+                logger.info("Đã cộng {} vào ví của chủ cửa hàng có ID {}. Loại thanh toán: {}", totalWithShipping, storeId, paymentType);
             }
         } else if ("vnpay".equalsIgnoreCase(paymentMethod)) {
             String returnUrl = "http://yourdomain.com/vnpay-payment";

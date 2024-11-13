@@ -61,8 +61,26 @@ public class WalletServiceImpl implements WalletService {
                 dto.setAmount((BigDecimal) result[2]);
             }
 
-            // Set description
-            dto.setDescription((String) result[3]);
+            // Safely retrieve paymentType (checking if it exists)
+            String paymentType = (result.length > 6 && result[6] != null) ? (String) result[6] : null;
+
+            // Set description based on transaction type and paymentType
+            if ("deposit".equalsIgnoreCase(paymentType)) {
+                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
+                    dto.setDescription("Người mua đặt cọc 50% khi mua hàng");
+                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
+                    dto.setDescription("Đặt cọc 50% khi mua hàng");
+                }
+            } else if ("full".equalsIgnoreCase(paymentType)) {
+                // For full payment transactions
+                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
+                    dto.setDescription("Người mua thanh toán đầy đủ khi mua hàng");
+                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
+                    dto.setDescription("Thanh toán đầy đủ khi mua hàng");
+                }
+            } else {
+                dto.setDescription((String) result[3]); // Default description for other types
+            }
 
             // Set transactionParty based on transaction type
             if ("Trừ tiền".equals(transactionType)) {
@@ -86,7 +104,6 @@ public class WalletServiceImpl implements WalletService {
         return transactions;
     }
 
-
     @Override
     public long getUserWalletBalance(Integer userId) {
         // Lấy số dư ví của người dùng từ walletRepository
@@ -94,87 +111,78 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public void deductFromWallet(Integer userId, double amount) {
-
-        // Lấy thực thể người dùng từ userRepository
+    public void deductFromWallet(Integer userId, double amount, String paymentType) {
+        // Retrieve user entity
         Optional<Users> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("Không tìm thấy người dùng");
         }
         Users user = optionalUser.get();
 
-        // Lấy thực thể ví của người dùng từ walletRepository
+        // Retrieve user's wallet entity
         Optional<Wallet> optionalWallet = walletRepository.findByUserId(user);
         if (optionalWallet.isEmpty()) {
             throw new IllegalArgumentException("Không tìm thấy ví của người dùng");
         }
         Wallet wallet = optionalWallet.get();
 
-        // Kiểm tra nếu số dư ví đủ để thực hiện thanh toán
+        // Check if wallet balance is sufficient
         Long currentBalance = wallet.getBalance();
-        Long amountToDeduct = (long) amount; // Chuyển đổi amount thành Long
+        Long amountToDeduct = (long) amount;
 
         if (currentBalance < amountToDeduct) {
             throw new IllegalArgumentException("Số dư trong ví không đủ");
         }
 
-        // Trừ số dư và lưu lại
+        // Deduct balance and save updated wallet
         Long newBalance = currentBalance - amountToDeduct;
         wallet.setBalance(newBalance);
-
-        // Lưu lại ví đã cập nhật
         walletRepository.save(wallet);
 
-        // Ghi lại giao dịch
+        // Record transaction
         Transactions transaction = new Transactions();
-        transaction.setFromWalletId(wallet); // Lấy ví mà số tiền bị trừ
-        transaction.setAmount(-amountToDeduct); // Đặt giá trị âm để thể hiện trừ tiền
-        transaction.setTransactionType("Trừ tiền"); // Thiết lập loại giao dịch
-        transaction.setDescription("Thanh toán khi mua hàng");
-        transaction.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian giao dịch hiện tại
+        transaction.setFromWalletId(wallet);
+        transaction.setAmount(-amountToDeduct);
+        transaction.setTransactionType("Trừ tiền");
+        transaction.setDescription(paymentType.equals("deposit") ? "Đặt cọc 50% khi mua hàng" : "Thanh toán đầy đủ khi mua hàng");
+        transaction.setPaymentType(paymentType); // Set payment type
+        transaction.setCreatedAt(LocalDateTime.now());
 
-        // Lưu lại giao dịch vào repository
         transactionRepository.save(transaction);
     }
 
     @Override
-    public void addToWallet(Integer userId, double amount) {
-        // Lấy thực thể người dùng từ userRepository
+    public void addToWallet(Integer userId, double amount, String paymentType) {
+        // Retrieve user entity
         Optional<Users> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("Không tìm thấy người dùng");
         }
         Users user = optionalUser.get();
 
-        // Lấy thực thể ví của người dùng từ walletRepository
+        // Retrieve user's wallet entity
         Optional<Wallet> optionalWallet = walletRepository.findByUserId(user);
         if (optionalWallet.isEmpty()) {
             throw new IllegalArgumentException("Không tìm thấy ví của người dùng");
         }
         Wallet wallet = optionalWallet.get();
 
-        // Lấy số dư hiện tại và cộng thêm số tiền
+        // Add balance and save updated wallet
         Long currentBalance = wallet.getBalance();
-        Long amountToAdd = (long) amount; // Chuyển đổi amount thành Long
-
-        // Cộng số dư và lưu lại
+        Long amountToAdd = (long) amount;
         Long newBalance = currentBalance + amountToAdd;
         wallet.setBalance(newBalance);
-
-        // Lưu lại ví đã cập nhật
         walletRepository.save(wallet);
 
-        // Ghi lại giao dịch
+        // Record transaction
         Transactions transaction = new Transactions();
-        transaction.setToWalletId(wallet); // Lấy ví mà số tiền được cộng vào
-        transaction.setAmount(amountToAdd); // Đặt giá trị dương để thể hiện cộng tiền
-        transaction.setTransactionType("Cộng tiền"); // Thiết lập loại giao dịch
-        transaction.setDescription("Nhận tiền khi bán hàng");
-        transaction.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian giao dịch hiện tại
+        transaction.setToWalletId(wallet);
+        transaction.setAmount(amountToAdd);
+        transaction.setTransactionType("Cộng tiền");
+        transaction.setDescription(paymentType.equals("deposit") ? "Người mua đặt cọc 50% khi mua hàng" : "Người mua thanh toán đầy đủ khi mua hàng");
+        transaction.setPaymentType(paymentType); // Set payment type
+        transaction.setCreatedAt(LocalDateTime.now());
 
-        // Lưu lại giao dịch vào repository
         transactionRepository.save(transaction);
     }
-
-
 }
