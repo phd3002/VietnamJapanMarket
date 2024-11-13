@@ -45,28 +45,47 @@ public class WalletServiceImpl implements WalletService {
         List<WalletDTO> transactions = new ArrayList<>();
         for (Object[] result : results) {
             WalletDTO dto = new WalletDTO();
+
+            // Set transaction date
             Timestamp transactionDateTimestamp = (Timestamp) result[0];
             dto.setTransactionDate(transactionDateTimestamp.toLocalDateTime());
-            dto.setTransactionType((String) result[1]);
 
+            // Set transaction type
+            String transactionType = (String) result[1];
+            dto.setTransactionType(transactionType);
+
+            // Set amount
             if (result[2] instanceof BigInteger) {
                 dto.setAmount(new BigDecimal((BigInteger) result[2]));
             } else if (result[2] instanceof BigDecimal) {
                 dto.setAmount((BigDecimal) result[2]);
             }
 
+            // Set description
             dto.setDescription((String) result[3]);
-            dto.setTransactionParty((String) result[4]);
 
+            // Set transactionParty based on transaction type
+            if ("Trừ tiền".equals(transactionType)) {
+                dto.setTransactionParty("Đã gửi cho shop");
+            } else if ("Cộng tiền".equals(transactionType)) {
+                dto.setTransactionParty("Đã nhận từ người mua");
+            } else {
+                dto.setTransactionParty("Unknown"); // Fallback, if needed
+            }
+
+            // Set wallet balance
             if (result[5] instanceof BigInteger) {
                 dto.setWalletBalance(new BigDecimal((BigInteger) result[5]));
             } else if (result[5] instanceof BigDecimal) {
                 dto.setWalletBalance((BigDecimal) result[5]);
             }
+
+            // Add the DTO to the list
             transactions.add(dto);
         }
         return transactions;
     }
+
 
     @Override
     public long getUserWalletBalance(Integer userId) {
