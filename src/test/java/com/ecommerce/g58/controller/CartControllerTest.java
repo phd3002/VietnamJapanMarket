@@ -159,7 +159,7 @@ public class CartControllerTest {
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, 0, redirectAttributes, request);
         verify(cartService, times(1)).addProductToCart(user, productDetail, 0, cart);
-        assertEquals("", redirectAttributes.getFlashAttributes().get("message"));
+        assertEquals("Sản phẩm đã được thêm vào giỏ hàng của bạn", redirectAttributes.getFlashAttributes().get("message"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -179,7 +179,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 1)).thenReturn(productDetail);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 1, -1, redirectAttributes, request);
-        assertEquals("", redirectAttributes.getFlashAttributes().get("message"));
+        assertEquals("Sản phẩm đã được thêm vào giỏ hàng của bạn", redirectAttributes.getFlashAttributes().get("message"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -483,7 +483,7 @@ public class CartControllerTest {
         String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
         assertEquals("redirect:/cart-items", result);
         verify(cartItemService, times(1)).updateCartItemQuantity(cartItemId, quantity);
-        assertEquals("Quantity updated successfully", redirectAttributes.getFlashAttributes().get("message"));
+        assertEquals("Cập nhật giỏ hàng thành công", redirectAttributes.getFlashAttributes().get("message"));
     }
 
     // testUpdateCartQuantity_ExceedsStock tc2
@@ -509,7 +509,7 @@ public class CartControllerTest {
         Integer quantity = -1;
         CartItem mockCartItem = new CartItem();
         ProductVariation productVariation = new ProductVariation();
-        productVariation.setStock(5);
+        productVariation.setStock(-1);
         mockCartItem.setVariationId(productVariation);
         when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(mockCartItem));
         String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
@@ -531,7 +531,7 @@ public class CartControllerTest {
         String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
         assertEquals("redirect:/cart-items", result);
         verify(cartItemService, never()).updateCartItemQuantity(anyInt(), anyInt());
-        assertEquals("Error updating quantity: Exceeds stock limit", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Lỗi khi cập nhật số lượng: Vượt quá số lượng tồn kho", redirectAttributes.getFlashAttributes().get("error"));
     }
 
     // testUpdateCartQuantity_ExceedsStock tc5
@@ -547,7 +547,7 @@ public class CartControllerTest {
         String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
         assertEquals("redirect:/cart-items", result);
         verify(cartItemService, never()).updateCartItemQuantity(anyInt(), anyInt());
-        assertEquals("Error updating quantity", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã xảy ra lỗi khi cập nhật số lượng", redirectAttributes.getFlashAttributes().get("error"));
     }
 
     // testUpdateCartQuantity_CartItemNotFound tc6
