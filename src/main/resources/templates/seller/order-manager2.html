@@ -120,9 +120,7 @@
                                 </form>
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-sm btn-save" type="button" title="Chỉnh sửa"
-                                        onclick="saveOrderStatus('[[${order.orderId}]]')">Lưu
-                                </button>
+<!--                                <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu</button>-->
                                 <a th:href="@{/seller/order-detail/{orderId}(orderId=${order.orderId})}">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết">
                                         <i class="fa fa-eye"></i>
@@ -132,55 +130,6 @@
                         </tr>
                         </tbody>
                     </table>
-                    <script>
-                        function updateOrderStatus(orderId, status) {
-                            fetch(`/seller/update-order-status`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ orderId: orderId, status: status })
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        console.log('Cập nhật tình trạng đơn hàng thành công');
-                                    } else {
-                                        console.error('Có lỗi khi cập nhật tình trạng đơn hàng');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                });
-                        }
-                    </script>
-                    <script>
-
-                        function saveOrderStatus(orderId) {
-                            const status = document.querySelector(`#sampleTable tr[data-order-id='${orderId}'] select#order-status`).value;
-
-                            fetch(`/seller/update-order-status`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({orderId: orderId, status: status})
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        alert('Cập nhật tình trạng đơn hàng thành công');
-                                    } else {
-                                        alert('Có lỗi khi cập nhật tình trạng đơn hàng');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    alert('Có lỗi khi cập nhật tình trạng đơn hàng');
-                                });
-                        }
-                    </script>
-                    <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu</button>
                 </div>
             </div>
         </div>

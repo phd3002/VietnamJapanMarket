@@ -6,14 +6,13 @@ import com.ecommerce.g58.repository.OrderDetailRepository;
 import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
-import com.ecommerce.g58.service.CartService;
-import com.ecommerce.g58.service.StoreService;
-import com.ecommerce.g58.service.UserService;
-import com.ecommerce.g58.service.WalletService;
+import com.ecommerce.g58.service.*;
 import com.ecommerce.g58.service.implementation.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +42,9 @@ public class CheckoutController {
     private CartService cartService;
 
     @Autowired
+    private CartItemService cartItemService;
+
+    @Autowired
     private StoreService storeService;
 
     @Autowired
@@ -65,6 +67,7 @@ public class CheckoutController {
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal, HttpSession session,
+                                   @RequestParam("cartItemIds") List<Integer> cartItemIds,
                                    @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod) {
         // Lấy thời gian bắt đầu session
         LocalDateTime sessionStartTime = (LocalDateTime) session.getAttribute("sessionStartTime");
@@ -150,9 +153,12 @@ public class CheckoutController {
 
         long totalWithShipping = totalPrice + shippingFee;
         logger.info("Total with shipping calculated: {}", totalWithShipping);
+//        List<CartItem> cartItemss = cartItemService.getCartItemsByIds(cartItemIds);
+
 
         // Thêm thông tin vào model
         model.addAttribute("cartItems", cartItems);
+        model.addAttribute("cartItemIds", cartItemIds);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("totalWithShipping", totalWithShipping);
         model.addAttribute("shippingFee", shippingFee);
@@ -180,7 +186,13 @@ public class CheckoutController {
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
                                     @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod,
-                                    @RequestParam(value = "paymentMethod", defaultValue = "wallet") String paymentMethod) {
+                                    @RequestParam("cartItemIdsString") String cartItemIdsString,
+                                    @RequestParam("address") String shippingAddress,
+                                    @RequestParam(value = "paymentMethod", defaultValue = "wallet") PaymentMethod paymentMethod) {
+        List<Integer> cartItemIds = Arrays.stream(cartItemIdsString.replaceAll("\\[|\\]", "").split(","))
+                .map(String::trim)
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (principal == null) {
             logger.warn("User not authenticated. Redirecting to sign-in.");
@@ -227,7 +239,7 @@ public class CheckoutController {
         logger.info("Total with shipping calculated: {}", totalWithShipping);
 
         // Nếu phương thức thanh toán là "wallet", kiểm tra số dư ví
-        if ("wallet".equalsIgnoreCase(paymentMethod)) {
+        if (paymentMethod == PaymentMethod.WALLET) {
             long walletBalance = walletService.getUserWalletBalance(userId);
             logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
 
@@ -240,6 +252,7 @@ public class CheckoutController {
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
+                session.setAttribute("cartItemIdsOrderOn", cartItemIds);
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
 
@@ -260,11 +273,6 @@ public class CheckoutController {
                 walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping); // Sử dụng ownerId để cộng vào ví của chủ cửa hàng
                 logger.info("Cộng {} vào ví của cửa hàng có ID {}", totalWithShipping, storeId);
             }
-        } else if ("vnpay".equalsIgnoreCase(paymentMethod)) {
-            String returnUrl = "http://yourdomain.com/vnpay-payment";
-            String paymentUrl = vnPayService.createPaymentUrl(order.getOrderId(), (int) totalWithShipping, PaymentMethod.VNPAY, returnUrl);
-            session.setAttribute("orderPending", order);
-            return "redirect:" + paymentUrl;
         } else {
             logger.info("Phương thức thanh toán là COD. Không thực hiện trừ ví.");
         }
@@ -325,31 +333,15 @@ public class CheckoutController {
         model.addAttribute("order", order);
         model.addAttribute("paymentMethod", paymentMethod);
         logger.info("Order details added to model for display on checkout-complete page.");
+        if (user != null){
+            session.setAttribute("userOrderOn", user);
+            session.setAttribute("addressOrderOn", shippingAddress);
+            session.setAttribute("paymentMethodOrderOn", paymentMethod);
+            session.setAttribute("cartItemIdsOrderOn", cartItemIds);
+        }
 
         // Chuyển hướng về trang checkout-complete
         return "checkout-complete";
-    }
-
-    @GetMapping("/vnpay-payment")
-    public String vnpayPaymentReturn(HttpSession session, HttpServletRequest request, Model model) {
-        Map<String, String> params = request.getParameterMap().entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0]));
-
-        String result = vnPayService.handlePaymentReturn(params);
-        Orders order = (Orders) session.getAttribute("orderPending");
-
-        if ("Thanh toán thành công".equals(result) && order != null) {
-            orderRepository.save(order);
-            logger.info("Order confirmed and saved in database with ID: {}", order.getOrderId());
-            session.removeAttribute("orderPending");
-            cartService.clearCart(order.getUserId().getUserId());
-            logger.info("Cart cleared for user ID {} after successful payment.", order.getUserId().getUserId());
-            model.addAttribute("order", order);
-            return "checkout-complete";
-        } else {
-            model.addAttribute("errorMessage", result);
-            return "checkout";
-        }
     }
 
     @PostMapping("/checkout/cancel")

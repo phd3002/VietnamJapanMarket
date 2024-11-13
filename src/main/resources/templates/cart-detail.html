@@ -92,14 +92,12 @@
                 </div>
                 <div class="cart-update-btn-area" style="margin-right: 10%; text-align: right">
                     <div class="update-btn">
-                        <form action="/checkout" method="get">
+                        <form id="checkoutForm" action="/checkout" method="get">
                             <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4" th:disabled="${isCartEmpty}">
                                 Check out
                             </button>
+                            <input type="hidden" name="cartItemIds" id="cartItemIds">
                         </form>
-<!--                        <form id="checkoutForm" action="/checkout" method="get" style="display: none;">-->
-<!--                            <input type="hidden" name="cartItemIds" id="cartItemIds">-->
-<!--                        </form>-->
                     </div>
                 </div>
 
@@ -393,5 +391,24 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<script>
+    $('#checkoutButton').click(function () {
+        var selectedCanteens = new Set();
+        var cartItemIds = [];
+        $('.product-checkbox:checked').each(function () {
+            selectedCanteens.add($(this).data('store'));
+            cartItemIds.push($(this).attr('id').replace('product', ''));
+        });
+
+        if (selectedCanteens.size > 1) {
+            // Show modal warning if more than one canteen's items are selected
+            $('#checkoutModal').modal('show');
+        } else {
+            // Proceed to checkout page
+            $('#cartItemIds').val(cartItemIds.join(','));
+            $('#checkoutForm').submit();
+        }
+    });
+</script>
 </body>
 </html>

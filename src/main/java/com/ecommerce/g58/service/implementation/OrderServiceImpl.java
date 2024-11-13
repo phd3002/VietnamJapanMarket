@@ -2,17 +2,24 @@ package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.OrderManagerDTO;
 import com.ecommerce.g58.dto.OrdersDTO;
-import com.ecommerce.g58.entity.Orders;
-import com.ecommerce.g58.entity.ShippingStatus;
+import com.ecommerce.g58.entity.*;
+import com.ecommerce.g58.enums.PaymentMethod;
+import com.ecommerce.g58.repository.OrderDetailRepository;
 import com.ecommerce.g58.repository.OrderRepository;
+import com.ecommerce.g58.repository.ProductVariationRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
+import com.ecommerce.g58.service.CartItemService;
+import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.OrderService;
+import com.ecommerce.g58.service.UserService;
+import com.ecommerce.g58.utils.RandomOrderCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,7 +32,22 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private CartItemService cartItemService;
+
+    @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private ProductVariationRepository productVariationRepository;
 
     @Autowired
     private ShippingStatusRepository shippingStatusRepository;
@@ -120,5 +142,44 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderStatuss(Integer orderId, String status) {
         shippingStatusRepository.updateOrderStatus(orderId, status);
+    }
+
+    @Transactional
+    public Orders createOrder(Users user, String address, PaymentMethod paymentMethod, List<Integer> cartItemIds) {
+        Orders order = new Orders();
+        order.setUserId(user);
+        order.setOrderDate(LocalDateTime.now());
+        order.setShippingAddress(address);
+        order.setPaymentMethod(paymentMethod);
+        order.setOrderCode(RandomOrderCodeGenerator.generateOrderCode());
+
+        long totalOrderPrice = 0;
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
+
+        for (Integer cartItemId : cartItemIds) {
+            CartItem cartItem = cartItemService.getCartItemById(cartItemId);
+            if (cartItem != null) {
+                OrderDetails orderDetail = new OrderDetails();
+                orderDetail.setOrderId(order);
+                orderDetail.setProductId(cartItem.getProductId());
+                orderDetail.setVariationId(cartItem.getVariationId());
+                orderDetail.setQuantity(cartItem.getQuantity());
+                orderDetail.setPrice(cartItem.getPrice());
+                totalOrderPrice += (long) cartItem.getPrice() * cartItem.getQuantity();
+
+                orderDetailsList.add(orderDetail);
+
+                // Update inventory
+                ProductVariation variation = productVariationRepository.findById(cartItem.getVariationId().getVariationId()).orElse(null);
+                if (variation != null) {
+                    variation.setStock(variation.getStock() - cartItem.getQuantity());
+                    productVariationRepository.save(variation);
+                }
+            }
+        }
+        order.setTotalPrice(totalOrderPrice);
+        order.setOrderDetails(orderDetailsList);
+        orderRepository.save(order);
+        return order;
     }
 }

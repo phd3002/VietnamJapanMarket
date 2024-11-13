@@ -103,7 +103,9 @@
                 <p th:text="${errorMessage}"></p>
             </div>
             <form action="/checkout" method="post">
-                <input type="hidden" id="store-country" th:value="${store.country.countryId}">
+                <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">
+                <input type="hidden" name="totalPrice" th:value="${totalPrice}">
+                <!--                <input type="hidden" id="store-country" th:value="${store.country.countryId}">-->
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
@@ -121,15 +123,8 @@
                             <input type="text" id="email-address">
                         </div>
                         <div class="form-group">
-                            <span>Quốc gia</span>
-                            <select id="country">
-                                <option value="1">Việt Nam</option>
-                                <option value="2">Japan</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <span>Địa chỉ chi tiết</span>
-                            <input type="text" name="shippingAddress" id="shipping-address" required>
+                            <input for="address" type="text" name="shippingAddress" id="shipping-address" required>
                         </div>
                     </div>
 
@@ -181,9 +176,9 @@
                             <div class="row">
                                 <div class="col-sm-12 d-flex justify-content-between">
                                     <div>
-                                        <button id="wallet" class="payment-btn btn-common selected" data-method="wallet" type="button">Ví VJ-Market</button>
-                                        <button id="cod" class="payment-btn btn-common" data-method="cod" type="button">Thanh toán khi nhận hàng</button>
-                                        <button id="vnpay" class="payment-btn btn-common" data-method="vnpay" type="button">Thanh toán VNPay</button>
+                                        <button value="WALLET" id="wallet" class="payment-btn btn-common selected" data-method="wallet" type="button">Ví VJ-Market</button>
+                                        <button value="COD" id="cod" class="payment-btn btn-common" data-method="cod" type="button">Thanh toán khi nhận hàng</button>
+                                        <button value="VNPAY" id="vnpay" class="payment-btn btn-common" data-method="vnpay" type="button">Thanh toán VNPay</button>
                                     </div>
                                     <div>
                                         <div class="payment-details" id="walletDetails">
@@ -199,7 +194,7 @@
                                 </div>
                             </div>
                             <!-- Hidden input to hold selected payment method -->
-                            <input type="hidden" id="paymentMethod" name="paymentMethod" value="wallet">
+                            <input for="paymentMethod" type="hidden" id="paymentMethod" name="paymentMethod" value="wallet">
                             <br><br>
                             <div class="order-price">
                                 <div class="d-flex justify-content-between">
