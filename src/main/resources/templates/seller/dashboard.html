@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách nhân viên | Kênh người bán</title>
@@ -107,7 +107,7 @@
                     <div class="widget-small primary coloured-icon"><i class='icon fa-3x bx bxs-chart'></i>
                         <div class="info">
                             <h4>Tổng thu nhập</h4>
-                            <p><b>104.890.000 đ</b></p>
+                            <p><b th:text="${totalRevenue} + ' đ'"></b></p>
                         </div>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                     <div class="widget-small info coloured-icon"><i class='icon bx bxs-purchase-tag-alt fa-3x'></i>
                         <div class="info">
                             <h4>Tổng sản phẩm</h4>
-                            <p><b>1850 sản phẩm</b></p>
+                            <p><b th:text="${totalProducts} + ' sản phẩm'"></b></p>
                         </div>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                     <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'></i>
                         <div class="info">
                             <h4>Tổng đơn hàng</h4>
-                            <p><b>247 đơn hàng</b></p>
+                            <p><b th:text="${totalOrders} +' đơn hàng'"></b></p>
                         </div>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                     <div class="widget-small primary coloured-icon"><i class='icon bx bxs-shopping-bag-alt fa-3x'></i>
                         <div class="info">
                             <h4>Đơn hàng thành công</h4>
-                            <p><b>4 đơn hàng</b></p>
+                            <p><b th:text="${totalOrdersCompleted} +' đơn hàng'"></b></p>
                         </div>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                     <div class="widget-small danger coloured-icon"><i class='icon fa-3x bx bxs-receipt'></i>
                         <div class="info">
                             <h4>Đơn hàng hủy và hoàn trả</h4>
-                            <p><b>2 đơn hàng</b></p>
+                            <p><b th:text="${totalOrdersCancelledAndReturned} +' đơn hàng'"></b></p>
                         </div>
                     </div>
                 </div>
@@ -160,14 +160,16 @@
                                     <th>Tên sản phẩm</th>
                                     <th>Giá tiền</th>
                                     <th>Danh mục</th>
+                                    <th>Đã bán</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>71309005</td>
-                                    <td>Điện thoại</td>
-                                    <td>5.600.000 đ</td>
-                                    <td>Điện thoại</td>
+                                <tr th:each="products : ${bestSellingProducts}">
+                                    <td th:text="${products.productCode}"></td>
+                                    <td th:text="${products.productName}"></td>
+                                    <td th:text="${products.price} +' đ'"></td>
+                                    <td th:text="${products.category}"></td>
+                                    <td th:text="${products.quantitySold}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -389,7 +391,6 @@
         } else {
             // Ẩn thông báo lỗi
             document.getElementById('errorMessage').style.display = 'none';
-            console.log('Dữ liệu hợp lệ. Lọc dữ liệu thành công.');
         }
     }
 

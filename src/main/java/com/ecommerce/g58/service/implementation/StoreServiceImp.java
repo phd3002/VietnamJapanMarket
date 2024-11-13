@@ -1,5 +1,6 @@
 package com.ecommerce.g58.service.implementation;
 
+import com.ecommerce.g58.dto.BestSellingDTO;
 import com.ecommerce.g58.entity.Countries;
 import com.ecommerce.g58.entity.Roles;
 import com.ecommerce.g58.entity.Stores;
@@ -13,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,5 +73,50 @@ public class StoreServiceImp implements StoreService {
     @Override
     public long getTotalStores() {
         return storeRepository.count();
+    }
+
+    @Override
+    public Integer calculateTotalRevenue(Integer storeUserId, String startDate, String endDate) {
+        return storeRepository.calculateTotalRevenue(storeUserId, startDate, endDate);
+    }
+
+    @Override
+    public Integer calculateTotalProducts(Integer userId) {
+        return storeRepository.totalProduct(userId);
+    }
+
+    @Override
+    public Integer totalOrders(Integer userId, String startDate, String endDate) {
+        return storeRepository.totalOrder(userId, startDate, endDate);
+    }
+
+    @Override
+    public Integer totalOrdersCompleted(Integer userId, String startDate, String endDate) {
+        return storeRepository.totalOrderComplete(userId, startDate, endDate);
+    }
+
+    @Override
+    public Integer totalOrdersCancelledAndReturned(Integer userId, String startDate, String endDate) {
+        return storeRepository.totalOrderCancelledAndReturned(userId, startDate, endDate);
+    }
+
+    @Override
+    public List<BestSellingDTO> getBestSellingProducts(Integer userId, String startDate, String endDate) {
+        List<Object[]> result = storeRepository.bestSelling(userId, startDate, endDate);
+        List<BestSellingDTO> bestSellingDTOS = new ArrayList<>();
+        for (Object[] objects : result) {
+            BestSellingDTO dto = new BestSellingDTO();
+            dto.setProductCode((String) objects[0]);
+            dto.setProductName((String) objects[1]);
+            dto.setPrice((Integer) objects[2]);
+            dto.setCategory((String) objects[3]);
+            if (objects[4] instanceof BigDecimal) {
+                dto.setQuantitySold(((BigDecimal) objects[4]).intValue());
+            } else if (objects[4] instanceof Integer) {
+                dto.setQuantitySold((Integer) objects[4]);
+            }
+            bestSellingDTOS.add(dto);
+        }
+        return bestSellingDTOS;
     }
 }

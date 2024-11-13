@@ -1,5 +1,6 @@
 package com.ecommerce.g58.controller.Seller;
 
+import com.ecommerce.g58.dto.BestSellingDTO;
 import com.ecommerce.g58.entity.Countries;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
@@ -22,6 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
@@ -124,14 +128,30 @@ public class SellerController {
     }
 
     @GetMapping("/seller/dashboard")
-    public String showSellerDashboard(Model model) {
+    public String showSellerDashboard(Model model,
+                                      @RequestParam(value = "startDate", required = false) String startDate,
+                                      @RequestParam(value = "endDate", required = false) String endDate) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         Users user = userService.findByEmail(userDetails.getUsername());
+        Integer userId = user.getUserId();
         if (user == null) {
             throw new RuntimeException("User not found");
         }
-
+        Integer totalRevenue = storeService.calculateTotalRevenue(userId, startDate, endDate);
+        Integer totalProducts = storeService.calculateTotalProducts(userId);
+        Integer totalOrders = storeService.totalOrders(userId, startDate, endDate);
+        Integer totalOrdersCompleted = storeService.totalOrdersCompleted(userId, startDate, endDate);
+        Integer totalOrdersCancelledAndReturned = storeService.totalOrdersCancelledAndReturned(userId, startDate, endDate);
+        List<BestSellingDTO> bestSellingProducts = storeService.getBestSellingProducts(userId, startDate, endDate);
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US); // Định dạng theo locale US
+        String formattedTotalRevenue = numberFormat.format(totalRevenue);
+        model.addAttribute("totalRevenue", formattedTotalRevenue);
+        model.addAttribute("totalProducts", totalProducts);
+        model.addAttribute("totalOrders", totalOrders);
+        model.addAttribute("totalOrdersCompleted", totalOrdersCompleted);
+        model.addAttribute("totalOrdersCancelledAndReturned", totalOrdersCancelledAndReturned);
+        model.addAttribute("bestSellingProducts", bestSellingProducts);
         Optional<Stores> store = storeService.findByOwnerId(user);
         store.ifPresent(value -> model.addAttribute("storeId", value.getStoreId()));
         return "seller/dashboard";
