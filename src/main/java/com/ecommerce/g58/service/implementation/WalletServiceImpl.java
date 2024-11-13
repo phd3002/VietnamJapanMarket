@@ -110,12 +110,52 @@ public class WalletServiceImpl implements WalletService {
         Transactions transaction = new Transactions();
         transaction.setFromWalletId(wallet); // Lấy ví mà số tiền bị trừ
         transaction.setAmount(-amountToDeduct); // Đặt giá trị âm để thể hiện trừ tiền
-        transaction.setTransactionType("DEDUCT"); // Thiết lập loại giao dịch
+        transaction.setTransactionType("Trừ tiền"); // Thiết lập loại giao dịch
         transaction.setDescription("Thanh toán khi mua hàng");
         transaction.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian giao dịch hiện tại
 
         // Lưu lại giao dịch vào repository
         transactionRepository.save(transaction);
     }
+
+    @Override
+    public void addToWallet(Integer userId, double amount) {
+        // Lấy thực thể người dùng từ userRepository
+        Optional<Users> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("Không tìm thấy người dùng");
+        }
+        Users user = optionalUser.get();
+
+        // Lấy thực thể ví của người dùng từ walletRepository
+        Optional<Wallet> optionalWallet = walletRepository.findByUserId(user);
+        if (optionalWallet.isEmpty()) {
+            throw new IllegalArgumentException("Không tìm thấy ví của người dùng");
+        }
+        Wallet wallet = optionalWallet.get();
+
+        // Lấy số dư hiện tại và cộng thêm số tiền
+        Long currentBalance = wallet.getBalance();
+        Long amountToAdd = (long) amount; // Chuyển đổi amount thành Long
+
+        // Cộng số dư và lưu lại
+        Long newBalance = currentBalance + amountToAdd;
+        wallet.setBalance(newBalance);
+
+        // Lưu lại ví đã cập nhật
+        walletRepository.save(wallet);
+
+        // Ghi lại giao dịch
+        Transactions transaction = new Transactions();
+        transaction.setToWalletId(wallet); // Lấy ví mà số tiền được cộng vào
+        transaction.setAmount(amountToAdd); // Đặt giá trị dương để thể hiện cộng tiền
+        transaction.setTransactionType("Cộng tiền"); // Thiết lập loại giao dịch
+        transaction.setDescription("Nhận tiền khi bán hàng");
+        transaction.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian giao dịch hiện tại
+
+        // Lưu lại giao dịch vào repository
+        transactionRepository.save(transaction);
+    }
+
 
 }

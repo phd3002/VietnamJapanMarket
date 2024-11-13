@@ -14,4 +14,7 @@ public interface WalletService {
 
     // tru tien tu vi
     void deductFromWallet(Integer userId, double amount);
+
+    // them tien vao vi
+    void addToWallet(Integer userId, double amount);
 }

@@ -240,21 +240,33 @@ public class CheckoutController {
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
-                logger.warn("Insufficient wallet balance. Returning to checkout.");
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
 
-            // Trừ tiền trong số dư ví nếu đủ số dư
+            // Trừ tiền trong ví của người mua
             walletService.deductFromWallet(userId, totalWithShipping);
             logger.info("Wallet balance deducted for user ID {}. Amount deducted: {}", userId, totalWithShipping);
+
+            // Lấy thực thể Stores từ sản phẩm trong giỏ hàng
+            Stores store = cartItems.get(0).getProductId().getStoreId(); // Lấy đối tượng Stores
+
+            // Lấy storeId từ đối tượng Stores và tìm cửa hàng trong database
+            Integer storeId = store.getStoreId();
+            Optional<Stores> optionalStore = storeService.findById(storeId);
+
+            // Cộng số tiền thanh toán vào ví của cửa hàng
+            if (optionalStore.isPresent()) {
+                Stores foundStore = optionalStore.get();
+                walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping); // Sử dụng ownerId để cộng vào ví của chủ cửa hàng
+                logger.info("Cộng {} vào ví của cửa hàng có ID {}", totalWithShipping, storeId);
+            }
         } else if ("vnpay".equalsIgnoreCase(paymentMethod)) {
             String returnUrl = "http://yourdomain.com/vnpay-payment";
             String paymentUrl = vnPayService.createPaymentUrl(order.getOrderId(), (int) totalWithShipping, PaymentMethod.VNPAY, returnUrl);
             session.setAttribute("orderPending", order);
             return "redirect:" + paymentUrl;
-        }
-        else {
-            logger.info("Payment method is COD. No wallet deduction performed.");
+        } else {
+            logger.info("Phương thức thanh toán là COD. Không thực hiện trừ ví.");
         }
 
         // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
