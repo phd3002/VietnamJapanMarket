@@ -184,14 +184,14 @@
         <!--Right-->
         <div class="col-md-12 col-lg-6">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="tile">
-                        <h3 class="tile-title">Dữ liệu 6 tháng đầu vào</h3>
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="col-md-12">-->
+<!--                    <div class="tile">-->
+<!--                        <h3 class="tile-title">Dữ liệu 6 tháng đầu vào</h3>-->
+<!--                        <div class="embed-responsive embed-responsive-16by9">-->
+<!--                            <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="col-md-12">
                     <div class="tile">
                         <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
@@ -202,31 +202,31 @@
                 </div>
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <h3 class="tile-title">Biểu đồ tỷ lệ đơn hàng</h3>
                         <div class="embed-responsive embed-responsive-16by9">
                             <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
                         </div>
                     </div>
                 </div>
+<!--                <div class="col-md-12">-->
+<!--                    <div class="tile">-->
+<!--                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>-->
+<!--                        <div class="embed-responsive embed-responsive-16by9">-->
+<!--                            <canvas class="embed-responsive-item" id="doughnutChartDemo"></canvas>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-12">-->
+<!--                    <div class="tile">-->
+<!--                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>-->
+<!--                        <div class="embed-responsive embed-responsive-16by9">-->
+<!--                            <canvas class="embed-responsive-item" id="polarAreaChartDemo"></canvas>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <canvas class="embed-responsive-item" id="doughnutChartDemo"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="tile">
-                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <canvas class="embed-responsive-item" id="polarAreaChartDemo"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="tile">
-                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <h3 class="tile-title">Đánh giá sản phẩm</h3>
                         <div class="embed-responsive embed-responsive-16by9">
                             <canvas class="embed-responsive-item" id="radarChartDemo"></canvas>
                         </div>
@@ -253,72 +253,82 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
     var data = {
-        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+        labels: ["Tháng 11"],
         datasets: [{
             label: "Dữ liệu đầu tiên",
-            fillColor: "rgba(255, 213, 59, 0.767), 212, 59)",
+            fillColor: "rgba(255, 213, 59, 0.5), 212, 59)",
             strokeColor: "rgb(255, 212, 59)",
             pointColor: "rgb(255, 212, 59)",
             pointStrokeColor: "rgb(255, 212, 59)",
             pointHighlightFill: "rgb(255, 212, 59)",
             pointHighlightStroke: "rgb(255, 212, 59)",
-            data: [20, 59, 90, 51, 56, 100]
+            data: [3000]
         },
-            {
-                label: "Dữ liệu kế tiếp",
-                fillColor: "rgba(9, 109, 239, 0.651)  ",
-                pointColor: "rgb(9, 109, 239)",
-                strokeColor: "rgb(9, 109, 239)",
-                pointStrokeColor: "rgb(9, 109, 239)",
-                pointHighlightFill: "rgb(9, 109, 239)",
-                pointHighlightStroke: "rgb(9, 109, 239)",
-                data: [48, 48, 49, 39, 86, 10]
-            }
         ]
     };
-    var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-    var lineChart = new Chart(ctxl).Line(data);
+    // var ctxl = $("#lineChartDemo").get(0).getContext("2d");
+    // var lineChart = new Chart(ctxl).Line(data);
 
     var ctxb = $("#barChartDemo").get(0).getContext("2d");
     var barChart = new Chart(ctxb).Bar(data);
     var pieData = [
-        {value: 120, color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1"},
-        {value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2"},
-        {value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3"}
+        {value: [[${totalOrdersCompleted}]], color: "#01ff02", highlight: "#007b01", label: "Hoàn thành"},
+        {value: [[${totalOrdersCancelledAndReturned}]], color: "#b10000", highlight: "#ff0000", label: "Hủy và hoàn trả"},
     ];
     var ctxp = document.getElementById("pieChartDemo").getContext("2d");
     var pieChart = new Chart(ctxp).Pie(pieData);
-    var ctxd = document.getElementById("doughnutChartDemo").getContext("2d");
-    var doughnutChart = new Chart(ctxd).Doughnut(pieData);
+    // var ctxd = document.getElementById("doughnutChartDemo").getContext("2d");
+    // var doughnutChart = new Chart(ctxd).Doughnut(pieData);
     // Dữ liệu cho biểu đồ cực
-    var polarData = [
-        {value: 120, color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1"},
-        {value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2"},
-        {value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3"},
-        {value: 90, color: "#949FB1", highlight: "#A8B3C5", label: "Dữ liệu 4"}
-    ];
-
-    // Biểu đồ cực
-    var ctxpo = document.getElementById("polarAreaChartDemo").getContext("2d");
-    var polarAreaChart = new Chart(ctxpo).PolarArea(polarData);
+    // var polarData = [
+    //     {value: [[${totalOrdersCancelledAndReturned}]], color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1"},
+    //     {value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2"},
+    //     {value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3"},
+    //     {value: 90, color: "#949FB1", highlight: "#A8B3C5", label: "Dữ liệu 4"}
+    // ];
+    //
+    // // Biểu đồ cực
+    // var ctxpo = document.getElementById("polarAreaChartDemo").getContext("2d");
+    // var polarAreaChart = new Chart(ctxpo).PolarArea(polarData);
 
     // Dữ liệu cho biểu đồ radar
     var radarData = {
-        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+        labels: ["5 sao", "4 sao", "3 sao", "2 sao", "1 sao"],
         datasets: [
             {
-                label: "Dữ liệu đầu tiên",
-                fillColor: "rgba(255, 213, 59, 0.7)",
-                strokeColor: "rgb(255, 212, 59)",
-                pointColor: "rgb(255, 212, 59)",
-                data: [65, 59, 90, 81, 56, 55]
+                label: "feedback",
+                fillColor: "rgba(76, 175, 80, 0.65)",
+                strokeColor: "rgb(76, 175, 80)",
+                pointColor: "rgb(76, 175, 80)",
+                data: [3, 2, 1, 0, 0]
             },
             {
-                label: "Dữ liệu kế tiếp",
-                fillColor: "rgba(9, 109, 239, 0.65)",
-                strokeColor: "rgb(9, 109, 239)",
-                pointColor: "rgb(9, 109, 239)",
-                data: [28, 48, 40, 19, 96, 27]
+                label: "4 sao",
+                fillColor: "rgba(139, 195, 74, 0.65)",
+                strokeColor: "rgb(139, 195, 74)",
+                pointColor: "rgb(139, 195, 74)",
+                data: [2]
+            },
+            {
+                label: "3 sao",
+                fillColor: "rgba(255, 235, 59, 0.65)",
+                strokeColor: "rgb(255, 235, 59)",
+                pointColor: "rgb(255, 235, 59)",
+                data: [0]
+            },
+            {
+                label: "2 sao",
+                fillColor: "rgba(255, 193, 7, 0.65)",
+                strokeColor: "rgb(255, 193, 7)",
+                pointColor: "rgb(255, 193, 7)",
+                data: [0]
+            },
+            {
+                label: "1 sao",
+                fillColor: "rgba(244, 67, 54, 0.65)",
+                strokeColor: "rgb(244, 67, 54)",
+                pointColor: "rgb(244, 67, 54)",
+                data: [0]
             }
         ]
     };
