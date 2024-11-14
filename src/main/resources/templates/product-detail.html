@@ -261,12 +261,12 @@
                                                                 <h6 class="commenter">
                                                                     <a class="hover-flip-item-wrapper">
                                                                         <span class="hover-flip-item">
-                                                                            <span data-text="Reply Author">ABC Store</span>
+                                                                            <span th:text="${feedback.storeId.storeName}"></span>
                                                                         </span>
                                                                     </a>
                                                                 </h6>
                                                                 <div class="comment-text">
-                                                                    <p>"This is a reply to the comment above."</p>
+                                                                    <p th:text="${'“' + feedback.sellerFeedback + '”'}"></p>
                                                                 </div>
                                                             </div>
                                                         </div>
