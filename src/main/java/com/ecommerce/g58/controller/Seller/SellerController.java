@@ -1,16 +1,13 @@
 package com.ecommerce.g58.controller.Seller;
 
+import com.ecommerce.g58.dto.BestSellingDTO;
 import com.ecommerce.g58.entity.Countries;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
-import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.CountryService;
 import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
@@ -120,13 +119,54 @@ public class SellerController {
     }
 
     @GetMapping("/seller/dashboard")
-    public String showSellerDashboard(Model model) {
+    public String showSellerDashboard(Model model,
+                                      @RequestParam(value = "startDate", required = false) String startDate,
+                                      @RequestParam(value = "endDate", required = false) String endDate) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         Users user = userService.findByEmail(userDetails.getUsername());
+        Integer userId = user.getUserId();
         if (user == null) {
             throw new RuntimeException("User not found");
         }
+
+        Integer totalRevenue = storeService.calculateTotalRevenue(userId, startDate, endDate);
+        Integer totalProductSold = storeService.totalProductsSold(userId, startDate, endDate);
+        Integer totalOrders = storeService.totalOrders(userId, startDate, endDate);
+        Integer totalOrdersCompleted = storeService.totalOrdersCompleted(userId, startDate, endDate);
+        Integer totalOrdersCancelledAndReturned = storeService.totalOrdersCancelledAndReturned(userId, startDate, endDate);
+        List<BestSellingDTO> bestSellingProducts = storeService.getBestSellingProducts(userId, startDate, endDate);
+        Integer count5StarFeedback = storeService.count5StarFeedback(userId, startDate, endDate);
+        Integer count4StarFeedback = storeService.count4StarFeedback(userId, startDate, endDate);
+        Integer count3StarFeedback = storeService.count3StarFeedback(userId, startDate, endDate);
+        Integer count2StarFeedback = storeService.count2StarFeedback(userId, startDate, endDate);
+        Integer count1StarFeedback = storeService.count1StarFeedback(userId, startDate, endDate);
+        Integer totalRevenueCurrentMonth = storeService.totalRevenueCurrentMonth(userId);
+        Integer totalRevenueLastMonth = storeService.totalRevenueLastMonth(userId);
+        Integer totalRevenueLast2Months = storeService.totalRevenueLast2Months(userId);
+        Integer totalRevenueLast3Months = storeService.totalRevenueLast3Months(userId);
+        Integer totalRevenueLast4Months = storeService.totalRevenueLast4Months(userId);
+        Integer totalRevenueLast5Months = storeService.totalRevenueLast5Months(userId);
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US); // Định dạng theo locale US
+        String formattedTotalRevenue = numberFormat.format(totalRevenue);
+
+        model.addAttribute("totalRevenue", formattedTotalRevenue);
+        model.addAttribute("totalProducts", totalProductSold);
+        model.addAttribute("totalOrders", totalOrders);
+        model.addAttribute("totalOrdersCompleted", totalOrdersCompleted);
+        model.addAttribute("totalOrdersCancelledAndReturned", totalOrdersCancelledAndReturned);
+        model.addAttribute("bestSellingProducts", bestSellingProducts);
+        model.addAttribute("count5StarFeedback", count5StarFeedback);
+        model.addAttribute("count4StarFeedback", count4StarFeedback);
+        model.addAttribute("count3StarFeedback", count3StarFeedback);
+        model.addAttribute("count2StarFeedback", count2StarFeedback);
+        model.addAttribute("count1StarFeedback", count1StarFeedback);
+        model.addAttribute("totalRevenueCurrentMonth", totalRevenueCurrentMonth);
+        model.addAttribute("totalRevenueLastMonth", totalRevenueLastMonth);
+        model.addAttribute("totalRevenueLast2Months", totalRevenueLast2Months);
+        model.addAttribute("totalRevenueLast3Months", totalRevenueLast3Months);
+        model.addAttribute("totalRevenueLast4Months", totalRevenueLast4Months);
+        model.addAttribute("totalRevenueLast5Months", totalRevenueLast5Months);
 
         Optional<Stores> store = storeService.findByOwnerId(user);
         store.ifPresent(value -> model.addAttribute("storeId", value.getStoreId()));

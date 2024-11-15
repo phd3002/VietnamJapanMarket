@@ -254,7 +254,7 @@
                                         <!--                                            <span class="summary-value">-5$</span>-->
                                         <!--                                        </div>-->
                                         <div class="summary-row">
-                                            <span class="summary-label total">Tổng chi phí</span>
+                                            <span class="summary-label total">Tổng chi phí(Đã bao gồm thuế)</span>
                                             <span th:if="${totalAmount != null and shippingFee != null}"
                                                   th:text="${totalAmount + shippingFee}">0</span>
                                             <span th:if="${totalAmount == null or shippingFee == null}">0</span>
@@ -262,7 +262,8 @@
                                         </div>
                                     </div>
                                     <div class="payment-method">
-                                        <p th:text="${paymentMethod}"></p>
+                                        <span class="summary-label">Phương thức thanh toán: </span>
+                                        <span th:text="${paymentMethod}"></span>
                                     </div>
                                 </div>
                             </div>
