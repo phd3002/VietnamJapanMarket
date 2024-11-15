@@ -10,6 +10,7 @@ import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
+import com.ecommerce.g58.service.ShippingUnitService;
 import com.ecommerce.g58.service.implementation.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,9 @@ public class CheckoutController {
     private StoreService storeService;
 
     @Autowired
+    private ShippingUnitService shippingUnitService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -65,7 +69,7 @@ public class CheckoutController {
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal, HttpSession session,
-                                   @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod) {
+                                   @RequestParam(value = "shippingUnitId", required = false) Integer shippingUnitId) {
         // Lấy thời gian bắt đầu session
         LocalDateTime sessionStartTime = (LocalDateTime) session.getAttribute("sessionStartTime");
 
@@ -133,20 +137,20 @@ public class CheckoutController {
                 .sum();
         logger.info("Total cart price calculated: {}", totalPrice);
 
-        // Tính phí vận chuyển dựa trên phương thức vận chuyển
-        long shippingFee;
-        switch (shippingMethod) {
-            case "express":
-                shippingFee = 100000;
-                break;
-            case "same-day":
-                shippingFee = 150000;
-                break;
-            default: // standard
-                shippingFee = 50000;
-                break;
+        // Lấy phí vận chuyển từ bảng shipping_unit dựa trên shippingUnitId
+        long shippingFee = 0;
+        if (shippingUnitId != null) {
+            Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
+            if (shippingUnitOpt.isPresent()) {
+                shippingFee = shippingUnitOpt.get().getShippingRevenue().longValue();
+                model.addAttribute("selectedShippingUnit", shippingUnitOpt.get());
+                logger.info("Shipping fee retrieved for shipping unit ID {}: {}", shippingUnitId, shippingFee);
+            } else {
+                logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
+            }
+        } else {
+            logger.info("No shipping unit selected, default shipping fee set to 0.");
         }
-        logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
         long totalWithShipping = totalPrice + shippingFee;
         logger.info("Total with shipping calculated: {}", totalWithShipping);
@@ -156,7 +160,10 @@ public class CheckoutController {
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("totalWithShipping", totalWithShipping);
         model.addAttribute("shippingFee", shippingFee);
-        model.addAttribute("selectedShippingMethod", shippingMethod);
+
+        // Lấy tất cả các đơn vị vận chuyển để hiển thị trong dropdown
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        model.addAttribute("shippingUnits", shippingUnits);
 
         // Lấy hình ảnh cho từng sản phẩm trong giỏ hàng
         Map<Integer, String> productImages = new HashMap<>();
@@ -179,7 +186,7 @@ public class CheckoutController {
 
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
-                                    @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod,
+                                    @RequestParam(value = "shippingUnitId") Integer shippingUnitId,
                                     @RequestParam(value = "paymentMethod", defaultValue = "wallet") String paymentMethod,
                                     @RequestParam(value = "paymentType", defaultValue = "full") String paymentType) {
         // Kiểm tra xem người dùng đã đăng nhập chưa
@@ -209,20 +216,17 @@ public class CheckoutController {
                 .sum();
         logger.info("Total cart price calculated: {}", totalPrice);
 
-        // Tính phí vận chuyển dựa trên phương thức vận chuyển
-        long shippingFee;
-        switch (shippingMethod) {
-            case "express":
-                shippingFee = 100000;
-                break;
-            case "same-day":
-                shippingFee = 150000;
-                break;
-            default: // standard
-                shippingFee = 50000;
-                break;
+        // Tính phí vận chuyển dựa trên đơn vị vận chuyển được chọn
+        long shippingFee = 0;
+        Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
+        if (shippingUnitOpt.isPresent()) {
+            shippingFee = shippingUnitOpt.get().getUnitPrice().longValue(); // Use unitPrice for the shipping fee
+            logger.info("Shipping fee retrieved from ShippingUnit ID {}: {}", shippingUnitId, shippingFee);
+        } else {
+            logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
+            model.addAttribute("errorMessage", "Đơn vị vận chuyển không hợp lệ.");
+            return "checkout"; // Quay lại trang checkout nếu không tìm thấy đơn vị vận chuyển
         }
-        logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
         // Calculate the final total based on payment type
         long totalWithShipping;
@@ -233,7 +237,6 @@ public class CheckoutController {
         }
         logger.info("Total with shipping calculated based on payment type '{}': {}", paymentType, totalWithShipping);
 
-
         // Nếu phương thức thanh toán là "wallet", kiểm tra số dư ví
         if ("wallet".equalsIgnoreCase(paymentMethod)) {
             long walletBalance = walletService.getUserWalletBalance(userId);
@@ -241,7 +244,6 @@ public class CheckoutController {
 
             // Kiểm tra nếu số dư ví không đủ
             if (walletBalance < totalWithShipping) {
-                // Thêm thông báo lỗi vào model và trả về trang checkout
                 model.addAttribute("errorMessage", "Bạn không đủ số dư để thực hiện giao dịch.");
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", walletBalance);
@@ -256,7 +258,7 @@ public class CheckoutController {
             logger.info("Đã trừ số dư ví cho người dùng ID {}. Số tiền trừ: {}. Loại thanh toán: {}", userId, totalWithShipping, paymentType);
 
             // Lấy thực thể Stores từ sản phẩm trong giỏ hàng
-            Stores store = cartItems.get(0).getProductId().getStoreId(); // Lấy đối tượng Stores
+            Stores store = cartItems.get(0).getProductId().getStoreId();
 
             // Lấy storeId từ đối tượng Stores và tìm cửa hàng trong database
             Integer storeId = store.getStoreId();

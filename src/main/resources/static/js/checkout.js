@@ -55,25 +55,15 @@ document.querySelectorAll('.payment-btn').forEach(function (button) {
 
 // Update the total shipping fee and total order price when the shipping method is changed
 document.getElementById("shipping-method").addEventListener("change", function () {
-    const shippingMethod = this.value;
-    let shippingFee;
+    // Get the selected option and retrieve the shipping fee from its data-fee attribute
+    const selectedOption = this.options[this.selectedIndex];
+    const shippingFee = parseFloat(selectedOption.getAttribute("data-fee"));
 
-    switch (shippingMethod) {
-        case "express":
-            shippingFee = 100000;
-            break;
-        case "same-day":
-            shippingFee = 150000;
-            break;
-        default:
-            shippingFee = 50000;
-            break;
-    }
-
-    // Update the UI with the new shipping fee and total order price
+    // Get the total product price and calculate the total with the selected shipping fee
     const totalProductPrice = parseFloat(document.getElementById("total-product-price").textContent.replace(/,/g, ''));
     const totalWithShipping = totalProductPrice + shippingFee;
 
+    // Update the UI with the new shipping fee and total order price
     document.getElementById("total-shipping-fee").textContent = shippingFee.toLocaleString() + "đ";
     document.getElementById("total-order-price").textContent = totalWithShipping.toLocaleString() + "đ";
 });

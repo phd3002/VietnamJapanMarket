@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShippingUnitServiceImpl implements ShippingUnitService {
@@ -49,5 +50,10 @@ public class ShippingUnitServiceImpl implements ShippingUnitService {
     @Override
     public boolean existsById(int id) {
         return shippingUnitRepository.existsById(id);
+    }
+
+    @Override
+    public Optional<ShippingUnit> findById(int id) {
+        return shippingUnitRepository.findById(id);
     }
 }

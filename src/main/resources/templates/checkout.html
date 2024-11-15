@@ -168,10 +168,12 @@
                         <div class="order-shipping-method">
                             <h5 class="title mb--20">Phương thức vận chuyển</h5>
                             <div class="form-group">
-                                <select name="shippingMethod" id="shipping-method">
-                                    <option value="standard">Giao hàng tiêu chuẩn - 50,000đ</option>
-                                    <option value="express">Giao hàng nhanh - 100,000đ</option>
-                                    <option value="same-day">Giao hàng trong ngày - 150,000đ</option>
+                                <select name="shippingUnitId" id="shipping-method">
+                                    <option th:each="unit : ${shippingUnits}"
+                                            th:value="${unit.unitId}"
+                                            th:data-fee="${unit.unitPrice}"
+                                            th:text="${unit.unitName + ' - ' + unit.unitPrice + 'đ'}">
+                                    </option>
                                 </select>
                             </div>
                         </div>
