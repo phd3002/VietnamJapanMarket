@@ -59,8 +59,8 @@ public class StoreController {
             redirectAttributes.addFlashAttribute("error", "Tên cửa hàng không được để trống và không được vượt quá 100 ký tự.");
             return "redirect:/store-info/" + storeId;
         }
-        if (storePhone == null || storePhone.isEmpty() || storePhone.length() > 20) {
-            redirectAttributes.addFlashAttribute("error", "Số điện thoại không được để trống và không được vượt quá 20 ký tự.");
+        if (storePhone == null || storePhone.isEmpty() || storePhone.length() > 20 || !storePhone.matches("^[0-9]*$") || storePhone.length() < 10) {
+            redirectAttributes.addFlashAttribute("error", "Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt.");
             return "redirect:/store-info/" + storeId;
         }
         if (storeAddress == null || storeAddress.isEmpty() || storeAddress.length() > 255) {
