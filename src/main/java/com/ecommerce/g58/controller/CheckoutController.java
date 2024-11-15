@@ -6,13 +6,15 @@ import com.ecommerce.g58.repository.OrderDetailRepository;
 import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
-import com.ecommerce.g58.service.*;
+import com.ecommerce.g58.service.CartService;
+import com.ecommerce.g58.service.StoreService;
+import com.ecommerce.g58.service.UserService;
+import com.ecommerce.g58.service.WalletService;
+import com.ecommerce.g58.service.ShippingUnitService;
 import com.ecommerce.g58.service.implementation.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +44,10 @@ public class CheckoutController {
     private CartService cartService;
 
     @Autowired
-    private CartItemService cartItemService;
+    private StoreService storeService;
 
     @Autowired
-    private StoreService storeService;
+    private ShippingUnitService shippingUnitService;
 
     @Autowired
     private UserService userService;
@@ -67,8 +69,7 @@ public class CheckoutController {
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal, HttpSession session,
-                                   @RequestParam("cartItemIds") List<Integer> cartItemIds,
-                                   @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod) {
+                                   @RequestParam(value = "shippingUnitId", required = false) Integer shippingUnitId) {
         // Lấy thời gian bắt đầu session
         LocalDateTime sessionStartTime = (LocalDateTime) session.getAttribute("sessionStartTime");
 
@@ -136,33 +137,32 @@ public class CheckoutController {
                 .sum();
         logger.info("Total cart price calculated: {}", totalPrice);
 
-        // Tính phí vận chuyển dựa trên phương thức vận chuyển
-        long shippingFee;
-        switch (shippingMethod) {
-            case "express":
-                shippingFee = 100000;
-                break;
-            case "same-day":
-                shippingFee = 150000;
-                break;
-            default: // standard
-                shippingFee = 50000;
-                break;
+        // Lấy phí vận chuyển từ bảng shipping_unit dựa trên shippingUnitId
+        long shippingFee = 0;
+        if (shippingUnitId != null) {
+            Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
+            if (shippingUnitOpt.isPresent()) {
+                shippingFee = shippingUnitOpt.get().getShippingRevenue().longValue();
+                model.addAttribute("selectedShippingUnit", shippingUnitOpt.get());
+                logger.info("Shipping fee retrieved for shipping unit ID {}: {}", shippingUnitId, shippingFee);
+            } else {
+                logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
+                model.addAttribute("errorMessage", "Đơn vị vận chuyển không hợp lệ.");
+            }
         }
-        logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
         long totalWithShipping = totalPrice + shippingFee;
         logger.info("Total with shipping calculated: {}", totalWithShipping);
-//        List<CartItem> cartItemss = cartItemService.getCartItemsByIds(cartItemIds);
-
 
         // Thêm thông tin vào model
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("cartItemIds", cartItemIds);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("totalWithShipping", totalWithShipping);
         model.addAttribute("shippingFee", shippingFee);
-        model.addAttribute("selectedShippingMethod", shippingMethod);
+
+        // Lấy tất cả các đơn vị vận chuyển để hiển thị trong dropdown
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        model.addAttribute("shippingUnits", shippingUnits);
 
         // Lấy hình ảnh cho từng sản phẩm trong giỏ hàng
         Map<Integer, String> productImages = new HashMap<>();
@@ -185,14 +185,9 @@ public class CheckoutController {
 
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
-                                    @RequestParam(value = "shippingMethod", defaultValue = "standard") String shippingMethod,
-                                    @RequestParam("cartItemIdsString") String cartItemIdsString,
-                                    @RequestParam("address") String shippingAddress,
-                                    @RequestParam(value = "paymentMethod", defaultValue = "wallet") PaymentMethod paymentMethod) {
-        List<Integer> cartItemIds = Arrays.stream(cartItemIdsString.replaceAll("\\[|\\]", "").split(","))
-                .map(String::trim)
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+                                    @RequestParam(value = "shippingUnitId") Integer shippingUnitId,
+                                    @RequestParam(value = "paymentMethod", defaultValue = "WALLET") PaymentMethod paymentMethod,
+                                    @RequestParam(value = "paymentType", defaultValue = "full") String paymentType) {
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (principal == null) {
             logger.warn("User not authenticated. Redirecting to sign-in.");
@@ -211,57 +206,55 @@ public class CheckoutController {
         List<CartItem> cartItems = userCart.getCartItems();
         logger.info("User cart items retrieved for user ID {}. Total items: {}", userId, cartItems.size());
 
-        // Log the payment method to check its value
-        logger.info("Payment method selected: {}", paymentMethod);
-
         // Tính tổng giá giỏ hàng
         long totalPrice = cartItems.stream()
                 .mapToLong(item -> (long) item.getPrice() * item.getQuantity())
                 .sum();
         logger.info("Total cart price calculated: {}", totalPrice);
 
-        // Tính phí vận chuyển dựa trên phương thức vận chuyển
-        long shippingFee;
-        switch (shippingMethod) {
-            case "express":
-                shippingFee = 100000;
-                break;
-            case "same-day":
-                shippingFee = 150000;
-                break;
-            default: // standard
-                shippingFee = 50000;
-                break;
+        // Tính phí vận chuyển dựa trên đơn vị vận chuyển được chọn
+        long shippingFee = 0;
+        Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
+        if (shippingUnitOpt.isPresent()) {
+            shippingFee = shippingUnitOpt.get().getUnitPrice().longValue();
+            logger.info("Shipping fee retrieved from ShippingUnit ID {}: {}", shippingUnitId, shippingFee);
+        } else {
+            logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
+            model.addAttribute("errorMessage", "Đơn vị vận chuyển không hợp lệ.");
+            return "checkout"; // Quay lại trang checkout nếu không tìm thấy đơn vị vận chuyển
         }
-        logger.info("Shipping fee calculated for method '{}': {}", shippingMethod, shippingFee);
 
-        long totalWithShipping = totalPrice + shippingFee;
-        logger.info("Total with shipping calculated: {}", totalWithShipping);
+        // Calculate the final total based on payment type
+        long totalWithShipping;
+        if ("deposit".equalsIgnoreCase(paymentType)) {
+            totalWithShipping = (totalPrice / 2) + shippingFee; // 50% of total price, full shipping fee
+        } else {
+            totalWithShipping = totalPrice + shippingFee; // Full payment
+        }
+        logger.info("Total with shipping calculated based on payment type '{}': {}", paymentType, totalWithShipping);
 
-        // Nếu phương thức thanh toán là "wallet", kiểm tra số dư ví
+        // Handle payment methods using PaymentMethod enum
         if (paymentMethod == PaymentMethod.WALLET) {
             long walletBalance = walletService.getUserWalletBalance(userId);
             logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
 
             // Kiểm tra nếu số dư ví không đủ
             if (walletBalance < totalWithShipping) {
-                // Thêm thông báo lỗi vào model và trả về trang checkout
                 model.addAttribute("errorMessage", "Bạn không đủ số dư để thực hiện giao dịch.");
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", walletBalance);
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
-                session.setAttribute("cartItemIdsOrderOn", cartItemIds);
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
 
             // Trừ tiền trong ví của người mua
-            walletService.deductFromWallet(userId, totalWithShipping);
-            logger.info("Wallet balance deducted for user ID {}. Amount deducted: {}", userId, totalWithShipping);
+            walletService.deductFromWallet(userId, totalWithShipping, paymentType);
+            logger.info("Đã trừ số dư ví cho người dùng ID {}. Số tiền trừ: {}. Loại thanh toán: {}", userId, totalWithShipping, paymentType);
 
             // Lấy thực thể Stores từ sản phẩm trong giỏ hàng
-            Stores store = cartItems.get(0).getProductId().getStoreId(); // Lấy đối tượng Stores
+            Stores store = cartItems.get(0).getProductId().getStoreId();
 
             // Lấy storeId từ đối tượng Stores và tìm cửa hàng trong database
             Integer storeId = store.getStoreId();
@@ -270,11 +263,18 @@ public class CheckoutController {
             // Cộng số tiền thanh toán vào ví của cửa hàng
             if (optionalStore.isPresent()) {
                 Stores foundStore = optionalStore.get();
-                walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping); // Sử dụng ownerId để cộng vào ví của chủ cửa hàng
-                logger.info("Cộng {} vào ví của cửa hàng có ID {}", totalWithShipping, storeId);
+                walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping, paymentType);
+                logger.info("Đã cộng {} vào ví của chủ cửa hàng có ID {}. Loại thanh toán: {}", totalWithShipping, storeId, paymentType);
             }
+        } else if (paymentMethod == PaymentMethod.VNPAY) {
+            String returnUrl = "http://yourdomain.com/vnpay-payment";
+            String paymentUrl = vnPayService.createPaymentUrl(order.getOrderId(), (int) totalWithShipping, paymentMethod, returnUrl);
+            session.setAttribute("orderPending", order);
+            return "redirect:" + paymentUrl;
         } else {
-            logger.info("Phương thức thanh toán là COD. Không thực hiện trừ ví.");
+            logger.info("Phương thức thanh toán không hợp lệ.");
+            model.addAttribute("errorMessage", "Phương thức thanh toán không hợp lệ.");
+            return "checkout";
         }
 
         // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
@@ -333,15 +333,31 @@ public class CheckoutController {
         model.addAttribute("order", order);
         model.addAttribute("paymentMethod", paymentMethod);
         logger.info("Order details added to model for display on checkout-complete page.");
-        if (user != null){
-            session.setAttribute("userOrderOn", user);
-            session.setAttribute("addressOrderOn", shippingAddress);
-            session.setAttribute("paymentMethodOrderOn", paymentMethod);
-            session.setAttribute("cartItemIdsOrderOn", cartItemIds);
-        }
 
         // Chuyển hướng về trang checkout-complete
         return "checkout-complete";
+    }
+
+    @GetMapping("/vnpay-payment")
+    public String vnpayPaymentReturn(HttpSession session, HttpServletRequest request, Model model) {
+        Map<String, String> params = request.getParameterMap().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0]));
+
+        String result = vnPayService.handlePaymentReturn(params);
+        Orders order = (Orders) session.getAttribute("orderPending");
+
+        if ("Thanh toán thành công".equals(result) && order != null) {
+            orderRepository.save(order);
+            logger.info("Order confirmed and saved in database with ID: {}", order.getOrderId());
+            session.removeAttribute("orderPending");
+            cartService.clearCart(order.getUserId().getUserId());
+            logger.info("Cart cleared for user ID {} after successful payment.", order.getUserId().getUserId());
+            model.addAttribute("order", order);
+            return "checkout-complete";
+        } else {
+            model.addAttribute("errorMessage", result);
+            return "checkout";
+        }
     }
 
     @PostMapping("/checkout/cancel")

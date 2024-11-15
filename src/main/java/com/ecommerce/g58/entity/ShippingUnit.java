@@ -31,4 +31,7 @@ public class ShippingUnit {
 
     @Column(name = "shipping_revenue", nullable = false)
     private BigDecimal shippingRevenue;
+
+    @Column(name = "unit_price", nullable = false)
+    private Integer unitPrice;
 }

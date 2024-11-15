@@ -29,7 +29,8 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
             "                CASE \n" +
             "                    WHEN w1.user_id = :userId THEN w1.balance\n" +
             "                    WHEN w2.user_id = :userId THEN w2.balance\n" +
-            "                END as walletBalance\n" +
+            "                END as walletBalance,\n" +
+            "                t.payment_type as paymentType\n" +  // Add this line
             "            FROM transactions t\n" +
             "            LEFT JOIN wallet w1 ON t.from_wallet_id = w1.wallet_id\n" +
             "            LEFT JOIN wallet w2 ON t.to_wallet_id = w2.wallet_id\n" +
