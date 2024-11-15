@@ -5,8 +5,7 @@ import lombok.Getter;
 @Getter
 public enum PaymentMethod {
     VNPAY(1, "VNPay"),
-    CASH(2, "Tiền mặt"),
-    WALLET(3, "Ví điện tử");
+    WALLET(2, "Ví điện tử");
 
     private final int value;
     private final String displayName;

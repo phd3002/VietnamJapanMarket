@@ -147,9 +147,8 @@ public class CheckoutController {
                 logger.info("Shipping fee retrieved for shipping unit ID {}: {}", shippingUnitId, shippingFee);
             } else {
                 logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
+                model.addAttribute("errorMessage", "Đơn vị vận chuyển không hợp lệ.");
             }
-        } else {
-            logger.info("No shipping unit selected, default shipping fee set to 0.");
         }
 
         long totalWithShipping = totalPrice + shippingFee;
@@ -187,7 +186,7 @@ public class CheckoutController {
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
                                     @RequestParam(value = "shippingUnitId") Integer shippingUnitId,
-                                    @RequestParam(value = "paymentMethod", defaultValue = "wallet") String paymentMethod,
+                                    @RequestParam(value = "paymentMethod", defaultValue = "WALLET") PaymentMethod paymentMethod,
                                     @RequestParam(value = "paymentType", defaultValue = "full") String paymentType) {
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (principal == null) {
@@ -207,9 +206,6 @@ public class CheckoutController {
         List<CartItem> cartItems = userCart.getCartItems();
         logger.info("User cart items retrieved for user ID {}. Total items: {}", userId, cartItems.size());
 
-        // Log the payment method to check its value
-        logger.info("Payment method selected: {}", paymentMethod);
-
         // Tính tổng giá giỏ hàng
         long totalPrice = cartItems.stream()
                 .mapToLong(item -> (long) item.getPrice() * item.getQuantity())
@@ -220,7 +216,7 @@ public class CheckoutController {
         long shippingFee = 0;
         Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
         if (shippingUnitOpt.isPresent()) {
-            shippingFee = shippingUnitOpt.get().getUnitPrice().longValue(); // Use unitPrice for the shipping fee
+            shippingFee = shippingUnitOpt.get().getUnitPrice().longValue();
             logger.info("Shipping fee retrieved from ShippingUnit ID {}: {}", shippingUnitId, shippingFee);
         } else {
             logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
@@ -237,8 +233,8 @@ public class CheckoutController {
         }
         logger.info("Total with shipping calculated based on payment type '{}': {}", paymentType, totalWithShipping);
 
-        // Nếu phương thức thanh toán là "wallet", kiểm tra số dư ví
-        if ("wallet".equalsIgnoreCase(paymentMethod)) {
+        // Handle payment methods using PaymentMethod enum
+        if (paymentMethod == PaymentMethod.WALLET) {
             long walletBalance = walletService.getUserWalletBalance(userId);
             logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
 
@@ -270,13 +266,15 @@ public class CheckoutController {
                 walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping, paymentType);
                 logger.info("Đã cộng {} vào ví của chủ cửa hàng có ID {}. Loại thanh toán: {}", totalWithShipping, storeId, paymentType);
             }
-        } else if ("vnpay".equalsIgnoreCase(paymentMethod)) {
+        } else if (paymentMethod == PaymentMethod.VNPAY) {
             String returnUrl = "http://yourdomain.com/vnpay-payment";
-            String paymentUrl = vnPayService.createPaymentUrl(order.getOrderId(), (int) totalWithShipping, PaymentMethod.VNPAY, returnUrl);
+            String paymentUrl = vnPayService.createPaymentUrl(order.getOrderId(), (int) totalWithShipping, paymentMethod, returnUrl);
             session.setAttribute("orderPending", order);
             return "redirect:" + paymentUrl;
         } else {
-            logger.info("Phương thức thanh toán là COD. Không thực hiện trừ ví.");
+            logger.info("Phương thức thanh toán không hợp lệ.");
+            model.addAttribute("errorMessage", "Phương thức thanh toán không hợp lệ.");
+            return "checkout";
         }
 
         // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
