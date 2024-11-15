@@ -28,7 +28,7 @@ public interface StoreService {
 
     Integer calculateTotalRevenue(Integer userId, String startDate, String endDate);
 
-    Integer calculateTotalProducts(Integer userId);
+    Integer totalProductsSold(Integer userId, String startDate, String endDate);
 
     Integer totalOrders(Integer userId, String startDate, String endDate);
 
@@ -37,4 +37,26 @@ public interface StoreService {
     Integer totalOrdersCancelledAndReturned(Integer userId, String startDate, String endDate);
 
     List<BestSellingDTO> getBestSellingProducts(Integer userId, String startDate, String endDate);
+
+    Integer count5StarFeedback(Integer userId, String startDate, String endDate);
+
+    Integer count4StarFeedback(Integer userId, String startDate, String endDate);
+
+    Integer count3StarFeedback(Integer userId, String startDate, String endDate);
+
+    Integer count2StarFeedback(Integer userId, String startDate, String endDate);
+
+    Integer count1StarFeedback(Integer userId, String startDate, String endDate);
+
+    Integer totalRevenueCurrentMonth(Integer userId);
+
+    Integer totalRevenueLastMonth(Integer userId);
+
+    Integer totalRevenueLast2Months(Integer userId);
+
+    Integer totalRevenueLast3Months(Integer userId);
+
+    Integer totalRevenueLast4Months(Integer userId);
+
+    Integer totalRevenueLast5Months(Integer userId);
 }

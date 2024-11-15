@@ -115,7 +115,7 @@
                 <div class="col-md-6">
                     <div class="widget-small info coloured-icon"><i class='icon bx bxs-purchase-tag-alt fa-3x'></i>
                         <div class="info">
-                            <h4>Tổng sản phẩm</h4>
+                            <h4>Tổng sản phẩm đã bán</h4>
                             <p><b th:text="${totalProducts} + ' sản phẩm'"></b></p>
                         </div>
                     </div>
@@ -164,12 +164,16 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="products : ${bestSellingProducts}">
+                                <tr th:each="products : ${bestSellingProducts}" th:if="${not #lists.isEmpty(bestSellingProducts)}">
                                     <td th:text="${products.productCode}"></td>
                                     <td th:text="${products.productName}"></td>
-                                    <td th:text="${products.price} +' đ'"></td>
+                                    <td th:text="${products.price} + ' đ'"></td>
                                     <td th:text="${products.category}"></td>
                                     <td th:text="${products.quantitySold}"></td>
+                                </tr>
+                                <!-- Hiển thị dòng thông báo khi danh sách rỗng -->
+                                <tr th:unless="${not #lists.isEmpty(bestSellingProducts)}">
+                                    <td colspan="5" style="text-align: center;">Không có dữ liệu</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -184,51 +188,27 @@
         <!--Right-->
         <div class="col-md-12 col-lg-6">
             <div class="row">
-<!--                <div class="col-md-12">-->
-<!--                    <div class="tile">-->
-<!--                        <h3 class="tile-title">Dữ liệu 6 tháng đầu vào</h3>-->
-<!--                        <div class="embed-responsive embed-responsive-16by9">-->
-<!--                            <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div class="col-md-12">
                     <div class="tile">
                         <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
+                        <div class="embed-responsive embed-responsive-16by9" id="lineChartContainer">
+                            <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="tile">
                         <h3 class="tile-title">Biểu đồ tỷ lệ đơn hàng</h3>
-                        <div class="embed-responsive embed-responsive-16by9">
+                        <div class="embed-responsive embed-responsive-16by9" id="pieChartContainer">
                             <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
                         </div>
                     </div>
                 </div>
-<!--                <div class="col-md-12">-->
-<!--                    <div class="tile">-->
-<!--                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>-->
-<!--                        <div class="embed-responsive embed-responsive-16by9">-->
-<!--                            <canvas class="embed-responsive-item" id="doughnutChartDemo"></canvas>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="col-md-12">-->
-<!--                    <div class="tile">-->
-<!--                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>-->
-<!--                        <div class="embed-responsive embed-responsive-16by9">-->
-<!--                            <canvas class="embed-responsive-item" id="polarAreaChartDemo"></canvas>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Đánh giá sản phẩm</h3>
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <canvas class="embed-responsive-item" id="radarChartDemo"></canvas>
+                        <h3 class="tile-title">Thống kê đánh giá sản phẩm</h3>
+                        <div class="embed-responsive embed-responsive-16by9" id="polarAreaChartContainer">
+                            <canvas class="embed-responsive-item" id="polarAreaChartDemo"></canvas>
                         </div>
                     </div>
                 </div>
@@ -253,89 +233,66 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
     var data = {
-        labels: ["Tháng 11"],
+        labels: ["5 tháng trước", "4 tháng trước", "3 tháng trước", "2 tháng trước", "Tháng trước", "Tháng này"],
         datasets: [{
-            label: "Dữ liệu đầu tiên",
-            fillColor: "rgba(255, 213, 59, 0.5), 212, 59)",
-            strokeColor: "rgb(255, 212, 59)",
-            pointColor: "rgb(255, 212, 59)",
-            pointStrokeColor: "rgb(255, 212, 59)",
+            label: "Doanh thu",
+            fillColor: "rgba(255, 193, 7, 0.5)",
+            strokeColor: "rgb(255, 193, 7)",
+            pointColor: "rgb(255, 193, 7)",
+            pointStrokeColor: "rgb(255, 193, 7)",
             pointHighlightFill: "rgb(255, 212, 59)",
             pointHighlightStroke: "rgb(255, 212, 59)",
-            data: [3000]
+            data: [
+                [[${totalRevenueLast5Months}]],
+                [[${totalRevenueLast4Months}]],
+                [[${totalRevenueLast3Months}]],
+                [[${totalRevenueLast2Months}]],
+                [[${totalRevenueLastMonth}]],
+                [[${totalRevenueCurrentMonth}]]
+            ]
         },
         ]
     };
-    // var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-    // var lineChart = new Chart(ctxl).Line(data);
+    var allZero = data.datasets[0].data.every(function(value) {
+        return value === 0;
+    });
+    if (allZero) {
+        document.getElementById("lineChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
+    } else {
+        var ctxl = $("#lineChartDemo").get(0).getContext("2d");
+        var lineChart = new Chart(ctxl).Line(data);
+    }
 
-    var ctxb = $("#barChartDemo").get(0).getContext("2d");
-    var barChart = new Chart(ctxb).Bar(data);
+    // Dữ liệu cho biểu đồ tròn
     var pieData = [
         {value: [[${totalOrdersCompleted}]], color: "#01ff02", highlight: "#007b01", label: "Hoàn thành"},
         {value: [[${totalOrdersCancelledAndReturned}]], color: "#b10000", highlight: "#ff0000", label: "Hủy và hoàn trả"},
     ];
-    var ctxp = document.getElementById("pieChartDemo").getContext("2d");
-    var pieChart = new Chart(ctxp).Pie(pieData);
-    // var ctxd = document.getElementById("doughnutChartDemo").getContext("2d");
-    // var doughnutChart = new Chart(ctxd).Doughnut(pieData);
+
+    var totalValue = pieData.reduce((sum, item) => sum + item.value, 0);
+
+    if (totalValue === 0) {
+        document.getElementById("pieChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
+    } else {
+        var ctxp = document.getElementById("pieChartDemo").getContext("2d");
+        var pieChart = new Chart(ctxp).Pie(pieData);
+    }
+
     // Dữ liệu cho biểu đồ cực
-    // var polarData = [
-    //     {value: [[${totalOrdersCancelledAndReturned}]], color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1"},
-    //     {value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2"},
-    //     {value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3"},
-    //     {value: 90, color: "#949FB1", highlight: "#A8B3C5", label: "Dữ liệu 4"}
-    // ];
-    //
-    // // Biểu đồ cực
-    // var ctxpo = document.getElementById("polarAreaChartDemo").getContext("2d");
-    // var polarAreaChart = new Chart(ctxpo).PolarArea(polarData);
-
-    // Dữ liệu cho biểu đồ radar
-    var radarData = {
-        labels: ["5 sao", "4 sao", "3 sao", "2 sao", "1 sao"],
-        datasets: [
-            {
-                label: "feedback",
-                fillColor: "rgba(76, 175, 80, 0.65)",
-                strokeColor: "rgb(76, 175, 80)",
-                pointColor: "rgb(76, 175, 80)",
-                data: [3, 2, 1, 0, 0]
-            },
-            {
-                label: "4 sao",
-                fillColor: "rgba(139, 195, 74, 0.65)",
-                strokeColor: "rgb(139, 195, 74)",
-                pointColor: "rgb(139, 195, 74)",
-                data: [2]
-            },
-            {
-                label: "3 sao",
-                fillColor: "rgba(255, 235, 59, 0.65)",
-                strokeColor: "rgb(255, 235, 59)",
-                pointColor: "rgb(255, 235, 59)",
-                data: [0]
-            },
-            {
-                label: "2 sao",
-                fillColor: "rgba(255, 193, 7, 0.65)",
-                strokeColor: "rgb(255, 193, 7)",
-                pointColor: "rgb(255, 193, 7)",
-                data: [0]
-            },
-            {
-                label: "1 sao",
-                fillColor: "rgba(244, 67, 54, 0.65)",
-                strokeColor: "rgb(244, 67, 54)",
-                pointColor: "rgb(244, 67, 54)",
-                data: [0]
-            }
-        ]
-    };
-
-    // Biểu đồ radar
-    var ctxr = document.getElementById("radarChartDemo").getContext("2d");
-    var radarChart = new Chart(ctxr).Radar(radarData);
+    var polarData = [
+        {value: [[${count5StarFeedback}]], color: "#4CAF50", highlight: "#66BB6A", label: "5 Stars"},
+        {value: [[${count4StarFeedback}]], color: "#8BC34A", highlight: "#9CCC65", label: "4 Stars"},
+        {value: [[${count3StarFeedback}]], color: "#FFEB3B", highlight: "#FFEE58", label: "3 Stars"},
+        {value: [[${count2StarFeedback}]], color: "#FFC107", highlight: "#FFD54F", label: "2 Stars"},
+        {value: [[${count1StarFeedback}]], color: "#F44336", highlight: "#EF5350", label: "1 Star"}
+    ];
+    polarData = polarData.filter(item => item.value > 0);
+    if (polarData.length === 0) {
+        document.getElementById("polarAreaChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
+    } else {
+        var ctxpo = document.getElementById("polarAreaChartDemo").getContext("2d");
+        var polarAreaChart = new Chart(ctxpo).PolarArea(polarData);
+    }
 </script>
 <script type="text/javascript">
     //Thời Gian
@@ -401,6 +358,22 @@
         } else {
             // Ẩn thông báo lỗi
             document.getElementById('errorMessage').style.display = 'none';
+            let url = '/seller/dashboard';
+            const params = [];
+
+            if (startDate) {
+                params.push(`startDate=${startDate}`);
+            }
+
+            if (endDate) {
+                params.push(`endDate=${endDate}`);
+            }
+
+            if (params.length > 0) {
+                url += '?' + params.join('&');
+            }
+
+            window.location.href = url;
         }
     }
 

@@ -1,7 +1,6 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.BestSellingDTO;
-import com.ecommerce.g58.entity.Countries;
 import com.ecommerce.g58.entity.Roles;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -81,8 +79,8 @@ public class StoreServiceImp implements StoreService {
     }
 
     @Override
-    public Integer calculateTotalProducts(Integer userId) {
-        return storeRepository.totalProduct(userId);
+    public Integer totalProductsSold(Integer userId, String startDate, String endDate) {
+        return storeRepository.totalProductSold(userId, startDate, endDate);
     }
 
     @Override
@@ -119,4 +117,61 @@ public class StoreServiceImp implements StoreService {
         }
         return bestSellingDTOS;
     }
+
+    @Override
+    public Integer count5StarFeedback(Integer userId, String startDate, String endDate) {
+        return storeRepository.countRatings5Star(userId, startDate, endDate);
+    }
+
+    @Override
+    public Integer count4StarFeedback(Integer userId, String startDate, String endDate) {
+        return storeRepository.countRatings4Star(userId, startDate, endDate);
+    }
+
+    @Override
+    public Integer count3StarFeedback(Integer userId, String startDate, String endDate) {
+        return storeRepository.countRatings3Star(userId, startDate, endDate);
+    }
+
+    @Override
+    public Integer count2StarFeedback(Integer userId, String startDate, String endDate) {
+        return storeRepository.countRatings2Star(userId, startDate, endDate);
+    }
+
+    @Override
+    public Integer count1StarFeedback(Integer userId, String startDate, String endDate) {
+        return storeRepository.countRatings1Star(userId, startDate, endDate);
+    }
+
+    @Override
+    public Integer totalRevenueCurrentMonth(Integer userId) {
+        return storeRepository.totalRevenueCurrent(userId);
+    }
+
+    @Override
+    public Integer totalRevenueLastMonth(Integer userId) {
+        return storeRepository.totalRevenueLastMonth(userId);
+    }
+
+    @Override
+    public Integer totalRevenueLast2Months(Integer userId) {
+        return storeRepository.totalRevenueLast2Months(userId);
+    }
+
+    @Override
+    public Integer totalRevenueLast3Months(Integer userId) {
+        return storeRepository.totalRevenueLast3Months(userId);
+    }
+
+    @Override
+    public Integer totalRevenueLast4Months(Integer userId) {
+        return storeRepository.totalRevenueLast4Months(userId);
+    }
+
+    @Override
+    public Integer totalRevenueLast5Months(Integer userId) {
+        return storeRepository.totalRevenueLast5Months(userId);
+    }
+
+
 }
