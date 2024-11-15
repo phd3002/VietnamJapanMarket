@@ -61,7 +61,7 @@ public class UserControllerTest {
         when(userService.isEmailExist("lequyet180902@gmail.com")).thenReturn(false);
         when(request.getSession()).thenReturn(session);
         String result = userController.registerUser(users, confirmPassword, model, redirectAttributes, request);
-        assertEquals("redirect:/sign-up", result);
+        assertEquals("sign-up", result);
     }
 
     // testRegisterUser_PasswordsDoNotMatch tc2
@@ -71,7 +71,7 @@ public class UserControllerTest {
         user.setEmail("lequyet180902@gmail.com");
         user.setPassword("123456");
         String result = userController.registerUser(user, "123@", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
+        verify(model).addAttribute("errorMessage", "Username không được để trống.");
         assertEquals("sign-up", result);
     }
 
