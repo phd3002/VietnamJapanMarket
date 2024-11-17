@@ -26,7 +26,9 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -166,7 +168,6 @@ public class OrderServiceImpl implements OrderService {
                 orderDetail.setQuantity(cartItem.getQuantity());
                 orderDetail.setPrice(cartItem.getPrice());
                 totalOrderPrice += (long) cartItem.getPrice() * cartItem.getQuantity();
-
                 orderDetailsList.add(orderDetail);
 
                 // Update inventory
@@ -177,9 +178,33 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
-        order.setTotalPrice(totalOrderPrice);
-        order.setOrderDetails(orderDetailsList);
+
+        ShippingStatus initialShippingStatus = ShippingStatus.builder()
+                .orderId(order)
+                .status("Pending")
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        // Save the order to generate the order ID
+        order.setTotalPrice(totalOrderPrice / 2);
         orderRepository.save(order);
+
+        // Save order details
+        orderDetailRepository.saveAll(orderDetailsList);
+
+        // Save initial shipping status
+        shippingStatusRepository.save(initialShippingStatus);
+
+        // Check for duplicate order details and remove them
+        List<OrderDetails> savedOrderDetails = orderDetailRepository.findByOrderId(order.getOrderId());
+        Set<String> uniqueOrderDetails = new HashSet<>();
+        for (OrderDetails orderDetail : savedOrderDetails) {
+            String uniqueKey = orderDetail.getProductId().getProductId() + "-" + orderDetail.getVariationId().getVariationId();
+            if (!uniqueOrderDetails.add(uniqueKey)) {
+                orderDetailRepository.delete(orderDetail);
+            }
+        }
+
         return order;
     }
 }

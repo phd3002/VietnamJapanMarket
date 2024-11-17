@@ -21,6 +21,9 @@ public class VNPayConfig {
     @Value("${vnpay.paymentUrl}")
     private  String vnp_PaymentUrl;
 
+    public static String vnp_ReturnUrl = "/vnpay-payment";
+
+
     public static String hashAllFields(Map fields) {
         List fieldNames = new ArrayList(fields.keySet());
         Collections.sort(fieldNames);

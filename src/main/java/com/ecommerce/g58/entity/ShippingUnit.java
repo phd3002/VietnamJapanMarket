@@ -29,7 +29,7 @@ public class ShippingUnit {
     @Column(name = "unit_phone")
     private String unitPhone;
 
-    @Column(name = "shipping_revenue", nullable = false)
+    @Column(name = "shipping_revenue")
     private BigDecimal shippingRevenue;
 
     @Column(name = "unit_price", nullable = false)

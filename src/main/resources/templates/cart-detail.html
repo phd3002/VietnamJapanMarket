@@ -392,22 +392,18 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
 <script>
-    $('#checkoutButton').click(function () {
-        var selectedCanteens = new Set();
-        var cartItemIds = [];
-        $('.product-checkbox:checked').each(function () {
-            selectedCanteens.add($(this).data('store'));
-            cartItemIds.push($(this).attr('id').replace('product', ''));
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get all cart item elements that have a hidden input with their ID
+        const cartItemElements = document.querySelectorAll('input[name="cartItemId"]');
+        const cartItemIds = [];
+
+        // Extract the IDs and add them to the cartItemIds array
+        cartItemElements.forEach(item => {
+            cartItemIds.push(item.value);
         });
 
-        if (selectedCanteens.size > 1) {
-            // Show modal warning if more than one canteen's items are selected
-            $('#checkoutModal').modal('show');
-        } else {
-            // Proceed to checkout page
-            $('#cartItemIds').val(cartItemIds.join(','));
-            $('#checkoutForm').submit();
-        }
+        // Set the value of the hidden input field to the list of IDs, joined by commas
+        document.getElementById('cartItemIds').value = cartItemIds.join(',');
     });
 </script>
 </body>

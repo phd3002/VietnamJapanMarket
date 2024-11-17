@@ -74,6 +74,9 @@
                         <div th:if="${successMessage}" class="success-message">
                             <p th:text="${successMessage}"></p>
                         </div>
+                        <div th:if="${verificationSuccessMessage}" class="success-message">
+                            <p th:text="${verificationSuccessMessage}"></p>
+                        </div>
                         <div th:if="${banned}" class="success-message">
                             <p th:text="${banned}"></p>
                         </div>

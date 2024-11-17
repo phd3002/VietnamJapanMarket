@@ -109,7 +109,9 @@
                 <p th:text="${errorMessage}"></p>
             </div>
             <form action="/checkout" method="post">
-                <input type="hidden" id="store-country" th:value="${store.country.countryId}">
+                <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">
+                <input type="hidden" name="totalOrderPrice" th:value="${totalOrderPrice}">
+<!--                <input type="hidden" id="store-country" th:value="${store.country.countryId}">-->
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
@@ -128,7 +130,7 @@
                         </div>
                         <div class="form-group">
                             <span>Địa chỉ chi tiết</span>
-                            <input type="text" name="shippingAddress" id="shipping-address" required>
+                            <input for="shippingAddress" type="text" name="shippingAddress" id="shipping-address" required>
                         </div>
                     </div>
 
@@ -203,6 +205,7 @@
                             </div>
                             <!-- Hidden input to hold selected payment method -->
                             <input type="hidden" id="paymentMethod" name="paymentMethod" value="WALLET">
+                            <input type="hidden"  name="paymentMethod" value="VNPAY">
                             <input type="hidden" id="paymentType" name="paymentType" value="full">
                             <br><br>
                             <div class="order-price">

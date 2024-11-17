@@ -47,18 +47,26 @@ public class VNPayController {
     public String submitOrder(@RequestParam("totalOrderPrice") int totalOrderPrice,
                               @RequestParam("orderInfo") String orderInfo,
                               HttpServletRequest request, HttpServletResponse httpServletResponse) {
+        System.out.println("submitOrder called with totalOrderPrice: " + totalOrderPrice + ", orderInfo: " + orderInfo);
+
         String serverPath;
         String serverHost = request.getHeader("X-Forwarded-Host");
         if (!StringUtils.isEmpty(serverHost)) {
             serverPath = "https://" + serverHost;
+            System.out.println("Using X-Forwarded-Host: " + serverHost);
         } else {
             String urlFixed = String.valueOf(request.getRequestURL());
             serverPath = urlFixed.replace(request.getRequestURI(), "");
+            System.out.println("Using request URL: " + urlFixed);
         }
 
         String vnpayUrl = vnPayService.createOrder(totalOrderPrice, orderInfo, serverPath);
+        System.out.println("VNPay URL created: " + vnpayUrl);
+
         httpServletResponse.setHeader("Location", vnpayUrl);
         httpServletResponse.setStatus(302);
+        System.out.println("Redirecting to VNPay URL");
+
         return null;
     }
 
@@ -78,14 +86,15 @@ public class VNPayController {
 
     @GetMapping("/vnpay-payment")
     public String vnpayPaymentReturn(HttpServletRequest request, Model model, HttpSession session) {
+        System.out.println("vnpayPaymentReturn called");
         int paymentStatus = vnPayService.orderReturn(request);
+        System.out.println("Payment status: " + paymentStatus);
         String orderInfo = request.getParameter("vnp_OrderInfo");
         String paymentTime = request.getParameter("vnp_PayDate");
         String transactionId = request.getParameter("vnp_TransactionNo");
         model.addAttribute("orderId", orderInfo);
         model.addAttribute("paymentTime", paymentTime);
         model.addAttribute("transactionId", transactionId);
-
         model.addAttribute("paymentTime", paymentTime);
         model.addAttribute("transactionId", transactionId);
 
@@ -94,8 +103,10 @@ public class VNPayController {
         PaymentMethod paymentMethod = (PaymentMethod) session.getAttribute("paymentMethodOrderOn");
         List<Integer> cartItemIds = (List<Integer>) session.getAttribute("cartItemIdsOrderOn");
         if (paymentStatus == 1) {
+            System.out.println("Payment successful");
             Orders order = orderService.createOrder(user, shippingAddress, paymentMethod, cartItemIds);
             if (order == null) {
+                System.out.println("Order creation failed");
                 return "error/404";
             }
             try {
@@ -104,15 +115,19 @@ public class VNPayController {
                 long totalPrice = order.getTotalPrice();
                 model.addAttribute("orderCode", orderCode);
                 model.addAttribute("totalPrice", totalPrice);
+                System.out.println("Order created successfully with order code: " + orderCode);
                 return "checkout-complete-vnpay";
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("Error removing cart items: " + e.getMessage());
                 return "error/404";
             }
         } else {
+            System.out.println("Payment failed or signature verification failed");
             return "homepage";
         }
     }
+
     @Data
     @Builder
     private static class ResponseCheckedDto {

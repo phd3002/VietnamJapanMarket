@@ -185,4 +185,14 @@ public class WalletServiceImpl implements WalletService {
 
         transactionRepository.save(transaction);
     }
+
+    public void createWalletForUser(Users userId, long initialBalance) {
+        Wallet wallet = new Wallet(); // Tạo một đối tượng Wallet mới
+        wallet.setUserId(userId); // Đặt userId cho ví mới
+        wallet.setBalance(initialBalance); // Đặt số dư ban đầu cho ví (0)
+        wallet.setLastUpdated(LocalDateTime.now()); // Cập nhật thời gian cập nhật cuối cùng
+
+        walletRepository.save(wallet); // Lưu ví mới vào cơ sở dữ liệu
+    }
+
 }

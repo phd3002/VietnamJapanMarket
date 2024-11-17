@@ -81,7 +81,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/terms-of-service/**", "/view-store/**", "/wallet/**",
                         "/wishlist/**", "/forgot-password/**", "/reset-password/**",
                         "/add_to_cart", "/cart-items", "/product/**",
-                        "/store-info/**", "/store-save/**", "/addProductFull/**","/addProductForm2/**"
+                        "/store-info/**", "/store-save/**", "/addProductFull/**","/addProductForm2/**",
+                        "/vn/**","/submitOrder/**","/now/**","/vnpay-payment/**"
                 ).permitAll()
 
                 // Checkout page requires authentication

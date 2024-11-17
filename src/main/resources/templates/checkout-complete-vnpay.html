@@ -1,88 +1,56 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <title th:text="${pageTitle} ?: 'Home Page'"></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Including CSS Files from base.html -->
-    <th:block th:replace="~{base :: head}"></th:block>
-    <style>
-        .confirmation-container {
-            margin: 60px auto;
-            text-align: center;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-        }
-        .confirmation-container h2 {
-            color: #4CAF50;
-        }
-        .order-summary {
-            margin-top: 20px;
-            text-align: left;
-            margin-left: 35%;
-        }
-        .order-summary th, .order-summary td {
-            padding: 10px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Thanh toán thành công</title>
 </head>
 
-<body class="sticky-header newsletter-popup-modal">
+<body>
+<!-- back to top -->
 
-<!-- Include Header Fragment -->
-<div th:replace="base :: header"></div>
-
-<!-- Main Content Section -->
-<main class="main-wrapper">
-    <div class="confirmation-container">
-        <h2>Cảm ơn vì bạn đã mua hàng!</h2>
-        <p>Đã tạo đơn thành công.</p>
-        <p>Mã đơn hàng là: <span th:text="${order.orderId}"></span></p>
-
-        <div class="order-summary">
-            <h3>Thông tin đơn hàng</h3>
-            <table>
+<!-- start body -->
+<div class="body py-5">
+    <div class="container">
+        <div class="w-50 m-auto">
+            <!-- Thêm lớp "my-4" để tạo ra khoảng cách trên và dưới tiêu đề trang -->
+            <h1 class="my-3 text-success text-center">Thanh toán thành công</h1>
+            <!-- Sử dụng lớp "alert" và "alert-danger" để tạo ra thông báo lỗi -->
+            <h2 class="my-2">Chi tiết đơn hàng</h2>
+            <!-- Sử dụng lớp "table" và "table-bordered" để tạo ra bảng hiển thị thông tin chi tiết đơn hàng -->
+            <table class="table table-bordered">
+                <tbody>
                 <tr>
-                    <th>Tổng giá:</th>
-                    <td th:text="${paymentMethod == 'cod' ? 'Thanh toán khi nhận hàng' : order.totalPrice + ' đ'}"></td>
+                    <td>Thông tin đơn hàng:</td>
+                    <td><span th:text="${orderCode}">[order ID]</span></td>
                 </tr>
                 <tr>
-                    <th>Ngày tạo đơn:</th>
-                    <td th:text="${order.orderDate}"></td>
+                    <td>Tổng tiền:</td>
+                    <td><span th:text="${totalPrice}">[total price]</span></td>
                 </tr>
                 <tr>
-                    <th>Trạng thái:</th>
-                    <td th:text="${order.shippingStatus[0].status}"></td>
+                    <td>Thời gian thanh toán:</td>
+                    <td><span th:text="${paymentTime}">[payment time]</span></td>
                 </tr>
+                <tr>
+                    <td>Mã giao dịch:</td>
+                    <td><span th:text="${transactionId}">[transaction ID]</span></td>
+                </tr>
+                </tbody>
             </table>
+            <a th:href="@{/homepage}" class="btn btn-primary">Về trang chủ</a>
         </div>
-        <a href="/orders" class="axil-btn btn-bg-primary">View My Orders</a>
     </div>
-</main>
+</div>
+<!-- end body -->
 
-<!-- Include Footer Fragment -->
-<div th:replace="base :: footer"></div>
 
-<!-- JS
-============================================ -->
-<script th:src="@{/js/vendor/modernizr.min.js}"></script>
-<script th:src="@{/js/vendor/jquery.js}"></script>
-<script th:src="@{/js/vendor/popper.min.js}"></script>
-<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
-<script th:src="@{/js/vendor/slick.min.js}"></script>
-<script th:src="@{/js/vendor/js.cookie.js}"></script>
-<script th:src="@{/js/vendor/jquery-ui.min.js}"></script>
-<script th:src="@{/js/vendor/jquery.ui.touch-punch.min.js}"></script>
-<script th:src="@{/js/vendor/jquery.countdown.min.js}"></script>
-<script th:src="@{/js/vendor/sal.js}"></script>
-<script th:src="@{/js/vendor/jquery.magnific-popup.min.js}"></script>
-<script th:src="@{/js/vendor/imagesloaded.pkgd.min.js}"></script>
-<script th:src="@{/js/vendor/isotope.pkgd.min.js}"></script>
-<script th:src="@{/js/vendor/counterup.js}"></script>
-<script th:src="@{/js/vendor/waypoints.min.js}"></script>
-<script th:src="@{/js/main.js}"></script>
-<script th:src="@{/js/script.js}"></script>
+<!-- start footer -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
