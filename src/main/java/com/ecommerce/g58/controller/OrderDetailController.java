@@ -72,7 +72,6 @@ public class OrderDetailController {
     public void updateOrderStatus(@PathVariable Integer orderId,
                                   @RequestParam String status,
                                   @RequestParam(required = false) String reason) {
-        System.out.println("HH");
         orderDetailService.updateStatus(orderId, status, reason);
     }
 }

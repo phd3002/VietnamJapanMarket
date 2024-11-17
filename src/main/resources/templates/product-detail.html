@@ -74,18 +74,15 @@
                                 <!-- Rating and review count -->
                                 <div class="product-rating">
                                     <div class="star-rating">
-                                        <i class="fas fa-star"
-                                           th:if="${oneStar > 0}"
-                                           th:each="i : ${#numbers.sequence(1, oneStar)}"></i>
-                                        <i class="far fa-star"
-                                           th:if="${noStar > 0}"
-                                           th:each="i : ${#numbers.sequence(1, noStar)}"></i>
+                                        <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, fullStars)}" th:if="${fullStars > 0}"></i>
+                                        <i class="fas fa-star-half-alt" th:if="${halfStars > 0}"></i>
+                                        <i class="far fa-star" th:each="i : ${#numbers.sequence(1, emptyStars)}" th:if="${emptyStars > 0}"></i>
                                     </div>
                                     <div class="review-link">
                                         <a href="#"><span th:text="${avgText}"></span> (<span th:text="${feedbacks.size()}"></span> customer reviews)</a>
                                     </div>
                                 </div>
-                                <!-- Product variations -->
+                     c           <!-- Product variations -->
                                 <div class="product-variations-wrapper">
                                     <!-- Colors Section -->
                                     <div class="product-variation">

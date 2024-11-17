@@ -16,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -76,20 +78,13 @@ public class ProductController {
         model.addAttribute("selectedSize", sizeId);  // Add selected size to the model
         model.addAttribute("feedbacks", feedbackService.findByProductId(productId));
         model.addAttribute("product", productService.getProductById(productId));
-        int averageRating = (int) feedbackService.findByProductId(productId).stream()
+        double averageRating = feedbackService.findByProductId(productId).stream()
                 .mapToInt(Feedback::getRating)
                 .average()
                 .orElse(0);
-        if (averageRating < 0) averageRating = 0;
-        if (averageRating > 5) averageRating = 5;
-
-        model.addAttribute("averageRating", averageRating);
+        model.addAllAttributes(calculateStars(averageRating));
         model.addAttribute("avgText", averageRating == 0 ? "" : new DecimalFormat("#.0").format(averageRating));
 
-        int oneStar = averageRating;
-        int noStar = 5 - oneStar;
-        model.addAttribute("oneStar", oneStar);
-        model.addAttribute("noStar", noStar);
         return "product-detail";
     }
 
@@ -108,5 +103,17 @@ public class ProductController {
         logger.info("Number of products found: {}", products.size());
         model.addAttribute("products", products);
         return "product-list";
+    }
+
+    private Map<String, Integer> calculateStars(double averageRating) {
+        Map<String, Integer> stars = new HashMap<>();
+        int fullStars = (int) Math.floor(averageRating);
+        boolean hasHalfStar = (averageRating - fullStars) >= 0.5;
+        int halfStars = hasHalfStar ? 1 : 0;
+        int emptyStars = 5 - fullStars - halfStars;
+        stars.put("fullStars", fullStars);
+        stars.put("halfStars", halfStars);
+        stars.put("emptyStars", emptyStars);
+        return stars;
     }
 }
