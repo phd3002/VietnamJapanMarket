@@ -95,15 +95,15 @@ public class ProductManagementController {
 
         // Kiểm tra các thông tin đầu vào
         if (productName == null || productName.isEmpty() || productName.length() > 100) {
-            redirectAttributes.addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự.");
+            redirectAttributes.addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
             return "redirect:/edit-product/" + productId;
         }
         if (productDescription == null || productDescription.isEmpty() || productDescription.length() > 500) {
-            redirectAttributes.addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự.");
+            redirectAttributes.addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
             return "redirect:/edit-product/" + productId;
         }
         if (price == null || price < 20000 || price > 50000000) {
-            redirectAttributes.addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000.");
+            redirectAttributes.addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000 và không được để trống.");
             return "redirect:/edit-product/" + productId;
         }
         if (weight < 0.1 || weight > 20.0) {
@@ -186,15 +186,15 @@ public class ProductManagementController {
 
         // Validate product input
         if (product.getProductName() == null || product.getProductName().isEmpty() || product.getProductName().length() > 100) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
             return "redirect:/addProductForm2/" + storeId;
         }
         if (product.getProductDescription() == null || product.getProductDescription().isEmpty() || product.getProductDescription().length() > 500) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
             return "redirect:/addProductForm2/" + storeId;
         }
-        if (product.getPrice() == null || product.getPrice() < 20000 || product.getPrice() > 50000000) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000.");
+        if (product.getPrice() == null || product.getPrice() < 20000 || product.getPrice() > 50000000)  {
+            redirectAttributes.addFlashAttribute("errorMessage", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000 và không được để trống.");
             return "redirect:/addProductForm2/" + storeId;
         }
         if (product.getWeight() < 0.1 || product.getWeight() > 20.0) {

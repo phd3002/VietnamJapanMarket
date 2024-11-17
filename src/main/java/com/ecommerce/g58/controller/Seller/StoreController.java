@@ -79,8 +79,8 @@ public class StoreController {
             redirectAttributes.addFlashAttribute("error", "Mô tả cửa hàng không được vượt quá 500 ký tự.");
             return "redirect:/store-info/" + storeId;
         }
-        if (postalCode != null && postalCode.length() > 20) {
-            redirectAttributes.addFlashAttribute("error", "Mã bưu chính không được vượt quá 20 ký tự.");
+        if (postalCode != null || postalCode.length() > 20 && !postalCode.matches("^[0-9]*$")) {
+            redirectAttributes.addFlashAttribute("error", "Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt.");
             return "redirect:/store-info/" + storeId;
         }
 
