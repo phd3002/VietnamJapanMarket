@@ -34,6 +34,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    pay.payment_status,\n" +
             "    o.shipping_address, \n" +
             "    latest_status.status AS shipping_status,\n" +
+            "    latest_status.previous_status AS previous_status,\n" +
             "    latest_status.tracking_number,\n" +
             "    status_times.pending_time AS pending_time,\n" +
             "    status_times.confirmed_time AS confirmed_time,\n" +
@@ -61,6 +62,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    SELECT \n" +
             "        ss1.order_id,\n" +
             "        ss1.status,\n" +
+            "        ss1.previous_status,\n" +
             "        ss1.tracking_number,\n" +
             "        ss1.updated_at\n" +
             "    FROM shipping_status ss1\n" +

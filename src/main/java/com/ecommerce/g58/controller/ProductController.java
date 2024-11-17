@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Controller
@@ -79,8 +80,16 @@ public class ProductController {
                 .mapToInt(Feedback::getRating)
                 .average()
                 .orElse(0);
+        if (averageRating < 0) averageRating = 0;
+        if (averageRating > 5) averageRating = 5;
 
         model.addAttribute("averageRating", averageRating);
+        model.addAttribute("avgText", averageRating == 0 ? "" : new DecimalFormat("#.0").format(averageRating));
+
+        int oneStar = averageRating;
+        int noStar = 5 - oneStar;
+        model.addAttribute("oneStar", oneStar);
+        model.addAttribute("noStar", noStar);
         return "product-detail";
     }
 

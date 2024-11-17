@@ -37,6 +37,7 @@ public class OrderDetailController {
             model.addAttribute("paymentStatus", firstDetail.getPaymentStatus());
             model.addAttribute("shippingAddress", firstDetail.getShippingAddress());
             model.addAttribute("shippingStatus", firstDetail.getShippingStatus());
+            model.addAttribute("previousStatus", firstDetail.getPreviousStatus());
             model.addAttribute("trackingNumber", firstDetail.getTrackingNumber());
             model.addAttribute("storeName", firstDetail.getStoreName());
             model.addAttribute("storeImage", firstDetail.getStoreImage());
@@ -64,5 +65,14 @@ public class OrderDetailController {
                           @AuthenticationPrincipal UserDetails userDetails) {
         var userEmail = userDetails.getUsername();
         orderDetailService.rateOrder(orderId, userEmail, rateText, rateStar);
+    }
+
+    @GetMapping("/update-order-status/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateOrderStatus(@PathVariable Integer orderId,
+                                  @RequestParam String status,
+                                  @RequestParam(required = false) String reason) {
+        System.out.println("HH");
+        orderDetailService.updateStatus(orderId, status, reason);
     }
 }

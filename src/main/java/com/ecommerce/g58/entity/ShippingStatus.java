@@ -24,9 +24,15 @@ public class ShippingStatus {
     @Column(name = "status", nullable = false)
     private String status;
 
+    @Column(name = "previous_status", nullable = false)
+    private String previousStatus;
+
     @Column(name = "updated_at", nullable = false, updatable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @Column(name = "tracking_number")
     private String trackingNumber;
+
+    @Column(name = "reason")
+    private String reason;
 }

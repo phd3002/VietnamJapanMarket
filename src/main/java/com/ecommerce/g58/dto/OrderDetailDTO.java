@@ -28,6 +28,7 @@ public class OrderDetailDTO {
     private String paymentStatus;
     private String shippingAddress;
     private String shippingStatus;
+    private String previousStatus;
     private String trackingNumber;
     private LocalDateTime pendingTime;
     private LocalDateTime confirmedTime;

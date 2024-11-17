@@ -9,5 +9,7 @@ public interface OrderDetailService {
     List<OrderDetailDTO> getOrderDetails(Long orderId);
 
     void rateOrder(Long orderId, String userEmail, String rateText, Integer rateStar);
+
+    void updateStatus(Integer orderId, String status, String reason);
 }
 
