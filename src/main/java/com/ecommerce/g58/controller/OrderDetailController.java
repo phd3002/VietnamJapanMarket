@@ -28,7 +28,6 @@ public class OrderDetailController {
         if (!orderDetails.isEmpty()) {
             // Extract order-level details from the first entry
             OrderDetailDTO firstDetail = orderDetails.get(0);
-
             model.addAttribute("orderId", orderId);
             model.addAttribute("orderTotalPrice", firstDetail.getOrderTotalPrice());
             model.addAttribute("totalAmount", firstDetail.getTotalAmount());

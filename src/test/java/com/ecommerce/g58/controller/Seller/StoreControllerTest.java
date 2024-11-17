@@ -1995,5 +1995,2529 @@ class StoreControllerTest {
         verify(storeService, never()).saveStore(any(Stores.class));
     }
 
+    // Test testSaveStoreInfo tc61
+    @Test
+    public void testSaveStoreInfo_tc61() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Địa chỉ không được để trống và không được vượt quá 255 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc62
+    @Test
+    public void testSaveStoreInfo_tc62() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Địa chỉ không được để trống và không được vượt quá 255 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc63
+    @Test
+    public void testSaveStoreInfo_tc63() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc64
+    @Test
+    public void testSaveStoreInfo_tc64() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc65
+    @Test
+    public void testSaveStoreInfo_tc65() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc66
+    @Test
+    public void testSaveStoreInfo_tc66() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc67
+    @Test
+    public void testSaveStoreInfo_tc67() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = null;
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc68
+    @Test
+    public void testSaveStoreInfo_tc68() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = null;
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc69
+    @Test
+    public void testSaveStoreInfo_tc69() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "1111111!@!@";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc40
+    @Test
+    public void testSaveStoreInfo_tc70() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "1111111!@!@";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc71
+    @Test
+    public void testSaveStoreInfo_tc71() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "0868746275";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc72
+    @Test
+    public void testSaveStoreInfo_tc72() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "0868746275";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc73
+    @Test
+    public void testSaveStoreInfo_tc73() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "111111";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc74
+    @Test
+    public void testSaveStoreInfo_tc74() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "111111";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc75
+    @Test
+    public void testSaveStoreInfo_tc75() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc76
+    @Test
+    public void testSaveStoreInfo_tc76() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc77
+    @Test
+    public void testSaveStoreInfo_tc77() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = null;
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc78
+    @Test
+    public void testSaveStoreInfo_tc78() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = null;
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc79
+    @Test
+    public void testSaveStoreInfo_tc79() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "1111111!@!@";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc80
+    @Test
+    public void testSaveStoreInfo_tc80() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "1111111!@!@";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc81
+    @Test
+    public void testSaveStoreInfo_tc81() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "0868746275";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc82
+    @Test
+    public void testSaveStoreInfo_tc82() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "0868746275";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc83
+    @Test
+    public void testSaveStoreInfo_tc83() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "111111";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc84
+    @Test
+    public void testSaveStoreInfo_tc84() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "111111";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc95
+    @Test
+    public void testSaveStoreInfo_tc85() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc86
+    @Test
+    public void testSaveStoreInfo_tc86() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc87
+    @Test
+    public void testSaveStoreInfo_tc87() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = null;
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc88
+    @Test
+    public void testSaveStoreInfo_tc88() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = null;
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc89
+    @Test
+    public void testSaveStoreInfo_tc89() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "1111111!@!@";
+        String storeAddress = null;
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc90
+    @Test
+    public void testSaveStoreInfo_tc90() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "1111111!@!@";
+        String storeAddress = null;
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc91
+    @Test
+    public void testSaveStoreInfo_tc91() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Email cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc92
+    @Test
+    public void testSaveStoreInfo_tc92() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Quốc gia không được để trống."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc93
+    @Test
+    public void testSaveStoreInfo_tc93() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc94
+    @Test
+    public void testSaveStoreInfo_tc94() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc95
+    @Test
+    public void testSaveStoreInfo_tc95() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc96
+    @Test
+    public void testSaveStoreInfo_tc96() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc97
+    @Test
+    public void testSaveStoreInfo_tc97() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = null;
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc98
+    @Test
+    public void testSaveStoreInfo_tc98() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = null;
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc99
+    @Test
+    public void testSaveStoreInfo_tc99() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "1111111!@!@";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc100
+    @Test
+    public void testSaveStoreInfo_tc100() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "1111111!@!@";
+        String storeAddress = "Đông anh ";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc101
+    @Test
+    public void testSaveStoreInfo_tc101() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc102
+    @Test
+    public void testSaveStoreInfo_tc102() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc103
+    @Test
+    public void testSaveStoreInfo_tc103() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "111111";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc104
+    @Test
+    public void testSaveStoreInfo_tc104() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "111111";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc105
+    @Test
+    public void testSaveStoreInfo_tc105() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc106
+    @Test
+    public void testSaveStoreInfo_tc106() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc107
+    @Test
+    public void testSaveStoreInfo_tc107() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = null;
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc108
+    @Test
+    public void testSaveStoreInfo_tc108() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = null;
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc109
+    @Test
+    public void testSaveStoreInfo_tc109() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "1111111!@!@";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc110
+    @Test
+    public void testSaveStoreInfo_tc110() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "SamsungSssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" +
+                "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
+        String storePhone = "1111111!@!@";
+        String storeAddress = "Đông anh ";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc111
+    @Test
+    public void testSaveStoreInfo_tc111() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc112
+    @Test
+    public void testSaveStoreInfo_tc112() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc113
+    @Test
+    public void testSaveStoreInfo_tc113() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "111111";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc114
+    @Test
+    public void testSaveStoreInfo_tc114() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "111111";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc115
+    @Test
+    public void testSaveStoreInfo_tc115() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc116
+    @Test
+    public void testSaveStoreInfo_tc116() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc117
+    @Test
+    public void testSaveStoreInfo_tc117() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = null;
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc118
+    @Test
+    public void testSaveStoreInfo_tc118() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = null;
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc119
+    @Test
+    public void testSaveStoreInfo_tc119() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "1111111!@!@";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc120
+    @Test
+    public void testSaveStoreInfo_tc120() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = null;
+        String storePhone = "1111111!@!@";
+        String storeAddress = "Đông anh ";
+        Integer countryId = null;
+        String storeDescription = "Dep qua";
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" +
+                "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Tên cửa hàng không được để trống và không được vượt quá 100 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc121
+    @Test
+    public void testSaveStoreInfo_tc121() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep quaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mô tả cửa hàng không được vượt quá 500 ký tự."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc122
+    @Test
+    public void testSaveStoreInfo_tc122() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep quaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Quốc gia không được để trống."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc123
+    @Test
+    public void testSaveStoreInfo_tc123() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep quaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc124
+    @Test
+    public void testSaveStoreInfo_tc124() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep quaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc125
+    @Test
+    public void testSaveStoreInfo_tc125() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep quaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc126
+    @Test
+    public void testSaveStoreInfo_tc126() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "111111222222222222222222222";
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = "Dep quaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc127
+    @Test
+    public void testSaveStoreInfo_tc127() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = null;
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = null ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc128
+    @Test
+    public void testSaveStoreInfo_tc128() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = null;
+        String storeAddress = "Đông anh";
+        Integer countryId = null;
+        String storeDescription = null;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc129
+    @Test
+    public void testSaveStoreInfo_tc129() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "1111111!@!@";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = null;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc130
+    @Test
+    public void testSaveStoreInfo_tc130() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "1111111!@!@";
+        String storeAddress = "Đông anh ";
+        Integer countryId = null;
+        String storeDescription = null;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Số điện thoại không được để trống và không được dưới 10 ký tự hoặc vượt quá 20 ký tự và không chứa ký tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc131
+    @Test
+    public void testSaveStoreInfo_tc131() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "111112222233333444455541";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc132
+    @Test
+    public void testSaveStoreInfo_tc132() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "111112222233333444441";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc133
+    @Test
+    public void testSaveStoreInfo_tc133() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "111112222233333444441";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc134
+    @Test
+    public void testSaveStoreInfo_tc134() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc135
+    @Test
+    public void testSaveStoreInfo_tc135() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc136
+    @Test
+    public void testSaveStoreInfo_tc136() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc137
+    @Test
+    public void testSaveStoreInfo_tc137() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456@@";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc138
+    @Test
+    public void testSaveStoreInfo_tc138() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456@@@";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+    // Test testSaveStoreInfo tc139
+    @Test
+    public void testSaveStoreInfo_tc139() throws IOException, SpringBootFileUploadException {
+        Integer storeId = 1;
+        String storeName = "Samsung";
+        String storePhone = "0868746275";
+        String storeAddress = "Đông anh";
+        Integer countryId = 1;
+        String storeDescription = "Dep qua" ;
+        String storeCity = "Ha Noi";
+        String storeDistrict = "Dong Da";
+        String postalCode = "123456@@@";
+        String storeMail = "lequyet180902@gmail.com";
+        String storeImgUrl = "http://example.com/store-image.jpg";
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        Countries country = new Countries();
+        country.setCountryId(countryId);
+        when(storeService.findById(storeId)).thenReturn(Optional.of(store));
+        when(countryService.findById(countryId)).thenReturn(Optional.of(country));
+        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
+        when(storeImg.isEmpty()).thenReturn(false);
+        String result = storeController.saveStoreInfo(
+                storeId, storeName, storePhone, storeAddress, countryId,
+                storeDescription, storeCity, storeDistrict, postalCode,
+                storeMail, storeImg, redirectAttributes, model);
+        assertEquals("redirect:/store-info/" + storeId, result);
+        verify(redirectAttributes).addFlashAttribute(eq("error"), eq("Mã bưu chính không được vượt quá 20 ký tự và không được có kí tự đặc biệt."));
+        verify(storeService, never()).saveStore(any(Stores.class));
+    }
+
+
 
 }
