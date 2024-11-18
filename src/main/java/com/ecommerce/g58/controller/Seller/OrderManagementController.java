@@ -53,7 +53,6 @@ public class OrderManagementController {
     public String updateOrderStatus(@RequestParam("orderId") Integer orderId, @RequestParam("status") String status, HttpServletRequest request) {
         orderService.updateOrderStatuss(orderId, status);
         System.out.println("Order status updated to " + status);
-//        return "redirect:/seller/order-manager/" + storeId;
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;  // Redirects to the same URL
     }

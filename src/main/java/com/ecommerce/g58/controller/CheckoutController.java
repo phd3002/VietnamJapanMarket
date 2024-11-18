@@ -8,6 +8,7 @@ import com.ecommerce.g58.repository.ProductImageRepository;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
 import com.ecommerce.g58.service.*;
 import com.ecommerce.g58.service.implementation.VNPayService;
+import com.ecommerce.g58.utils.RandomOrderCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -289,6 +290,7 @@ public class CheckoutController {
             logger.info("Order prepared for user ID {}. Total with shipping: {}", userId, totalWithShipping);
 
             // Lưu đơn hàng vào cơ sở dữ liệu
+            order.setOrderCode(RandomOrderCodeGenerator.generateOrderCode());
             orderRepository.save(order);
             logger.info("Order saved in database with ID: {}", order.getOrderId());
 
