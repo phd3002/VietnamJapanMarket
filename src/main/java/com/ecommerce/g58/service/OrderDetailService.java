@@ -1,10 +1,12 @@
 package com.ecommerce.g58.service;
 
 import com.ecommerce.g58.dto.OrderDetailDTO;
+import org.springframework.stereotype.Service;
+
 import com.ecommerce.g58.dto.OrderDetailManagerDTO;
 
 import java.util.List;
-
+@Service
 public interface OrderDetailService {
 
     // Method to fetch order details by orderId
