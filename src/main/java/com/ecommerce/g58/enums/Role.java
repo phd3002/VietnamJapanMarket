@@ -7,7 +7,8 @@ public enum Role {
     ADMIN(1, "Admin"),
     CUSTOMER(3, "Customer"),
     GUEST(4, "Guest"),
-    SELLER(2, "Seller");
+    SELLER(2, "Seller"),
+    LOGISTIC(5, "Logistic");
 
     private final int id;
     private final String name;

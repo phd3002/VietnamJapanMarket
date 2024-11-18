@@ -139,6 +139,36 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             nativeQuery = true)
     List<Object[]> findOrdersByStoreId(@Param("storeId") Integer storeId);
 
+    @Query(value = "SELECT \n" +
+            "    o.order_id AS orderId, \n" +
+            "    CONCAT(u.first_name, ' ', u.last_name) AS customerName, \n" +
+            "    GROUP_CONCAT(DISTINCT p.product_name SEPARATOR ', ') AS productNames, \n" +
+            "    SUM(od.quantity) AS totalProducts, \n" +
+            "    (o.total_price + COALESCE(MAX(i.shipping_fee), 0)) AS order_price,\n" +
+            "    (SELECT ss.status \n" +
+            "     FROM shipping_status ss \n" +
+            "     WHERE ss.order_id = o.order_id \n" +
+            "     ORDER BY ss.updated_at DESC \n" +
+            "     LIMIT 1) AS latestStatus \n" +
+            "FROM \n" +
+            "    orders o \n" +
+            "JOIN \n" +
+            "    users u ON u.user_id = o.user_id \n" +
+            "JOIN \n" +
+            "    order_details od ON od.order_id = o.order_id \n" +
+            "JOIN \n" +
+            "    products p ON p.product_id = od.product_id \n" +
+            "JOIN \n" +
+            "    stores s ON s.store_id = p.store_id \n" +
+            "LEFT JOIN \n" +
+            "    invoice i ON i.order_id = o.order_id \n" +
+            "LEFT JOIN \n" +
+            "    shipping_status ss ON ss.order_id = o.order_id \n" +
+            "GROUP BY \n" +
+            "    o.order_id, u.first_name, u.last_name, o.total_price",
+            nativeQuery = true)
+    List<Object[]> findOrders();
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE orders o SET o.unit_id = NULL WHERE o.unit_id = :unitId", nativeQuery = true)

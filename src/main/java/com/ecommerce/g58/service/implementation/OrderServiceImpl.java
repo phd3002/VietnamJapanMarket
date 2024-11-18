@@ -207,4 +207,21 @@ public class OrderServiceImpl implements OrderService {
 
         return order;
     }
+
+    @Override
+    public List<OrderManagerDTO> getOrders() {
+        List<Object[]> results = orderRepository.findOrders();
+        List<OrderManagerDTO> orders = new ArrayList<>();
+        for (Object[] result : results) {
+            OrderManagerDTO order = new OrderManagerDTO();
+            order.setOrderId((Integer) result[0]);
+            order.setCustomerName((String) result[1]);
+            order.setProductNames((String) result[2]);
+            order.setTotalProducts(((Number) result[3]).intValue());
+            order.setTotalPrice(((Number) result[4]).intValue());
+            order.setLatestStatus((String) result[5]);
+            orders.add(order);
+        }
+        return orders;
+    }
 }

@@ -207,12 +207,6 @@ public class UserController {
                 model.addAttribute("errorMessage", "Email chưa được đăng kí");
                 return "sign-in";
             }
-            // Check if the user is inactive
-            // Check if the user is inactive using UserDetails methods
-//            if (!userDetails.isAccountNonLocked() || !userDetails.isEnabled()) {
-//                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa.");
-//                return "sign-in";
-//            }
             // Check if the password matches
             boolean isPasswordValid = userService.checkPassword(password, userDetails.getPassword());
             if (!isPasswordValid) {
@@ -225,6 +219,14 @@ public class UserController {
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Redirect based on user role
+            if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Logistic"))) {
+                return "redirect:/logistic/dashboard";
+            } else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Admin"))) {
+                return "redirect:/admin/dashboard";
+            }
+
             return "redirect:/homepage"; // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
 
         } catch (BadCredentialsException e) {
