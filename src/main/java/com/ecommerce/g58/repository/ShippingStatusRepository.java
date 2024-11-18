@@ -16,4 +16,6 @@ public interface ShippingStatusRepository extends JpaRepository<ShippingStatus, 
     @Query(value = "UPDATE shipping_status SET status = :status, updated_at = CURRENT_TIMESTAMP \n" +
             "WHERE order_id = :orderId", nativeQuery = true)
     void updateOrderStatus(@Param("orderId") Integer orderId, @Param("status") String status);
+    ShippingStatus findByOrderId(Integer orderId);
+    ShippingStatus findByOrderIdOrderId(Integer orderId);
 }

@@ -12,5 +12,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface FeedbackService {
+    Feedback findById(Integer id);
     List<Feedback> findByProductId(Integer id);
+    List<Feedback> findAllFByUserId(Integer id);
+    void addSellerReply(Integer feedbackId, String reply);
 }

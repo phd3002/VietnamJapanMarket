@@ -13,5 +13,7 @@ public interface OrderDetailService {
     void rateOrder(Long orderId, String userEmail, String rateText, Integer rateStar);
 
     List<OrderDetailManagerDTO> getOrderDetailsForManager(Long orderId);
+
+    void updateStatus(Integer orderId, String status, String reason);
 }
 
