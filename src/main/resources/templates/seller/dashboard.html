@@ -206,9 +206,9 @@
                 </div>
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Thống kê đánh giá sản phẩm</h3>
-                        <div class="embed-responsive embed-responsive-16by9" id="polarAreaChartContainer">
-                            <canvas class="embed-responsive-item" id="polarAreaChartDemo"></canvas>
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9" id="radarChartContainer">
+                            <canvas class="embed-responsive-item" id="radarChartDemo"></canvas>
                         </div>
                     </div>
                 </div>
@@ -278,21 +278,35 @@
         var pieChart = new Chart(ctxp).Pie(pieData);
     }
 
-    // Dữ liệu cho biểu đồ cực
-    var polarData = [
-        {value: [[${count5StarFeedback}]], color: "#4CAF50", highlight: "#66BB6A", label: "5 Stars"},
-        {value: [[${count4StarFeedback}]], color: "#8BC34A", highlight: "#9CCC65", label: "4 Stars"},
-        {value: [[${count3StarFeedback}]], color: "#FFEB3B", highlight: "#FFEE58", label: "3 Stars"},
-        {value: [[${count2StarFeedback}]], color: "#FFC107", highlight: "#FFD54F", label: "2 Stars"},
-        {value: [[${count1StarFeedback}]], color: "#F44336", highlight: "#EF5350", label: "1 Star"}
-    ];
-    polarData = polarData.filter(item => item.value > 0);
-    if (polarData.length === 0) {
-        document.getElementById("polarAreaChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
+    // Dữ liệu cho biểu đồ radar
+    var radarData = {
+        labels: ["5 sao", "4 sao", "3 sao", "2 sao", "1 sao"],
+        datasets: [
+            {
+                label: "Dữ liệu đầu tiên",
+                fillColor: "rgba(255, 213, 59, 0.7)",
+                strokeColor: "rgb(255, 212, 59)",
+                pointColor: "rgb(255, 212, 59)",
+                data: [
+                    [[${count5StarFeedback}]],
+                    [[${count4StarFeedback}]],
+                    [[${count3StarFeedback}]],
+                    [[${count2StarFeedback}]],
+                    [[${count1StarFeedback}]]
+                ]
+            },
+        ]
+    };
+    var allZeroData = radarData.datasets[0].data.every(function(value) {
+        return value === 0;
+    });
+    if (allZeroData) {
+        document.getElementById("radarChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
     } else {
-        var ctxpo = document.getElementById("polarAreaChartDemo").getContext("2d");
-        var polarAreaChart = new Chart(ctxpo).PolarArea(polarData);
+        var ctxr = document.getElementById("radarChartDemo").getContext("2d");
+        var radarChart = new Chart(ctxr).Radar(radarData);
     }
+
 </script>
 <script type="text/javascript">
     //Thời Gian
