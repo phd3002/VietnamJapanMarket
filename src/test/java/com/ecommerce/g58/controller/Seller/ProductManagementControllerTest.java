@@ -2145,5 +2145,913 @@ class ProductManagementControllerTest {
         assertEquals("redirect:/addProductForm2/" + storeId, result);
     }
 
+//----------------------------------------------------------------------------------------------------------------------------------
+
+    // test updateProduct tc1
+    @Test
+    void testUpdateProduct_tc1() {
+    // Arrange
+    Integer productId = 1;
+    String productName = "Quần";
+    String productDescription = "dài ống";
+    Integer price = 100000;
+    float weight = 1.0f;
+    Products product = new Products();
+    when(productService.findById(productId)).thenReturn(Optional.of(product));
+    String result = ProductManagementController.updateProduct(productId, productName, productDescription, price, weight, redirectAttributes);
+    assertEquals("redirect:/edit-product/" + productId, result);
+    verify(productService, times(1)).saveProduct(product);
+    verify(redirectAttributes, times(1)).addFlashAttribute("message", "Cập nhật sản phẩm thành công.");
+}
+
+    // test updateProduct tc2
+    @Test
+    void testUpdateProduct_tc2() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "";
+        int price = 50000;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc3
+    @Test
+    void testUpdateProduct_tc3() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc4
+    @Test
+    void testUpdateProduct_tc4() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ống";
+        int price = 50000;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc5
+    @Test
+    void testUpdateProduct_tc5() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc6
+    @Test
+    void testUpdateProduct_tc6() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "";
+        int price = 50000;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc7
+    @Test
+    void testUpdateProduct_tc7() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ống";
+        int price = 50000;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc8
+    @Test
+    void testUpdateProduct_tc8() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc9
+    @Test
+    void testUpdateProduct_tc9() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "";
+        int price = 50000;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc10
+    @Test
+    void testUpdateProduct_tc10() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ống";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000 và không được để trống.");
+    }
+
+    // test updateProduct tc11
+    @Test
+    void testUpdateProduct_tc11() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc12
+    @Test
+    void testUpdateProduct_tc12() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc13
+    @Test
+    void testUpdateProduct_tc13() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ống";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc14
+    @Test
+    void testUpdateProduct_tc14() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc15
+    @Test
+    void testUpdateProduct_tc15() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc16
+    @Test
+    void testUpdateProduct_tc16() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ống";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc17
+    @Test
+    void testUpdateProduct_tc17() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc18
+    @Test
+    void testUpdateProduct_tc18() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "";
+        int price = 19999;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc19
+    @Test
+    void testUpdateProduct_tc19() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ống";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000 và không được để trống.");
+    }
+
+    // test updateProduct tc20
+    @Test
+    void testUpdateProduct_tc20() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc21
+    @Test
+    void testUpdateProduct_tc21() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc22
+    @Test
+    void testUpdateProduct_tc22() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ống";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc23
+    @Test
+    void testUpdateProduct_tc23() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc24
+    @Test
+    void testUpdateProduct_tc24() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc25
+    @Test
+    void testUpdateProduct_tc25() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ống";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc26
+    @Test
+    void testUpdateProduct_tc26() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc27
+    @Test
+    void testUpdateProduct_tc27() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "";
+        int price = 50000001;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc28
+    @Test
+    void testUpdateProduct_tc28() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ống";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000 và không được để trống.");
+    }
+
+    // test updateProduct tc29
+    @Test
+    void testUpdateProduct_tc29() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc30
+    @Test
+    void testUpdateProduct_tc30() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc31
+    @Test
+    void testUpdateProduct_tc31() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ống";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc32
+    @Test
+    void testUpdateProduct_tc32() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc33
+    @Test
+    void testUpdateProduct_tc33() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc34
+    @Test
+    void testUpdateProduct_tc34() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ống";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc35
+    @Test
+    void testUpdateProduct_tc35() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc36
+    @Test
+    void testUpdateProduct_tc36() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "";
+        Integer price = null;
+        float weight = 2.5f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc37
+    @Test
+    void testUpdateProduct_tc37() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ống";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Khối lượng sản phẩm phải trong khoảng từ 0.1kg đến 20kg.");
+    }
+
+    // test updateProduct tc38
+    @Test
+    void testUpdateProduct_tc38() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc39
+    @Test
+    void testUpdateProduct_tc39() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc40
+    @Test
+    void testUpdateProduct_tc40() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ống";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc41
+    @Test
+    void testUpdateProduct_tc41() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc42
+    @Test
+    void testUpdateProduct_tc42() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc43
+    @Test
+    void testUpdateProduct_tc43() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ống";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc44
+    @Test
+    void testUpdateProduct_t44() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc45
+    @Test
+    void testUpdateProduct_tc45() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "";
+        int price = 50000;
+        float weight = 0.0f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+
+    // test updateProduct tc46
+    @Test
+    void testUpdateProduct_tc46() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ống";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Khối lượng sản phẩm phải trong khoảng từ 0.1kg đến 20kg.");
+    }
+
+    // test updateProduct tc47
+    @Test
+    void testUpdateProduct_tc47() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc48
+    @Test
+    void testUpdateProduct_tc48() {
+        Integer productId = 1;
+        String invalidName = "Quần";
+        String description = "";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc49
+    @Test
+    void testUpdateProduct_tc49() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ống";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc50
+    @Test
+    void testUpdateProduct_tc50() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc51
+    @Test
+    void testUpdateProduct_tc51() {
+        Integer productId = 1;
+        String invalidName = "Quầnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn" +
+                "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+        String description = "";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc52
+    @Test
+    void testUpdateProduct_tc52() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ống";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc53
+    @Test
+    void testUpdateProduct_t53() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "dài ốngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg" +
+                "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc54
+    @Test
+    void testUpdateProduct_tc54() {
+        Integer productId = 1;
+        String invalidName = "";
+        String description = "";
+        int price = 50000;
+        float weight = 20.1f;
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateProduct(productId, invalidName, description, price, weight, redirectAttributes
+        );
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1))
+                .addFlashAttribute("error", "Tên sản phẩm không được để trống và không được vượt quá 100 ký tự và không được để trống.");
+    }
+
+    // test updateProduct tc55
+    @Test
+    void testUpdateProduct_tc55() {
+        Integer productId = 1;
+        when(productService.findById(productId)).thenReturn(Optional.empty());
+        String result = ProductManagementController.updateProduct(productId, "Valid Name", "Valid Description", 50000, 2.5f, redirectAttributes);
+        assertEquals("redirect:/edit-product/" + productId, result);
+        verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không tìm thấy sản phẩm.");
+    }
+
 
 }
