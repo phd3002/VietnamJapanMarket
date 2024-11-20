@@ -103,6 +103,13 @@
                             <!-- Order Details Tab -->
                             <div id="nav-order-detail" class="tab-pane fade show active" role="tabpanel">
                                 <div class="order-detail axil-dashboard-order">
+                                    <div th:if="${message != null}"
+                                         class="alert alert-dismissible"
+                                         th:classappend="${messageType == 'success'} ? 'alert-success' : 'alert-danger'">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                        <p th:text="${message}"></p>
+                                    </div>
                                     <h4 style="text-align: center">Mã: <span
                                             id="order-id" th:text="${trackingNumber}"></span></h4>
                                     <h4 style="text-align: center">Trạng thái: <span
@@ -169,17 +176,19 @@
                                                 <input th:if="${shippingStatus == 'Delivered'}" type="submit"
                                                        id="rate-product"
                                                        class="axil-btn btn-bg-secondary btn-sm"
-                                                       value="đánh giá đơn hàng">
+                                                       value="Đánh giá đơn hàng">
                                                 <!-- Huy don hang(chi hien thi khi chua nhan hang) -->
-                                                <input type="submit" id="cancel-order"
+                                                <input type="submit" th:if="${shippingStatus == 'Pending'}"
+                                                       id="cancel-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        style="background-color: red; border: none; margin-left: 10px;"
-                                                       value="Huy don hang">
+                                                       value="Hủy đơn hàng">
                                                 <!-- yeu cau hoan tra tien(khi da nhan hang) -->
-                                                <input type="submit" id="refund-order"
+                                                <input type="submit" th:if="${shippingStatus == 'Delivered'}"
+                                                       id="refund-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        style="background-color: red; border: none; margin-left: 10px;"
-                                                       value="Yeu cau hoan tra tien">
+                                                       value="Yêu cầu trả hàng hoàn tiền">
                                             </div>
                                         </div>
                                     </div>
@@ -310,13 +319,39 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Xác nhận thông tin</h2>
-            <form id="pendingForm">
+            <form action="/order-detail/cancel" method="POST">
+                <input type="hidden" id="cancel-order-id" name="orderId" value="">
                 <label for="reason-name">Lý do mà bạn gửi yêu cầu:</label>
-                <input type="text" id="reason-name" name="reason-name" required><br><br>
+                <input type="text" id="reason-name" name="reason" required><br><br>
                 <button type="submit">Gửi</button>
             </form>
         </div>
     </div>
+    <script>
+        const cancel_orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id");
+        document.getElementById('cancel-order-id').value = cancel_orderId;
+
+    </script>
+    <!--    Refund Modal-->
+    <div id="refundModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Xác nhận thông tin</h2>
+            <form action="/order-detail/return" method="POST">
+                <input type="hidden" id="refund-order-id" name="orderId" value="">
+                <label for="reason">Lý do mà bạn gửi yêu cầu:</label>
+                <select id="reason" name="reason" required>
+                    <option value="" disabled selected>Chọn lý do</option>
+                    <option value="not_as_described">Hàng không như mô tả</option>
+                    <option value="damaged">Hàng bị vỡ</option>
+                </select><br><br>
+                <input type="hidden" name="status" value="Returned"><br><br>
+
+                <button type="submit">Gửi</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Success Modal -->
     <div id="successModal-rating" class="modal" style="display:none;">
         <div class="modal-content">
@@ -466,14 +501,18 @@
         document.getElementById('pendingConfirmationModal').style.display = "none";
         document.getElementById('successModal-rating').style.display = "none";
         document.getElementById('successModal-pending').style.display = "none";
+        document.getElementById('refundModal').style.display = "none";
     }
 
     // Hiển thị modal xác nhận đã nhận hàng
-    document.getElementById('rate-product').addEventListener('click', function () {
-        closeAllModals();
-        document.getElementById('rateProductModal').style.display = "block";
-        document.getElementById('rating-modal').style.opacity = '1';
-        // document.getElementById('confirmDeliveryModal').style.display = "block";
+    document.addEventListener('click', function (event) {
+        // document.getElementById('rate-product').addEventListener('click', function (event) {
+        if (event.target.id === 'rate-product') {
+            closeAllModals();
+            document.getElementById('rateProductModal').style.display = "block";
+            document.getElementById('rating-modal').style.opacity = '1';
+            // document.getElementById('confirmDeliveryModal').style.display = "block";
+        }
     });
 
     // Khi xác nhận đã nhận hàng, mở modal đánh giá
@@ -482,6 +521,8 @@
         closeAllModals();
         document.getElementById('rateProductModal').style.display = "block";
     });
+    const refund_orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id");
+    document.getElementById('refund-order-id').value = refund_orderId;
 
     // Khi người dùng xác nhận đánh giá, mở modal thành công và reload trang
     document.getElementById('rateForm').addEventListener('submit', function (event) {
@@ -521,27 +562,30 @@
     });
 
     // Khi nhấn "Hủy đơn hàng" hoặc "Yêu cầu hoàn trả", mở modal yêu cầu lý do
-    document.getElementById('cancel-order').addEventListener('click', function () {
-        closeAllModals();
-        document.getElementById('pendingConfirmationModal').style.display = "block";
+    document.addEventListener('click', function (event) {
+        if (event.target.id === 'cancel-order') {
+            closeAllModals();
+            document.getElementById('pendingConfirmationModal').style.display = "block";
+        }
+
+        if (event.target.id === 'refund-order') {
+            closeAllModals();
+            document.getElementById('refundModal').style.display = "block";
+        }
     });
 
-    document.getElementById('refund-order').addEventListener('click', function () {
-        closeAllModals();
-        document.getElementById('pendingConfirmationModal').style.display = "block";
-    });
 
     // Sau khi nhập lý do và gửi yêu cầu, hiển thị modal thành công và reload trang
-    document.getElementById('pendingForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Ngăn không tải lại trang khi submit form
-        closeAllModals();
-        document.getElementById('successModal-pending').style.display = "block";
-
-        // Sau 2 giây reload lại trang
-        setTimeout(function () {
-            location.reload();
-        }, 2000);
-    });
+    // document.getElementById('pendingForm').addEventListener('submit', function (event) {
+    //     event.preventDefault(); // Ngăn không tải lại trang khi submit form
+    //     closeAllModals();
+    //     document.getElementById('successModal-pending').style.display = "block";
+    //
+    //     // Sau 2 giây reload lại trang
+    //     setTimeout(function () {
+    //         location.reload();
+    //     }, 2000);
+    // });
 
     // Đóng modal khi nhấn nút close (dấu "x")
     var closeButtons = document.getElementsByClassName('close');
@@ -550,6 +594,7 @@
             closeAllModals();
         };
     }
+
 </script>
 </body>
 

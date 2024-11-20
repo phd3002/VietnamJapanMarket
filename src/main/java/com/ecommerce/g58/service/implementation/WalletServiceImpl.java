@@ -1,13 +1,16 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.WalletDTO;
+import com.ecommerce.g58.entity.Orders;
 import com.ecommerce.g58.entity.Transactions;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.entity.Wallet;
+import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.TransactionRepository;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.repository.WalletRepository;
 import com.ecommerce.g58.service.WalletService;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +34,8 @@ public class WalletServiceImpl implements WalletService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -185,6 +191,37 @@ public class WalletServiceImpl implements WalletService {
 
         transactionRepository.save(transaction);
     }
+
+//    @Override
+//    public void addToWalletForLogistics(Long amount, int orderId) {
+//        Orders order = orderRepository.findOrdersByOrderId(orderId);
+//        Optional<Wallet> userWallet = walletRepository.findByUserId(order.getUserId());
+//
+//        // Retrieve user's wallet entity
+//        Optional<Wallet> optionalWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5);
+//        if (optionalWallet.isEmpty()) {
+//            throw new IllegalArgumentException("Không tìm thấy ví của người dùng");
+//        }
+//        Wallet wallet = optionalWallet.get();
+//
+//        // Add balance and save updated wallet
+//        Long currentBalance = wallet.getBalance();
+//        Long newBalance = currentBalance + amount;
+//        wallet.setBalance(newBalance);
+//        walletRepository.save(wallet);
+//
+//        // Record transaction
+//        Transactions transaction = new Transactions();
+//        transaction.setToWalletId(wallet);
+//        transaction.setAmount(amount);
+//        userWallet.ifPresent(transaction::setFromWalletId);
+//        transaction.setTransactionType("Cộng tiền");
+//        transaction.setDescription("Nhận tiền ship cho đơn hàng " + order.getOrderCode());
+//        transaction.setCreatedAt(LocalDateTime.now());
+//
+//        transactionRepository.save(transaction);
+//    }
+
 
     public void createWalletForUser(Users userId, long initialBalance) {
         Wallet wallet = new Wallet(); // Tạo một đối tượng Wallet mới

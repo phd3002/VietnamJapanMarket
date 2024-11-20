@@ -4,10 +4,7 @@ import com.ecommerce.g58.dto.OrderManagerDTO;
 import com.ecommerce.g58.dto.OrdersDTO;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.PaymentMethod;
-import com.ecommerce.g58.repository.OrderDetailRepository;
-import com.ecommerce.g58.repository.OrderRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
-import com.ecommerce.g58.repository.ShippingStatusRepository;
+import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.OrderService;
@@ -25,10 +22,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -38,6 +32,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private CartService cartService;
+    @Autowired
+    private WalletRepository walletRepository;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private CartItemService cartItemService;
@@ -55,6 +54,8 @@ public class OrderServiceImpl implements OrderService {
     private ShippingStatusRepository shippingStatusRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository) {
@@ -127,6 +128,8 @@ public class OrderServiceImpl implements OrderService {
             order.setTotalProducts(((Number) result[3]).intValue());
             order.setTotalPrice(((Number) result[4]).intValue());
             order.setLatestStatus((String) result[5]);
+            order.setReason((String) result[6]);
+            order.setPrevious_status((String) result[7]);
             orders.add(order);
         }
         return orders;
@@ -143,6 +146,53 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrderStatuss(Integer orderId, String status) {
+        if (status.equalsIgnoreCase("Dispatched")) {
+            // get order
+            Orders order = orderRepository.findOrdersByOrderId(orderId);
+            // get detail to get store Owner
+            OrderDetails details = orderDetailRepository.findByOrderId(orderId).get(0);
+
+            Optional<Wallet> sellWallet = walletRepository.findByUserId(details.getProductId().getStoreId().getOwnerId());
+            Optional<Wallet> logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5);
+
+            Invoice invoice = invoiceRepository.findInvoiceByOrderId(order);
+
+
+            if (sellWallet.isPresent() && logisticWallet.isPresent()) {
+                // process to subtract shipping fee from seller balance
+                BigDecimal currentSellerWallet = new BigDecimal(sellWallet.get().getBalance());
+                BigDecimal newSellerAmount = currentSellerWallet.subtract(invoice.getShippingFee());
+                sellWallet.get().setBalance(newSellerAmount.longValue());
+                // save to database
+                walletRepository.save(sellWallet.get());
+
+                //process to plus shipping fee to logistic balance
+                BigDecimal currentLogisticWallet = new BigDecimal(sellWallet.get().getBalance());
+                BigDecimal newLogisticAmount = currentLogisticWallet.add(invoice.getShippingFee());
+                sellWallet.get().setBalance(newLogisticAmount.longValue());
+                // save to database
+                walletRepository.save(logisticWallet.get());
+
+                // process to save transaction for seller
+                Transactions sellerTransactions = new Transactions();
+                sellerTransactions.setCreatedAt(LocalDateTime.now());
+                sellerTransactions.setFromWalletId(sellWallet.get());
+                sellerTransactions.setAmount(invoice.getShippingFee().longValue());
+                sellerTransactions.setTransactionType("Thanh toán tiền ship");
+                sellerTransactions.setDescription("Thanh toán " + invoice.getShippingFee() + " tiền ship cho đơn hàng " + order.getOrderCode());
+
+                transactionRepository.save(sellerTransactions);
+                // process to save transaction for seller
+                Transactions logisticTransactions = new Transactions();
+                logisticTransactions.setCreatedAt(LocalDateTime.now());
+                logisticTransactions.setToWalletId(logisticWallet.get());
+                logisticTransactions.setAmount(invoice.getShippingFee().longValue());
+                logisticTransactions.setTransactionType("Tiền ship");
+                logisticTransactions.setDescription("Nhận " + invoice.getShippingFee() + " từ đơn hàng " + order.getOrderCode());
+
+                transactionRepository.save(logisticTransactions);
+            }
+        }
         shippingStatusRepository.updateOrderStatus(orderId, status);
     }
 

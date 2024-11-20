@@ -117,7 +117,18 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "     FROM shipping_status ss \n" +
             "     WHERE ss.order_id = o.order_id \n" +
             "     ORDER BY ss.updated_at DESC \n" +
-            "     LIMIT 1) AS latestStatus \n" +
+            "     LIMIT 1) AS latestStatus ," +
+            " (SELECT ss.reason \n" +
+            "     FROM shipping_status ss \n" +
+            "     WHERE ss.order_id = o.order_id \n" +
+            "     ORDER BY ss.updated_at DESC \n" +
+            "     LIMIT 1) AS latestReason,  \n" +
+            "(SELECT ss.previous_status \n" +
+            "     FROM shipping_status ss \n" +
+            "     WHERE ss.order_id = o.order_id \n" +
+            "     ORDER BY ss.updated_at DESC \n" +
+            "     LIMIT 1) AS oldStatus \n" +
+
             "FROM \n" +
             "    orders o \n" +
             "JOIN \n" +
@@ -173,4 +184,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Modifying
     @Query(value = "UPDATE orders o SET o.unit_id = NULL WHERE o.unit_id = :unitId", nativeQuery = true)
     void unsetShippingUnitInOrders(@Param("unitId") int unitId);
+
+
+    Orders findOrdersByOrderId(Integer orderId);
 }

@@ -1,6 +1,7 @@
 package com.ecommerce.g58.entity;
 
 import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -29,4 +30,12 @@ public class ShippingStatus {
 
     @Column(name = "tracking_number")
     private String trackingNumber;
+
+    @Column(name = "reason")
+    private String reason;
+
+     @Column(name = "previous_status")
+    private String previous_status;
+
+
 }

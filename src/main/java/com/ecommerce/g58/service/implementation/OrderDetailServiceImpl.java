@@ -1,38 +1,57 @@
 package com.ecommerce.g58.service.implementation;
 
+import com.ecommerce.g58.controller.CheckoutController;
 import com.ecommerce.g58.dto.OrderDetailDTO;
 import com.ecommerce.g58.dto.OrderDetailManagerDTO;
-import com.ecommerce.g58.entity.Feedback;
-import com.ecommerce.g58.repository.FeedbackRepository;
-import com.ecommerce.g58.repository.OrderDetailRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
-import com.ecommerce.g58.repository.UserRepository;
+import com.ecommerce.g58.entity.*;
+import com.ecommerce.g58.enums.Reason;
+import com.ecommerce.g58.enums.TransactionType;
+import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.OrderDetailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
+    private static final Logger logger = LoggerFactory.getLogger(CheckoutController.class);
 
     private final OrderDetailRepository orderDetailRepository;
     private final FeedbackRepository feedbackRepository;
     private final ProductVariationRepository productVariationRepository;
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
-    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository, FeedbackRepository feedbackRepository, ProductVariationRepository productVariationRepository, UserRepository userRepository) {
+    WalletRepository walletRepository;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    ShippingStatusRepository shippingStatusRepository;
+    @Autowired
+    InvoiceRepository invoiceRepository;
+    @Autowired
+    TransactionRepository transactionRepository;
+
+    @Autowired
+    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository, FeedbackRepository feedbackRepository, ProductVariationRepository productVariationRepository, UserRepository userRepository,
+                                  OrderRepository orderRepository) {
         this.orderDetailRepository = orderDetailRepository;
         this.feedbackRepository = feedbackRepository;
         this.productVariationRepository = productVariationRepository;
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -87,7 +106,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 Timestamp shippingTimestamp = (Timestamp) result[24];
                 dto.setShippingTime(shippingTimestamp.toLocalDateTime());
             }
-            if(result[25] instanceof Timestamp) {
+            if (result[25] instanceof Timestamp) {
                 Timestamp failedTimestamp = (Timestamp) result[25];
                 dto.setFailedTime(failedTimestamp.toLocalDateTime());
             }
@@ -185,5 +204,227 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         }
         return orderDetailManager;
     }
-}
 
+
+    @Override
+    public boolean changeStatus(Integer orderId, String status, String reason) {
+        ShippingStatus shippingStatus = shippingStatusRepository.findShippingStatusByOrderId_OrderId(orderId);
+        if (shippingStatus == null) {
+            logger.error("Order not found");
+            return false;
+        }
+        shippingStatus.setStatus(status);
+        shippingStatus.setUpdatedAt(LocalDateTime.now());
+        String actualReason;
+        if (reason.equalsIgnoreCase(String.valueOf(Reason.NOT_AS_DESCRIBED))) {
+            actualReason = "Hàng không giống mô tả";
+        } else if (reason.equalsIgnoreCase(String.valueOf(Reason.DAMAGED))) {
+            actualReason = "Hàng bị vỡ/hỏng";
+        } else {
+            actualReason = reason;
+        }
+        shippingStatus.setReason(actualReason);
+        shippingStatusRepository.save(shippingStatus);
+        return true;
+    }
+
+    @Override
+    public boolean cancelOrder(Integer orderId, String status, String reason) {
+        boolean isChanged = changeStatus(orderId, status, reason);
+        if (isChanged) {
+            Orders order = orderRepository.findOrdersByOrderId(orderId);
+            Invoice invoice = invoiceRepository.findInvoiceByOrderId(order);
+            if (invoice == null) {
+                logger.error("Invoice not found");
+                return false;
+            }
+            OrderDetails details = orderDetailRepository.findByOrderId((orderId)).get(0);
+            Optional<Wallet> sellerWallet = walletRepository.findByUserId(details.getProductId().getStoreId().getOwnerId());
+            Optional<Wallet> userWallet = walletRepository.findByUserId(order.getUserId());
+            if (sellerWallet.isPresent() && userWallet.isPresent()) {
+                BigDecimal currentSellerBalance = new BigDecimal(sellerWallet.get().getBalance());
+                BigDecimal newSellerBalance = currentSellerBalance.subtract(invoice.getDeposit());
+                sellerWallet.get().setBalance(newSellerBalance.longValue());
+
+                walletRepository.save(sellerWallet.get());
+
+                BigDecimal walletBalance = new BigDecimal(userWallet.get().getBalance());
+                BigDecimal totalAmount = walletBalance.add(invoice.getDeposit());
+                userWallet.get().setBalance(totalAmount.longValue());
+
+                walletRepository.save(userWallet.get());
+
+                // seller transaction
+                Transactions sellerTransactions = new Transactions();
+                sellerTransactions.setAmount(-invoice.getDeposit().longValue());
+                sellerTransactions.setFromWalletId(sellerWallet.get());
+                sellerTransactions.setTransactionType("Hoàn tiền");
+                sellerTransactions.setDescription("Hoàn " + invoice.getDeposit() + " do khách hủy đơn " + order.getOrderCode());
+                sellerTransactions.setCreatedAt(LocalDateTime.now());
+                transactionRepository.save(sellerTransactions);
+
+                Transactions userTransactions = new Transactions();
+                userTransactions.setAmount(invoice.getDeposit().longValue());
+                userTransactions.setToWalletId(userWallet.get());
+                userTransactions.setTransactionType("Thanh toán hoàn tiền");
+                userTransactions.setDescription("Hoàn " + invoice.getDeposit() + "tiền từ đơn hàng  do bạn đã hủy đơn " + order.getOrderCode());
+                userTransactions.setCreatedAt(LocalDateTime.now());
+                transactionRepository.save(userTransactions);
+            }
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public boolean refundOrder(Integer orderId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Ensure the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("User not authenticated");
+        }
+
+
+        // Fetch the order and validate ownership
+        Orders order = orderRepository.findOrdersByOrderId(orderId);
+
+
+        // Fetch the invoice for shipping fee and additional calculations
+        Invoice invoice = invoiceRepository.findInvoiceByOrderId(order);
+        if (invoice == null) {
+            throw new IllegalArgumentException("Invoice not found for the order");
+        }
+
+        OrderDetails orderDetails = orderDetailRepository.findByOrderId(orderId).get(0);
+        ShippingStatus shippingStatus = shippingStatusRepository.findShippingStatusByOrderId_OrderId(orderId);
+
+        // Handle refund logic based on reason
+        if (shippingStatus.getReason().equalsIgnoreCase("Hàng không giống mô tả")) {
+            handleNotAsDescribedRefund(order, orderDetails, invoice);
+        } else if (shippingStatus.getReason().equalsIgnoreCase("Hàng bị vỡ/hỏng")) {
+            handleDamagedRefund(order, orderDetails, invoice);
+        } else {
+            throw new IllegalArgumentException("Invalid refund reason");
+        }
+        // Update shipping status
+        shippingStatus.setStatus("Returned");
+        shippingStatus.setPrevious_status("Returned");
+        shippingStatusRepository.save(shippingStatus);
+        return true;
+    }
+
+    private void handleNotAsDescribedRefund(Orders order, OrderDetails detail, Invoice invoice) {
+        Wallet userWallet = walletRepository.findByUserId(order.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User wallet not found"));
+
+        // Refund logic
+        BigDecimal returnPrice = BigDecimal.valueOf(invoice.getDeposit().longValue());
+        // Refund full product price to the user and deduct from seller's wallet
+        Wallet sellerWallet = walletRepository.findByUserId(detail.getProductId().getStoreId().getOwnerId())
+                .orElseThrow(() -> new IllegalArgumentException("Seller wallet not found"));
+
+        // Hoàn tiền đơn hàng + phí ship(lượt đi) cho user
+        updateWalletBalance(
+                userWallet,
+                returnPrice,
+                "Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận",
+                String.valueOf(TransactionType.REFUND)
+        );
+        // Trừ tiền ví seller ch0 đơn hàng + phí ship(lượt đi)
+        updateWalletBalance(
+                sellerWallet,
+                invoice.getDeposit().negate(),
+                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                String.valueOf(TransactionType.REFUND));
+
+        // Deduct shipping fee from seller's wallet and add to logistic
+        Wallet logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5)
+                .orElseThrow(() -> new IllegalArgumentException("Logistic wallet not found"));
+
+        // trừ tiền ship lượt về cho shipper
+        updateWalletBalance(
+                sellerWallet,
+                invoice.getShippingFee().negate(),
+                "Trả tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
+                String.valueOf(TransactionType.SHIPPING_FEE)
+        );
+        // nhận tiền ship lượt về
+        updateWalletBalance(
+                logisticWallet,
+                invoice.getShippingFee(),
+                "Nhận tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
+                String.valueOf(TransactionType.SHIPPING_FEE)
+
+        );
+    }
+
+    private void handleDamagedRefund(Orders order, OrderDetails detail, Invoice invoice) {
+        Wallet userWallet = walletRepository.findByUserId(order.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User wallet not found"));
+
+        // Refund logic
+        Wallet sellerWallet = walletRepository.findByUserId(detail.getProductId().getStoreId().getOwnerId())
+                .orElseThrow(() -> new IllegalArgumentException("Seller wallet not found"));
+
+        Wallet logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5)
+                .orElseThrow(() -> new IllegalArgumentException("Logistic wallet not found"));
+
+        // Refund full product price to the user and deduct from seller's wallet
+
+        updateWalletBalance(
+                sellerWallet,
+                invoice.getDeposit().negate(),
+                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                String.valueOf(TransactionType.REFUND));
+
+
+        updateWalletBalance(
+                userWallet,
+                invoice.getDeposit(),
+                "Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận",
+                String.valueOf(TransactionType.REFUND)
+
+                // Logistic
+
+        );
+        // Logistic đền cho seller tiền hàng (không bao gồm ship) - coi như seller mất tiền ship 1 lần
+        BigDecimal returnPrice = BigDecimal.valueOf((invoice.getDeposit().longValue())).subtract(BigDecimal.valueOf(invoice.getShippingFee().longValue()));
+        updateWalletBalance(
+                logisticWallet,
+                returnPrice.negate(),
+                "Bồi thường do làm hỏng  đơn hàng " + order.getOrderCode(),
+                String.valueOf(TransactionType.REFUND)
+
+        );
+        updateWalletBalance(
+                sellerWallet,
+                returnPrice,
+                "Nhận tiền bồi thường cho đơn hàng " + order.getOrderCode() + " do ship làm hỏng",
+                String.valueOf(TransactionType.REFUND)
+
+        );
+
+    }
+
+    private void updateWalletBalance(Wallet wallet, BigDecimal amount, String description, String transactionType) {
+        BigDecimal currentBalance = BigDecimal.valueOf(wallet.getBalance());
+
+        BigDecimal updatedBalance = currentBalance.add(amount);
+
+        wallet.setBalance(updatedBalance.longValue());
+        walletRepository.save(wallet);
+
+        Transactions transaction = new Transactions();
+        transaction.setFromWalletId(amount.signum() < 0 ? wallet : null);
+        transaction.setToWalletId(amount.signum() > 0 ? wallet : null);
+        transaction.setAmount(amount.abs().longValue());
+        transaction.setTransactionType(transactionType);
+        transaction.setDescription(description);
+        transaction.setIsRefund("YES");
+        transaction.setCreatedAt(LocalDateTime.now());
+        transactionRepository.save(transaction);
+    }
+}
