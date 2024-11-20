@@ -77,8 +77,8 @@ public class SellerController {
             redirectAttributes.addFlashAttribute("errorMessage", "Tên cửa hàng không được để trống và không được vượt quá 100 ký tự.");
             return "redirect:/sign-up-seller";
         }
-        if (store.getStorePhone() == null || store.getStorePhone().isEmpty() || store.getStorePhone().length() > 20) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại cửa hàng không được để trống và không được vượt quá 20 ký tự.");
+        if (store.getStorePhone() == null || store.getStorePhone().isEmpty() || store.getStorePhone().length() > 20|| !store.getStorePhone().matches("^[0-9]*$")) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại cửa hàng không được để trống ,không được vượt quá 20 ký tự và không có kí tự đặc biệt.");
             return "redirect:/sign-up-seller";
         }
         if (store.getStoreAddress() == null || store.getStoreAddress().isEmpty() || store.getStoreAddress().length() > 255) {
