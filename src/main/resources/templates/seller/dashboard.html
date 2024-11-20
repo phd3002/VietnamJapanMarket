@@ -18,6 +18,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <style>
+        .legend-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        .legend-label {
+            font-size: 14px;
+        }
+    </style>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -202,6 +223,16 @@
                         <div class="embed-responsive embed-responsive-16by9" id="pieChartContainer">
                             <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
                         </div>
+                        <div class="legend-container">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #01ff02"></div>
+                                <span class="legend-label">Hoàn thành (<span id="completedPercent">0</span>%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #b10000"></div>
+                                <span class="legend-label">Hủy và hoàn trả (<span id="cancelledPercent">0</span>%)</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -274,6 +305,10 @@
     if (totalValue === 0) {
         document.getElementById("pieChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
     } else {
+        document.getElementById("completedPercent").textContent =
+            ((pieData[0].value / totalValue) * 100).toFixed(1);
+        document.getElementById("cancelledPercent").textContent =
+            ((pieData[1].value / totalValue) * 100).toFixed(1);
         var ctxp = document.getElementById("pieChartDemo").getContext("2d");
         var pieChart = new Chart(ctxp).Pie(pieData);
     }
