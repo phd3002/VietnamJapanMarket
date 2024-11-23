@@ -91,7 +91,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             dto.setShippingAddress((String) result[17]);
             dto.setShippingStatus((String) result[18]);
             dto.setPreviousStatus((String) result[19]);
-            dto.setTrackingNumber((String) result[20]);
+            dto.setOrderCode((String) result[20]);
             if (result[21] instanceof Timestamp) {
                 Timestamp pendingTimestamp = (Timestamp) result[21];
                 dto.setPendingTime(pendingTimestamp.toLocalDateTime());
@@ -173,7 +173,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         var orderStatus = shippingStatusRepository.findByOrderIdOrderId(orderId);
         if (orderStatus.getStatus().equals("Pending") || orderStatus.getStatus().equals("Processing")
                 || (orderStatus.getStatus().equals("Delivered") && reason != null)) {
-            orderStatus.setPreviousStatus(orderStatus.getStatus());
+            orderStatus.setPrevious_status(orderStatus.getStatus());
         }
         orderStatus.setStatus(status);
         if (status.equals("Returned") && reason != null) {

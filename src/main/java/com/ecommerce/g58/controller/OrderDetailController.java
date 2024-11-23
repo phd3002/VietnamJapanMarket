@@ -46,7 +46,7 @@ public class OrderDetailController {
             model.addAttribute("shippingAddress", firstDetail.getShippingAddress());
             model.addAttribute("shippingStatus", firstDetail.getShippingStatus());
             model.addAttribute("previousStatus", firstDetail.getPreviousStatus());
-            model.addAttribute("trackingNumber", firstDetail.getTrackingNumber());
+            model.addAttribute("trackingNumber", firstDetail.getOrderCode());
             model.addAttribute("storeName", firstDetail.getStoreName());
             model.addAttribute("storeImage", firstDetail.getStoreImage());
             model.addAttribute("storeId", firstDetail.getStoreId());

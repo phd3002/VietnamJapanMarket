@@ -44,7 +44,7 @@ class OrderDetailControllerTest {
         orderDetail.setPaymentStatus("Paid");
         orderDetail.setShippingAddress("123 Main St");
         orderDetail.setShippingStatus("Shipped");
-        orderDetail.setTrackingNumber("TRACK12345");
+        orderDetail.setOrderCode("TRACK12345");
         orderDetail.setStoreName("Test Store");
         List<OrderDetailDTO> orderDetails = List.of(orderDetail);
         when(orderDetailService.getOrderDetails(orderId)).thenReturn(orderDetails);
@@ -59,7 +59,7 @@ class OrderDetailControllerTest {
         verify(model, times(1)).addAttribute("paymentStatus", orderDetail.getPaymentStatus());
         verify(model, times(1)).addAttribute("shippingAddress", orderDetail.getShippingAddress());
         verify(model, times(1)).addAttribute("shippingStatus", orderDetail.getShippingStatus());
-        verify(model, times(1)).addAttribute("trackingNumber", orderDetail.getTrackingNumber());
+        verify(model, times(1)).addAttribute("trackingNumber", orderDetail.getOrderCode());
         verify(model, times(1)).addAttribute("storeName", orderDetail.getStoreName());
     }
 

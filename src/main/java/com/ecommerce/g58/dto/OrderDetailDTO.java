@@ -28,7 +28,7 @@ public class OrderDetailDTO {
     private String shippingAddress;
     private String shippingStatus;
     private String previousStatus;
-    private String trackingNumber;
+    private String orderCode;
     private LocalDateTime pendingTime;
     private LocalDateTime confirmedTime;
     private LocalDateTime processingTime;
