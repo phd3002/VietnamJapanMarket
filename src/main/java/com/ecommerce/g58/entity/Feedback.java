@@ -45,4 +45,7 @@ public class Feedback {
     @Enumerated(EnumType.STRING)
     @Column(name = "feedback_status")
     private FeedbackStatus feedbackStatus;
+
+    @Column(name = "seller_feedback")
+    private String sellerFeedback;
 }

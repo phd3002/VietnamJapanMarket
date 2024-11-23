@@ -19,4 +19,6 @@ public interface ShippingStatusRepository extends JpaRepository<ShippingStatus, 
     void updateOrderStatus(@Param("orderId") Integer orderId, @Param("status") String status);
 
     ShippingStatus findShippingStatusByOrderId_OrderId(Integer id);
+    ShippingStatus findByOrderId(Integer orderId);
+    ShippingStatus findByOrderIdOrderId(Integer orderId);
 }

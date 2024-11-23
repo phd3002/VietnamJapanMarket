@@ -8,6 +8,8 @@ import com.ecommerce.g58.enums.Reason;
 import com.ecommerce.g58.enums.TransactionType;
 import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.NotificationService;
+import com.ecommerce.g58.entity.Feedback;
+import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.OrderDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,21 +90,22 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             dto.setPaymentStatus((String) result[16]);
             dto.setShippingAddress((String) result[17]);
             dto.setShippingStatus((String) result[18]);
-            dto.setTrackingNumber((String) result[19]);
-            if (result[20] instanceof Timestamp) {
-                Timestamp pendingTimestamp = (Timestamp) result[20];
+            dto.setPreviousStatus((String) result[19]);
+            dto.setTrackingNumber((String) result[20]);
+            if (result[21] instanceof Timestamp) {
+                Timestamp pendingTimestamp = (Timestamp) result[21];
                 dto.setPendingTime(pendingTimestamp.toLocalDateTime());
             }
-            if (result[21] instanceof Timestamp) {
-                Timestamp confirmedTimestamp = (Timestamp) result[21];
+            if (result[22] instanceof Timestamp) {
+                Timestamp confirmedTimestamp = (Timestamp) result[22];
                 dto.setConfirmedTime(confirmedTimestamp.toLocalDateTime());
             }
-            if (result[22] instanceof Timestamp) {
-                Timestamp processingTimestamp = (Timestamp) result[22];
+            if (result[23] instanceof Timestamp) {
+                Timestamp processingTimestamp = (Timestamp) result[23];
                 dto.setProcessingTime(processingTimestamp.toLocalDateTime());
             }
-            if (result[23] instanceof Timestamp) {
-                Timestamp dispatchedTimestamp = (Timestamp) result[23];
+            if (result[24] instanceof Timestamp) {
+                Timestamp dispatchedTimestamp = (Timestamp) result[24];
                 dto.setDispatchedTime(dispatchedTimestamp.toLocalDateTime());
             }
             if (result[24] instanceof Timestamp) {
@@ -113,20 +116,24 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 Timestamp failedTimestamp = (Timestamp) result[25];
                 dto.setFailedTime(failedTimestamp.toLocalDateTime());
             }
-            if (result[26] instanceof Timestamp) {
-                Timestamp deliveredTimestamp = (Timestamp) result[26];
-                dto.setDeliveredTime(deliveredTimestamp.toLocalDateTime());
+            if(result[26] instanceof Timestamp) {
+                Timestamp failedTimestamp = (Timestamp) result[26];
+                dto.setFailedTime(failedTimestamp.toLocalDateTime());
             }
             if (result[27] instanceof Timestamp) {
-                Timestamp completedTimestamp = (Timestamp) result[27];
-                dto.setCompletedTime(completedTimestamp.toLocalDateTime());
+                Timestamp deliveredTimestamp = (Timestamp) result[27];
+                dto.setDeliveredTime(deliveredTimestamp.toLocalDateTime());
             }
             if (result[28] instanceof Timestamp) {
-                Timestamp cancelledTimestamp = (Timestamp) result[28];
-                dto.setCancelledTime(cancelledTimestamp.toLocalDateTime());
+                Timestamp completedTimestamp = (Timestamp) result[28];
+                dto.setCompletedTime(completedTimestamp.toLocalDateTime());
             }
             if (result[29] instanceof Timestamp) {
-                Timestamp returnedTimestamp = (Timestamp) result[29];
+                Timestamp cancelledTimestamp = (Timestamp) result[29];
+                dto.setCancelledTime(cancelledTimestamp.toLocalDateTime());
+            }
+            if (result[30] instanceof Timestamp) {
+                Timestamp returnedTimestamp = (Timestamp) result[30];
                 dto.setReturnedTime(returnedTimestamp.toLocalDateTime());
             }
             orderDetails.add(dto);
@@ -157,6 +164,20 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             feedback.setVariationId(pv);
             feedback.setCreatedAt(LocalDateTime.now());
             feedbackRepository.save(feedback);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(Integer orderId, String status, String reason) {
+        var orderStatus = shippingStatusRepository.findByOrderIdOrderId(orderId);
+        if (orderStatus.getStatus().equals("Pending") || orderStatus.getStatus().equals("Processing")
+                || (orderStatus.getStatus().equals("Delivered") && reason != null)) {
+            orderStatus.setPreviousStatus(orderStatus.getStatus());
+        }
+        orderStatus.setStatus(status);
+        if (status.equals("Returned") && reason != null) {
+            orderStatus.setReason(reason);
         }
     }
 
