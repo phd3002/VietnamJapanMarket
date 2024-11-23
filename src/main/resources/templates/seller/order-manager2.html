@@ -218,12 +218,17 @@
 
     <script>
         // Open the modal
+        // Open the modal and store the form reference
         function openModal(select) {
+            const form = select.closest("form"); // Get the closest form element
+
+            // Display the modal
             document.getElementById('confirmModal').style.display = 'block';
 
-            // Handle the confirmation button click to submit the form
-            document.getElementById('confirmBtn').addEventListener('click', function () {
-                // Display a success message after confirmation
+            // Bind the click event for the confirm button (bind only once)
+            const confirmButton = document.getElementById('confirmBtn');
+            confirmButton.onclick = function () {
+                // Submit the form after user confirms
                 swal({
                     title: "Xác nhận",
                     text: "Trạng thái đã được thay đổi thành công.",
@@ -231,20 +236,18 @@
                     buttons: false,
                     timer: 1500
                 }).then(() => {
-                    // Submit the form after success
-                    select.closest("form").submit();
+                    form.submit(); // Submit the specific form
                     closeModal();
                 });
-            });
+            };
         }
 
         // Close the modal
         function closeModal() {
             document.getElementById('confirmModal').style.display = 'none';
-            window.location.reload();
         }
 
-        // Handle the status change dropdowns
+        // Handle status dropdown changes
         document.querySelectorAll('.status-dropdown').forEach(function (select) {
             select.addEventListener('change', function () {
                 handleStatusChange(select);
@@ -254,13 +257,14 @@
         function handleStatusChange(select) {
             const selectedStatus = select.value;
 
-            // Only trigger the modal if the status is "Dispatched"
+            // Trigger modal only for "Dispatched"
             if (selectedStatus === 'Dispatched') {
-                openModal(select);  // Pass the select element to handle form submission after confirmation
+                openModal(select); // Pass the select element
             } else {
-                select.closest("form").submit();
+                select.closest("form").submit(); // Submit directly for other statuses
             }
         }
+
 
         // for accept modal
 
