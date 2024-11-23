@@ -1,0 +1,28 @@
+@startuml
+
+actor Seller
+participant "Product Manager Page"
+participant SellerProductManagementController
+participant ProductService
+participant ProductRepository
+participant Database
+
+Seller -> "Product Manager Page": open delete product page
+"Product Manager Page" -> SellerProductManagementController: deleteProduct(productId, request, session)
+SellerProductManagementController -> ProductService: findById(productId)
+ProductService -> ProductRepository: findById(productId)
+ProductRepository -> Database: select product by productId
+Database --> ProductRepository: product data
+ProductRepository --> ProductService: product found
+ProductService --> SellerProductManagementController: product found
+
+SellerProductManagementController -> ProductService: deleteProductById(productId)
+ProductService -> ProductRepository: deleteByProductId(productId)
+ProductRepository -> Database: delete product by productId
+Database --> ProductRepository: product deleted
+ProductRepository --> ProductService: product deleted
+ProductService --> SellerProductManagementController: product deleted
+
+SellerProductManagementController -> "Product Manager Page": display product delete success message
+
+@enduml
