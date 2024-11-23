@@ -94,9 +94,7 @@
                                 <form method="post" th:action="@{/logistic/update-order-status}">
                                     <input type="hidden" name="orderId" th:value="${order.orderId}"/>
                                     <select class="form-control status-dropdown" id="order-status" name="status"
-                                            th:value="${order.latestStatus}">
-
-                                        th:value="${order.latestStatus}" onchange="this.form.submit()">
+                                            th:value="${order.latestStatus}" onchange="handleStatusChange(this)">
                                         <option value="Pending" th:selected="${order.latestStatus == 'Pending'}"
                                                 disabled>Chờ xử lý
                                         </option>
@@ -137,12 +135,10 @@
                                 </form>
                             </td>
                             <td>
-                                <!--                                <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu</button>-->
                                 <a th:href="@{/logistic/order-detail/{orderId}(orderId=${order.orderId})}">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết">
                                         <i class="fa fa-eye"></i>
                                     </button>
-
                                 </a>
                                 <button th:if="${order.previous_status == 'Failed'}" class="btn btn-danger btn-sm"
                                         type="button" title="Giao hàng thất bại 2 lần">
@@ -152,7 +148,6 @@
                                         type="button" title="Giao hàng thất bại 1 lần">
                                     <i class="fa fa-warning"></i>
                                 </button>
-
                             </td>
                         </tr>
                         </tbody>
@@ -284,7 +279,7 @@
     function handleStatusChange(select) {
         const selectedStatus = select.value;
 
-        // Trigger modal only for "Dispatched"
+        // Trigger modal only for "Delivered"
         if (selectedStatus === 'Delivered') {
             openModal(select); // Pass the select element
         } else {
@@ -299,7 +294,6 @@
         document.querySelector(`form[data-order-id="${orderId}"]`).submit();
     });
 
-</script>
 </script>
 <script>
     // Function to handle the "Lưu lại" button click event

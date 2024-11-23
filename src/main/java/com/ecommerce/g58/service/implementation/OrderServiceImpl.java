@@ -260,8 +260,6 @@ public class OrderServiceImpl implements OrderService {
                         "http://localhost:8080/order-detail/" + orderId);
             }
         }
-
-
         shippingStatusRepository.updateOrderStatus(orderId, status);
 
     }
