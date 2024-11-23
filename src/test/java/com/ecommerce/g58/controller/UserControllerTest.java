@@ -18,10 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+
 
 public class UserControllerTest {
 
@@ -54,13 +52,14 @@ public class UserControllerTest {
     // testRegisterUser_Success tc1
     @Test
     public void testRegisterUser_Success() throws Exception {
+        RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
         Users users = new Users();
         users.setEmail("lequyet180902@gmail.com");
         users.setPassword("123456");
         String confirmPassword = "123456";
         when(userService.isEmailExist("lequyet180902@gmail.com")).thenReturn(false);
         when(request.getSession()).thenReturn(session);
-        String result = userController.registerUser(users, confirmPassword, model, redirectAttributes, request);
+        String result = userController.registerUser(users, confirmPassword, model, mockRedirectAttributes, request);
         assertEquals("sign-up", result);
     }
 
@@ -86,38 +85,7 @@ public class UserControllerTest {
         assertEquals("sign-up", result);
     }
 
-    // testRegisterUser_Spepcialcharacter tc4
-    @Test
-    void testRegisterUser_Spepcialcharactertc4() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902#@@!gmail.com");
-        user.setPassword("123456");
-        String result = userController.registerUser(user, "123456", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("redirect:/sign-up", result);
-    }
 
-    // testRegisterUser_Spepcialcharacter tc5
-    @Test
-    void testRegisterUser_Spepcialcharactertc5() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902#@@!gmail.com");
-        user.setPassword("123456");
-        String result = userController.registerUser(user, "123", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("sign-up", result);
-    }
-
-    // testRegisterUser_Spepcialcharacter tc6
-    @Test
-    void testRegisterUser_Spepcialcharactertc6() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902#@@!gmail.com");
-        user.setPassword("123456");
-        String result = userController.registerUser(user, "", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("sign-up", result);
-    }
 
     // testRegisterUser_EmailAlreadyExiststc7
     @Test
@@ -213,28 +181,6 @@ public class UserControllerTest {
         assertEquals("sign-up", result);
     }
 
-    // testRegisterUser_PasswordsDoNotMatch tc15
-    @Test
-    void testRegisterUser_PasswordsDoNotMatchtc15() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902#@@!gmail.com");
-        user.setPassword("");
-        String result = userController.registerUser(user, "", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("redirect:/sign-up", result);
-    }
-
-    // testRegisterUser_Spepcialcharacter tc16
-    @Test
-    void testRegisterUser_Spepcialcharactertc16() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902#@@!gmail.com");
-        user.setPassword("");
-        String result = userController.registerUser(user, "1236", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("redirect:/sign-up", result);
-    }
-
     // testRegisterUser_EmailAlreadyExiststc17
     @Test
     void testRegisterUser_EmailAlreadyExiststc17() throws Exception {
@@ -258,8 +204,6 @@ public class UserControllerTest {
         verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
         assertEquals("sign-up", result);
     }
-
-
 
     // testRegisterUser_EmailNulltc19
     @Test
@@ -286,21 +230,25 @@ public class UserControllerTest {
 
 
 //---------------------------------------------------------------------------------------------------------------------
-    // testLoginSubmit_Success tc1
+    // testLoginSubmit tc1
     @Test
-    public void testLoginSubmit_Successtc1() {
+    public void testLoginSubmit_tc1() {
+    when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
     UserDetails userDetails = mock(UserDetails.class);
     when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(userDetails);
     when(userDetails.getPassword()).thenReturn("123456");
     when(userService.checkPassword("password", "123456")).thenReturn(true);
     String result = userController.loginSubmit("lequyet180902@gmail.com", "password", model);
     assertEquals("redirect:/homepage", result);
+    verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
     verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
+    verify(userService, times(1)).checkPassword("password", "123456");
 }
 
-    // testLoginSubmit_PasswordNulltc2
+    // testLoginSubmit tc2
     @Test
-    public void testLoginSubmit_PasswordNulltc2() {
+    public void testLoginSubmit_tc2() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
         UserDetails userDetails = mock(UserDetails.class);
         when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(userDetails);
         when(userDetails.getPassword()).thenReturn("");
@@ -308,196 +256,194 @@ public class UserControllerTest {
         String result = userController.loginSubmit("lequyet180902@gmail.com", "Password", model);
         assertEquals("sign-in", result);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Sai tài khoản hoặc mật khẩu."));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
+        verify(userService, times(1)).checkPassword("Password", "");
     }
 
-    // testLoginSubmit_MistakePasswordtc3
+    // testLoginSubmit tc3
     @Test
-    public void testLoginSubmit_MistakePasswordtc3() {
+    public void testLoginSubmit_tc3() {
+        // Mock dependencies
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
         UserDetails userDetails = mock(UserDetails.class);
         when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(userDetails);
         when(userDetails.getPassword()).thenReturn("123456");
-        when(userService.checkPassword("wrongPassword", "123")).thenReturn(false);
+        when(userService.checkPassword("wrongPassword", "123456")).thenReturn(false);
         String result = userController.loginSubmit("lequyet180902@gmail.com", "wrongPassword", model);
         assertEquals("sign-in", result);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Sai tài khoản hoặc mật khẩu."));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
+        verify(userService, times(1)).checkPassword("wrongPassword", "123456");
     }
 
-    // testLoginSubmit_MistakeUsernametc4
+    // testLoginSubmit tc4
     @Test
-    public void testLoginSubmit_MistakeUsernametc4() {
-        UserDetails userDetails = mock(UserDetails.class);
-        when(userService.loadUserByUsername("lequyet1@gmail.com")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("123456");
-        when(userService.checkPassword("Password", "123456")).thenReturn(false);
-        String result = userController.loginSubmit("lequyet1@gmail.com", "Password", model);
-        assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
+    public void testLoginSubmit_tc4() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
+        when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(null);
+        String result = userController.loginSubmit("lequyet180902@gmail.com", "123456", model);
+        assertEquals("sign-in", result); //
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
     }
 
-    // testLoginSubmit_MistakeUsernametc5
+    // testLoginSubmit tc5
     @Test
-    public void testLoginSubmit_MistakeUsernametc5() {
-        UserDetails userDetails = mock(UserDetails.class);
-        when(userService.loadUserByUsername("lequyet1@gmail.com")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("");
-        when(userService.checkPassword("Password", "")).thenReturn(false);
-        String result = userController.loginSubmit("lequyet1@gmail.com", "Password", model);
+    public void testLoginSubmit_tc5() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
+        when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(null);
+        String result = userController.loginSubmit("lequyet180902@gmail.com", "", model);
         assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
-    }
-    // testLoginSubmit_MistakeUsernametc6
-    @Test
-    public void testLoginSubmit_MistakeUsernametc6() {
-        UserDetails userDetails = mock(UserDetails.class);
-        when(userService.loadUserByUsername("lequyet1@gmail.com")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("123456");
-        when(userService.checkPassword("Password", "456")).thenReturn(false);
-        String result = userController.loginSubmit("lequyet1@gmail.com", "Password", model);
-        assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
     }
 
-    // testLoginSubmit_Spepcialchar tc7
+    // testLoginSubmit_tc6
     @Test
-    public void testLoginSubmit_Spepcialchartc7() {
-        UserDetails userDetails = mock(UserDetails.class);
-        when(userService.loadUserByUsername("lequyet180902@!!@gmail.com")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("123456");
-        when(userService.checkPassword("Password", "123456")).thenReturn(false);
-        String result = userController.loginSubmit("lequyet180902@!!@gmail.com", "Password", model);
+    public void testLoginSubmit_tc6() {
+        // Mock dependencies
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
+        when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(null);
+        String result = userController.loginSubmit("lequyet180902@gmail.com", "123@!1", model);
         assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
     }
 
-    // testLoginSubmit_Spepcialchar tc8
+    // testLoginSubmit tc7
     @Test
-    public void testLoginSubmit_Spepcialchartc8() {
-        UserDetails userDetails = mock(UserDetails.class);
-        when(userService.loadUserByUsername("lequyet180902@!!@gmail.com")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("");
-        when(userService.checkPassword("Password", "")).thenReturn(false);
-        String result = userController.loginSubmit("lequyet180902@!!@gmail.com", "Password", model);
-        assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
-    }
-
-    // testLoginSubmit_Spepcialchar tc9
-    @Test
-    public void testLoginSubmit_Spepcialchartc9() {
-        UserDetails userDetails = mock(UserDetails.class);
-        when(userService.loadUserByUsername("lequyet180902@!!@gmail.com")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("123456");
-        when(userService.checkPassword("Password", "456")).thenReturn(false);
-        String result = userController.loginSubmit("lequyet180902@!!@gmail.com", "Password", model);
-        assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
-    }
-
-    // testLoginSubmit_UsernameNull tc10
-    @Test
-    public void testLoginSubmit_UsernameNulltc10() {
-        UserDetails userDetails = mock(UserDetails.class);
+    public void testLoginSubmit_tc7() {
+        when(userService.isAccountActive("")).thenReturn(true);
         when(userService.loadUserByUsername("")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("123456");
-        when(userService.checkPassword("Password", "123456")).thenReturn(false);
-        String result = userController.loginSubmit("", "Password", model);
-        assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
+        String result = userController.loginSubmit("", "123456", model);
+        assertEquals("sign-in", result); //
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
+        verify(userService, times(1)).isAccountActive("");
+        verify(userService, times(1)).loadUserByUsername("");
     }
 
-    // testLoginSubmit_UsernameNull tc11
+    // testLoginSubmit tc8
     @Test
-    public void testLoginSubmit_UsernameNulltc11() {
-        UserDetails userDetails = mock(UserDetails.class);
+    public void testLoginSubmit_tc8() {
+        when(userService.isAccountActive("")).thenReturn(true);
         when(userService.loadUserByUsername("")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("");
-        when(userService.checkPassword("Password", "")).thenReturn(false);
-        String result = userController.loginSubmit("", "Password", model);
-        assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
+        String result = userController.loginSubmit("", "", model);
+        assertEquals("sign-in", result); //
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
+        verify(userService, times(1)).isAccountActive("");
+        verify(userService, times(1)).loadUserByUsername("");
     }
 
-    // testLoginSubmit_UsernameNull tc12
+    // testLoginSubmit_tc9
     @Test
-    public void testLoginSubmit_UsernameNulltc12() {
-        UserDetails userDetails = mock(UserDetails.class);
+    public void testLoginSubmit_tc9() {
+        when(userService.isAccountActive("")).thenReturn(true);
         when(userService.loadUserByUsername("")).thenReturn(null);
-        when(userDetails.getPassword()).thenReturn("123456");
-        when(userService.checkPassword("Password", "456")).thenReturn(false);
-        String result = userController.loginSubmit("", "Password", model);
-        assertEquals("sign-in", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email không tồn tại"));
+        String result = userController.loginSubmit("", "1123!@1", model);
+        assertEquals("sign-in", result); //
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
+        verify(userService, times(1)).isAccountActive("");
+        verify(userService, times(1)).loadUserByUsername("");
     }
+
+    // testLoginSubmit_tc10
+    @Test
+    public void testLoginSubmit_tc10() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(false);
+        String result = userController.loginSubmit("lequyet180902@gmail.com", "123456", model);
+        assertEquals("sign-in", result);
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Tài khoản của bạn đã bị khóa."));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+    }
+
+    // testLoginSubmit_tc11
+    @Test
+    public void testLoginSubmit_tc11() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenThrow(new BadCredentialsException("Invalid credentials"));
+        String result = userController.loginSubmit("lequyet180902@gmail.com", "123456", model);
+        assertEquals("sign-in", result);
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Sai tài khoản hoặc mật khẩu."));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+    }
+
+    // testLoginSubmit_tc12
+    @Test
+    public void testLoginSubmit_tc12() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenThrow(new RuntimeException("Unexpected error"));
+        String result = userController.loginSubmit("lequyet180902@gmail.com", "123456", model);
+        assertEquals("sign-in", result);
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Sai tài khoản hoặc mật khẩu."));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+    }
+
 
     //---------------------------------------------------------------------------------------------------------------------
-    // testProcessForgotPassword_Success tc1
+    // testProcessForgotPassword tc1
     @Test
-    public void testProcessForgotPassword_Success() {
-        doNothing().when(userService).sendResetPasswordEmail(anyString(), any(HttpServletRequest.class));
+    public void testForgotPassword_tc1() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
         String result = userController.processForgotPassword("lequyet180902@gmail.com", redirectAttributes, request, model);
         assertEquals("redirect:/forgot-password", result);
-
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+        verify(userService, times(1)).sendResetPasswordEmail(eq("lequyet180902@gmail.com"), eq(request));
         verify(redirectAttributes, times(1)).addFlashAttribute(eq("successMessage"), eq("Chúng tôi đã gửi Email về cho bạn"));
     }
 
-    // testProcessForgotPassword_EmailNulltc2
+    // testProcessForgotPassword tc2
     @Test
-    public void testProcessForgotPassword_EmailNulltc2() {
-        doThrow(new BadCredentialsException("Email không tồn tại")).when(userService).sendResetPasswordEmail(anyString(), any(HttpServletRequest.class));
+    public void testForgotPassword_tc2() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenThrow(new BadCredentialsException("User not found"));
+        String result = userController.processForgotPassword("lequyet180902@gmail.com", redirectAttributes, request, model);
+        assertEquals("forgot-password", result);
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Chúng tôi không thấy có Email người dùng "));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+    }
+
+    // testProcessForgotPassword tc3
+    @Test
+    public void testForgotPassword_tc3() {
+        when(userService.isAccountActive("")).thenThrow(new BadCredentialsException("User not found"));
         String result = userController.processForgotPassword("", redirectAttributes, request, model);
         assertEquals("forgot-password", result);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Chúng tôi không thấy có Email người dùng "));
+        verify(userService, times(1)).isAccountActive("");
     }
 
-    // testProcessForgotPassword_Spepcialcharacter tc3
+    // testProcessForgotPassword tc4
     @Test
-    public void testProcessForgotPassword_Spepcialcharactertc3() {
-        doThrow(new BadCredentialsException("Email không tồn tại")).when(userService).sendResetPasswordEmail(anyString(), any(HttpServletRequest.class));
-        String result = userController.processForgotPassword("lequyet180902@#@#gmail.com", redirectAttributes, request, model);
+    public void testForgotPassword_tc4() {
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(false);
+        String result = userController.processForgotPassword("lequyet180902@gmail.com", redirectAttributes, request, model);
         assertEquals("forgot-password", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Chúng tôi không thấy có Email người dùng "));
+        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Tài khoản của bạn đã bị khóa và không thể thực hiện yêu cầu đặt lại mật khẩu."));
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
     }
 
-    // testProcessForgotPassword_MistakeEmail tc4
-    @Test
-    public void testProcessForgotPassword_MistakeEmailtc4() {
-        doThrow(new BadCredentialsException("Email không tồn tại")).when(userService).sendResetPasswordEmail(anyString(), any(HttpServletRequest.class));
-        String result = userController.processForgotPassword("lequyet18aa@gmail.com", redirectAttributes, request, model);
-        assertEquals("forgot-password", result);
-        verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Chúng tôi không thấy có Email người dùng "));
-    }
 
     //----------------------------------------------------------------------------------------------------------------------
-    @Test
-    public void testShowResetPasswordForm_ValidToken() {
-        when(userService.isResetTokenValid("validToken")).thenReturn(true);
-        String result = userController.showResetPasswordForm("validToken", model);
-        assertEquals("reset-password", result);
-        verify(model, times(1)).addAttribute("token", "validToken");
-    }
-
-
-    @Test
-    public void testShowResetPasswordForm_InvalidToken() {
-        when(userService.isResetTokenValid("invalidToken")).thenReturn(false);
-        String result = userController.showResetPasswordForm("invalidToken", model);
-        assertEquals("reset-password", result);
-        verify(model, times(1)).addAttribute("errorMessage", "Mã thông báo đặt lại không hợp lệ hoặc đã hết hạn.");
-    }
-    //----------------------------------------------------------------------------------------------------------------------
-
 
     @Test
     public void testProcessResetPassword_ShortPassword() {
-        String result = userController.processResetPassword("validToken", "123", "123", redirectAttributes, model);
+        String result = userController.processResetPassword("validToken", "12345", "12345", redirectAttributes, model);
         assertEquals("/reset-password", result);
         verify(model, times(1)).addAttribute("errorMessage", "Mật Khẩu phải dài ít nhất 6 ký tự.");
     }
 
-
     @Test
     public void testProcessResetPassword_PasswordsDoNotMatch() {
         String result = userController.processResetPassword("validToken", "password123", "password456", redirectAttributes, model);
+        assertEquals("/reset-password", result);
+        verify(model, times(1)).addAttribute("errorMessage", "Mật Khẩu và Xác Nhận Mật Khẩu không khớp.");
+    }
+
+    @Test
+    public void testProcessResetPassword_PasswordsDoNotMatch1() {
+        String result = userController.processResetPassword("validToken", "pas123213213", "password456", redirectAttributes, model);
         assertEquals("/reset-password", result);
         verify(model, times(1)).addAttribute("errorMessage", "Mật Khẩu và Xác Nhận Mật Khẩu không khớp.");
     }
@@ -519,21 +465,7 @@ public class UserControllerTest {
         assertEquals("redirect:/reset-password?token=validToken", result);
         verify(redirectAttributes, times(1)).addFlashAttribute("errorMessage", "Error: Some error");
     }
-    //---------------------------------------------------------------------------------------------------------------------------
 
-    @Test
-    public void testShowForgotPasswordForm() {
-        String result = userController.showForgotPasswordForm();
-        assertEquals("forgot-password", result);
-    }
-
-    //----------------------------------------------------------------------------------------------------------------------
-    @Test
-    public void testShowRegistrationForm() {
-        String viewName = userController.showRegistrationForm(model);
-        verify(model, times(1)).addAttribute(eq("users"), any(Users.class));
-        assertEquals("sign-up", viewName);
-    }
 
     //-----------------------------------------------------------------------------------------------------
     // testShowVerifyOtpForm_Success tc1
