@@ -59,14 +59,23 @@ document.getElementById("shipping-method").addEventListener("change", function (
     const selectedOption = this.options[this.selectedIndex];
     const shippingFee = parseFloat(selectedOption.getAttribute("data-fee"));
 
-    // Get the total product price and calculate the total with the selected shipping fee
+    // Get the total product price
     const totalProductPrice = parseFloat(document.getElementById("total-product-price").textContent.replace(/,/g, ''));
-    const totalWithShipping = totalProductPrice + shippingFee;
 
-    // Update the UI with the new shipping fee and total order price
+    // Calculate tax (8%)
+    const taxRate = 0.08;
+    const taxAmount = totalProductPrice * taxRate;
+
+    // Calculate the total with shipping and tax
+    const totalWithShipping = totalProductPrice + shippingFee + taxAmount;
+
+    // Update the UI with the new shipping fee, tax, and total order price
     document.getElementById("total-shipping-fee").textContent = shippingFee.toLocaleString() + "đ";
+    document.getElementById("total-tax-fee").textContent = taxAmount.toLocaleString() + "đ";
     document.getElementById("total-order-price").textContent = totalWithShipping.toLocaleString() + "đ";
+
 });
+
 
 // Check session status periodically
 let sessionCheckInterval = setInterval(function () {
@@ -144,21 +153,29 @@ document.querySelectorAll('.payment-type-btn').forEach(function (button) {
 function updateTotalAmount() {
     const totalProductPrice = parseFloat(document.getElementById("total-product-price").textContent.replace(/,/g, ''));
     const shippingFee = parseFloat(document.getElementById("total-shipping-fee").textContent.replace(/,/g, ''));
+    const taxRate = 0.08; // 8% tax
 
+    // Calculate the tax on the product price
+    const taxAmount = totalProductPrice * taxRate;
+
+    // Get the selected payment type
     const paymentType = document.getElementById("paymentType").value;
+
     let finalOrderTotal;
 
     if (paymentType === "deposit") {
-        // Apply 50% only to the order total (excluding shipping fee)
-        finalOrderTotal = (totalProductPrice * 0.5) + shippingFee;
+        // Apply 50% to the order total (excluding shipping fee), then add shipping and tax
+        finalOrderTotal = (totalProductPrice * 0.5) + shippingFee + taxAmount;
     } else {
-        // Full payment includes the entire order total and shipping fee
-        finalOrderTotal = totalProductPrice + shippingFee;
+        // Full payment includes the total product price, shipping fee, and tax
+        finalOrderTotal = totalProductPrice + shippingFee + taxAmount;
     }
 
     // Update the displayed total amount
     document.getElementById("total-order-price").textContent = finalOrderTotal.toLocaleString() + "đ";
+
 }
+
 
 // Initialize total amount on page load
 updateTotalAmount();

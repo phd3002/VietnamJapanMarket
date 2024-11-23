@@ -73,6 +73,7 @@
             background-color: #616eff;
             color: #ffffff;
         }
+
         .payment-type-btn {
             width: 50%;
             padding: 10px 20px;
@@ -111,7 +112,7 @@
             <form action="/checkout" method="post">
                 <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">
                 <input type="hidden" name="totalOrderPrice" th:value="${totalOrderPrice}">
-<!--                <input type="hidden" id="store-country" th:value="${store.country.countryId}">-->
+                <!--                <input type="hidden" id="store-country" th:value="${store.country.countryId}">-->
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
@@ -130,7 +131,8 @@
                         </div>
                         <div class="form-group">
                             <span>Địa chỉ chi tiết</span>
-                            <input for="shippingAddress" type="text" name="shippingAddress" id="shipping-address" required>
+                            <input for="shippingAddress" type="text" name="shippingAddress" id="shipping-address"
+                                   required>
                         </div>
                     </div>
 
@@ -184,12 +186,17 @@
                             <div class="row">
                                 <div class="col-sm-12 d-flex justify-content-between">
                                     <div>
-                                        <button id="wallet" class="payment-btn btn-common selected" data-method="WALLET" type="button">Ví VJ-Market</button>
-                                        <button id="vnpay" class="payment-btn btn-common" data-method="VNPAY" type="button">Thanh toán VNPay</button>
+                                        <button id="wallet" class="payment-btn btn-common selected" data-method="WALLET"
+                                                type="button">Ví VJ-Market
+                                        </button>
+                                        <button id="vnpay" class="payment-btn btn-common" data-method="VNPAY"
+                                                type="button">Thanh toán VNPay
+                                        </button>
                                     </div>
                                     <div>
                                         <div class="payment-details" id="walletDetails">
-                                            <p>Số dư ví của bạn: <strong th:text="${walletBalance} + 'đ'">0đ</strong></p>
+                                            <p>Số dư ví của bạn: <strong th:text="${walletBalance} + 'đ'">0đ</strong>
+                                            </p>
                                         </div>
                                         <div class="payment-details" id="vnpayDetails" style="display:none;">
                                             <p>Bạn đang chọn thanh toán qua VNPay.</p>
@@ -200,12 +207,16 @@
                             <!-- Payment type options -->
                             <div class="payment-type-options">
                                 <h6 class="title mb--10">Hình thức thanh toán</h6>
-                                <button id="fullPayment" class="payment-type-btn selected" data-type="full" type="button">Trả đủ</button>
-                                <button id="depositPayment" class="payment-type-btn" data-type="deposit" type="button">Đặt cọc 50%</button>
+                                <button id="fullPayment" class="payment-type-btn selected" data-type="full"
+                                        type="button">Trả đủ
+                                </button>
+                                <button id="depositPayment" class="payment-type-btn" data-type="deposit" type="button">
+                                    Đặt cọc 50%
+                                </button>
                             </div>
                             <!-- Hidden input to hold selected payment method -->
                             <input type="hidden" id="paymentMethod" name="paymentMethod" value="WALLET">
-                            <input type="hidden"  name="paymentMethod" value="VNPAY">
+                            <input type="hidden" name="paymentMethod" value="VNPAY">
                             <input type="hidden" id="paymentType" name="paymentType" value="full">
                             <br><br>
                             <div class="order-price">
@@ -218,10 +229,14 @@
                                     <span id="total-shipping-fee">50000đ</span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <h5 class="title mb-0">Tổng thanh toán:</h5>
-                                    <h6 id="total-order-price" style="color: #bb2d3b;"
-                                        th:text="${totalWithShipping} + 'đ'"></h6>
+                                    <h6 class="title mb-0">Thuế (8%):</h6>
+                                    <span id="total-tax-fee" th:text="${tax} + 'đ'"></span>
                                 </div>
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="title mb-0">Tổng thanh toán:</h5>
+                                    <h6 id="total-order-price" style="color: #bb2d3b;" th:text="${totalWithShipping} + 'đ'"></h6>
+                                </div>
+
                             </div>
                         </div>
                         <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán</button>

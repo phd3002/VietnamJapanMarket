@@ -2,10 +2,7 @@ package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.PaymentMethod;
-import com.ecommerce.g58.repository.OrderDetailRepository;
-import com.ecommerce.g58.repository.OrderRepository;
-import com.ecommerce.g58.repository.ProductImageRepository;
-import com.ecommerce.g58.repository.ShippingStatusRepository;
+import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.*;
 import com.ecommerce.g58.service.implementation.VNPayService;
 import com.ecommerce.g58.utils.RandomOrderCodeGenerator;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -66,6 +64,13 @@ public class CheckoutController {
 
     @Autowired
     private CartItemService cartItemService;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
+    @Autowired
+    private WalletRepository walletRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal, HttpSession session,
@@ -153,10 +158,17 @@ public class CheckoutController {
             }
         }
 
-        long totalWithShipping = totalPrice + shippingFee;
-        logger.info("Total with shipping calculated: {}", totalWithShipping);
+        double taxRate = 0.08; // 8% tax rate
+        long baseTotal = totalPrice + shippingFee; // Total before tax
+        long taxAmount = Math.round(baseTotal * taxRate); // Tax applied to the base total
+        long totalWithShipping = baseTotal + taxAmount; // Final total including tax
 
-        // Thêm thông tin vào model
+// Debugging logs
+        logger.info("Base total (price + shipping): {}", baseTotal);
+        logger.info("Tax amount calculated: {}", taxAmount);
+        logger.info("Total with shipping and tax: {}", totalWithShipping);
+
+        model.addAttribute("tax", taxAmount);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("totalWithShipping", totalWithShipping);
@@ -237,10 +249,23 @@ public class CheckoutController {
 
         // Calculate the final total based on payment type
         long totalWithShipping;
+        double tax = 0.08;
+        Invoice invoice = new Invoice();
+
         if ("deposit".equalsIgnoreCase(paymentType)) {
-            totalWithShipping = (totalPrice / 2) + shippingFee; // 50% of total price, full shipping fee
+            totalWithShipping = (long) ((((double) totalPrice / 2) + shippingFee) + (totalPrice * tax)); // 50% of total price, full shipping fee
+
+            invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
+            invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
+            invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
+            invoice.setRemainingBalance(BigDecimal.valueOf(totalPrice - (totalPrice / 2)));
+
         } else {
-            totalWithShipping = totalPrice + shippingFee; // Full payment
+            totalWithShipping = (long) ((totalPrice + shippingFee) + (totalPrice * tax));
+            invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
+            invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
+            invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
+            invoice.setRemainingBalance(BigDecimal.valueOf(0));
         }
         logger.info("Total with shipping calculated based on payment type '{}': {}", paymentType, totalWithShipping);
 
@@ -277,6 +302,8 @@ public class CheckoutController {
                 walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping, paymentType);
                 logger.info("Đã cộng {} vào ví của chủ cửa hàng có ID {}. Loại thanh toán: {}", totalWithShipping, storeId, paymentType);
             }
+
+
             // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
             cartService.subtractItemQuantitiesFromStock(userId);
             session.setAttribute("userId", userId);
@@ -332,6 +359,8 @@ public class CheckoutController {
 
             // Đặt đơn hàng cho model để hiển thị thông tin đơn hàng
             model.addAttribute("order", order);
+            invoice.setOrderId(order);
+            invoiceRepository.save(invoice);
             model.addAttribute("paymentMethod", paymentMethod);
             logger.info("Order details added to model for display on checkout-complete page.");
 

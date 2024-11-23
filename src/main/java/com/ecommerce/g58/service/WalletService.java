@@ -20,4 +20,6 @@ public interface WalletService {
     void addToWallet(Integer userId, double amount, String paymentType);
 
     void createWalletForUser(Users userId, long initialBalance);
+
+//    void addToWalletForLogistics( Long amount, int orderId);
 }

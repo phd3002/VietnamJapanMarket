@@ -20,6 +20,24 @@
     <link rel="stylesheet" th:href="@{/css/vendor/base.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style-2.css}" type="text/css">
+    <style>
+        .notification-count {
+            display: inline-block; /* Ensure it is visible */
+            visibility: visible;
+        }
+        .item-content {
+            display: flex;
+            justify-content: space-between; /* Ensures space between title and time */
+            align-items: center; /* Aligns items vertically */
+        }
+
+        .item-time {
+            color: gray; /* Optional for styling */
+            font-size: 0.9rem;
+            white-space: nowrap; /* Prevents wrapping */
+        }
+
+    </style>
 </head>
 
 <body class="sticky-header newsletter-popup-modal">
@@ -68,41 +86,52 @@
                             </a>
                         </li>
                         <li class="notification">
-                            <a href="my-account.html#nav-notification" class="notification-dropdown-btn">
+                            <!-- Notification Icon with Unread Count -->
+                            <a href="#" class="notification-dropdown-btn">
                                 <i class="flaticon-envelope"></i>
-                                <span class="notification-count"></span>
+                                <!-- Always show unread count for debugging -->
+                                <span th:if="${unreadCount > 0}" class="notification-count"></span>
+
                             </a>
 
+
                             <!-- Notification Dropdown -->
-                            <div id="notification-dropdown" class="notification-dropdown">
+                            <div id="notification-dropdown" class="notification-dropdown"
+                                 th:if="${topNotifications != null && !topNotifications.isEmpty()}">
                                 <div class="notification-content-wrap">
+                                    <!-- Header Section -->
                                     <div class="notification-header">
                                         <p>New notifications</p>
                                     </div>
+
+                                    <!-- Notification Items -->
                                     <div class="notification-body">
-                                        <!-- Notification Item -->
-                                        <div class="notification-item">
-                                            <div class="item-content">
-                                                <h3 class="item-title">New message from John</h3>
-                                                <p class="item-text">Hey, how's it going?</p>
-                                                <span class="item-time">2 minutes ago</span>
-                                            </div>
+                                        <!-- Loop through top notifications -->
+                                        <div th:each="notification : ${topNotifications}" class="notification-item">
+
+                                            <form th:action="@{/notification/read}" method="post">
+                                                <input type="hidden" name="notificationId" th:value="${notification.notificationId}" />
+                                                <div class="item-content row" onclick="this.parentElement.submit()">
+                                                    <h3 th:if="${!notification.read}" class="item-title"
+                                                        th:text="${notification.title}">Notification Title</h3>
+                                                    <span th:if="${notification.read}" class="item-title col-md-8"
+                                                          th:text="${notification.title}">Notification Title</span>
+                                                    <span style="float: right" class="item-time  col-md-4"
+                                                          th:text="${#temporals.format(notification.created, 'MMM dd, yyyy HH:mm') ?: 'No Time Available'}">Time</span>
+                                                </div>
+                                            </form>
+
                                         </div>
-                                        <div class="notification-item">
-                                            <div class="item-content">
-                                                <h3 class="item-title">New message from John</h3>
-                                                <p class="item-text">Hey, how's it going?</p>
-                                                <span class="item-time">2 minutes ago</span>
-                                            </div>
-                                        </div>
-                                        <!-- Repeat for more notification items -->
                                     </div>
+
+                                    <!-- Footer Section -->
                                     <div class="notification-footer">
-                                        <a href="my-account.html#nav-notification">View All Notifications</a>
+                                        <a href="/notification">View All Notifications</a>
                                     </div>
                                 </div>
                             </div>
                         </li>
+
                         <li class="shopping-cart">
                             <a href="/cart-items" class="cart-dropdown-btn" onclick="event.stopPropagation();">
                                 <span id="cart-count" class="cart-count">0</span>

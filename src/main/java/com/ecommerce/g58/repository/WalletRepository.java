@@ -45,4 +45,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     Optional<Long> findBalanceByUserId(@Param("userId") Integer userId);
 
     Optional<Wallet> findByUserId(Users user);
+
+    // method to find wallet for specific role (1 is ADMIN, 2 is 5)
+    Optional<Wallet> findFirstByUserId_RoleId_RoleId(Integer roleId);
 }

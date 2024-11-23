@@ -44,7 +44,8 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item active" href="/logistic/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item active" href="/logistic/dashboard"><i
+                class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
         <li><a class="app-menu__item" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
@@ -91,18 +92,47 @@
                             <td th:text="${order.totalPrice}"></td>
                             <td>
                                 <form method="post" th:action="@{/logistic/update-order-status}">
-                                    <input type="hidden" name="orderId" th:value="${order.orderId}" />
-                                    <select class="form-control" id="order-status" name="status" th:value="${order.latestStatus}" onchange="this.form.submit()">
-                                        <option value="Pending" th:selected="${order.latestStatus == 'Pending'}">Chờ xử lý</option>
-                                        <option value="Confirmed" th:selected="${order.latestStatus == 'Confirmed'}">Xác nhận</option>
-                                        <option value="Processing" th:selected="${order.latestStatus == 'Processing'}">Đang xử đóng gói</option>
-                                        <option value="Dispatched" th:selected="${order.latestStatus == 'Dispatched'}">Đã giao cho vận chuyển</option>
-                                        <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'}">Đang vận chuyển</option>
-                                        <option value="Delivered" th:selected="${order.latestStatus == 'Delivered'}">Đã giao</option>
-                                        <option value="Completed" th:selected="${order.latestStatus == 'Completed'}">Hoàn tất</option>
-                                        <option value="Failed" th:selected="${order.latestStatus == 'Failed'}">Giao hàng thất bại</option>
-                                        <option value="Returned" th:selected="${order.latestStatus == 'Returned'}">Hoàn trả</option>
-                                        <option value="Canceled" th:selected="${order.latestStatus == 'Canceled'}">Đã hủy</option>
+                                    <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+                                    <select class="form-control status-dropdown" id="order-status" name="status"
+                                            th:value="${order.latestStatus}">
+
+                                        th:value="${order.latestStatus}" onchange="this.form.submit()">
+                                        <option value="Pending" th:selected="${order.latestStatus == 'Pending'}"
+                                                disabled>Chờ xử lý
+                                        </option>
+                                        <option value="Confirmed" th:selected="${order.latestStatus == 'Confirmed'}"
+                                                disabled>Xác nhận
+                                        </option>
+                                        <option value="Processing" th:selected="${order.latestStatus == 'Processing'}"
+                                                disabled>Đang xử đóng gói
+                                        </option>
+                                        <option value="Dispatched" th:selected="${order.latestStatus == 'Dispatched'}"
+                                                disabled>Đã giao cho vận chuyển
+                                        </option>
+                                        <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'}"
+                                                th:disabled="${order.latestStatus != 'Dispatched' }"
+                                        >Đang vận chuyển
+                                        </option>
+                                        <option value="Delivered" th:selected="${order.latestStatus == 'Delivered'}"
+                                                th:disabled="${order.latestStatus != 'Shipping' }">
+                                            Đã giao
+                                        </option>
+                                        <option value="Completed" th:selected="${order.latestStatus == 'Completed'}"
+                                                disabled>Hoàn tất
+                                        </option>
+                                        <option value="Failed" th:selected="${order.latestStatus == 'Failed'}"
+                                                th:disabled="${order.latestStatus != 'Shipping' }">Giao hàng thất bại
+                                        </option>
+                                        <option value="Returned" th:selected="${order.latestStatus == 'Returned'}"
+                                                disabled>Hoàn trả
+                                        </option>
+                                        <option value="Cancelled" th:selected="${order.latestStatus == 'Cancelled'}"
+                                                disabled>Đã hủy
+                                        </option>
+                                        <option th:if="${order.previous_status != null}" value="Canceled"
+                                                th:selected="${order.previous_status == 'Returned'}"
+                                                disabled>Đã hoàn trả
+                                        </option>
                                     </select>
                                 </form>
                             </td>
@@ -112,7 +142,17 @@
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết">
                                         <i class="fa fa-eye"></i>
                                     </button>
+
                                 </a>
+                                <button th:if="${order.previous_status == 'Failed'}" class="btn btn-danger btn-sm"
+                                        type="button" title="Giao hàng thất bại 2 lần">
+                                    <i class="fa fa-warning"></i>
+                                </button>
+                                <button th:if="${order.previous_status == 'Fail'}" class="btn btn-warning btn-sm"
+                                        type="button" title="Giao hàng thất bại 1 lần">
+                                    <i class="fa fa-warning"></i>
+                                </button>
+
                             </td>
                         </tr>
                         </tbody>
@@ -121,43 +161,19 @@
             </div>
         </div>
     </div>
-    <!--
-  MODAL
--->
-    <!--    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"-->
-    <!--         data-keyboard="false">-->
-    <!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
-    <!--            <div class="modal-content">-->
-    <!--                <div class="modal-body">-->
-    <!--                    <div class="row">-->
-    <!--                        <div class="form-group  col-md-12">-->
-    <!--                              <span class="thong-tin-thanh-toan">-->
-    <!--                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>-->
-    <!--                              </span>-->
-    <!--                        </div>-->
-    <!--                        <div class="form-group col-md-12">-->
-    <!--                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>-->
-    <!--                            <select class="form-control" id="exampleSelect1">-->
-    <!--                                <option>Chờ xác nhận</option>-->
-    <!--                                <option>Đang đóng gói</option>-->
-    <!--                                <option>Chờ lấy hàng</option>-->
-    <!--                                <option>Đã giao cho đơn vị vận chuyển</option>-->
-    <!--                            </select>-->
-    <!--                        </div>-->
-    <!--                    </div>-->
-    <!--                    <BR>-->
-    <!--                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>-->
-    <!--                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>-->
-    <!--                    <BR>-->
-    <!--                </div>-->
-    <!--                <div class="modal-footer">-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--
-    MODAL
-    -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title">Xác nhận thay đổi trạng thái</h2>
+            <p>Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này thành "Đã giao hàng thành công"? <br><span
+                    style="color: red;">Hành động này không thể hoàn tác!</span></p>
+
+            <div class="modal-buttons">
+                <button id="confirmBtn" class="btn btn-success">Đồng ý</button>
+                <button class="btn btn-danger" onclick="closeModal()">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
 </main>
 <!-- Essential javascripts for application to work-->
 <script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
@@ -226,28 +242,64 @@
             win.print();
         }
     }
-    //     //Sao chép dữ liệu
-    //     var copyTextareaBtn = document.querySelector('.js-textareacopybtn');
 
-    // copyTextareaBtn.addEventListener('click', function(event) {
-    //   var copyTextarea = document.querySelector('.js-copytextarea');
-    //   copyTextarea.focus();
-    //   copyTextarea.select();
+</script>
+<script>
+    function openModal(select) {
+        const form = select.closest("form"); // Get the closest form element
 
-    //   try {
-    //     var successful = document.execCommand('copy');
-    //     var msg = successful ? 'successful' : 'unsuccessful';
-    //     console.log('Copying text command was ' + msg);
-    //   } catch (err) {
-    //     console.log('Oops, unable to copy');
-    //   }
-    // });
+        // Display the modal
+        document.getElementById('confirmModal').style.display = 'block';
 
+        // Bind the click event for the confirm button (bind only once)
+        const confirmButton = document.getElementById('confirmBtn');
+        confirmButton.onclick = function () {
+            // Submit the form after user confirms
+            swal({
+                title: "Xác nhận",
+                text: "Trạng thái đã được thay đổi thành công.",
+                icon: "success",
+                buttons: false,
+                timer: 1500
+            }).then(() => {
+                form.submit(); // Submit the specific form
+                closeModal();
+            });
+        };
+    }
 
-    //Modal
-    // $("#show-emp").on("click", function () {
-    //     $("#ModalUP").modal({backdrop: false, keyboard: false})
-    // });
+    // Close the modal
+    function closeModal() {
+        document.getElementById('confirmModal').style.display = 'none';
+        // location.reload();
+    }
+
+    // Handle status dropdown changes
+    document.querySelectorAll('.status-dropdown').forEach(function (select) {
+        select.addEventListener('change', function () {
+            handleStatusChange(select);
+        });
+    });
+
+    function handleStatusChange(select) {
+        const selectedStatus = select.value;
+
+        // Trigger modal only for "Dispatched"
+        if (selectedStatus === 'Delivered') {
+            openModal(select); // Pass the select element
+        } else {
+            select.closest("form").submit(); // Submit directly for other statuses
+        }
+    }
+
+    document.getElementById("confirmAcceptOrderBtn").addEventListener("click", function () {
+        const orderId = this.getAttribute("data-order-id");
+
+        // Submit the form or send an API request
+        document.querySelector(`form[data-order-id="${orderId}"]`).submit();
+    });
+
+</script>
 </script>
 <script>
     // Function to handle the "Lưu lại" button click event
