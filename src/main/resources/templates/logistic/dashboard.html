@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/logistic/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/seller/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -45,7 +45,7 @@
     <ul class="app-menu">
         <li><a class="app-menu__item active" href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="income-manager.html"><i class='app-menu__icon bx bx-dollar'></i><span
                 class="app-menu__label">Quản lý doanh thu</span></a></li>
@@ -200,18 +200,18 @@
         <!--END right-->
     </div>
 </main>
-<script src="../../static/logistic/js/jquery-3.2.1.min.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
 <!--===============================================================================================-->
-<script src="../../static/logistic/js/popper.min.js"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
 <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
 <!--===============================================================================================-->
-<script src="../../static/logistic/js/bootstrap.min.js"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
 <!--===============================================================================================-->
-<script src="../../static/logistic/js/main.js"></script>
+<script th:src="@{/seller/js/main.js}"></script>
 <!--===============================================================================================-->
-<script src="../../static/logistic/js/plugins/pace.min.js"></script>
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
 <!--===============================================================================================-->
-<script type="text/javascript" src="../../static/logistic/js/plugins/chart.js"></script>
+<script th:src="@{/seller/js/plugins/chart.js}" type="text/javascript"></script>
 <!--===============================================================================================-->
 <script type="text/javascript">
     var data = {

@@ -92,14 +92,12 @@
                 </div>
                 <div class="cart-update-btn-area" style="margin-right: 10%; text-align: right">
                     <div class="update-btn">
-                        <form action="/checkout" method="get">
+                        <form id="checkoutForm" action="/checkout" method="get">
                             <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4" th:disabled="${isCartEmpty}">
                                 Check out
                             </button>
+                            <input type="hidden" name="cartItemIds" id="cartItemIds">
                         </form>
-<!--                        <form id="checkoutForm" action="/checkout" method="get" style="display: none;">-->
-<!--                            <input type="hidden" name="cartItemIds" id="cartItemIds">-->
-<!--                        </form>-->
                     </div>
                 </div>
 
@@ -393,5 +391,20 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get all cart item elements that have a hidden input with their ID
+        const cartItemElements = document.querySelectorAll('input[name="cartItemId"]');
+        const cartItemIds = [];
+
+        // Extract the IDs and add them to the cartItemIds array
+        cartItemElements.forEach(item => {
+            cartItemIds.push(item.value);
+        });
+
+        // Set the value of the hidden input field to the list of IDs, joined by commas
+        document.getElementById('cartItemIds').value = cartItemIds.join(',');
+    });
+</script>
 </body>
 </html>

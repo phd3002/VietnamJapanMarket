@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
                 // Public pages and resources
                 .antMatchers(
-                        "/","/**", "/sign-up/confirm-code/**",
+                        "/", "/**", "/sign-up/confirm-code/**",
                         "/address/**", "/cart-detail/**",
                         "/coming-soon/**", "/confirm-code/**", "/footer/**",
                         "/head/**", "/header/**",
@@ -81,7 +81,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/terms-of-service/**", "/view-store/**", "/wallet/**",
                         "/wishlist/**", "/forgot-password/**", "/reset-password/**",
                         "/add_to_cart", "/cart-items", "/product/**",
-                        "/store-info/**", "/store-save/**", "/addProductFull/**","/addProductForm2/**"
+                        "/notification",
+                        "/store-info/**", "/store-save/**", "/addProductFull/**", "/addProductForm2/**",
+                        "/vn/**", "/submitOrder/**", "/now/**", "/vnpay-payment/**"
                 ).permitAll()
 
                 // Checkout page requires authentication

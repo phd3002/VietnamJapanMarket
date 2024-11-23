@@ -62,7 +62,7 @@ public class SellerController {
 
     @PostMapping("/sign-up-seller")
     public String registerStore(@ModelAttribute Stores store,
-                                @RequestParam("countryId") Integer countryId,
+//                                @RequestParam("countryId") Integer countryId,
                                 @RequestParam("city") String city,
                                 @RequestParam("district") String district,
                                 @RequestParam("postalCode") String postalCode,
@@ -84,10 +84,6 @@ public class SellerController {
             redirectAttributes.addFlashAttribute("errorMessage", "Địa chỉ cửa hàng không được để trống và không được vượt quá 255 ký tự.");
             return "redirect:/sign-up-seller";
         }
-        if (countryId == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Quốc gia không được để trống.");
-            return "redirect:/sign-up-seller";
-        }
         if (city == null || city.isEmpty() || city.length() > 100) {
             redirectAttributes.addFlashAttribute("errorMessage", "Thành phố không được để trống và không được vượt quá 100 ký tự.");
             return "redirect:/sign-up-seller";
@@ -106,7 +102,7 @@ public class SellerController {
         store.setDistrict(district != null ? district.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
         store.setPostalCode(postalCode != null ? postalCode.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
 
-        Countries country = countryService.getCountryById(countryId);
+        Countries country = countryService.getCountryById(2);
         store.setCountry(country); // Set country
         Optional<Stores> existingStoreByName = storeService.findByStoreName(store.getStoreName());
         if (existingStoreByName.isPresent()) {

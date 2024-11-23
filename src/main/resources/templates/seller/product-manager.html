@@ -102,7 +102,7 @@
                         <tbody>
                         <tr th:each="product : ${products}">
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td th:text="${product.productId}"></td>
+                            <td th:text="${product.productCode}"></td>
                             <td th:text="${product.productName}"></td>
                             <td>
                                 <img th:if="${product.productVariations != null && product.productVariations.size() > 0}"
@@ -130,7 +130,7 @@
                                     <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i
                                             class="fas fa-trash-alt"></i></button>
                                 </a>
-                                <a href="add-variation.html">
+                                <a th:href="@{'/addProductVariationForm/' + ${product.productId}}">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Thêm biến thể"><i
                                             class="fas fa-plus-square"></i></button>
                                 </a>

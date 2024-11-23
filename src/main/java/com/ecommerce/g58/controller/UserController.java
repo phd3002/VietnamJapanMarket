@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ecommerce.g58.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -44,6 +45,9 @@ public class UserController {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private WalletService walletService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -135,6 +139,7 @@ public class UserController {
             Users user = temporaryUsers.get(otpFromSession); // Lấy người dùng từ bản đồ tạm thời
             user.setStatus("active"); // Đặt trạng thái của người dùng là "active"
             userService.registerUser(user); // Đăng ký người dùng mới
+            walletService.createWalletForUser(user, 0); // Tạo ví cho người dùng mới
             temporaryUsers.remove(otpFromSession); // Xóa người dùng khỏi bản đồ tạm thời
             session.setAttribute("verificationSuccessMessage", "Xác minh OTP thành công!"); // Thêm thông báo thành công vào session
             session.removeAttribute("otp"); // Xóa OTP khỏi session
@@ -202,12 +207,6 @@ public class UserController {
                 model.addAttribute("errorMessage", "Email chưa được đăng kí");
                 return "sign-in";
             }
-            // Check if the user is inactive
-            // Check if the user is inactive using UserDetails methods
-//            if (!userDetails.isAccountNonLocked() || !userDetails.isEnabled()) {
-//                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa.");
-//                return "sign-in";
-//            }
             // Check if the password matches
             boolean isPasswordValid = userService.checkPassword(password, userDetails.getPassword());
             if (!isPasswordValid) {
@@ -220,6 +219,14 @@ public class UserController {
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Redirect based on user role
+            if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Logistic"))) {
+                return "redirect:/logistic/dashboard";
+            } else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Admin"))) {
+                return "redirect:/admin/dashboard";
+            }
+
             return "redirect:/homepage"; // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
 
         } catch (BadCredentialsException e) {

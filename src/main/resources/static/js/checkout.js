@@ -55,28 +55,27 @@ document.querySelectorAll('.payment-btn').forEach(function (button) {
 
 // Update the total shipping fee and total order price when the shipping method is changed
 document.getElementById("shipping-method").addEventListener("change", function () {
-    const shippingMethod = this.value;
-    let shippingFee;
+    // Get the selected option and retrieve the shipping fee from its data-fee attribute
+    const selectedOption = this.options[this.selectedIndex];
+    const shippingFee = parseFloat(selectedOption.getAttribute("data-fee"));
 
-    switch (shippingMethod) {
-        case "express":
-            shippingFee = 100000;
-            break;
-        case "same-day":
-            shippingFee = 150000;
-            break;
-        default:
-            shippingFee = 50000;
-            break;
-    }
-
-    // Update the UI with the new shipping fee and total order price
+    // Get the total product price
     const totalProductPrice = parseFloat(document.getElementById("total-product-price").textContent.replace(/,/g, ''));
-    const totalWithShipping = totalProductPrice + shippingFee;
 
+    // Calculate tax (8%)
+    const taxRate = 0.08;
+    const taxAmount = totalProductPrice * taxRate;
+
+    // Calculate the total with shipping and tax
+    const totalWithShipping = totalProductPrice + shippingFee + taxAmount;
+
+    // Update the UI with the new shipping fee, tax, and total order price
     document.getElementById("total-shipping-fee").textContent = shippingFee.toLocaleString() + "đ";
+    document.getElementById("total-tax-fee").textContent = taxAmount.toLocaleString() + "đ";
     document.getElementById("total-order-price").textContent = totalWithShipping.toLocaleString() + "đ";
+
 });
+
 
 // Check session status periodically
 let sessionCheckInterval = setInterval(function () {
@@ -129,20 +128,54 @@ window.addEventListener("beforeunload", function () {
     }).catch(error => console.error("Error canceling checkout:", error));
 });
 
-// Assuming the store's country is available in a hidden field or data attribute
-const storeCountry = document.getElementById("store-country").value; // Hidden field with store country
+// Add event listeners to each payment type button
+document.querySelectorAll('.payment-type-btn').forEach(function (button) {
+    button.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent default action (page jump)
 
-document.getElementById("country").addEventListener("change", function () {
-    const userCountry = this.value;
-    const codButton = document.getElementById("cod");
+        // Remove 'selected' class from all payment type buttons
+        document.querySelectorAll('.payment-type-btn').forEach(function (btn) {
+            btn.classList.remove('selected');
+        });
 
-    if (userCountry !== storeCountry) {
-        codButton.disabled = true;
-        codButton.classList.add("disabled"); // Optional: Add a class to style it as disabled
-        codButton.classList.remove("selected"); // Remove selection if previously selected
-        document.getElementById("paymentMethod").value = "wallet"; // Set default payment method to wallet
-    } else {
-        codButton.disabled = false;
-        codButton.classList.remove("disabled");
-    }
+        // Add 'selected' class to the clicked button
+        this.classList.add('selected');
+
+        // Update hidden input with selected payment type
+        document.getElementById('paymentType').value = this.dataset.type;
+
+        // Update total based on selected payment type
+        updateTotalAmount();
+    });
 });
+
+// Function to update total amount based on payment type
+function updateTotalAmount() {
+    const totalProductPrice = parseFloat(document.getElementById("total-product-price").textContent.replace(/,/g, ''));
+    const shippingFee = parseFloat(document.getElementById("total-shipping-fee").textContent.replace(/,/g, ''));
+    const taxRate = 0.08; // 8% tax
+
+    // Calculate the tax on the product price
+    const taxAmount = totalProductPrice * taxRate;
+
+    // Get the selected payment type
+    const paymentType = document.getElementById("paymentType").value;
+
+    let finalOrderTotal;
+
+    if (paymentType === "deposit") {
+        // Apply 50% to the order total (excluding shipping fee), then add shipping and tax
+        finalOrderTotal = (totalProductPrice * 0.5) + shippingFee + taxAmount;
+    } else {
+        // Full payment includes the total product price, shipping fee, and tax
+        finalOrderTotal = totalProductPrice + shippingFee + taxAmount;
+    }
+
+    // Update the displayed total amount
+    document.getElementById("total-order-price").textContent = finalOrderTotal.toLocaleString() + "đ";
+
+}
+
+
+// Initialize total amount on page load
+updateTotalAmount();

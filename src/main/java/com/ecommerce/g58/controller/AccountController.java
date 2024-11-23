@@ -3,7 +3,6 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.implementation.ProfileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +19,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class AccountController {
     private final ProfileService profileService;
-
-    @Autowired
-    private StoreService storeService;
+    private final StoreService storeService;
 
     @GetMapping("/my-account")
     public String myAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {

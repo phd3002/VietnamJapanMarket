@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -95,7 +96,7 @@ public class CartController {
                 cartService.addProductToCart(user, productDetail, quantity, cart);
 
                 // Success message
-                redirectAttributes.addFlashAttribute("message", "Sản phâ đã được thêm vào giỏ hàng của bạn");
+                redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được thêm vào giỏ hàng của bạn");
             } else {
                 // Error message if the product detail is not found
                 redirectAttributes.addFlashAttribute("error", "Không thể thêm sản phẩm vào giỏ hàng");
@@ -111,6 +112,7 @@ public class CartController {
     }
 
 
+    
     // View Cart Items
     @GetMapping("/cart-items")
     public String getCartItems(Model model) {
@@ -186,3 +188,9 @@ public class CartController {
         return 0;
     }
 }
+
+
+
+
+
+

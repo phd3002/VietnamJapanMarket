@@ -74,10 +74,20 @@
                         <div th:if="${successMessage}" class="success-message">
                             <p th:text="${successMessage}"></p>
                         </div>
+                        <div th:if="${verificationSuccessMessage}" class="success-message">
+                            <p th:text="${verificationSuccessMessage}"></p>
+                        </div>
                         <div th:if="${banned}" class="success-message">
                             <p th:text="${banned}"></p>
                         </div>
                         <br>
+                        <div th:if="${message != null}"
+                             class="alert alert-dismissible"
+                             th:classappend="${messageType == 'success'} ? 'alert-success' : 'alert-danger'">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <p th:text="${message}"></p>
+                        </div>
+
                         <div class="form-group">
                             <label>Email <span>*</span></label>
                             <input type="email" class="form-control" name="email" placeholder="Email" required>

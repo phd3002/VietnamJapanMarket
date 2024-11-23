@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/vietnam_japan_market
     username: root
-    password: 12345678
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
@@ -50,10 +50,10 @@ spring:
             enable: true
 aws:
   bucket:
-    name: vietnamjapanmarket
-  region: ap-southeast-2
-  accessKey: AKIAU6VTTYKZOJMREN7U
-  secretKey: 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
+    name:
+  region:
+  accessKey:
+  secretKey:
 server:
   servlet:
     session:

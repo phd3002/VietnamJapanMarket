@@ -1,9 +1,11 @@
 package com.ecommerce.g58.service;
 
 import com.ecommerce.g58.entity.CartItem;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface CartItemService {
     // Retrieve all cart items for a specific user by their userId
     List<CartItem> getCartItemsByUserId(Integer userId);
@@ -15,5 +17,10 @@ public interface CartItemService {
     void removeCartItemById(Integer cartItemId);
 
     List<CartItem> getCartItemsByIds(List<Integer> cartItemId);
+
+    CartItem getCartItemById(Integer cartItemId);
+
+    void removeCartItemsByIds(List<Integer> cartItemIds);
+
 
 }
