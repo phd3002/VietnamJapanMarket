@@ -101,8 +101,10 @@
                             <td th:text="${feedback.getCreatedAt()}"></td>
                             <td>
                                 <a href="/seller/reply-feedback" class="link-reply">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Phản hồi" th:classappend="${!feedback.getSellerFeedback().isBlank()} ? 'btn-red' : 'btn-primary'"><i
-                                            class="fa fa-envelope-open-text"></i></button>
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Phản hồi"
+                                            th:classappend="${feedback.getSellerFeedback() != null and !feedback.getSellerFeedback().isBlank()} ? 'btn-red' : 'btn-primary'">
+                                        <i class="fa fa-envelope-open-text"></i>
+                                    </button>
                                 </a>
                             </td>
                         </tr>
