@@ -49,23 +49,146 @@ public class UserControllerTest {
         temporaryUsers = new HashMap<>();
         ReflectionTestUtils.setField(userController, "temporaryUsers", temporaryUsers);
     }
-    // testRegisterUser_Success tc1
+    // testRegisterUser tc1
     @Test
-    public void testRegisterUser_Success() throws Exception {
-        RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
+    public void testRegisterUser_tc1() throws Exception {
         Users users = new Users();
+        users.setUsername("lequyet");
         users.setEmail("lequyet180902@gmail.com");
         users.setPassword("123456");
         String confirmPassword = "123456";
         when(userService.isEmailExist("lequyet180902@gmail.com")).thenReturn(false);
         when(request.getSession()).thenReturn(session);
-        String result = userController.registerUser(users, confirmPassword, model, mockRedirectAttributes, request);
+        String result = userController.registerUser(users, confirmPassword, model, redirectAttributes, request);
+        assertEquals("redirect:/sign-up", result);
+    }
+
+    // testRegisterUser tc2
+    @Test
+    void testRegisterUser_tc2() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("lequyet180902@gmail.com");
+        user.setPassword("123456");
+        String result = userController.registerUser(user, "123@", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
         assertEquals("sign-up", result);
     }
 
-    // testRegisterUser_PasswordsDoNotMatch tc2
+    // testRegisterUser tc3
     @Test
-    void testRegisterUser_PasswordsDoNotMatchtc2() throws Exception {
+    void testRegisterUser_tc3() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("lequyet180902@gmail.com");
+        user.setPassword("123456");
+        String result = userController.registerUser(user, "", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser tc4
+    @Test
+    void testRegisterUser_tc4() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("lequyet180902@gmail.com");
+        user.setPassword("123456");
+        when(userService.isEmailExist(user.getEmail())).thenReturn(true);
+        String result = userController.registerUser(user, "123456", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Email đã tồn tại.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser tc5
+    @Test
+    void testRegisterUser_tc5() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("lequyet180902@gmail.com");
+        user.setPassword("123456");
+        when(userService.isEmailExist(user.getEmail())).thenReturn(true);
+        String result = userController.registerUser(user, "123", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser  tc6
+    @Test
+    void testRegisterUser_tc6() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("lequyet180902@gmail.com");
+        user.setPassword("123456");
+        when(userService.isEmailExist(user.getEmail())).thenReturn(true);
+        String result = userController.registerUser(user, "", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser tc7
+    @Test
+    void testRegisterUser_tc7() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("");
+        user.setPassword("123456");
+        String result = userController.registerUser(user, "123456", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Email không được để trống.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser tc8
+    @Test
+    void testRegisterUser_tc8() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("");
+        user.setPassword("123456");
+        String result = userController.registerUser(user, "123", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Email không được để trống.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser tc9
+    @Test
+    void testRegisterUser_tc9() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("");
+        user.setPassword("123456");
+        String result = userController.registerUser(user, "", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Email không được để trống.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser tc10
+    @Test
+    void testRegisterUser_tc10() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("");
+        user.setPassword("");
+        String result = userController.registerUser(user, "", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Email không được để trống.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser tc11
+    @Test
+    void testRegisterUser_tc11() throws Exception {
+        Users user = new Users();
+        user.setUsername("lequyet");
+        user.setEmail("");
+        user.setPassword("");
+        String result = userController.registerUser(user, "123", model, redirectAttributes, request);
+        verify(model).addAttribute("errorMessage", "Email không được để trống.");
+        assertEquals("sign-up", result);
+    }
+
+    // testRegisterUser tc12
+    @Test
+    void testRegisterUser_tc12() throws Exception {
         Users user = new Users();
         user.setEmail("lequyet180902@gmail.com");
         user.setPassword("123456");
@@ -73,160 +196,6 @@ public class UserControllerTest {
         verify(model).addAttribute("errorMessage", "Username không được để trống.");
         assertEquals("sign-up", result);
     }
-
-    // testRegisterUser_PasswordsDoNotMatch tc3
-    @Test
-    void testRegisterUser_PasswordsDoNotMatchtc3() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902@gmail.com");
-        user.setPassword("123456");
-        String result = userController.registerUser(user, "", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
-        assertEquals("sign-up", result);
-    }
-
-
-
-    // testRegisterUser_EmailAlreadyExiststc7
-    @Test
-    void testRegisterUser_EmailAlreadyExiststc7() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902@gmail.com");
-        user.setPassword("123456");
-        when(userService.isEmailExist(user.getEmail())).thenReturn(true);
-        String result = userController.registerUser(user, "123456", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Email đã tồn tại.");
-        assertEquals("sign-up", result);
-    }
-
-    // testRegisterUser_EmailAlreadyExiststc8
-    @Test
-    void testRegisterUser_EmailAlreadyExiststc8() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902@gmail.com");
-        user.setPassword("123456");
-        when(userService.isEmailExist(user.getEmail())).thenReturn(true);
-        String result = userController.registerUser(user, "123", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
-        assertEquals("sign-up", result);
-    }
-
-    // testRegisterUser_EmailAlreadyExiststc9
-    @Test
-    void testRegisterUser_EmailAlreadyExiststc9() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902@gmail.com");
-        user.setPassword("123456");
-        when(userService.isEmailExist(user.getEmail())).thenReturn(true);
-        String result = userController.registerUser(user, "", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
-        assertEquals("sign-up", result);
-    }
-
-    // testRegisterUser_EmailAlreadyExiststc10
-    @Test
-    void testRegisterUser_EmailNulltc10() throws Exception {
-        Users user = new Users();
-        user.setEmail("");
-        user.setPassword("123456");
-        String result = userController.registerUser(user, "123456", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("redirect:/sign-up", result);
-    }
-
-    // testRegisterUser_PasswordsNull tc11
-    @Test
-    void testRegisterUser_EmailNulltc11() throws Exception {
-        Users user = new Users();
-        user.setEmail("");
-        user.setPassword("123456");
-        String result = userController.registerUser(user, "123", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("redirect:/sign-up", result);
-    }
-
-    // testRegisterUser_PasswordsNull tc12
-    @Test
-    void testRegisterUser_EmailNulltc12() throws Exception {
-        Users user = new Users();
-        user.setEmail("");
-        user.setPassword("123456");
-        String result = userController.registerUser(user, "", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("redirect:/sign-up", result);
-    }
-
-
-    // testRegisterUser_PasswordNull tc13
-    @Test
-    public void testRegisterUser_PasswordNulltc13() throws Exception {
-        Users users = new Users();
-        users.setEmail("lequyet180902@gmail.com");
-        users.setPassword("");
-        String confirmPassword = "";
-        when(userService.isEmailExist("lequyet180902@gmail.com")).thenReturn(false);
-        when(request.getSession()).thenReturn(session);
-        String result = userController.registerUser(users, confirmPassword, model, redirectAttributes, request);
-        assertEquals("redirect:/sign-up", result);
-    }
-
-    // testRegisterUser_PasswordsDoNotMatch tc14
-    @Test
-    void testRegisterUser_PasswordsDoNotMatchtc14() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902@gmail.com");
-        user.setPassword("");
-        String result = userController.registerUser(user, "123@", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
-        assertEquals("sign-up", result);
-    }
-
-    // testRegisterUser_EmailAlreadyExiststc17
-    @Test
-    void testRegisterUser_EmailAlreadyExiststc17() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902@gmail.com");
-        user.setPassword("");
-        when(userService.isEmailExist(user.getEmail())).thenReturn(true);
-        String result = userController.registerUser(user, "", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Email đã tồn tại.");
-        assertEquals("sign-up", result);
-    }
-
-    // testRegisterUser_EmailAlreadyExiststc18
-    @Test
-    void testRegisterUser_EmailAlreadyExiststc18() throws Exception {
-        Users user = new Users();
-        user.setEmail("lequyet180902@gmail.com");
-        user.setPassword("");
-        when(userService.isEmailExist(user.getEmail())).thenReturn(true);
-        String result = userController.registerUser(user, "123", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
-        assertEquals("sign-up", result);
-    }
-
-    // testRegisterUser_EmailNulltc19
-    @Test
-    void testRegisterUser_EmailNulltc19() throws Exception {
-        Users user = new Users();
-        user.setEmail("");
-        user.setPassword("");
-        String result = userController.registerUser(user, "", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("redirect:/sign-up", result);
-    }
-
-    // testRegisterUser_EmailNull tc20
-    @Test
-    void testRegisterUser_EmailNulltc20() throws Exception {
-        Users user = new Users();
-        user.setEmail("");
-        user.setPassword("");
-        String result = userController.registerUser(user, "123", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "");
-        assertEquals("redirect:/sign-up", result);
-    }
-
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -427,34 +396,46 @@ public class UserControllerTest {
 
     //----------------------------------------------------------------------------------------------------------------------
 
+    // testProcessResetPassword tc1
     @Test
-    public void testProcessResetPassword_ShortPassword() {
+    public void testProcessResetPassword_tc1() {
+        doNothing().when(userService).updatePasswordReset(anyString(), anyString());
+        String result = userController.processResetPassword("validToken", "password123", "password123", redirectAttributes, model);
+        assertEquals("redirect:/sign-in", result);
+        verify(redirectAttributes, times(1)).addFlashAttribute("successMessage", "Đặt lại Mật Khẩu thành công.");
+    }
+
+    // testProcessResetPassword tc2
+    @Test
+    public void testProcessResetPassword_tc2() {
         String result = userController.processResetPassword("validToken", "12345", "12345", redirectAttributes, model);
         assertEquals("/reset-password", result);
         verify(model, times(1)).addAttribute("errorMessage", "Mật Khẩu phải dài ít nhất 6 ký tự.");
     }
 
+    // testProcessResetPassword tc3
     @Test
-    public void testProcessResetPassword_PasswordsDoNotMatch() {
-        String result = userController.processResetPassword("validToken", "password123", "password456", redirectAttributes, model);
+    public void testProcessResetPassword_tc3() {
+        String result = userController.processResetPassword("validToken", "", "123456", redirectAttributes, model);
+        assertEquals("/reset-password", result);
+        verify(model, times(1)).addAttribute("errorMessage", "Mật Khẩu phải dài ít nhất 6 ký tự.");
+    }
+
+    // testProcessResetPassword tc4
+    @Test
+    public void testProcessResetPassword_tc4() {
+        String result = userController.processResetPassword("validToken", "123456", "12345", redirectAttributes, model);
         assertEquals("/reset-password", result);
         verify(model, times(1)).addAttribute("errorMessage", "Mật Khẩu và Xác Nhận Mật Khẩu không khớp.");
     }
 
+
+    // testProcessResetPassword tc5
     @Test
-    public void testProcessResetPassword_PasswordsDoNotMatch1() {
-        String result = userController.processResetPassword("validToken", "pas123213213", "password456", redirectAttributes, model);
+    public void testProcessResetPassword_t5() {
+        String result = userController.processResetPassword("validToken", "123456", "", redirectAttributes, model);
         assertEquals("/reset-password", result);
         verify(model, times(1)).addAttribute("errorMessage", "Mật Khẩu và Xác Nhận Mật Khẩu không khớp.");
-    }
-
-
-    @Test
-    public void testProcessResetPassword_Success() {
-        doNothing().when(userService).updatePasswordReset(anyString(), anyString());
-        String result = userController.processResetPassword("validToken", "password123", "password123", redirectAttributes, model);
-        assertEquals("redirect:/sign-in", result);
-        verify(redirectAttributes, times(1)).addFlashAttribute("successMessage", "Đặt lại Mật Khẩu thành công.");
     }
 
 
@@ -463,7 +444,7 @@ public class UserControllerTest {
         doThrow(new RuntimeException("Some error")).when(userService).updatePasswordReset(anyString(), anyString());
         String result = userController.processResetPassword("validToken", "password123", "password123", redirectAttributes, model);
         assertEquals("redirect:/reset-password?token=validToken", result);
-        verify(redirectAttributes, times(1)).addFlashAttribute("errorMessage", "Error: Some error");
+        verify(redirectAttributes, times(1)).addFlashAttribute("errorMessage", "Đặt lại Mật Khẩu thất bại.");
     }
 
 
