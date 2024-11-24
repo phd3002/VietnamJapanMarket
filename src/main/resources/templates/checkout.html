@@ -143,10 +143,10 @@
                             <table class="table summery-table">
                                 <thead>
                                 <tr>
-                                    <th width="70%">Sản phẩm</th>
-                                    <th width="10%">Đơn giá</th>
-                                    <th width="10%">Số lượng</th>
-                                    <th width="10%">Thành tiền</th>
+                                    <th scope="col">Sản phẩm</th>
+                                    <th scope="col">Đơn giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Thành tiền</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -271,5 +271,54 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
 <script th:src="@{/js/checkout.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy các phần tử input từ form
+        const fullNameInput = document.getElementById("full-name");
+        const phoneNumberInput = document.getElementById("phone-number");
+        const emailAddressInput = document.getElementById("email-address");
+        const shippingAddressInput = document.getElementById("shipping-address");
+
+        // Thêm sự kiện submit cho form (hoặc bạn có thể thêm sự kiện riêng cho button submit)
+        const checkoutButton = document.querySelector(".checkout-btn");
+        checkoutButton.addEventListener("click", function (event) {
+            // Dừng việc submit mặc định để kiểm tra dữ liệu
+            event.preventDefault();
+
+            // Kiểm tra tên đầy đủ
+            if (fullNameInput.value.trim() === "") {
+                alert("Họ tên không được bỏ trống.");
+                fullNameInput.focus();
+                return;
+            }
+
+            // Kiểm tra số điện thoại (chỉ cho phép số và phải từ 10-11 chữ số)
+            const phoneRegex = /^[0-9]{10,11}$/;
+            if (!phoneRegex.test(phoneNumberInput.value)) {
+                alert("Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại có 10-11 chữ số.");
+                phoneNumberInput.focus();
+                return;
+            }
+
+            // Kiểm tra email (phải có định dạng email hợp lệ)
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(emailAddressInput.value)) {
+                alert("Địa chỉ email không hợp lệ.");
+                emailAddressInput.focus();
+                return;
+            }
+
+            // Kiểm tra địa chỉ giao hàng
+            if (shippingAddressInput.value.trim() === "") {
+                alert("Địa chỉ chi tiết không được bỏ trống.");
+                shippingAddressInput.focus();
+                return;
+            }
+
+            // Nếu tất cả đều hợp lệ thì submit form
+            event.target.closest("form").submit();
+        });
+    });
+</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title th:text="${pageTitle} ?: 'Your Cart'"></title>
@@ -23,29 +23,28 @@
             <div class="axil-product-cart-wrap">
                 <div class="product-table-heading">
                     <h4 class="title">Your Cart</h4>
-                    <a href="#" class="cart-clear">Clear Shopping Cart</a>
                 </div>
 
                 <!-- Display empty cart message -->
                 <div th:if="${isCartEmpty}" class="alert alert-warning" role="alert">
-                    <span>Giỏ hàng của bạn đang trống.</span>
+                    <span>Giỏ hàng của bạn đang trống. <a href="/product-list">Mua ngay</a>. </span>
                 </div>
 
                 <!-- Cart Items Table -->
                 <div th:each="storeEntry : ${cartItemGroupedByStore}">
                     <div class="store-name">
-                        <h5 th:text="${storeEntry.key.storeName}"></h5>
+                        Cửa hàng: <h5 th:text="${storeEntry.key.storeName}"></h5>
                     </div>
                     <div class="table-responsive">
-                        <table class="table axil-product-table axil-cart-table mb--40">
+                        <table class="table axil-product-table">
                             <thead>
                             <tr>
-                                <th scope="col" class="product-remove"></th>
-                                <th scope="col" class="product-thumbnail">Product</th>
-                                <th scope="col" class="product-title">Product Name</th>
-                                <th scope="col" class="product-price">Price</th>
-                                <th scope="col" class="product-quantity">Quantity</th>
-                                <th scope="col" class="product-subtotal">Subtotal</th>
+                                <th scope="col"></th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Subtotal</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -61,7 +60,7 @@
                                 </td>
 
                                 <td class="product-thumbnail">
-                                    <a href="product-detail.html">
+                                    <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}">
                                         <img th:src="@{${item.variationId.imageId.thumbnail}}" alt="Product Image">
                                     </a>
                                 </td>
@@ -70,19 +69,19 @@
                                        th:text="${item.productId.productName}">Product Name</a>
                                 </td>
                                 <td class="product-price" data-title="Price">
-                                    <span class="currency-symbol">$</span>
                                     <span th:text="${item.price}">Price</span>
                                 </td>
                                 <td class="product-quantity" data-title="Qty">
                                     <form action="/update_cart_quantity" method="post">
                                         <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
+                                        <div class="pro-qty">
                                         <input type="number" name="quantity" class="quantity-input"
                                                th:value="${item.quantity}" min="1">
+                                        </div>
                                         <button type="submit">Update</button>
                                     </form>
                                 </td>
                                 <td class="product-subtotal" data-title="Subtotal">
-                                    <span class="currency-symbol">$</span>
                                     <span th:text="${item.price * item.quantity}">Subtotal</span>
                                 </td>
                             </tr>
@@ -90,10 +89,10 @@
                         </table>
                     </div>
                 </div>
-                <div class="cart-update-btn-area" style="margin-right: 10%; text-align: right">
+                <div class="cart-update-btn-area" style="display: flex; justify-content: flex-end; margin-right: 10%" th:if="${!isCartEmpty}">
                     <div class="update-btn">
                         <form id="checkoutForm" action="/checkout" method="get">
-                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4" th:disabled="${isCartEmpty}">
+                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4; color: white" th:disabled="${isCartEmpty}">
                                 Check out
                             </button>
                             <input type="hidden" name="cartItemIds" id="cartItemIds">
@@ -122,15 +121,6 @@
                             <div class="label-block label-right">
                                 <div class="product-badget">20% OFF</div>
                             </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
                         </div>
                         <div class="product-content">
                             <div class="inner">
@@ -152,15 +142,6 @@
                             </a>
                             <div class="label-block label-right">
                                 <div class="product-badget">40% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
                             </div>
                         </div>
                         <div class="product-content">
@@ -184,15 +165,6 @@
                             <div class="label-block label-right">
                                 <div class="product-badget">30% OFF</div>
                             </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
                         </div>
                         <div class="product-content">
                             <div class="inner">
@@ -214,15 +186,6 @@
                             </a>
                             <div class="label-block label-right">
                                 <div class="product-badget">50% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
                             </div>
                         </div>
                         <div class="product-content">
@@ -246,15 +209,6 @@
                             <div class="label-block label-right">
                                 <div class="product-badget">25% OFF</div>
                             </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
                         </div>
                         <div class="product-content">
                             <div class="inner">
@@ -268,101 +222,6 @@
                     </div>
                 </div>
                 <!-- End .slick-single-layout -->
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">30% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$60</span>
-                                    <span class="price current-price">$45</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">50% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$70</span>
-                                    <span class="price current-price">$35</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">25% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS5 Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$50</span>
-                                    <span class="price current-price">$38</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-
             </div>
         </div>
     </div>
