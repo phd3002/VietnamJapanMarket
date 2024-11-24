@@ -128,77 +128,30 @@
                             <td th:text="${user.roleId.roleName}"></td>
                             <td th:text="${user.status}"></td>
                             <td class="table-td-center">
-                                <a class="btn btn-primary btn-sm edit" href="#" th:href="@{/admin/user-manager/edit/{userId}(userId=${user.userId})}" title="Sửa" data-toggle="modal" data-target="#ModalUP" th:data-user-id="${user.userId}">
+                                <a class="btn btn-primary btn-sm edit" th:href="@{/admin/edit-user/{userId}(userId=${user.userId})}" title="Sửa">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-
+                    <div class="pagination">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:if="${currentPage > 0}">
+                                <a class="page-link" th:href="@{/admin/user-manager(page=${currentPage - 1})}">Lùi</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/admin/user-manager(page=${i})}" th:text="${i + 1}"></a>
+                            </li>
+                            <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                                <a class="page-link" th:href="@{/admin/user-manager(page=${currentPage + 1})}">Tiếp</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--
-MODAL
--->
-
-    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
-         data-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form th:action="@{/admin/user-manager/update-user}" method="post">
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                            <span class="thong-tin-thanh-toan">
-                                <h5>Chỉnh sửa thông tin</h5>
-                            </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="role-Selected" class="control-label">Chức vụ</label>
-                                <select class="form-control" id="role-Selected" name="roleId">
-                                    <option value="1">Admin</option>
-                                    <option value="2">Seller</option>
-                                    <option value="3">Customer</option>
-                                    <option value="4">Guest</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="status-Selected" class="control-label">Trạng thái</label>
-                                <select class="form-control" id="status-Selected" name="status">
-                                    <option value="active">Đang hoạt động</option>
-                                    <option value="inactive">Khóa tài khoản</option>
-                                </select>
-                            </div>
-                        </div>
-                        <input type="hidden" id="userId" name="userId" />
-                        <br>
-                        <button class="btn btn-save" type="submit">Lưu lại</button>
-                        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-                        <br>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            $('#ModalUP').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Button that triggered the modal
-                var userId = button.data('user-id'); // Extract info from data-* attributes
-                $(this).find('#userId').val(userId);
-            });
-        });
-    </script>
-    <!--
-    MODAL
-    -->
 </main>
 
 

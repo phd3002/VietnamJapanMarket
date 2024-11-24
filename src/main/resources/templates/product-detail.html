@@ -74,17 +74,15 @@
                                 <!-- Rating and review count -->
                                 <div class="product-rating">
                                     <div class="star-rating">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
+                                        <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, fullStars)}" th:if="${fullStars > 0}"></i>
+                                        <i class="fas fa-star-half-alt" th:if="${halfStars > 0}"></i>
+                                        <i class="far fa-star" th:each="i : ${#numbers.sequence(1, emptyStars)}" th:if="${emptyStars > 0}"></i>
                                     </div>
                                     <div class="review-link">
-                                        <a href="#">(<span>2</span> customer reviews)</a>
+                                        <a href="#"><span th:text="${avgText}"></span> (<span th:text="${feedbacks.size()}"></span> customer reviews)</a>
                                     </div>
                                 </div>
-                                <!-- Product variations -->
+                     c           <!-- Product variations -->
                                 <div class="product-variations-wrapper">
                                     <!-- Colors Section -->
                                     <div class="product-variation">
@@ -237,7 +235,7 @@
                                                 </div>
                                                 <div class="comment-inner">
                                                     <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
+                                                        <a class="hover-flip-item-wrapper">
                                                                 <span class="hover-flip-item">
                                                                     <span data-text="Cameron Williamson"
                                                                           th:text="${feedback.userId.firstName + ' ' + feedback.userId.lastName}"></span>
@@ -250,6 +248,26 @@
                                                     </h6>
                                                     <div class="comment-text">
                                                         <p th:text="${'“' + feedback.comment + '”'}"></p>
+                                                    </div>
+                                                    <!-- Phần hiển thị reply -->
+                                                    <div class="comment-replies">
+                                                        <div class="single-comment reply-comment">
+                                                            <div class="comment-img">
+                                                                <img th:src="@{/images/others/author1.png}" alt="Author Images">
+                                                            </div>
+                                                            <div class="comment-inner">
+                                                                <h6 class="commenter">
+                                                                    <a class="hover-flip-item-wrapper">
+                                                                        <span class="hover-flip-item">
+                                                                            <span th:text="${feedback.storeId.storeName}"></span>
+                                                                        </span>
+                                                                    </a>
+                                                                </h6>
+                                                                <div class="comment-text">
+                                                                    <p th:text="${'“' + feedback.sellerFeedback + '”'}"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

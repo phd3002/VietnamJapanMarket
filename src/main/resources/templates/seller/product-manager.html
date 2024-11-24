@@ -39,7 +39,8 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="../../static/images/product/categories/electronic.png" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar"
+                                        src="../../static/images/product/categories/electronic.png" width="50px"
                                         alt="User Image">
     </div>
     <hr>
@@ -78,7 +79,7 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-2">
-                            <a class="btn btn-add btn-sm" th:href="@{'/addProductForm/' + ${storeId}}" title="Thêm"><i
+                            <a class="btn btn-add btn-sm" th:href="@{'/addProductForm2/' + ${storeId}}" title="Thêm"><i
                                     class="fas fa-plus"></i> Tạo mới sản phẩm</a>
                         </div>
                         <!-- Các button khác như Tải từ file, In, Sao chép, Xuất Excel, Xuất PDF, Xóa tất cả -->
@@ -101,7 +102,7 @@
                         <tbody>
                         <tr th:each="product : ${products}">
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td th:text="${product.productId}"></td>
+                            <td th:text="${product.productCode}"></td>
                             <td th:text="${product.productName}"></td>
                             <td>
                                 <img th:if="${product.productVariations != null && product.productVariations.size() > 0}"
@@ -129,11 +130,31 @@
                                     <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i
                                             class="fas fa-trash-alt"></i></button>
                                 </a>
+                                <a th:href="@{'/addProductVariationForm/' + ${product.productId}}">
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Thêm biến thể"><i
+                                            class="fas fa-plus-square"></i></button>
+                                </a>
                             </td>
                         </tr>
                         </tbody>
-
                     </table>
+                    <div class="pagination">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:if="${currentPage > 0}">
+                                <a class="page-link"
+                                   th:href="@{'/seller-products/' + ${storeId} + '?page=' + (${currentPage - 1})}">Lùi</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{'/seller-products/' + ${storeId} + '?page=' + ${i}}"
+                                   th:text="${i + 1}"></a>
+                            </li>
+                            <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                                <a class="page-link"
+                                   th:href="@{'/seller-products/' + ${storeId} + '?page=' + (${currentPage + 1})}">Tiếp</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

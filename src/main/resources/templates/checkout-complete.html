@@ -46,7 +46,7 @@
             <table>
                 <tr>
                     <th>Tổng giá:</th>
-                    <td th:text="${order.totalPrice}"></td>
+                    <td th:text="${paymentMethod == 'cod' ? 'Thanh toán khi nhận hàng' : order.totalPrice + ' đ'}"></td>
                 </tr>
                 <tr>
                     <th>Ngày tạo đơn:</th>

@@ -5,10 +5,10 @@ import javax.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Data
 @Getter
 @Setter
 @Entity
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -50,4 +50,5 @@ public class Users {
 
     @Transient // This ensures the field is not persisted to the database
     private String confirmPassword;
+
 }

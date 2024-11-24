@@ -51,4 +51,8 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     void deleteByProductId(Products productId);
     void deleteByVariationId(ProductVariation variationId);
 
+    @Modifying
+    @Query("DELETE FROM CartItem ci WHERE ci.cartItemId IN :ids")
+    void deleteByIds(@Param("ids") List<Integer> ids);
+
 }

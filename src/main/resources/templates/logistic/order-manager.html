@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Danh sách đơn hàng | Quản trị Admin</title>
+    <title>Danh sách đơn hàng | Kênh người bán</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/logistic/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/seller/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 
-    <!-- Font-icon css-->
+    <!-- Font-icon seller-->
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
@@ -39,14 +39,15 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="#" width="50px"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item active" href="/logistic/dashboard"><i
+                class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item active" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="income-manager.html"><i class='app-menu__icon bx bx-dollar'></i><span
                 class="app-menu__label">Quản lý doanh thu</span></a></li>
@@ -65,84 +66,88 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập"
-                               onclick="myFunction(this)"><i
-                                    class="fas fa-file-upload"></i> Tải từ file</a>
-                        </div>
-
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm print-file" type="button" title="In"
-                               onclick="myApp.printTable()"><i
-                                    class="fas fa-print"></i> In dữ liệu</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm print-file js-textareacopybtn" type="button"
-                               title="Sao chép"><i
-                                    class="fas fa-copy"></i> Sao chép</a>
-                        </div>
-
-                        <div class="col-sm-2">
-                            <a class="btn btn-excel btn-sm" href="" title="In"><i class="fas fa-file-excel"></i> Xuất
-                                Excel</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm pdf-file" type="button" title="In"
-                               onclick="myFunction(this)"><i
-                                    class="fas fa-file-pdf"></i> Xuất PDF</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
-                                    class="fas fa-trash-alt"></i> Xóa tất cả </a>
+                            <a class="btn btn-add btn-sm" href="add-order.html" title="Thêm"><i
+                                    class="fas fa-plus"></i>
+                                Tạo đơn hàng</a>
                         </div>
                     </div>
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                         <tr>
-                            <th width="10"><input type="checkbox" id="all"></th>
-                            <th>Mã đơn hàng</th>
-                            <th>Người gửi</th>
-                            <th>Người nhận</th>
-                            <th>Sản phẩm</th>
-                            <th>Phí vận chuyển</th>
+                            <th>ID Đơn hàng</th>
+                            <th>Khách hàng</th>
+                            <th>Đơn hàng</th>
+                            <th>Số lượng</th>
                             <th>Tổng tiền</th>
-                            <th>Thanh toán</th>
                             <th>Tình trạng</th>
                             <th>Tính năng</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td>MD0837</td>
-                            <td>Shop Vippro</td>
-                            <td>Nguyen Van A</td>
-                            <td>Áo</td>
-                            <td>50.000 đ</td>
-                            <td>9.400.000 đ</td>
-                            <td><span class="badge bg-success">Đã thanh toán</span></td>
-                            <td data-toggle="modal"
-                                data-target="#ModalUP"><span class="badge bg-success">Hoàn thành</span></td>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.orderId}"></td>
+                            <td th:text="${order.customerName}"></td>
+                            <td th:text="${order.productNames}"></td>
+                            <td th:text="${order.totalProducts}"></td>
+                            <td th:text="${order.totalPrice}"></td>
                             <td>
-                                <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết"><i
-                                        class="fa fa-edit"></i></button>
+                                <form method="post" th:action="@{/logistic/update-order-status}">
+                                    <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+                                    <select class="form-control status-dropdown" id="order-status" name="status"
+                                            th:value="${order.latestStatus}" onchange="handleStatusChange(this)">
+                                        <option value="Pending" th:selected="${order.latestStatus == 'Pending'}"
+                                                disabled>Chờ xử lý
+                                        </option>
+                                        <option value="Confirmed" th:selected="${order.latestStatus == 'Confirmed'}"
+                                                disabled>Xác nhận
+                                        </option>
+                                        <option value="Processing" th:selected="${order.latestStatus == 'Processing'}"
+                                                disabled>Đang xử đóng gói
+                                        </option>
+                                        <option value="Dispatched" th:selected="${order.latestStatus == 'Dispatched'}"
+                                                disabled>Đã giao cho vận chuyển
+                                        </option>
+                                        <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'}"
+                                                th:disabled="${order.latestStatus != 'Dispatched' }"
+                                        >Đang vận chuyển
+                                        </option>
+                                        <option value="Delivered" th:selected="${order.latestStatus == 'Delivered'}"
+                                                th:disabled="${order.latestStatus != 'Shipping' }">
+                                            Đã giao
+                                        </option>
+                                        <option value="Completed" th:selected="${order.latestStatus == 'Completed'}"
+                                                disabled>Hoàn tất
+                                        </option>
+                                        <option value="Failed" th:selected="${order.latestStatus == 'Failed'}"
+                                                th:disabled="${order.latestStatus != 'Shipping' }">Giao hàng thất bại
+                                        </option>
+                                        <option value="Returned" th:selected="${order.latestStatus == 'Returned'}"
+                                                disabled>Hoàn trả
+                                        </option>
+                                        <option value="Cancelled" th:selected="${order.latestStatus == 'Cancelled'}"
+                                                disabled>Đã hủy
+                                        </option>
+                                        <option th:if="${order.previous_status != null}" value="Canceled"
+                                                th:selected="${order.previous_status == 'Returned'}"
+                                                disabled>Đã hoàn trả
+                                        </option>
+                                    </select>
+                                </form>
                             </td>
-                        </tr>
-                        <tr>
-                            <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td>MD0837</td>
-                            <td>Shop Vippro</td>
-                            <td>Nguyen Van A</td>
-                            <td>Áo</td>
-                            <td>50.000 đ</td>
-                            <td>9.400.000 đ</td>
-                            <td><span class="badge bg-info">Thanh toán khi nhận hàng</span></td>
-                            <td data-toggle="modal"
-                                data-target="#ModalUP"><span class="badge bg-success">Hoàn thành</span></td>
                             <td>
-                                <a href="order-detail.html">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết"><i
-                                            class="fa fa-edit"></i></button>
+                                <a th:href="@{/logistic/order-detail/{orderId}(orderId=${order.orderId})}">
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
                                 </a>
+                                <button th:if="${order.previous_status == 'Failed'}" class="btn btn-danger btn-sm"
+                                        type="button" title="Giao hàng thất bại 2 lần">
+                                    <i class="fa fa-warning"></i>
+                                </button>
+                                <button th:if="${order.previous_status == 'Fail'}" class="btn btn-warning btn-sm"
+                                        type="button" title="Giao hàng thất bại 1 lần">
+                                    <i class="fa fa-warning"></i>
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -151,99 +156,36 @@
             </div>
         </div>
     </div>
-    <!--
-  MODAL
--->
-    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
-         data-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group  col-md-12">
-                              <span class="thong-tin-thanh-toan">
-                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>
-                              </span>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label for="exampleSelect1" class="control-label">Tình trạng vận chuyển</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option selected>Đang vận chuyển</option>
-                                <option>Đang giao hàng</option>
-                                <option>Đã giao hàng</option>
-                                <option>Giao hàng thất bại</option>
-                                <option>Trả hàng/Hoàn tiền</option>
-                            </select>
-                        </div>
-                    </div>
-                    <BR>
-                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>
-                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-                    <BR>
-                </div>
-                <div class="modal-footer">
-                </div>
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title">Xác nhận thay đổi trạng thái</h2>
+            <p>Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này thành "Đã giao hàng thành công"? <br><span
+                    style="color: red;">Hành động này không thể hoàn tác!</span></p>
+
+            <div class="modal-buttons">
+                <button id="confirmBtn" class="btn btn-success">Đồng ý</button>
+                <button class="btn btn-danger" onclick="closeModal()">Hủy bỏ</button>
             </div>
         </div>
     </div>
-    <!--
-    MODAL
-    -->
 </main>
 <!-- Essential javascripts for application to work-->
-<script src="../../static/logistic/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/logistic/js/popper.min.js"></script>
-<script src="../../static/logistic/js/bootstrap.min.js"></script>
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="../../static/logistic/js/main.js"></script>
+<script th:src="@{/seller/js/jquery.table2excel.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top-->
-<script src="../../static/logistic/js/plugins/pace.min.js"></script>
-<!-- Page specific javascripts-->
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+<!-- Page specific javascripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="../../static/logistic/js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="../../static/logistic/js/plugins/dataTables.bootstrap.min.js"></script>
+<!-- Data table plugin -->
+<script th:src="@{/seller/js/plugins/jquery.dataTables.min.js}" type="text/javascript"></script>
+<script th:src="@{/seller/js/plugins/dataTables.bootstrap.min.js}" type="text/javascript"></script>
 <script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("myTable").deleteRow(i);
-    }
-
-    jQuery(function () {
-        jQuery(".trash").click(function () {
-            swal({
-                title: "Cảnh báo",
-
-                text: "Bạn có chắc chắn là muốn xóa đơn hàng này?",
-                buttons: ["Hủy bỏ", "Đồng ý"],
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        swal("Đã xóa thành công.!", {});
-                    }
-                });
-        });
-    });
-    oTable = $('#sampleTable').dataTable();
-    $('#all').click(function (e) {
-        $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-        e.stopImmediatePropagation();
-    });
-
-    //EXCEL
-    // $(document).ready(function () {
-    //   $('#').DataTable({
-
-    //     dom: 'Bfrtip',
-    //     "buttons": [
-    //       'excel'
-    //     ]
-    //   });
-    // });
-
-
     //Thời Gian
     function time() {
         var today = new Date();
@@ -295,28 +237,63 @@
             win.print();
         }
     }
-    //     //Sao chép dữ liệu
-    //     var copyTextareaBtn = document.querySelector('.js-textareacopybtn');
 
-    // copyTextareaBtn.addEventListener('click', function(event) {
-    //   var copyTextarea = document.querySelector('.js-copytextarea');
-    //   copyTextarea.focus();
-    //   copyTextarea.select();
+</script>
+<script>
+    function openModal(select) {
+        const form = select.closest("form"); // Get the closest form element
 
-    //   try {
-    //     var successful = document.execCommand('copy');
-    //     var msg = successful ? 'successful' : 'unsuccessful';
-    //     console.log('Copying text command was ' + msg);
-    //   } catch (err) {
-    //     console.log('Oops, unable to copy');
-    //   }
-    // });
+        // Display the modal
+        document.getElementById('confirmModal').style.display = 'block';
 
+        // Bind the click event for the confirm button (bind only once)
+        const confirmButton = document.getElementById('confirmBtn');
+        confirmButton.onclick = function () {
+            // Submit the form after user confirms
+            swal({
+                title: "Xác nhận",
+                text: "Trạng thái đã được thay đổi thành công.",
+                icon: "success",
+                buttons: false,
+                timer: 1500
+            }).then(() => {
+                form.submit(); // Submit the specific form
+                closeModal();
+            });
+        };
+    }
 
-    //Modal
-    $("#show-emp").on("click", function () {
-        $("#ModalUP").modal({backdrop: false, keyboard: false})
+    // Close the modal
+    function closeModal() {
+        document.getElementById('confirmModal').style.display = 'none';
+        // location.reload();
+    }
+
+    // Handle status dropdown changes
+    document.querySelectorAll('.status-dropdown').forEach(function (select) {
+        select.addEventListener('change', function () {
+            handleStatusChange(select);
+        });
     });
+
+    function handleStatusChange(select) {
+        const selectedStatus = select.value;
+
+        // Trigger modal only for "Delivered"
+        if (selectedStatus === 'Delivered') {
+            openModal(select); // Pass the select element
+        } else {
+            select.closest("form").submit(); // Submit directly for other statuses
+        }
+    }
+
+    document.getElementById("confirmAcceptOrderBtn").addEventListener("click", function () {
+        const orderId = this.getAttribute("data-order-id");
+
+        // Submit the form or send an API request
+        document.querySelector(`form[data-order-id="${orderId}"]`).submit();
+    });
+
 </script>
 <script>
     // Function to handle the "Lưu lại" button click event

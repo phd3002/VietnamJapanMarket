@@ -56,9 +56,40 @@
             background-color: #616eff;
         }
 
-        .checkout-btn-container {
-            text-align: center;
-            margin-top: 20px;
+        .payment-btn {
+            width: 75%;
+            padding: 10px 20px;
+            border: 1px solid #616eff;
+            background-color: #ffffff;
+            color: #616eff;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 3px;
+        }
+
+        .payment-btn.selected, .payment-btn:hover {
+            background-color: #616eff;
+            color: #ffffff;
+        }
+
+        .payment-type-btn {
+            width: 50%;
+            padding: 10px 20px;
+            border: 1px solid #616eff;
+            background-color: #ffffff;
+            color: #616eff;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 3px;
+        }
+
+        .payment-type-btn.selected, .payment-type-btn:hover {
+            background-color: #616eff;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -75,7 +106,13 @@
         <div class="container">
             <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
             </div>
-            <form action="/process-checkout" method="post">
+            <div id="insufficient-balance-alert" th:if="${errorMessage}" class="alert alert-danger">
+                <p th:text="${errorMessage}"></p>
+            </div>
+            <form action="/checkout" method="post">
+                <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">
+                <input type="hidden" name="totalOrderPrice" th:value="${totalOrderPrice}">
+                <!--                <input type="hidden" id="store-country" th:value="${store.country.countryId}">-->
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
@@ -93,15 +130,9 @@
                             <input type="text" id="email-address">
                         </div>
                         <div class="form-group">
-                            <span>Quốc gia</span>
-                            <select id="country">
-                                <option value="vietnam">Việt Nam</option>
-                                <option value="nhatban">Nhật Bản</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <span>Địa chỉ chi tiết</span>
-                            <input type="text" name="shippingAddress" id="shipping-address" required>
+                            <input for="shippingAddress" type="text" name="shippingAddress" id="shipping-address"
+                                   required>
                         </div>
                     </div>
 
@@ -137,59 +168,78 @@
                                 </tbody>
                             </table>
                         </div>
+                        <!-- Shipping Method Section -->
+                        <div class="order-shipping-method">
+                            <h5 class="title mb--20">Phương thức vận chuyển</h5>
+                            <div class="form-group">
+                                <select name="shippingUnitId" id="shipping-method">
+                                    <option th:each="unit : ${shippingUnits}"
+                                            th:value="${unit.unitId}"
+                                            th:data-fee="${unit.unitPrice}"
+                                            th:text="${unit.unitName + ' - ' + unit.unitPrice + 'đ'}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="order-payment-method">
                             <h5 class="title mb--20">Phương thức thanh toán</h5>
                             <div class="row">
                                 <div class="col-sm-12 d-flex justify-content-between">
                                     <div>
-                                        <button id="wallet" class="payment-btn btn-common selected"
-                                                data-method="wallet">Ví VJ-Market
+                                        <button id="wallet" class="payment-btn btn-common selected" data-method="WALLET"
+                                                type="button">Ví VJ-Market
                                         </button>
-                                        <button id="credit-card" class="payment-btn btn-common"
-                                                data-method="credit-card">Thanh toán qua ngân hàng
-                                        </button>
-                                        <button id="cod" class="payment-btn btn-common" data-method="cod">Thanh toán khi
-                                            nhận hàng
+                                        <button id="vnpay" class="payment-btn btn-common" data-method="VNPAY"
+                                                type="button">Thanh toán VNPay
                                         </button>
                                     </div>
                                     <div>
                                         <div class="payment-details" id="walletDetails">
-                                            <p>Số dư ví của bạn: <strong>1,500,000đ</strong></p>
+                                            <p>Số dư ví của bạn: <strong th:text="${walletBalance} + 'đ'">0đ</strong>
+                                            </p>
                                         </div>
-                                        <div class="payment-details" id="credit-cardDetails" style="display:none;">
-                                            <select name="bank" id="bank-select">
-                                                <option value="">Chọn ngân hàng</option>
-                                                <option value="vietcombank">Vietcombank</option>
-                                                <option value="techcombank">Techcombank</option>
-                                                <option value="bidv">BIDV</option>
-                                                <option value="acb">ACB</option>
-                                            </select>
-                                        </div>
-                                        <div class="payment-details" id="codDetails" style="display:none;">
-                                            <p>Trả tiền mặt khi nhận hàng.</p>
+                                        <div class="payment-details" id="vnpayDetails" style="display:none;">
+                                            <p>Bạn đang chọn thanh toán qua VNPay.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Payment type options -->
+                            <div class="payment-type-options">
+                                <h6 class="title mb--10">Hình thức thanh toán</h6>
+                                <button id="fullPayment" class="payment-type-btn selected" data-type="full"
+                                        type="button">Trả đủ
+                                </button>
+                                <button id="depositPayment" class="payment-type-btn" data-type="deposit" type="button">
+                                    Đặt cọc 50%
+                                </button>
+                            </div>
+                            <!-- Hidden input to hold selected payment method -->
+                            <input type="hidden" id="paymentMethod" name="paymentMethod" value="WALLET">
+                            <input type="hidden" name="paymentMethod" value="VNPAY">
+                            <input type="hidden" id="paymentType" name="paymentType" value="full">
                             <br><br>
                             <div class="order-price">
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Tổng tiền hàng:</h6>
-                                    <span id="total-product-price" th:text="${totalPrice}"></span>
+                                    <span id="total-product-price" th:text="${totalPrice} + 'đ'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Tổng tiền phí vận chuyển:</h6>
-                                    <span id="total-shipping-fee">50000</span>
+                                    <span id="total-shipping-fee">50000đ</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="title mb-0">Thuế (8%):</h6>
+                                    <span id="total-tax-fee" th:text="${tax} + 'đ'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="title mb-0">Tổng thanh toán:</h5>
-                                    <h6 id="total-order-price" style="color: #bb2d3b;"
-                                        th:text="${totalWithShipping}"></h6>
+                                    <h6 id="total-order-price" style="color: #bb2d3b;" th:text="${totalWithShipping} + 'đ'"></h6>
                                 </div>
+
                             </div>
                         </div>
-                        <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán
-                        </button>
+                        <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán</button>
                     </div>
                 </div>
             </form>
@@ -200,55 +250,6 @@
 
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>
-
-<script>
-    // kiem tra session co con ton tai hay khong
-    let sessionCheckInterval = setInterval(function () {
-        console.log('Checking session status...');
-        fetch('/session-status')
-            .then(response => response.json())
-            .then(data => {
-                // Neu session het han thi chuyen huong ve trang chu
-                if (!data.sessionValid) {
-                    console.log('Session expired, redirecting to homepage...');
-                    clearInterval(sessionCheckInterval); // dung kiem tra session neu het han
-                    window.location.href = '/';
-                }
-            })
-            .catch(error => {
-                console.error('Error checking session status:', error);
-                clearInterval(sessionCheckInterval); // dung kiem tra session neu gap loi
-            });
-    }, 60000); // kiem tra session moi 60 giay
-
-    // Dung kiem tra session khi nguoi dung roi khoi trang
-    window.addEventListener('beforeunload', function () {
-        clearInterval(sessionCheckInterval);
-    });
-</script>
-
-<script>
-    // kiem tra thoi gian con lai de thanh toan
-    function checkTimeRemaining() {
-        // lay thoi gian con lai tu server
-        fetch('/checkout-time-remaining')
-            .then(response => response.json())
-            .then(data => {
-                // neu thoi gian con lai < 5 phut thi hien thi thong bao
-                if (data.showWarning) {
-                    document.getElementById("timeoutWarning").style.display = "block";
-                } else {
-                    document.getElementById("timeoutWarning").style.display = "none";
-                }
-            })
-            .catch(error => console.error('Error checking time remaining:', error));
-    }
-
-    // kiem tra moi 10 giay
-    setInterval(checkTimeRemaining, 10000);
-    // ban dau an thong bao
-    document.getElementById("timeoutWarning").style.display = "none";
-</script>
 
 <!-- JS
 ============================================ -->

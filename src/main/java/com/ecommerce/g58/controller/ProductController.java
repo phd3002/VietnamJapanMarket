@@ -15,7 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,10 +67,11 @@ public class ProductController {
         // Fetch available sizes
         List<String> availableSizes = productService.getAvailableSizesByProductIdAndColorId(productId, colorId);
         List<Color> availableColors = productService.getAvailableColors(productId);
-        System.out.println("Available colors: " + availableColors);
-        System.out.println("Available sizes: " + availableSizes);
-        System.out.println("Selected size: " + sizeId);
-        System.out.println(productDetail.getVariationId());
+//        System.out.println("Available colors: " + availableColors);
+//        System.out.println("Available sizes: " + availableSizes);
+//        System.out.println("Selected size: " + sizeId);
+//        System.out.println(productDetail.getVariationId());
+//        System.out.println(productDetail.getStoreId());
         // Pass the product details, available colors, and sizes to the front-end
         model.addAttribute("productDetail", productDetail);
         model.addAttribute("availableColors", availableColors);
@@ -75,15 +79,15 @@ public class ProductController {
         model.addAttribute("selectedSize", sizeId);  // Add selected size to the model
         model.addAttribute("feedbacks", feedbackService.findByProductId(productId));
         model.addAttribute("product", productService.getProductById(productId));
-        int averageRating = (int) feedbackService.findByProductId(productId).stream()
+        double averageRating = feedbackService.findByProductId(productId).stream()
                 .mapToInt(Feedback::getRating)
                 .average()
                 .orElse(0);
+        model.addAllAttributes(calculateStars(averageRating));
+        model.addAttribute("avgText", averageRating == 0 ? "" : new DecimalFormat("#.0").format(averageRating));
 
-        model.addAttribute("averageRating", averageRating);
         return "product-detail";
     }
-
 
 //    @GetMapping("/seller-products")
 //    public String getProductsByStore(@RequestParam Stores storeId, Model model) {
@@ -99,5 +103,17 @@ public class ProductController {
         logger.info("Number of products found: {}", products.size());
         model.addAttribute("products", products);
         return "product-list";
+    }
+
+    private Map<String, Integer> calculateStars(double averageRating) {
+        Map<String, Integer> stars = new HashMap<>();
+        int fullStars = (int) Math.floor(averageRating);
+        boolean hasHalfStar = (averageRating - fullStars) >= 0.5;
+        int halfStars = hasHalfStar ? 1 : 0;
+        int emptyStars = 5 - fullStars - halfStars;
+        stars.put("fullStars", fullStars);
+        stars.put("halfStars", halfStars);
+        stars.put("emptyStars", emptyStars);
+        return stars;
     }
 }

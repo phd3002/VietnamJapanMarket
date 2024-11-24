@@ -3,7 +3,6 @@ package com.ecommerce.g58.service.implementation;
 import com.ecommerce.g58.entity.Cart;
 import com.ecommerce.g58.entity.CartItem;
 import com.ecommerce.g58.repository.CartItemRepository;
-import com.ecommerce.g58.repository.CartRepository;
 import com.ecommerce.g58.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +32,22 @@ public class CartItemServiceImp implements CartItemService {
     @Override
     public void removeCartItemById(Integer cartItemId) {
         cartItemRepository.deleteById(cartItemId);
+    }
+
+    @Override
+    public List<CartItem> getCartItemsByIds(List<Integer> cartItemIds) {
+        return cartItemRepository.findByCartItemIdIn(cartItemIds);
+    }
+
+    @Override
+    public CartItem getCartItemById(Integer cartItemId) {
+        return cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new EntityNotFoundException("CartItem not found with id: " + cartItemId));
+    }
+
+    @Transactional
+    public void removeCartItemsByIds(List<Integer> cartItemIds) {
+        cartItemRepository.deleteByIds(cartItemIds);
     }
 
 }

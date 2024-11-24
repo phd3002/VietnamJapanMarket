@@ -3,12 +3,14 @@ package com.ecommerce.g58.service;
 //import com.ecommerce.g58.dto.UserDTO;
 
 import com.ecommerce.g58.entity.Users;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Service
@@ -36,7 +38,7 @@ public interface UserService extends UserDetailsService {
     //change pass
     void updatePassword(Users user, String newPassword);
 
-    List<Users> getAllUsers();
+    Page<Users> getAllUsers(Pageable pageable);;
 
     List<Users> getAllSellers();
 
