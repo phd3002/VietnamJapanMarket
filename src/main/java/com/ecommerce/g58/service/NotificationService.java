@@ -13,5 +13,6 @@ public interface NotificationService {
     Integer getUnreadNotificationCount();
 
     String markAsRead(Long notificationId);
+
     void updateNotification(Notification notification) ;
 }
