@@ -18,7 +18,7 @@
 <main class="main-wrapper">
 
     <!-- Start Wishlist Area  -->
-    <div class="axil-wishlist-area axil-section-gap">
+    <div class="axil-wishlist-area axil-section-gap" th:if="${wishlistItems != null and !wishlistItems.isEmpty()}">
         <div class="container">
             <div class="product-table-heading">
                 <h4 class="title">My Wish List</h4>
