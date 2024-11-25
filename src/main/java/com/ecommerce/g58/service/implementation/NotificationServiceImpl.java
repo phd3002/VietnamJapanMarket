@@ -76,9 +76,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void updateNotification(Notification notification) {
-        notification.setRead(false);
-        notification.setCreated(LocalDateTime.now());
-        notificationRepository.save(notification);
+            notification.setRead(false);
+            notification.setCreated(LocalDateTime.now());
+            notificationRepository.save(notification);
     }
 
     private String getCurrentUsername() {
