@@ -20,8 +20,8 @@
     <div class="axil-categorie-area bg-color-white axil-section-gapcommon">
         <div class="container">
             <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-secondary"><i class="far fa-tags"></i> Categories</span>
-                <h2 class="title">Browse by Category</h2>
+                <span class="title-highlighter highlighter-secondary"><i class="far fa-tags"></i> Danh mục</span>
+                <h2 class="title">Duyệt theo danh mục</h2>
             </div>
             <ul class="categories-list">
                 <li th:each="category : ${categories}" class="category-item">
@@ -41,107 +41,12 @@
     </div>
     <!-- End Categorie Area -->
 
-    <!-- Start Store Area  -->
-<!--    <div class="axil-store-area bg-color-white axil-section-gap">-->
-<!--        <div class="container">-->
-<!--            <div class="section-title-wrapper">-->
-<!--                <span class="title-highlighter highlighter-primary">Our Stores</span>-->
-<!--                <h2 class="title">Explore Our Top Stores</h2>-->
-<!--            </div>-->
-
-<!--            <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 row&#45;&#45;20">-->
-<!--                &lt;!&ndash; Store Item 1 &ndash;&gt;-->
-<!--                <div class="col">-->
-<!--                    <div class="axil-store-box">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="store-detail.html">-->
-<!--                                <img src="../static/images/store/store-01.jpg" alt="Store Image">-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                        <div class="content">-->
-<!--                            <h6 class="title"><a href="store-detail.html">Tên cửa hàng</a></h6>-->
-<!--                            <span class="title">Danh mục bán</span>-->
-<!--                            <div class="title">-->
-<!--                                <span>Tổng sản phẩm: 1,500</span><br>-->
-<!--                                <span>Đã bán: 1,200</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash; Store Item 2 &ndash;&gt;-->
-<!--                <div class="col">-->
-<!--                    <div class="axil-store-box">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="store-detail.html">-->
-<!--                                <img src="../static/images/store/store-01.jpg" alt="Store Image">-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                        <div class="content">-->
-<!--                            <h6 class="title"><a href="store-detail.html">Tên cửa hàng</a></h6>-->
-<!--                            <span class="title">Danh mục bán</span>-->
-<!--                            <div class="title">-->
-<!--                                <span>Tổng sản phẩm: 1,500</span><br>-->
-<!--                                <span>Đã bán: 1,200</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash; Store Item 3 &ndash;&gt;-->
-<!--                <div class="col">-->
-<!--                    <div class="axil-store-box">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="store-detail.html">-->
-<!--                                <img src="../static/images/store/store-01.jpg" alt="Store Image">-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                        <div class="content">-->
-<!--                            <h6 class="title"><a href="store-detail.html">Tên cửa hàng</a></h6>-->
-<!--                            <span class="title">Danh mục bán</span>-->
-<!--                            <div class="title">-->
-<!--                                <span>Tổng sản phẩm: 1,500</span><br>-->
-<!--                                <span>Đã bán: 1,200</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash; Store Item 4 &ndash;&gt;-->
-<!--                <div class="col">-->
-<!--                    <div class="axil-store-box">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="store-detail.html">-->
-<!--                                <img src="../static/images/store/store-01.jpg" alt="Store Image">-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                        <div class="content">-->
-<!--                            <h6 class="title"><a href="store-detail.html">Tên cửa hàng</a></h6>-->
-<!--                            <span class="title">Danh mục bán</span>-->
-<!--                            <div class="title">-->
-<!--                                <span>Tổng sản phẩm: 1,500</span><br>-->
-<!--                                <span>Đã bán: 1,200</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="row">-->
-<!--                <div class="col-lg-12 text-center mt&#45;&#45;30">-->
-<!--                    <a href="store-list.html" class="axil-btn btn-bg-lighter btn-load-more">Xem thêm cửa hàng</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-    <!-- End Store Area  -->
-
     <!-- Start Explore Product Area -->
     <div class="axil-product-area bg-color-white axil-section-gap">
         <div class="container">
             <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-primary"> <i class="far fa-shopping-basket"></i> Our Products</span>
-                <h2 class="title">Explore our Products</h2>
+                <span class="title-highlighter highlighter-primary"> <i class="far fa-shopping-basket"></i> Sản phẩm của chúng tôi</span>
+                <h2 class="title">Khám phá sản phẩm của chúng tôi</h2>
             </div>
             <div class="row row--15">
                 <div th:each="product : ${products}" class="col-xl-3 col-lg-4 col-sm-6">
@@ -172,7 +77,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 text-center mt--20 mt_sm--0">
-                    <a href="product-list" class="axil-btn btn-bg-lighter btn-load-more">View All Products</a>
+                    <a href="product-list" class="axil-btn btn-bg-lighter btn-load-more">Xem tất cả sản phẩm</a>
                 </div>
             </div>
         </div>

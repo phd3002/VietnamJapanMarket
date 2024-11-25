@@ -101,7 +101,7 @@
                                 <div class="notification-content-wrap">
                                     <!-- Header Section -->
                                     <div class="notification-header">
-                                        <p>New notifications</p>
+                                        <p>Thông báo mới</p>
                                     </div>
 
                                     <!-- Notification Items -->
@@ -126,7 +126,7 @@
 
                                     <!-- Footer Section -->
                                     <div class="notification-footer">
-                                        <a href="/notification">View All Notifications</a>
+                                        <a href="/notification">Xem thông báo</a>
                                     </div>
                                 </div>
                             </div>
@@ -144,26 +144,26 @@
                             </a>
                             <div class="my-account-dropdown">
                                 <div th:if="${#authentication.name != 'anonymousUser'}">
-                                    <div><span>Welcome, <span th:text="${firstname}"></span></span></div>
+                                    <div><span>Chào mừng, <span th:text="${firstname}"></span></span></div>
                                     <ul>
                                         <li>
-                                            <a href="/my-account">My Account</a>
+                                            <a href="/my-account">Tài khoản</a>
                                         </li>
                                         <li>
-                                            <a href="/orders">My Orders</a>
+                                            <a href="/orders">Đơn hàng</a>
                                         </li>
                                         <li>
-                                            <a href="/logout">Logout</a>
+                                            <a href="/logout">Đăng xuất</a>
                                         </li>
                                     </ul>
                                 </div>
                                 <div th:if="${#authentication.name == 'anonymousUser'}">
-                                    <p style="font-size: smaller;">You are currently not logged in.</p>
+                                    <p style="font-size: smaller;">Hiện tại bạn chưa đăng nhập.</p>
                                     <div class="login-btn">
-                                        <a href="/sign-in" class="axil-btn btn-bg-primary">Login</a>
+                                        <a href="/sign-in" class="axil-btn btn-bg-primary">Đăng nhập</a>
                                     </div>
                                     <div class="reg-footer text-center">
-                                        No account yet? <a href="/sign-up" class="btn-link">REGISTER HERE.</a>
+                                        Chưa có tài khoản? <a href="/sign-up" class="btn-link">ĐĂNG KÝ TẠI ĐÂY.</a>
                                     </div>
                                 </div>
                             </div>
@@ -185,13 +185,13 @@
         <div class="header-search-wrap">
             <div class="card-header">
                 <form onsubmit="return performSearch()">
-                    <input type="text" id="prod-search" placeholder="Search products..." oninput="performSearch()"/>
+                    <input type="text" id="prod-search" placeholder="Tìm kiếm sản phẩm..." oninput="performSearch()"/>
                 </form>
             </div>
             <div class="card-body" id="search-results" style="display: none;">
                 <div class="search-result-header">
-                    <h6 class="title"><span id="result-count">0</span> Result(s) Found</h6>
-                    <a href="product-list" class="view-all">View All</a>
+                    <h6 class="title"><span id="result-count">0</span> Kết quả tìm thấy</h6>
+                    <a href="product-list" class="view-all">Xem tất cả</a>
                 </div>
                 <div class="search-results">
                     <!-- Dynamic search result items should go here -->
@@ -219,8 +219,8 @@
                             <img th:src="@{/images/icons/service1.png}" alt="Service">
                         </div>
                         <div class="content">
-                            <h6 class="title">Fast &amp; Secure Delivery</h6>
-                            <p>Tell about your service.</p>
+                            <h6 class="title">Giao hàng nhanh chóng và an toàn</h6>
+                            <p>Hãy kể về dịch vụ của bạn.</p>
                         </div>
                     </div>
                 </div>
@@ -230,8 +230,8 @@
                             <img th:src="@{/images/icons/service2.png}" alt="Service">
                         </div>
                         <div class="content">
-                            <h6 class="title">Money Back Guarantee</h6>
-                            <p>Within 10 days.</p>
+                            <h6 class="title">Đảm bảo hoàn tiền</h6>
+                            <p>Trong vòng 10 ngày.</p>
                         </div>
                     </div>
                 </div>
@@ -241,8 +241,8 @@
                             <img th:src="@{/images/icons/service3.png}" alt="Service">
                         </div>
                         <div class="content">
-                            <h6 class="title">24 Hour Return Policy</h6>
-                            <p>No question ask.</p>
+                            <h6 class="title">Chính sách trả hàng trong vòng 24 giờ</h6>
+                            <p>Không cần hỏi gì cả.</p>
                         </div>
                     </div>
                 </div>
@@ -252,8 +252,8 @@
                             <img th:src="@{/images/icons/service4.png}" alt="Service">
                         </div>
                         <div class="content">
-                            <h6 class="title">Pro Quality Support</h6>
-                            <p>24/7 Live support.</p>
+                            <h6 class="title">Hỗ trợ chất lượng chuyên nghiệp</h6>
+                            <p>Hỗ trợ trực tiếp 24/7.</p>
                         </div>
                     </div>
                 </div>
@@ -267,11 +267,11 @@
                     <div class="axil-footer-widget">
                         <h5 class="widget-title">Support</h5>
                         <div class="inner">
-                            <p>685 Market Street, Las Vegas, LA 95820</p>
+                            <p>Đại học FPT, Khu Công Nghệ Cao Hòa Lạc, Km29 Đại lộ Thăng Long, Thạch Hoà, Thạch Thất, Hà Nội 13100</p>
                             <ul class="support-list-item">
-                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
+                                <li><a href="hungdphe170721@fpt.edu.vn"><i class="fal fa-envelope-open"></i>
                                     example@domain.com</a></li>
-                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
+                                <li><a href="tel:(+94)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
                                 </li>
                             </ul>
                         </div>
@@ -279,14 +279,14 @@
                 </div>
                 <div class="col-lg-6 col-sm-6">
                     <div class="axil-footer-widget">
-                        <h5 class="widget-title">Account</h5>
+                        <h5 class="widget-title">Tài khoản</h5>
                         <div class="inner">
                             <ul>
-                                <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="sign-up.html">Login / Register</a></li>
-                                <li><a href="cart-detail.html">Cart</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="product-list">Shop</a></li>
+                                <li><a href="/my-account">Tài khoản của tôi</a></li>
+                                <li><a href="/sign-up">Login / Register</a></li>
+                                <li><a href="/cart-items">Cart</a></li>
+                                <li><a href="/wishlist">Wishlist</a></li>
+                                <li><a href="/product-list">Shop</a></li>
                             </ul>
                         </div>
                     </div>

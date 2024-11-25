@@ -40,11 +40,11 @@
                             <thead>
                             <tr>
                                 <th scope="col"></th>
-                                <th scope="col">Product</th>
-                                <th scope="col">Product Name</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Subtotal</th>
+                                <th scope="col">Sản phẩm</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Tổng</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -78,11 +78,11 @@
                                         <input type="number" name="quantity" class="quantity-input"
                                                th:value="${item.quantity}" min="1">
                                         </div>
-                                        <button type="submit">Update</button>
+                                        <button type="submit">Cập nhật</button>
                                     </form>
                                 </td>
                                 <td class="product-subtotal" data-title="Subtotal">
-                                    <span th:text="${item.price * item.quantity}">Subtotal</span>
+                                    <span th:text="${item.price * item.quantity}">Tổng</span>
                                 </td>
                             </tr>
                             </tbody>
@@ -93,7 +93,7 @@
                     <div class="update-btn">
                         <form id="checkoutForm" action="/checkout" method="get">
                             <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4; color: white" th:disabled="${isCartEmpty}">
-                                Check out
+                                Thanh toán
                             </button>
                             <input type="hidden" name="cartItemIds" id="cartItemIds">
                         </form>
@@ -105,127 +105,127 @@
     </div>
 
     <!-- Start Recently Viewed Product Area  -->
-    <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
-        <div class="container">
-            <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i> Your Recently</span>
-                <h2 class="title">Viewed Items</h2>
-            </div>
-            <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-01.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">20% OFF</div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">3D™ wireless headset</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$30</span>
-                                    <span class="price current-price">$30</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-02.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">40% OFF</div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">Media remote</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$80</span>
-                                    <span class="price current-price">$50</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">30% OFF</div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$60</span>
-                                    <span class="price current-price">$45</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">50% OFF</div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$70</span>
-                                    <span class="price current-price">$35</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">25% OFF</div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$50</span>
-                                    <span class="price current-price">$38</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-            </div>
-        </div>
-    </div>
-    <!-- End Recently Viewed Product Area  -->
+<!--    <div class="axil-product-area bg-color-white axil-section-gap pb&#45;&#45;50 pb_sm&#45;&#45;30">-->
+<!--        <div class="container">-->
+<!--            <div class="section-title-wrapper">-->
+<!--                <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i> Your Recently</span>-->
+<!--                <h2 class="title">Viewed Items</h2>-->
+<!--            </div>-->
+<!--            <div class="recent-product-activation slick-layout-wrapper&#45;&#45;15 axil-slick-arrow arrow-top-slide">-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-01.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">20% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">3D™ wireless headset</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$30</span>-->
+<!--                                    <span class="price current-price">$30</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-02.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">40% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">Media remote</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$80</span>-->
+<!--                                    <span class="price current-price">$50</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">30% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$60</span>-->
+<!--                                    <span class="price current-price">$45</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">50% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$70</span>-->
+<!--                                    <span class="price current-price">$35</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">25% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$50</span>-->
+<!--                                    <span class="price current-price">$38</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; End Recently Viewed Product Area  &ndash;&gt;-->
 </main>
 
 <!-- Include Footer Fragment -->

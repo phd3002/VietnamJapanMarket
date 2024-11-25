@@ -5,22 +5,22 @@
                 <nav class="axil-dashboard-nav">
                     <div class="nav nav-tabs" role="tablist">
                         <a class="nav-item nav-link" href="/my-account"
-                           aria-selected="false"><i class="fas fa-user"></i>Account Details</a>
+                           aria-selected="false"><i class="fas fa-user"></i>Chi tiết tài khoản</a>
                         <a class="nav-item nav-link" th:if="${hasStore}" href="/seller/dashboard" aria-selected="false">
-                            <i class="fas fa-store"></i>Your Shop
+                            <i class="fas fa-store"></i>Cửa hàng của tôi
                         </a>
                         <a class="nav-item nav-link" th:unless="${hasStore}" href="#" aria-selected="false"
                            onclick="showSignupModal()">
-                            <i class="fas fa-store"></i>Your Shop
+                            <i class="fas fa-store"></i>Cửa hàng của tôi
                         </a>
                         <a class="nav-item nav-link" href="/orders"
-                           aria-selected="false"><i class="fas fa-shopping-basket"></i>Orders</a>
+                           aria-selected="false"><i class="fas fa-shopping-basket"></i>Đơn hàng của tôi</a>
                         <a class="nav-item nav-link" href="/wallet"
-                           aria-selected="false"><i class="fas fa-wallet"></i>Wallet</a>
-                        <a class="nav-item nav-link" href="/address"
-                           aria-selected="false"><i class="fas fa-home"></i>Addresses</a>
+                           aria-selected="false"><i class="fas fa-wallet"></i>Ví của tôi</a>
+<!--                        <a class="nav-item nav-link" href="/address"-->
+<!--                           aria-selected="false"><i class="fas fa-home"></i>Addresses</a>-->
                         <a class="nav-item nav-link" href="/notification"
-                           aria-selected="false"><i class="fas fa-bell"></i>Notification</a>
+                           aria-selected="false"><i class="fas fa-bell"></i>Thông báo</a>
                     </div>
                 </nav>
             </aside>
