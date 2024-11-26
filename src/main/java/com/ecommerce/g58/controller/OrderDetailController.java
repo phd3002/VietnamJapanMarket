@@ -85,26 +85,31 @@ public class OrderDetailController {
 
     @PostMapping("/order-detail/return")
     public String returnOrder(
-            @RequestParam("orderId") Integer orderId,
-            @RequestParam("reason") String reason,
-            @RequestParam("status") String status,
-            Principal principal,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam("orderId") Integer orderId,  // ID của đơn hàng cần hoàn trả
+            @RequestParam("reason") String reason,     // Lý do hoàn trả
+            @RequestParam("status") String status,     // Trạng thái mới của đơn hàng
+            Principal principal,                       // Thông tin người dùng (dùng để xác thực)
+            RedirectAttributes redirectAttributes      // Dùng để thêm thông báo
+    ) {
 
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
         if (principal == null) {
             redirectAttributes.addFlashAttribute("message", "Bạn cần đăng nhập để gửi yêu cầu.");
             redirectAttributes.addFlashAttribute("messageType", "error");
-            return "redirect:/sign-in";
+            return "redirect:/sign-in";  // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
         }
 
+        // Kiểm tra lý do hoàn trả có được cung cấp hay không
         if (reason == null || reason.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Vui lòng chọn lý do.");
             redirectAttributes.addFlashAttribute("messageType", "error");
-            return "redirect:/order-detail/" + orderId;
+            return "redirect:/order-detail/" + orderId;  // Quay lại trang chi tiết đơn hàng nếu không có lý do
         }
 
+        // Gọi service để thay đổi trạng thái đơn hàng
         boolean isOrderUpdated = orderDetailService.changeStatus(orderId, status, reason);
 
+        // Xử lý kết quả
         if (isOrderUpdated) {
             redirectAttributes.addFlashAttribute("message", "Yêu cầu hoàn trả đã được gửi thành công.");
             redirectAttributes.addFlashAttribute("messageType", "success");
@@ -113,7 +118,7 @@ public class OrderDetailController {
             redirectAttributes.addFlashAttribute("messageType", "error");
         }
 
-        return "redirect:/order-detail/" + orderId;
+        return "redirect:/order-detail/" + orderId;  // Quay lại trang chi tiết đơn hàng
     }
 
     @PostMapping("/order-detail/cancel")

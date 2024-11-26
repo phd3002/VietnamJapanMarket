@@ -116,7 +116,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 Timestamp failedTimestamp = (Timestamp) result[25];
                 dto.setFailedTime(failedTimestamp.toLocalDateTime());
             }
-            if(result[26] instanceof Timestamp) {
+            if (result[26] instanceof Timestamp) {
                 Timestamp failedTimestamp = (Timestamp) result[26];
                 dto.setFailedTime(failedTimestamp.toLocalDateTime());
             }
@@ -230,15 +230,21 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
 
-    @Override
     public boolean changeStatus(Integer orderId, String status, String reason) {
+        // Lấy trạng thái vận chuyển hiện tại của đơn hàng
         ShippingStatus shippingStatus = shippingStatusRepository.findShippingStatusByOrderId_OrderId(orderId);
+
+        // Kiểm tra xem đơn hàng có tồn tại không
         if (shippingStatus == null) {
-            logger.error("Order not found");
+            logger.error("Order not found");  // Log lỗi nếu không tìm thấy đơn hàng
             return false;
         }
+
+        // Cập nhật trạng thái và lý do (nếu có)
         shippingStatus.setStatus(status);
-        shippingStatus.setUpdatedAt(LocalDateTime.now());
+        shippingStatus.setUpdatedAt(LocalDateTime.now());  // Cập nhật thời gian thay đổi trạng thái
+
+        // Xử lý lý do hoàn trả (nếu lý do trùng với enum)
         String actualReason;
         if (reason.equalsIgnoreCase(String.valueOf(Reason.NOT_AS_DESCRIBED))) {
             actualReason = "Hàng không giống mô tả";
@@ -247,11 +253,12 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         } else {
             actualReason = reason;
         }
-        shippingStatus.setReason(actualReason);
+        shippingStatus.setReason(actualReason);  // Lưu lý do cuối cùng
+
+        // Lưu thay đổi vào cơ sở dữ liệu
         shippingStatusRepository.save(shippingStatus);
 
-
-        return true;
+        return true;  // Trả về kết quả thành công
     }
 
     @Override
@@ -311,26 +318,25 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public boolean refundOrder(Integer orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Ensure the user is authenticated
+        // Kiểm tra xem người dùng đã xác thực chưa
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new SecurityException("User not authenticated");
         }
 
-
-        // Fetch the order and validate ownership
+        // Truy vấn đơn hàng từ cơ sở dữ liệu
         Orders order = orderRepository.findOrdersByOrderId(orderId);
 
-
-        // Fetch the invoice for shipping fee and additional calculations
+        // Kiểm tra hóa đơn liên quan đến đơn hàng
         Invoice invoice = invoiceRepository.findInvoiceByOrderId(order);
         if (invoice == null) {
             throw new IllegalArgumentException("Invoice not found for the order");
         }
 
+        // Lấy thông tin chi tiết đơn hàng và trạng thái vận chuyển
         OrderDetails orderDetails = orderDetailRepository.findByOrderId(orderId).get(0);
         ShippingStatus shippingStatus = shippingStatusRepository.findShippingStatusByOrderId_OrderId(orderId);
 
-        // Handle refund logic based on reason
+        // Xử lý hoàn tiền dựa trên lý do
         if (shippingStatus.getReason().equalsIgnoreCase("Hàng không giống mô tả")) {
             handleNotAsDescribedRefund(order, orderDetails, invoice);
         } else if (shippingStatus.getReason().equalsIgnoreCase("Hàng bị vỡ/hỏng")) {
@@ -338,149 +344,166 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         } else {
             throw new IllegalArgumentException("Invalid refund reason");
         }
-        // Update shipping status
+
+        // Cập nhật trạng thái sau khi hoàn tiền
         shippingStatus.setStatus("Returned");
         shippingStatus.setPrevious_status("Returned");
         shippingStatusRepository.save(shippingStatus);
-        return true;
+
+        return true;  // Trả về kết quả thành công
     }
 
     private void handleNotAsDescribedRefund(Orders order, OrderDetails detail, Invoice invoice) {
+        // Lấy ví của khách hàng (User Wallet)
         Wallet userWallet = walletRepository.findByUserId(order.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User wallet not found"));
 
-        // Refund logic
+        // Tính toán số tiền hoàn trả từ tiền đặt cọc
         BigDecimal returnPrice = BigDecimal.valueOf(invoice.getDeposit().longValue());
-        // Refund full product price to the user and deduct from seller's wallet
+
+        // Lấy ví của người bán (Seller Wallet)
         Wallet sellerWallet = walletRepository.findByUserId(detail.getProductId().getStoreId().getOwnerId())
                 .orElseThrow(() -> new IllegalArgumentException("Seller wallet not found"));
 
-        // Hoàn tiền đơn hàng + phí ship(lượt đi) cho user
+        // Hoàn tiền cho khách hàng, bao gồm cả phí ship (lượt đi)
         updateWalletBalance(
                 userWallet,
                 returnPrice,
                 "Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận",
                 String.valueOf(TransactionType.REFUND)
         );
+
+        // Gửi thông báo cho khách hàng về việc hoàn tiền
         Notification notification = new Notification();
         notification.setTitle("Hoàn tiền: " + invoice.getDeposit());
         notification.setContent("Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận");
-
         notification.setUrl("http://localhost:8080/wallet");
         notification.setUserId(order.getUserId());
-
         notificationService.updateNotification(notification);
-        // Trừ tiền ví seller ch0 đơn hàng + phí ship(lượt đi)
+
+        // Trừ tiền từ ví của người bán
         updateWalletBalance(
                 sellerWallet,
                 invoice.getDeposit().negate(),
                 "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
-                String.valueOf(TransactionType.REFUND));
+                String.valueOf(TransactionType.REFUND)
+        );
 
+        // Gửi thông báo cho người bán về việc trừ tiền
         Notification sellerNotification1 = new Notification();
         sellerNotification1.setTitle("Hoàn tiền: " + invoice.getDeposit());
         sellerNotification1.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
         sellerNotification1.setUrl("http://localhost:8080/wallet");
         sellerNotification1.setUserId(sellerWallet.getUserId());
-
         notificationService.updateNotification(sellerNotification1);
-        // Deduct shipping fee from seller's wallet and add to logistic
+
+        // Lấy ví của đơn vị vận chuyển (Logistic Wallet)
         Wallet logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5)
                 .orElseThrow(() -> new IllegalArgumentException("Logistic wallet not found"));
 
-        // trừ tiền ship lượt về cho shipper
+        // Trừ tiền phí ship lượt về từ ví của người bán
         updateWalletBalance(
                 sellerWallet,
                 invoice.getShippingFee().negate(),
                 "Trả tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
                 String.valueOf(TransactionType.SHIPPING_FEE)
         );
-        // nhận tiền ship lượt về
+
+        // Cộng tiền phí ship lượt về vào ví của đơn vị vận chuyển
         updateWalletBalance(
                 logisticWallet,
                 invoice.getShippingFee(),
                 "Nhận tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
                 String.valueOf(TransactionType.SHIPPING_FEE)
-
         );
     }
 
     private void handleDamagedRefund(Orders order, OrderDetails detail, Invoice invoice) {
+        // Lấy ví của khách hàng (User Wallet)
         Wallet userWallet = walletRepository.findByUserId(order.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User wallet not found"));
 
-        // Refund logic
+        // Lấy ví của người bán (Seller Wallet)
         Wallet sellerWallet = walletRepository.findByUserId(detail.getProductId().getStoreId().getOwnerId())
                 .orElseThrow(() -> new IllegalArgumentException("Seller wallet not found"));
 
+        // Lấy ví của đơn vị vận chuyển (Logistic Wallet)
         Wallet logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5)
                 .orElseThrow(() -> new IllegalArgumentException("Logistic wallet not found"));
 
-        // Refund full product price to the user and deduct from seller's wallet
-
+        // Trừ tiền từ ví người bán
         updateWalletBalance(
                 sellerWallet,
                 invoice.getDeposit().negate(),
-                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
-                String.valueOf(TransactionType.REFUND));
+                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " bị hư hỏng!",
+                String.valueOf(TransactionType.REFUND)
+        );
+
+        // Gửi thông báo cho người bán
         Notification notification = new Notification();
         notification.setTitle("Hoàn tiền: " + invoice.getDeposit());
-        notification.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
+        notification.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " bị hư hỏng!");
         notification.setUrl("http://localhost:8080/wallet");
         notification.setUserId(sellerWallet.getUserId());
-
         notificationService.updateNotification(notification);
 
+        // Hoàn tiền cho khách hàng
         updateWalletBalance(
                 userWallet,
                 invoice.getDeposit(),
                 "Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận",
                 String.valueOf(TransactionType.REFUND)
-
-                // Logistic
-
         );
+
+        // Gửi thông báo cho khách hàng
         Notification userNotification = new Notification();
         userNotification.setTitle("Hoàn tiền: " + invoice.getDeposit());
         userNotification.setContent("Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận");
         userNotification.setUrl("http://localhost:8080/wallet");
         userNotification.setUserId(order.getUserId());
-
         notificationService.updateNotification(userNotification);
-        // Logistic đền cho seller tiền hàng (không bao gồm ship) - coi như seller mất tiền ship 1 lần
-        BigDecimal returnPrice = BigDecimal.valueOf((invoice.getDeposit().longValue())).subtract(BigDecimal.valueOf(invoice.getShippingFee().longValue()));
+
+        // Tính toán số tiền bồi thường từ đơn vị vận chuyển (không bao gồm phí ship)
+        BigDecimal returnPrice = BigDecimal.valueOf(invoice.getDeposit().longValue())
+                .subtract(BigDecimal.valueOf(invoice.getShippingFee().longValue()));
+
+        // Trừ tiền từ ví đơn vị vận chuyển
         updateWalletBalance(
                 logisticWallet,
                 returnPrice.negate(),
-                "Bồi thường do làm hỏng  đơn hàng " + order.getOrderCode(),
+                "Bồi thường do làm hỏng đơn hàng " + order.getOrderCode(),
                 String.valueOf(TransactionType.REFUND)
-
         );
+
+        // Cộng tiền bồi thường vào ví người bán
         updateWalletBalance(
                 sellerWallet,
                 returnPrice,
                 "Nhận tiền bồi thường cho đơn hàng " + order.getOrderCode() + " do ship làm hỏng",
                 String.valueOf(TransactionType.REFUND)
-
         );
+
+        // Gửi thông báo cho người bán
         Notification sellerNotification1 = new Notification();
         sellerNotification1.setTitle("Hoàn tiền: " + invoice.getDeposit());
         sellerNotification1.setContent("Nhận tiền bồi thường cho đơn hàng " + order.getOrderCode() + " do ship làm hỏng");
         sellerNotification1.setUrl("http://localhost:8080/wallet");
         sellerNotification1.setUserId(order.getUserId());
-
         notificationService.updateNotification(sellerNotification1);
-
     }
 
     private void updateWalletBalance(Wallet wallet, BigDecimal amount, String description, String transactionType) {
+        // Lấy số dư hiện tại của ví
         BigDecimal currentBalance = BigDecimal.valueOf(wallet.getBalance());
 
+        // Tính toán số dư mới
         BigDecimal updatedBalance = currentBalance.add(amount);
 
+        // Cập nhật số dư vào ví
         wallet.setBalance(updatedBalance.longValue());
         walletRepository.save(wallet);
 
+        // Tạo giao dịch mới
         Transactions transaction = new Transactions();
         transaction.setFromWalletId(amount.signum() < 0 ? wallet : null);
         transaction.setToWalletId(amount.signum() > 0 ? wallet : null);
