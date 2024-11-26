@@ -4,10 +4,14 @@ import com.ecommerce.g58.entity.Countries;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.exception.SpringBootFileUploadException;
+import com.ecommerce.g58.repository.StoreRepository;
+import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.CountryService;
 import com.ecommerce.g58.service.FileS3Service;
 import com.ecommerce.g58.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +28,10 @@ import java.util.Optional;
 @Controller
 public class StoreController {
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private StoreRepository storeRepository;
+    @Autowired
     private StoreService storeService;
 
     @Autowired
@@ -32,12 +40,19 @@ public class StoreController {
     @Autowired
     private CountryService countryService;
 
-    @GetMapping("/store-info/{storeId}")
-    public String getStoreInfo(@PathVariable("storeId") Integer storeId, Model model) {
-        Optional<Stores> store = storeService.findById(storeId);
+    @GetMapping("/store-info")
+    public String getStoreInfo(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Ensure the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+        Users owner = userRepository.findByEmail(authentication.getName());
+        Optional<Stores> storeOwner = storeRepository.findByOwnerId(owner);
+
         List<Countries> countries = countryService.getAllCountries();
-        if (store.isPresent()) {
-            model.addAttribute("store", store.get());
+        if (storeOwner.isPresent()) {
+            model.addAttribute("store", storeOwner.get());
             model.addAttribute("countries", countries);
         } else {
             model.addAttribute("error", "Store information not found.");

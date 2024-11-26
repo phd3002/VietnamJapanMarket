@@ -107,16 +107,16 @@
                             <label class="control-label">Mã Bưu Điện</label>
                             <input class="form-control" type="text" name="postalCode" th:value="${store.postalCode}">
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="countrySelected" class="control-label">Quốc gia</label>
-                            <select class="form-control" id="countrySelected" name="countryId">
-                                <option th:each="country : ${countries}"
-                                        th:value="${country.countryId}"
-                                        th:text="${country.countryName}"
-                                        th:selected="${country.countryId == store.country?.countryId}">
-                                </option>
-                            </select>
-                        </div>
+<!--                        <div class="form-group col-md-6">-->
+<!--                            <label for="countrySelected" class="control-label">Quốc gia</label>-->
+<!--                            <select class="form-control" id="countrySelected" name="countryId">-->
+<!--                                <option th:each="country : ${countries}"-->
+<!--                                        th:value="${country.countryId}"-->
+<!--                                        th:text="${country.countryName}"-->
+<!--                                        th:selected="${country.countryId == store.country?.countryId}">-->
+<!--                                </option>-->
+<!--                            </select>-->
+<!--                        </div>-->
                         <div class="form-group col-md-12">
                             <label class="control-label">Ảnh cửa hàng</label>
                             <div id="mainImageUpload">

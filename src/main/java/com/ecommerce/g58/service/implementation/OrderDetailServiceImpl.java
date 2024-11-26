@@ -316,6 +316,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             throw new SecurityException("User not authenticated");
         }
 
+        System.out.println(authentication.getName());
 
         // Fetch the order and validate ownership
         Orders order = orderRepository.findOrdersByOrderId(orderId);

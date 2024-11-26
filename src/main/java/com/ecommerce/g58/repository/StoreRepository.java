@@ -19,6 +19,8 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
 
     Page<Stores> findByStoreNameContainingIgnoreCase(String storeName, Pageable pageable);
 
+
+
     Optional<Stores> findByOwnerId(Users ownerId);
 
     @Query(value = "SELECT COALESCE(SUM(od.price * od.quantity), 0)\n" +
