@@ -193,7 +193,8 @@ public class OrderServiceImpl implements OrderService {
                 createNotification(sellWallet.get().getUserId(), "Đơn hàng đã được gửi đi",
                         "Đơn hàng " + order.getOrderCode() + " đã được gửi đi. Phí vận chuyển: " + invoice.getShippingFee(),
                         "http://localhost:8080/order-detail/" + orderId);
-
+                shippingStatusRepository.updateOrderStatus(orderId, status);
+                System.out.println("Order status updated to " + status);
             }
         } else if (status.equalsIgnoreCase("Delivered")) {
             if (sellWallet.isPresent() && logisticWallet.isPresent()) {
@@ -222,17 +223,19 @@ public class OrderServiceImpl implements OrderService {
                             "http://localhost:8080/order-detail/" + orderId);
                 }
             }
+            shippingStatusRepository.updateOrderStatus(orderId, status);
+            System.out.println("Order status updated to " + status);
         } else if (status.equalsIgnoreCase("Failed")) {
             ShippingStatus shippingStatus = shippingStatusRepository.findShippingStatusByOrderId_OrderId(orderId);
             if (shippingStatus.getPrevious_status() == null) {
-                shippingStatus.setPrevious_status("Thất bại");
-                shippingStatus.setStatus("Đang vận chuyển");
+                shippingStatus.setPrevious_status("Fail");
+                shippingStatus.setStatus("Shipping");
                 shippingStatus.setUpdatedAt(LocalDateTime.now());
                 shippingStatusRepository.save(shippingStatus);
             } else {
-                shippingStatus.setStatus("Đã hủy");
-                shippingStatus.setPrevious_status("Thất bại");
-                shippingStatus.setReason("Giao hàng thất bại");
+                shippingStatus.setStatus("Cancelled");
+                shippingStatus.setPrevious_status("Failed");
+                shippingStatus.setReason("Shipping failed");
                 shippingStatus.setUpdatedAt(LocalDateTime.now());
                 shippingStatusRepository.save(shippingStatus);
 
@@ -259,9 +262,9 @@ public class OrderServiceImpl implements OrderService {
                         "Đơn hàng " + order.getOrderCode() + " giao thất bại. Đã hoàn tiền: " + invoice.getDeposit(),
                         "http://localhost:8080/order-detail/" + orderId);
             }
+        } else {
+            shippingStatusRepository.updateOrderStatus(orderId, status);
         }
-        shippingStatusRepository.updateOrderStatus(orderId, status);
-
     }
 
     private void createNotification(Users user, String title, String content, String url) {

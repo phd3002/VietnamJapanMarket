@@ -123,7 +123,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    s.store_address,\n" +
             "    s.store_phone,\n" +
             "    os.status AS shipping_status,\n" +
-            "    os.tracking_number,\n" +
+            "    o.order_code,\n" +
             "    os.updated_at AS update_at,\n" +
             "    CONCAT(u.first_name, ' ', u.last_name) AS full_name,\n" +
             "    o.shipping_address,\n" +

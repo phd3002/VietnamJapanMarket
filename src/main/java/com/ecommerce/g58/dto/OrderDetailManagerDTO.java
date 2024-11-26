@@ -12,7 +12,7 @@ public class OrderDetailManagerDTO {
     private String storeAddress;
     private String storePhone;
     private String orderStatus;
-    private String trackingNumber;
+    private String orderCode;
     private LocalDateTime statusTime;
     private String customerName;
     private String customerAddress;

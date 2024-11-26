@@ -128,7 +128,6 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "     WHERE ss.order_id = o.order_id \n" +
             "     ORDER BY ss.updated_at DESC \n" +
             "     LIMIT 1) AS oldStatus \n" +
-
             "FROM \n" +
             "    orders o \n" +
             "JOIN \n" +
@@ -146,7 +145,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "WHERE \n" +
             "    s.store_id = :storeId \n" +
             "GROUP BY \n" +
-            "    o.order_id, u.first_name, u.last_name, o.total_price",
+            " o.order_id, u.first_name, u.last_name, o.total_price \n",
             nativeQuery = true)
     List<Object[]> findOrdersByStoreId(@Param("storeId") Integer storeId);
 
