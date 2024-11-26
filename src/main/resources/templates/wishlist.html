@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title th:text="${pageTitle} ?: 'Wishlist'"></title>
@@ -18,7 +18,7 @@
 <main class="main-wrapper">
 
     <!-- Start Wishlist Area  -->
-    <div class="axil-wishlist-area axil-section-gap" th:if="${wishlistItems != null and !wishlistItems.isEmpty()}">
+    <div class="axil-wishlist-area axil-section-gap">
         <div class="container">
             <div class="product-table-heading">
                 <h4 class="title">Danh sách mong muốn của tôi</h4>

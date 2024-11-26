@@ -22,17 +22,6 @@
             <div class="axil-dashboard-warp">
                 <!-- Dashboard Sidebar and Content Container -->
                 <div class="row">
-                    <div class="axil-dashboard-author">
-                        <div class="media">
-                            <div class="thumbnail">
-                                <img th:src="@{/images/product/author1.png}">
-                            </div>
-                            <div class="media-body">
-                                <h5 class="title mb-0" th:text="'Hello ' + ${user.getUsername()}"></h5>
-                                <span class="joining-date" th:text="'Register Since ' + ${createdAtFormatted}"></span>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Sidebar -->
                     <div class="col-xl-3 col-md-4">
                         <aside th:insert="~{sidebar :: sidebar}">
@@ -74,11 +63,11 @@
                                         <table class="table">
                                             <thead>
                                             <tr>
-                                                <th width="20%">Ngày</th>
-                                                <th width="20%">Loại giao dịch</th>
-                                                <th>Số tiền</th>
-                                                <th width="20%">Nguồn</th>
-                                                <th width="30%">Nội dung</th>
+                                                <th scope="col">Ngày</th>
+                                                <th scope="col">Loại giao dịch</th>
+                                                <th scope="col">Số tiền</th>
+                                                <th scope="col">Nguồn</th>
+                                                <th scope="col">Nội dung</th>
                                             </tr>
                                             </thead>
                                             <tbody id="transaction-history">

@@ -61,7 +61,7 @@
 
                         <div class="form-group">
                             <label>Số điện thoại <span>*</span></label>
-                            <input type="text" class="form-control" name="storePhone" value="0123123" required>
+                            <input type="text" class="form-control" name="storePhone" required>
                         </div>
 
                         <div class="form-group">
@@ -110,12 +110,12 @@
                         <div id="japanFields" class="address-fields hidden">
                             <div class="form-group">
                                 <label>郵便番号 (Mã bưu điện)</label>
-                                <input type="text" id="jpPostalCode" name="postalCode" placeholder="XXX-XXXX" maxlength="8">
+                                <input type="text" id="jpPostalCode" name="postalCode" placeholder="XXX-XXXX" maxlength="8" required>
                             </div>
 
                             <div class="form-group">
                                 <label>都道府県 (Tỉnh)</label>
-                                <select id="jpPrefecture" name="city">
+                                <select id="jpPrefecture" name="city" required>
                                     <option value="">Chọn tỉnh</option>
                                     <option value="Tokyo">Tokyo</option>
                                     <option value="Osaka">Osaka</option>
@@ -125,7 +125,7 @@
 
                             <div class="form-group">
                                 <label>市区町村 (Thành phố/Quận)</label>
-                                <select id="jpCity" name="district">
+                                <select id="jpCity" name="district" required>
                                     <option value="">Chọn thành phố/quận</option>
                                     <option value="Shibuya">Shibuya</option>
                                     <option value="Shinjuku">Shinjuku</option>
@@ -135,7 +135,7 @@
 
                             <div class="form-group">
                                 <label>住所 (Địa chỉ chi tiết)</label>
-                                <input type="text" id="jpStoreAddress" name="storeAddress" placeholder="Số nhà, tên đường...">
+                                <input type="text" id="jpStoreAddress" name="storeAddress" placeholder="Số nhà, tên đường..." required>
                             </div>
                         </div>
 

@@ -9,7 +9,7 @@
                         <a class="nav-item nav-link" th:if="${hasStore}" href="/seller/dashboard" aria-selected="false">
                             <i class="fas fa-store"></i>Cửa hàng của tôi
                         </a>
-                        <a class="nav-item nav-link" th:unless="${hasStore}" href="#" aria-selected="false"
+                        <a class="nav-item nav-link" th:unless="${hasStore}" aria-selected="false"
                            onclick="showSignupModal()">
                             <i class="fas fa-store"></i>Cửa hàng của tôi
                         </a>
@@ -17,8 +17,6 @@
                            aria-selected="false"><i class="fas fa-shopping-basket"></i>Đơn hàng của tôi</a>
                         <a class="nav-item nav-link" href="/wallet"
                            aria-selected="false"><i class="fas fa-wallet"></i>Ví của tôi</a>
-<!--                        <a class="nav-item nav-link" href="/address"-->
-<!--                           aria-selected="false"><i class="fas fa-home"></i>Addresses</a>-->
                         <a class="nav-item nav-link" href="/notification"
                            aria-selected="false"><i class="fas fa-bell"></i>Thông báo</a>
                     </div>
@@ -26,4 +24,22 @@
             </aside>
         </div>
     </div>
+    <script>
+        function showSignupModal() {
+            Swal.fire({
+                title: 'Bạn đang chưa có cửa hàng',
+                text: 'Bạn có muốn đăng ký làm người bán hàng?',
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonText: 'Tôi muốn đăng kí làm người bán hàng',
+                cancelButtonText: 'Đóng',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/sign-up-seller';
+                }
+            });
+        }
+    </script>
 </div>

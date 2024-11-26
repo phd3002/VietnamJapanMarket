@@ -95,26 +95,6 @@
             </div>
         </div>
     </div>
-    </div>
-    <div id="signupModal" style="display: none;">
-        <p>Bạn đang chưa có cửa hàng, bạn có muốn đăng ký làm người bán hàng?</p>
-        <button onclick="window.location.href='/sign-up-seller'">Tôi muốn đăng kí làm người bán hàng</button>
-    </div>
-    <script>
-        function showSignupModal() {
-            Swal.fire({
-                title: 'Bạn đang chưa có cửa hàng',
-                text: 'Bạn có muốn đăng ký làm người bán hàng?',
-                showCancelButton: true,
-                confirmButtonText: 'Tôi muốn đăng kí làm người bán hàng',
-                cancelButtonText: 'Đóng'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/sign-up-seller';
-                }
-            });
-        }
-    </script>
 
 </main>
 

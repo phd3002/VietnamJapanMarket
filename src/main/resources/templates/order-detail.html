@@ -84,23 +84,7 @@
                 <!-- Dashboard Sidebar -->
                 <div class="row">
                     <div class="col-xl-3 col-md-4">
-                        <aside class="axil-dashboard-aside">
-                            <nav class="axil-dashboard-nav">
-                                <div class="nav nav-tabs" role="tablist">
-                                    <a class="nav-item nav-link" href="my-account.html"
-                                       aria-selected="false"><i class="fas fa-user"></i>Tài khoản</a>
-                                    <a class="nav-item nav-link" href="my-shop.html"
-                                       aria-selected="false"><i class="fas fa-store"></i>Cửa hàng</a>
-                                    <a class="nav-item nav-link active" href="order.html"
-                                       aria-selected="true"><i class="fas fa-shopping-basket"></i>Đơn hàng</a>
-                                    <a class="nav-item nav-link" href="wallet.html"
-                                       aria-selected="false"><i class="fas fa-wallet"></i>Ví</a>
-                                    <a class="nav-item nav-link" href="address.html"
-                                       aria-selected="false"><i class="fas fa-home"></i>Địa chỉ</a>
-                                    <a class="nav-item nav-link" href="notification.html"
-                                       aria-selected="false"><i class="fas fa-bell"></i>Thông báo</a>
-                                </div>
-                            </nav>
+                        <aside th:insert="~{sidebar :: sidebar}">
                         </aside>
                     </div>
                     <!-- Dashboard Content -->
@@ -384,101 +368,7 @@
     </div>
 </main>
 
-
-<div class="service-area">
-    <div class="container">
-        <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service1.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Fast &amp; Secure Delivery</h6>
-                        <p>Tell about your service.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service2.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Money Back Guarantee</h6>
-                        <p>Within 10 days.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service3.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">24 Hour Return Policy</h6>
-                        <p>No question ask.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service4.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Pro Quality Support</h6>
-                        <p>24/7 Live support.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Start Footer Area  -->
-<footer class="axil-footer-area footer-style-2">
-    <!-- Start Footer Top Area  -->
-    <div class="footer-top separator-top">
-        <div class="container">
-            <div class="row">
-                <!-- Start Single Widget  -->
-                <div class="col-lg-6 col-sm-6">
-                    <div class="axil-footer-widget">
-                        <h5 class="widget-title">Support</h5>
-                        <div class="inner">
-                            <p>685 Market Street, Las Vegas, LA 95820</p>
-                            <ul class="support-list-item">
-                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
-                                    example@domain.com</a></li>
-                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
-                                </li>
-                                <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Widget  -->
-                <!-- Start Single Widget  -->
-                <div class="col-lg-6 col-sm-6">
-                    <div class="axil-footer-widget">
-                        <h5 class="widget-title">Account</h5>
-                        <div class="inner">
-                            <ul>
-                                <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="sign-up.html">Login / Register</a></li>
-                                <li><a href="cart-detail.html">Cart</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="product-list.html">Shop</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Widget  -->
-            </div>
-        </div>
-    </div>
-    <!-- End Footer Top Area  -->
-</footer>
+<div th:replace="base :: footer"></div>
 <!-- End Footer Area  -->
 
 <!-- Header Search Modal End -->
