@@ -27,7 +27,7 @@ public class OrderDetailManagementControllerr {
             model.addAttribute("storeAddress", firstDetail.getStoreAddress());
             model.addAttribute("storePhone", firstDetail.getStorePhone());
             model.addAttribute("orderStatus", firstDetail.getOrderStatus());
-            model.addAttribute("trackingNumber", firstDetail.getTrackingNumber());
+            model.addAttribute("trackingNumber", firstDetail.getOrderCode());
             model.addAttribute("updateTime", firstDetail.getStatusTime());
             model.addAttribute("customerName", firstDetail.getCustomerName());
             model.addAttribute("customerAddress", firstDetail.getCustomerAddress());

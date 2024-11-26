@@ -191,7 +191,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             dto.setStoreAddress((String) result[1]);
             dto.setStorePhone((String) result[2]);
             dto.setOrderStatus((String) result[3]);
-            dto.setTrackingNumber((String) result[4]);
+            dto.setOrderCode((String) result[4]);
 //            dto.setStatusTime((LocalDateTime) result[5]);
             if (result[5] instanceof Timestamp) {
                 Timestamp statusTimestamp = (Timestamp) result[5];

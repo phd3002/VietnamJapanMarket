@@ -50,7 +50,8 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
+        <li><a class="app-menu__item" href="store-info-manager.html"><i
+                class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
@@ -101,8 +102,10 @@
                             <td th:text="${feedback.getCreatedAt()}"></td>
                             <td>
                                 <a href="/seller/reply-feedback" class="link-reply">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Phản hồi" th:classappend="${!feedback.getSellerFeedback().isBlank()} ? 'btn-red' : 'btn-primary'"><i
-                                            class="fa fa-envelope-open-text"></i></button>
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Phản hồi"
+                                            th:classappend="${feedback.getSellerFeedback() != null and !feedback.getSellerFeedback().isBlank()} ? 'btn-red' : 'btn-primary'">
+                                        <i class="fa fa-envelope-open-text"></i>
+                                    </button>
                                 </a>
                             </td>
                         </tr>
