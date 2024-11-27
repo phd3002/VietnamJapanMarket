@@ -1,7 +1,9 @@
 package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.dto.OrderDetailDTO;
+import com.ecommerce.g58.entity.Invoice;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.repository.InvoiceRepository;
 import com.ecommerce.g58.service.OrderDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
 
 @Controller
 public class OrderDetailController {
@@ -27,20 +32,36 @@ public class OrderDetailController {
 
     @Autowired
     private OrderDetailService orderDetailService;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @GetMapping("/order-detail/{orderId}")
     public String getOrderDetails(@PathVariable Long orderId, Model model) {
         List<OrderDetailDTO> orderDetails = orderDetailService.getOrderDetails(orderId);
 
         model.addAttribute("orderDetails", orderDetails);
-
+        Invoice invoice = invoiceRepository.findInvoiceByOrderId_OrderId(Math.toIntExact(orderId));
         if (!orderDetails.isEmpty()) {
             // Extract order-level details from the first entry
+            BigDecimal finalTotal = null;
+
+            if (invoice.getTotalAmount() != null && invoice.getTax() != null && invoice.getShippingFee() != null){
+                finalTotal = invoice.getTotalAmount()
+                        .add(invoice.getTax())
+                        .add(invoice.getShippingFee());
+            }else{
+                finalTotal = invoice.getTotalAmount();
+            }
+            String finalTotalStr = formatCurrency(finalTotal);
             OrderDetailDTO firstDetail = orderDetails.get(0);
             model.addAttribute("orderId", orderId);
             model.addAttribute("orderTotalPrice", firstDetail.getOrderTotalPrice());
-            model.addAttribute("totalAmount", firstDetail.getTotalAmount());
-            model.addAttribute("shippingFee", firstDetail.getShippingFee());
+            model.addAttribute("totalAmount", invoice.getFormattedTotalAmount());
+            model.addAttribute("finalTotal", finalTotalStr);
+            model.addAttribute("shippingFee", invoice.getFormattedShippingFee());
+            model.addAttribute("tax", invoice.getFormattedTax());
+            model.addAttribute("deposit", invoice.getFormatedDeposit());
+            model.addAttribute("remaining_balance", invoice.getFormatedRemainingBalance());
             model.addAttribute("paymentMethod", firstDetail.getPaymentMethod());
             model.addAttribute("paymentStatus", firstDetail.getPaymentStatus());
             model.addAttribute("shippingAddress", firstDetail.getShippingAddress());

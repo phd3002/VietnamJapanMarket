@@ -1,10 +1,12 @@
 package com.ecommerce.g58.controller;
 
-import com.ecommerce.g58.entity.Orders;
-import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.PaymentMethod;
+import com.ecommerce.g58.repository.InvoiceRepository;
 import com.ecommerce.g58.service.CartItemService;
+import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.OrderService;
+import com.ecommerce.g58.service.ShippingUnitService;
 import com.ecommerce.g58.service.implementation.VNPayService;
 import lombok.Builder;
 import lombok.Data;
@@ -21,16 +23,22 @@ import org.thymeleaf.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
 public class VNPayController {
     @Autowired
     private VNPayService vnPayService;
+    @Autowired
+    private ShippingUnitService shippingUnitService;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private OrderService orderService;
@@ -99,7 +107,10 @@ public class VNPayController {
         model.addAttribute("transactionId", transactionId);
 
         Users user = (Users) session.getAttribute("userOrderOn");
+        String paymentType = (String) session.getAttribute("paymentType");
         String shippingAddress = (String) session.getAttribute("addressOrderOn");
+        Integer shippingUnitId = (Integer) session.getAttribute("shippingUnitId");
+        Double totalWeight = (Double) session.getAttribute("totalWeight");
         PaymentMethod paymentMethod = (PaymentMethod) session.getAttribute("paymentMethodOrderOn");
         List<Integer> cartItemIds = (List<Integer>) session.getAttribute("cartItemIdsOrderOn");
         if (paymentStatus == 1) {
@@ -110,12 +121,53 @@ public class VNPayController {
                 return "error/404";
             }
             try {
-                cartItemService.removeCartItemsByIds(cartItemIds);
+
+
                 String orderCode = order.getOrderCode();
                 long totalPrice = order.getTotalPrice();
                 model.addAttribute("orderCode", orderCode);
-                model.addAttribute("totalPrice", totalPrice);
-                System.out.println("Order created successfully with order code: " + orderCode);
+
+
+                List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+                long shippingFee = (long) (shippingUnits.get(0).getUnitPrice().longValue() * totalWeight);
+                if (shippingUnitId != null) {
+                    Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
+                    if (shippingUnitOpt.isPresent()) {
+                        shippingFee = Math.round(shippingUnitOpt.get().getUnitPrice().longValue() * totalWeight);
+                        model.addAttribute("selectedShippingUnit", shippingUnitOpt.get());
+                    } else {
+                        return "checkout";
+                    }
+
+                }
+
+                long totalWithShipping;
+                double tax = 0.08;
+                Invoice invoice = new Invoice();
+
+                if ("deposit".equalsIgnoreCase(paymentType)) {
+                    totalWithShipping = (long) ((((double) totalPrice / 2) + shippingFee) + (totalPrice * tax)); // 50% of total price, full shipping fee
+
+                    invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
+                    invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
+                    invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
+                    invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
+                    invoice.setRemainingBalance(BigDecimal.valueOf(totalPrice - (totalPrice / 2)));
+
+                } else {
+                    totalWithShipping = (long) ((totalPrice + shippingFee) + (totalPrice * tax));
+                    invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
+                    invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
+                    invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
+                    invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
+                    invoice.setRemainingBalance(BigDecimal.valueOf(0));
+                }
+                invoice.setOrderId(order);
+                Orders newOrder = orderService.getOrderByCode(orderCode);
+                invoice.setOrderId(newOrder);
+                invoiceRepository.save(invoice);
+                cartItemService.removeCartItemsByIds(cartItemIds);
+                model.addAttribute("totalPrice", invoice.getDeposit());
                 return "checkout-complete-vnpay";
             } catch (Exception e) {
                 e.printStackTrace();

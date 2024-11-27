@@ -144,29 +144,38 @@ public class CheckoutController {
                 .sum();
         logger.info("Total cart price calculated: {}", totalPrice);
 
+        double totalWeight = cartItems.stream()
+                .mapToDouble(item -> item.getProductId().getWeight() * item.getQuantity())
+                .sum();
+
+        totalWeight = Math.max(totalWeight, 1.0);
+        // Lấy tất cả các đơn vị vận chuyển để hiển thị trong dropdown
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        model.addAttribute("shippingUnits", shippingUnits);
         // Lấy phí vận chuyển từ bảng shipping_unit dựa trên shippingUnitId
-        long shippingFee = 0;
+        long shippingFee = (long) (shippingUnits.get(0).getUnitPrice().longValue() * totalWeight);
         if (shippingUnitId != null) {
             Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
             if (shippingUnitOpt.isPresent()) {
-                shippingFee = shippingUnitOpt.get().getShippingRevenue().longValue();
+                shippingFee = Math.round(shippingUnitOpt.get().getUnitPrice().longValue() * totalWeight);
                 model.addAttribute("selectedShippingUnit", shippingUnitOpt.get());
-                logger.info("Shipping fee retrieved for shipping unit ID {}: {}", shippingUnitId, shippingFee);
             } else {
-                logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
-                model.addAttribute("errorMessage", "Đơn vị vận chuyển không hợp lệ.");
+                shippingFee = (long) (shippingUnits.get(0).getUnitPrice().longValue() * totalWeight);
+                model.addAttribute("errorMessage", "Invalid shipping unit selected.");
             }
+
         }
 
         double taxRate = 0.08; // 8% tax rate
         long baseTotal = totalPrice + shippingFee; // Total before tax
-        long taxAmount = Math.round(baseTotal * taxRate); // Tax applied to the base total
+        long taxAmount = (long) (totalPrice * taxRate); // Tax applied to the base total
         long totalWithShipping = baseTotal + taxAmount; // Final total including tax
 
 // Debugging logs
         logger.info("Base total (price + shipping): {}", baseTotal);
         logger.info("Tax amount calculated: {}", taxAmount);
         logger.info("Total with shipping and tax: {}", totalWithShipping);
+
 
         model.addAttribute("tax", taxAmount);
         model.addAttribute("cartItems", cartItems);
@@ -175,9 +184,8 @@ public class CheckoutController {
         model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("cartItemIds", cartItemIds);
 
-        // Lấy tất cả các đơn vị vận chuyển để hiển thị trong dropdown
-        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
-        model.addAttribute("shippingUnits", shippingUnits);
+        model.addAttribute("totalWeight", totalWeight);
+
 
         // Lấy hình ảnh cho từng sản phẩm trong giỏ hàng
         Map<Integer, String> productImages = new HashMap<>();
@@ -200,7 +208,7 @@ public class CheckoutController {
 
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
-                                    @RequestParam("shippingAddress") String shippingAddress,
+                                    @RequestParam("formattedShippingAddress") String formattedShippingAddress,
                                     @RequestParam("cartItemIdsString") String cartItemIdsString,
                                     @RequestParam(value = "shippingUnitId") Integer shippingUnitId,
                                     @RequestParam(value = "paymentMethod", defaultValue = "WALLET") PaymentMethod paymentMethod,
@@ -236,15 +244,25 @@ public class CheckoutController {
         logger.info("Total cart price calculated: {}", totalPrice);
 
         // Tính phí vận chuyển dựa trên đơn vị vận chuyển được chọn
-        long shippingFee = 0;
-        Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
-        if (shippingUnitOpt.isPresent()) {
-            shippingFee = shippingUnitOpt.get().getUnitPrice().longValue();
-            logger.info("Shipping fee retrieved from ShippingUnit ID {}: {}", shippingUnitId, shippingFee);
-        } else {
-            logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
-            model.addAttribute("errorMessage", "Đơn vị vận chuyển không hợp lệ.");
-            return "checkout"; // Quay lại trang checkout nếu không tìm thấy đơn vị vận chuyển
+        double totalWeight = cartItems.stream()
+                .mapToDouble(item -> item.getProductId().getWeight() * item.getQuantity())
+                .sum();
+
+        totalWeight = Math.max(totalWeight, 1.0);
+        // Lấy tất cả các đơn vị vận chuyển để hiển thị trong dropdown
+
+
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        long shippingFee = (long) (shippingUnits.get(0).getUnitPrice().longValue() * totalWeight);
+        if (shippingUnitId != null) {
+            Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
+            if (shippingUnitOpt.isPresent()) {
+                shippingFee = Math.round(shippingUnitOpt.get().getUnitPrice().longValue() * totalWeight);
+                model.addAttribute("selectedShippingUnit", shippingUnitOpt.get());
+            } else {
+                return "checkout";
+            }
+
         }
 
         // Calculate the final total based on payment type
@@ -258,6 +276,7 @@ public class CheckoutController {
             invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
             invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
             invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
+            invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
             invoice.setRemainingBalance(BigDecimal.valueOf(totalPrice - (totalPrice / 2)));
 
         } else {
@@ -265,6 +284,7 @@ public class CheckoutController {
             invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
             invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
             invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
+            invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
             invoice.setRemainingBalance(BigDecimal.valueOf(0));
         }
         logger.info("Total with shipping calculated based on payment type '{}': {}", paymentType, totalWithShipping);
@@ -288,7 +308,7 @@ public class CheckoutController {
             // Trừ tiền trong ví của người mua
             walletService.deductFromWallet(userId, totalWithShipping, paymentType);
             logger.info("Đã trừ số dư ví cho người dùng ID {}. Số tiền trừ: {}. Loại thanh toán: {}", userId, totalWithShipping, paymentType);
-
+            logger.info(formattedShippingAddress + "s");
             // Lấy thực thể Stores từ sản phẩm trong giỏ hàng
             Stores store = cartItems.get(0).getProductId().getStoreId();
 
@@ -312,6 +332,7 @@ public class CheckoutController {
 
             // Xác nhận và lưu đơn hàng
             order.setUserId(user);
+            order.setShippingAddress(formattedShippingAddress);
             order.setOrderDate(LocalDateTime.now());
             order.setTotalPrice(totalWithShipping);
             logger.info("Order prepared for user ID {}. Total with shipping: {}", userId, totalWithShipping);
@@ -368,7 +389,10 @@ public class CheckoutController {
             return "checkout-complete";
         } else if (paymentMethod == PaymentMethod.VNPAY) {
             session.setAttribute("userOrderOn", user);
-            session.setAttribute("addressOrderOn", shippingAddress);
+            session.setAttribute("paymentType", paymentType);
+            session.setAttribute("totalWeight", totalWeight);
+            session.setAttribute("shippingUnitId", shippingUnitId);
+            session.setAttribute("addressOrderOn", formattedShippingAddress);
             session.setAttribute("paymentMethodOrderOn", paymentMethod);
             session.setAttribute("cartItemIdsOrderOn", cartItemIds);
             model.addAttribute("totalOrderPrice", totalWithShipping);

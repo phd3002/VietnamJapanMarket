@@ -64,32 +64,35 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable) {
-        Page<Object[]> results = orderRepository.findOrdersByUserIdAndStatus(userId, status, pageable);
-        return results.map(result -> {
+        // Dynamically filter by status if provided, otherwise fetch all
+        Page<Orders> ordersPage;
+        if (status == null || status.isEmpty()) {
+            ordersPage = orderRepository.findByUserId_UserId(userId, pageable); // New method for all statuses
+        } else {
+            ordersPage = orderRepository.findByUserId_UserIdAndShippingStatus_Status(userId, status, pageable);
+        }
+
+        // Map `Orders` to `OrdersDTO` (same as before)
+        return ordersPage.map(order -> {
             OrdersDTO dto = new OrdersDTO();
-            dto.setOrderId((int) result[0]);
-
-            if (result[1] != null) {
-                Timestamp orderDateTimestamp = (Timestamp) result[1];
-                dto.setOrderDate(orderDateTimestamp.toLocalDateTime());
-            }
-
-            dto.setStatus((String) result[2]);
-
-            if (result[3] != null) {
-                if (result[3] instanceof Number) {
-                    dto.setTotalQuantity(((Number) result[3]).intValue());
-                }
-            }
-
-            if (result[4] != null) {
-                if (result[4] instanceof Number) {
-                    dto.setTotalPrice(((Number) result[4]).longValue());
-                }
-            }
+            dto.setOrderId(order.getOrderId());
+            dto.setOrderDate(order.getOrderDate());
+            dto.setStatus(order.getShippingStatus()
+                    .stream()
+                    .max(Comparator.comparing(ShippingStatus::getUpdatedAt))
+                    .map(ShippingStatus::getStatus)
+                    .orElse(null));
+            dto.setTotalQuantity(order.getOrderDetails()
+                    .stream()
+                    .mapToInt(OrderDetails::getQuantity)
+                    .sum());
+            dto.setTotalPrice(order.getTotalPrice());
+            dto.setFormattedPrice(order.getTotalPrice());
             return dto;
         });
     }
+
+
 
     @Override
     public List<OrderManagerDTO> getOrdersForStore(Integer userId) {
@@ -357,6 +360,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return order;
+    }
+
+    @Override
+    public Orders getOrderByCode(String code) {
+        return orderRepository.findFirstByOrderCode(code);
     }
 
     @Override

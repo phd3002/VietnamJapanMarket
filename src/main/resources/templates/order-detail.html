@@ -254,19 +254,21 @@
                                             <span class="summary-value"
                                                   th:text="${shippingFee}"></span>
                                         </div>
-                                        <!--                                        <div class="summary-row">-->
-                                        <!--                                            <span class="summary-label">Tax(10%)</span>-->
-                                        <!--                                            <span class="summary-value">10$</span>-->
-                                        <!--                                        </div>-->
-                                        <!--                                        <div class="summary-row">-->
-                                        <!--                                            <span class="summary-label">Voucher from Shop</span>-->
-                                        <!--                                            <span class="summary-value">-5$</span>-->
-                                        <!--                                        </div>-->
+                                        <div class="summary-row">
+                                            <span class="summary-label">Tax(8%)</span>
+                                            <span class="summary-value" th:text="${tax}"> </span>
+                                        </div>
+
                                         <div class="summary-row">
                                             <span class="summary-label total">Tổng chi phí</span>
-                                            <span th:if="${totalAmount != null and shippingFee != null}"
-                                                  th:text="${totalAmount + shippingFee}">0</span>
-                                            <span th:if="${totalAmount == null or shippingFee == null}">0</span>
+                                            <span th:text="${finalTotal}">0</span>
+                                        </div> <div class="summary-row">
+                                            <span class="summary-label total">Đã Thanh toán</span>
+                                            <span th:text="${deposit}">0</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label total">Còn lại</span>
+                                            <span th:text="${remaining_balance}">0</span>
                                         </div>
                                     </div>
                                     <div class="payment-method">
