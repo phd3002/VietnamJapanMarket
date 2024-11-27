@@ -17,12 +17,9 @@ public class GlobalNotificationAdvice {
     @ModelAttribute("unreadCount")
     public Integer getUnreadCount() {
         try {
-            Integer unreadCount = notificationService.getUnreadNotificationCount();
-            System.out.println("Unread notifications count: " + unreadCount);
-            return unreadCount;
+            return notificationService.getUnreadNotificationCount();
         } catch (Exception e) {
-            System.err.println("Failed to fetch unread notifications: " + e.getMessage());
-            return 0; // Default to 0 if an error occurs
+            return 0;
         }
     }
 

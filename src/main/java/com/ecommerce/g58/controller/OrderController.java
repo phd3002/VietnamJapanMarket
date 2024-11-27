@@ -1,6 +1,7 @@
 package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.dto.OrdersDTO;
+import com.ecommerce.g58.entity.Orders;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.OrderService;
 import com.ecommerce.g58.service.StoreService;
@@ -56,7 +57,7 @@ public class OrderController {
 
         Page<OrdersDTO> orderPage = orderService.getOrdersByUserIdAndStatus(user.getUserId(), status, PageRequest.of(page, size));
         Page<OrdersDTO> allOrdersPage = orderService.getOrdersByUserIdAndStatus(user.getUserId(), null, PageRequest.of(page, size));
-
+        System.out.println(orderPage.getContent().size());
         if (allOrdersPage.isEmpty()) {
             model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
             model.addAttribute("productListLink", "/product-list");
