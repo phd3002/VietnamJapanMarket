@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách vận chuyển | Quản trị Admin</title>
@@ -31,7 +31,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/sign-in"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -39,16 +39,16 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="#" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item " href="/admin/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item" href="user-manager.html"><i class='app-menu__icon bx bx-id-card'></i>
+        <li><a class="app-menu__item" href="/admin/user-manager"><i class='app-menu__icon bx bx-id-card'></i>
             <span class="app-menu__label">Quản lý người dùng</span></a></li>
-        <li><a class="app-menu__item active" href="shipping-manager.html"><i
+        <li><a class="app-menu__item active" href="/list-shipping-unit"><i
                 class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
         </li>
         <li><a class="app-menu__item" href="income-manager.html"><i
@@ -73,36 +73,6 @@
                             <a class="btn btn-add btn-sm" href="/add-shipping-unit" title="Thêm"><i
                                     class="fas fa-plus"></i>
                                 Thêm đơn vị vận chuyển mới</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập"
-                               onclick="myFunction(this)"><i
-                                    class="fas fa-file-upload"></i> Tải từ file</a>
-                        </div>
-
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm print-file" type="button" title="In"
-                               onclick="myApp.printTable()"><i
-                                    class="fas fa-print"></i> In dữ liệu</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm print-file js-textareacopybtn" type="button"
-                               title="Sao chép"><i
-                                    class="fas fa-copy"></i> Sao chép</a>
-                        </div>
-
-                        <div class="col-sm-2">
-                            <a class="btn btn-excel btn-sm" href="" title="In"><i class="fas fa-file-excel"></i> Xuất
-                                Excel</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm pdf-file" type="button" title="In"
-                               onclick="myFunction(this)"><i
-                                    class="fas fa-file-pdf"></i> Xuất PDF</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
-                                    class="fas fa-trash-alt"></i> Xóa tất cả </a>
                         </div>
                     </div>
                     <table class="table table-hover table-bordered" id="sampleTable">
@@ -142,19 +112,19 @@
 
 
 <!-- Essential javascripts for application to work-->
-<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
-<script th:src="@{/seller/js/popper.min.js}"></script>
-<script th:src="@{/seller/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/admin/js/popper.min.js}"></script>
+<script th:src="@{/admin/js/bootstrap.min.js}"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script th:src="@{/seller/js/jquery.table2excel.js}"></script>
-<script th:src="@{/seller/js/main.js}"></script>
+<script th:src="@{/admin/js/jquery.table2excel.js}"></script>
+<script th:src="@{/admin/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top -->
-<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+<script th:src="@{/admin/js/plugins/pace.min.js}"></script>
 <!-- Page specific javascripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <!-- Data table plugin -->
-<script th:src="@{/seller/js/plugins/jquery.dataTables.min.js}" type="text/javascript"></script>
-<script th:src="@{/seller/js/plugins/dataTables.bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/admin/js/plugins/jquery.dataTables.min.js}" type="text/javascript"></script>
+<script th:src="@{/admin/js/plugins/dataTables.bootstrap.min.js}" type="text/javascript"></script>
 
 <script type="text/javascript">
     $('#sampleTable').DataTable();

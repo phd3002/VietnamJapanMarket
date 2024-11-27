@@ -1,5 +1,5 @@
-    <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Thêm sản phẩm | Kênh người bán</title>
@@ -154,17 +154,16 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" th:href="@{'/store-info/' + ${storeId}}"><i
+        <li><a class="app-menu__item" href="/store-info"><i
                 class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item active" href="/seller/dashboard"><i
                 class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item" th:href="@{'/seller-products/' + ${storeId}}"><i
+        <li><a class="app-menu__item" href="/seller-products"><i
                 class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
         </li>
-
-        <li><a class="app-menu__item" th:href="@{'/seller/order-manager/' + ${storeId}}"><i
+        <li><a class="app-menu__item" href="/seller/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/feedback-manager"><i
@@ -184,7 +183,9 @@
             <div class="tile">
                 <h3 class="tile-title">Cập nhật sản phẩm</h3>
                 <div class="tile-body">
-                    <form class="row" action="/edit-product/{productId}" method="post" th:action="@{/update-product/{productId}(productId=${product.productId})}" th:object="${product}">
+                    <form class="row" action="/edit-product/{productId}" method="post"
+                          th:action="@{/update-product/{productId}(productId=${product.productId})}"
+                          th:object="${product}">
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên sản phẩm</label>
                             <input class="form-control" type="text" name="productName" th:value="*{productName}">
@@ -199,7 +200,8 @@
                         </div>
                         <div class="form-group col-md-12">
                             <label class="control-label">Mô tả sản phẩm</label>
-                            <textarea class="form-control" name="productDescription" th:text="*{productDescription}" id="mota"></textarea>
+                            <textarea class="form-control" name="productDescription" th:text="*{productDescription}"
+                                      id="mota"></textarea>
                             <script>CKEDITOR.replace('mota');</script>
                         </div>
                         <div class="col-md-12">

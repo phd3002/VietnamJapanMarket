@@ -25,16 +25,19 @@
             justify-content: center;
             gap: 20px;
         }
+
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
         }
+
         .legend-color {
             width: 20px;
             height: 20px;
             border-radius: 4px;
         }
+
         .legend-label {
             font-size: 14px;
         }
@@ -73,7 +76,6 @@
         <li><a class="app-menu__item" href="/seller-products/"><i
                 class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
         </li>
-
         <li><a class="app-menu__item" href="/seller/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
@@ -179,7 +181,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="products : ${bestSellingProducts}" th:if="${not #lists.isEmpty(bestSellingProducts)}">
+                                <tr th:each="products : ${bestSellingProducts}"
+                                    th:if="${not #lists.isEmpty(bestSellingProducts)}">
                                     <td th:text="${products.productCode}"></td>
                                     <td th:text="${products.productName}"></td>
                                     <td th:text="${products.price} + ' đ'"></td>
@@ -224,7 +227,8 @@
                             </div>
                             <div class="legend-item">
                                 <div class="legend-color" style="background-color: #b10000"></div>
-                                <span class="legend-label">Hủy và hoàn trả (<span id="cancelledPercent">0</span>%)</span>
+                                <span class="legend-label">Hủy và hoàn trả (<span
+                                        id="cancelledPercent">0</span>%)</span>
                             </div>
                         </div>
                     </div>
@@ -278,7 +282,7 @@
         },
         ]
     };
-    var allZero = data.datasets[0].data.every(function(value) {
+    var allZero = data.datasets[0].data.every(function (value) {
         return value === 0;
     });
     if (allZero) {
@@ -291,7 +295,12 @@
     // Dữ liệu cho biểu đồ tròn
     var pieData = [
         {value: [[${totalOrdersCompleted}]], color: "#01ff02", highlight: "#007b01", label: "Hoàn thành"},
-        {value: [[${totalOrdersCancelledAndReturned}]], color: "#b10000", highlight: "#ff0000", label: "Hủy và hoàn trả"},
+        {
+            value: [[${totalOrdersCancelledAndReturned}]],
+            color: "#b10000",
+            highlight: "#ff0000",
+            label: "Hủy và hoàn trả"
+        },
     ];
 
     var totalValue = pieData.reduce((sum, item) => sum + item.value, 0);
@@ -326,7 +335,7 @@
             },
         ]
     };
-    var allZeroData = radarData.datasets[0].data.every(function(value) {
+    var allZeroData = radarData.datasets[0].data.every(function (value) {
         return value === 0;
     });
     if (allZeroData) {

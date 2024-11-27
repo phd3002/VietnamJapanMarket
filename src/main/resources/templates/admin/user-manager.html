@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách người dùng | Quản trị Admin</title>
@@ -31,7 +31,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="#"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/sign-in"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -39,16 +39,16 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="#" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item " href="/admin/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item active" href="user-manager.html"><i class='app-menu__icon bx bx-id-card'></i>
+        <li><a class="app-menu__item active" href="/admin/user-manager"><i class='app-menu__icon bx bx-id-card'></i>
             <span class="app-menu__label">Quản lý người dùng</span></a></li>
-        <li><a class="app-menu__item" href="shipping-manager.html"><i
+        <li><a class="app-menu__item" href="/list-shipping-unit"><i
                 class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
         </li>
         <li><a class="app-menu__item" href="income-manager.html"><i class='app-menu__icon bx bx-dollar'></i><span
@@ -67,47 +67,7 @@
         <div class="col-md-12">
             <div class="tile">
                 <div class="tile-body">
-
-                    <div class="row element-button">
-                        <div class="col-sm-2">
-
-                            <a class="btn btn-add btn-sm" href="add-user.html" title="Thêm"><i
-                                    class="fas fa-plus"></i>
-                                Tạo mới người dùng</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập"
-                               onclick="myFunction(this)"><i
-                                    class="fas fa-file-upload"></i> Tải từ file</a>
-                        </div>
-
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm print-file" type="button" title="In"
-                               onclick="myApp.printTable()"><i
-                                    class="fas fa-print"></i> In dữ liệu</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm print-file js-textareacopybtn" type="button"
-                               title="Sao chép"><i
-                                    class="fas fa-copy"></i> Sao chép</a>
-                        </div>
-
-                        <div class="col-sm-2">
-                            <a class="btn btn-excel btn-sm" href="" title="In"><i class="fas fa-file-excel"></i> Xuất
-                                Excel</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm pdf-file" type="button" title="In"
-                               onclick="myFunction(this)"><i
-                                    class="fas fa-file-pdf"></i> Xuất PDF</a>
-                        </div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
-                                    class="fas fa-trash-alt"></i> Xóa tất cả </a>
-                        </div>
-                    </div>
-                    <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0"
-                           border="0" id="sampleTable">
+                    <table class="table table-hover table-bordered js-copytextarea" id="sampleTable">
                         <thead>
                         <tr>
                             <th>ID người dùng</th>

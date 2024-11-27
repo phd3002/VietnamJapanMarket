@@ -1,28 +1,34 @@
 @startuml
+skinparam componentStyle rectangle
 
-actor Seller
-participant "Product Manager Page"
-participant SellerProductManagementController
-participant ProductService
-participant ProductRepository
-participant Database
+actor User as user
+node "Web Browser" as browser
 
-Seller -> "Product Manager Page": open delete product page
-"Product Manager Page" -> SellerProductManagementController: deleteProduct(productId, request, session)
-SellerProductManagementController -> ProductService: findById(productId)
-ProductService -> ProductRepository: findById(productId)
-ProductRepository -> Database: select product by productId
-Database --> ProductRepository: product data
-ProductRepository --> ProductService: product found
-ProductService --> SellerProductManagementController: product found
+node "Spring MVC Framework" as mvc {
+    rectangle "Controller" as controller
+    rectangle "Model" as model
+    rectangle "View (Thymeleaf)" as view
+}
 
-SellerProductManagementController -> ProductService: deleteProductById(productId)
-ProductService -> ProductRepository: deleteByProductId(productId)
-ProductRepository -> Database: delete product by productId
-Database --> ProductRepository: product deleted
-ProductRepository --> ProductService: product deleted
-ProductService --> SellerProductManagementController: product deleted
+database "MySQL Database" as mysql
+cloud "Amazon S3" as s3
 
-SellerProductManagementController -> "Product Manager Page": display product delete success message
+' Connections
+user --> browser : HTTP Requests
+browser --> controller : Sends Requests
+controller --> model : Invokes Business Logic
+model --> mysql : Reads/Writes Data
+model --> s3 : Stores/Retrieves Files
+model --> view : Passes Data
+view --> browser : Renders Response
+
+' Technologies
+note bottom of view
+Thymeleaf (UI Rendering)
+end note
+
+note bottom of mvc
+Spring Boot (Core Framework)
+end note
 
 @enduml

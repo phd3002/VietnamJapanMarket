@@ -70,7 +70,7 @@
                             <div class="inner">
                                 <!-- Product title and price -->
                                 <h2 class="product-title" th:text="${productDetail.productName}">Tên sản phẩm</h2>
-                                <span class="price-amount" th:text="${productDetail.price} + ' $'">Giá</span>
+                                <span class="price-amount" th:text="${productDetail.price}">Giá</span>
                                 <!-- Rating and review count -->
                                 <div class="product-rating">
                                     <div class="star-rating">
@@ -81,8 +81,8 @@
                                            th:if="${emptyStars > 0}"></i>
                                     </div>
                                     <div class="review-link">
-                                        <a href="#"><span th:text="${avgText}"></span> (<span
-                                                th:text="${feedbacks.size()}"></span> đánh giá của khách hàng)</a>
+                                        <span th:text="${avgText}"></span> (<span
+                                                th:text="${feedbacks.size()}"></span> đánh giá của khách hàng)
                                     </div>
                                 </div>
                                 <!-- Product variations -->
@@ -262,7 +262,8 @@
         </div>
     </div>
 </main>
-
+<br>
+<br>
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>
 

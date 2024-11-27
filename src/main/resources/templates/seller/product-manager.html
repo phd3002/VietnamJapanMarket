@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách nhân viên | Kênh người bán</title>
@@ -44,17 +44,16 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" th:href="@{'/store-info/' + ${storeId}}"><i
+        <li><a class="app-menu__item" href="/store-info"><i
                 class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/dashboard"><i
                 class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item active" th:href="@{'/seller-products/' + ${storeId}}"><i
+        <li><a class="app-menu__item active" href="/seller-products"><i
                 class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
         </li>
-
-        <li><a class="app-menu__item" th:href="@{'/seller/order-manager/' + ${storeId}}"><i
+        <li><a class="app-menu__item" href="/seller/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/feedback-manager"><i

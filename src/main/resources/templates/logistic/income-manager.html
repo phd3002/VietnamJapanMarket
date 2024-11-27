@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Danh sách đơn hàng | Quản trị Admin</title>
+    <title>Danh sách đơn hàng | Quản trị vận chuyển</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,7 +31,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/sign-in"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -39,7 +39,7 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
@@ -203,19 +203,19 @@ MODAL
     -->
 </main>
 <!-- Essential javascripts for application to work-->
-<script src="../../static/admin/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/admin/js/popper.min.js"></script>
-<script src="../../static/admin/js/bootstrap.min.js"></script>
+<script src="../../static/logistic/js/jquery-3.2.1.min.js"></script>
+<script src="../../static/logistic/js/popper.min.js"></script>
+<script src="../../static/logistic/js/bootstrap.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="src/jquery.table2excel.js"></script>
-<script src="../../static/admin/js/main.js"></script>
+<script src="../../static/logistic/js/main.js"></script>
 <!-- The javascript plugin to display page loading on top-->
-<script src="../../static/admin/js/plugins/pace.min.js"></script>
+<script src="../../static/logistic/js/plugins/pace.min.js"></script>
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <!-- Data table plugin-->
-<script type="text/javascript" src="../../static/admin/js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="../../static/admin/js/plugins/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/logistic/js/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../static/logistic/js/plugins/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
     function deleteRow(r) {
