@@ -14,8 +14,8 @@
             gap: 20px;
         }
 
-        .user-info, .order-summary {
-            flex: 1;
+        .user-info {
+            flex: 0 0 40%; /* Take 40% of the container width */
             padding: 20px;
             box-sizing: border-box;
             background-color: #f9f9f9;
@@ -23,7 +23,11 @@
         }
 
         .order-summary {
-            margin-left: 10px;
+            flex: 0 0 60%; /* Take 60% of the container width */
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
         }
 
         /* Make the layout stack vertically on smaller screens */
@@ -32,9 +36,12 @@
                 flex-direction: column;
             }
 
-            .user-info, .order-summary {
-                width: 100%;
-                margin: 0;
+            .user-info {
+                flex: 0 0 40%; /* Take 40% of the container width */
+                padding: 20px;
+                box-sizing: border-box;
+                background-color: #f9f9f9;
+                border: 1px solid #ddd;
             }
         }
 
@@ -130,12 +137,83 @@
                             <input type="text" id="email-address" required>
                         </div>
                         <div class="form-group">
-                            <label>Địa chỉ chi tiết <span>*</span></label>
-                            <input for="shippingAddress" type="text" name="shippingAddress" id="shipping-address"
+                            <label for="city">Tỉnh thành</label>
+                            <select id="city" required>
+                                <option value="" selected>Chọn tỉnh thành</option>
+                            </select>
+                            <label for="district">Tỉnh thành</label>
+                            <select id="district" required>
+                                <option value="" selected>Vui lòng chọn tỉnh thành</option>
+                            </select>
+                            <label for="ward">Tỉnh thành</label>
+                            <select id="ward" required>
+                                <option value="" selected>Vui lòng chọn quận huyện</option>
+                            </select>
+                            <label for="shipping-address">Địa chỉ chi tiết <span>*</span></label>
+                            <input class="form-group" type="text" name="shippingAddress" id="shipping-address"
                                    required>
-                        </div>
-                    </div>
 
+                            <input type="hidden" id="formatted-shipping-address" name="formattedShippingAddress">
+
+                        </div>
+
+                    </div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+                            referrerpolicy="no-referrer"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+                    <script>
+                        const host = "https://provinces.open-api.vn/api/";
+                        var callAPI = (api) => {
+                            return axios.get(api)
+                                .then((response) => {
+                                    renderData(response.data, "city");
+                                });
+                        }
+                        callAPI('https://provinces.open-api.vn/api/?depth=1');
+                        var callApiDistrict = (api) => {
+                            return axios.get(api)
+                                .then((response) => {
+                                    renderData(response.data.districts, "district");
+                                });
+                        }
+                        var callApiWard = (api) => {
+                            return axios.get(api)
+                                .then((response) => {
+                                    renderData(response.data.wards, "ward");
+                                });
+                        }
+
+                        var renderData = (array, select) => {
+                            let row = ' <option disable value="">Chọn</option>';
+                            array.forEach(element => {
+                                row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`
+                            });
+                            document.querySelector("#" + select).innerHTML = row
+                        }
+
+                        $("#city").change(() => {
+                            callApiDistrict(host + "p/" + $("#city").find(':selected').data('id') + "?depth=2");
+                            printResult();
+                        });
+                        $("#district").change(() => {
+                            callApiWard(host + "d/" + $("#district").find(':selected').data('id') + "?depth=2");
+                            printResult();
+                        });
+                        $("#ward").change(() => {
+                            printResult();
+                        })
+
+                        var printResult = () => {
+                            if ($("#district").find(':selected').data('id') != "" && $("#city").find(':selected').data('id') != "" &&
+                                $("#ward").find(':selected').data('id') != "") {
+                                let result = $("#city option:selected").text() +
+                                    " | " + $("#district option:selected").text() + " | " +
+                                    $("#ward option:selected").text();
+                                $("#result").text(result)
+                            }
+
+                        }
+                    </script>
                     <!-- Order Summary Section -->
                     <div class="order-summary">
                         <h5 class="title mb--20">Đơn hàng của bạn</h5>
@@ -146,6 +224,7 @@
                                     <th scope="col">Sản phẩm</th>
                                     <th scope="col">Đơn giá</th>
                                     <th scope="col">Số lượng</th>
+                                    <th scope="col">Khối lượng</th>
                                     <th scope="col">Thành tiền</th>
                                 </tr>
                                 </thead>
@@ -163,6 +242,7 @@
                                     </td>
                                     <td th:text="${item.price}"></td>
                                     <td th:text="${item.quantity}"></td>
+                                    <td th:text="${item.getProductId().getWeight()}"></td>
                                     <td th:text="${item.price * item.quantity}"></td>
                                 </tr>
                                 </tbody>
@@ -176,7 +256,7 @@
                                     <option th:each="unit : ${shippingUnits}"
                                             th:value="${unit.unitId}"
                                             th:data-fee="${unit.unitPrice}"
-                                            th:text="${unit.unitName + ' - ' + unit.unitPrice + 'đ'}">
+                                            th:text="${unit.unitName + ' - ' + unit.unitPrice + 'đ / kg'}">
                                     </option>
                                 </select>
                             </div>
@@ -225,16 +305,25 @@
                                     <span id="total-product-price" th:text="${totalPrice} + 'đ'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <h6 class="title mb-0">Tổng tiền phí vận chuyển:</h6>
-                                    <span id="total-shipping-fee">50000đ</span>
+                                    <h6 class="title mb-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Các đơn hàng có khối lượng dưới 1kg sẽ được làm tròn thành 1kg để tính phí vận chuyển.">
+                                        Tổng tiền phí vận chuyển<span class="font-weight-bold" style="color: red">(?)</span>:
+                                    </h6>
+                                    <span id="total-shipping-fee" th:text="${shippingFee}"></span>
                                 </div>
+
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Thuế (8%):</h6>
                                     <span id="total-tax-fee" th:text="${tax} + 'đ'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="title mb-0">Tổng thanh toán:</h5>
-                                    <h6 id="total-order-price" style="color: #bb2d3b;" th:text="${totalWithShipping} + 'đ'"></h6>
+                                    <h6 id="total-order-price" style="color: #bb2d3b;"
+                                        th:text="${totalWithShipping} + 'đ'"></h6>
+                                </div>
+                                <div class="order-weight" style="display: none">
+                                    <h6>Total Weight:</h6>
+                                    <span id="total-weight" th:text="${totalWeight} + ' kg'"></span>
                                 </div>
 
                             </div>
@@ -279,6 +368,10 @@
         const emailAddressInput = document.getElementById("email-address");
         const shippingAddressInput = document.getElementById("shipping-address");
 
+        const citySelect = document.getElementById("city");
+        const districtSelect = document.getElementById("district");
+        const wardSelect = document.getElementById("ward");
+
         // Thêm sự kiện submit cho form (hoặc bạn có thể thêm sự kiện riêng cho button submit)
         const checkoutButton = document.querySelector(".checkout-btn");
         checkoutButton.addEventListener("click", function (event) {
@@ -307,13 +400,34 @@
                 emailAddressInput.focus();
                 return;
             }
+// Validate city
+            if (citySelect.value === "" || citySelect.value === "Chọn") {
+                alert("Vui lòng chọn tỉnh/thành phố.");
+                citySelect.focus();
+                return;
+            }
 
+            // Validate district
+            if (districtSelect.value === "" || districtSelect.value === "Chọn") {
+                alert("Vui lòng chọn quận/huyện.");
+                districtSelect.focus();
+                return;
+            }
+
+            // Validate ward
+            if (wardSelect.value === "" || wardSelect.value === "Chọn") {
+                alert("Vui lòng chọn phường/xã.");
+                wardSelect.focus();
+                return;
+            }
             // Kiểm tra địa chỉ giao hàng
             if (shippingAddressInput.value.trim() === "") {
                 alert("Địa chỉ chi tiết không được bỏ trống.");
                 shippingAddressInput.focus();
                 return;
             }
+            const formattedAddress = ` ${shippingAddressInput.value.trim()} - ${wardSelect.value} - ${districtSelect.value} - ${citySelect.value} `;
+            document.getElementById("formatted-shipping-address").value = formattedAddress;
 
             // Nếu tất cả đều hợp lệ thì submit form
             event.target.closest("form").submit();

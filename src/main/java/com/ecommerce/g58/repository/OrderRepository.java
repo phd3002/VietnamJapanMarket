@@ -73,6 +73,16 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
                                                @Param("status") String status,
                                                Pageable pageable);
 
+    Page<Orders> findByUserId_UserIdAndShippingStatus_Status(
+            Integer userId,
+            String status,
+            Pageable pageable
+    );
+    Page<Orders> findByUserId_UserId(
+            Integer userId,
+            Pageable pageable
+    );
+
     @Query(value = "SELECT \n" +
             "    o.order_id AS 'Mã đơn hàng',\n" +
             "    CONCAT(u.first_name, ' ', u.last_name) AS full_name,\n" +
@@ -196,4 +206,5 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
 
     Orders findOrdersByOrderId(Integer orderId);
+    Orders findFirstByOrderCode(String code);
 }
