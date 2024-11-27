@@ -15,7 +15,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
     @Query("SELECT od FROM OrderDetails od WHERE od.orderId.orderId = :orderId")
     List<OrderDetails> findByOrderId(@Param("orderId") Integer orderId);
 
-    @Query(value = "SELECT \n" +
+    @Query(value = "SELECT DISTINCT \n" +
             "    o.order_id, \n" +
             "    p.product_id, \n" +
             "    p.store_id, \n" +
@@ -27,7 +27,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    (od.price * od.quantity) AS order_total_price,\n" +
             "    od.quantity,\n" +
             "    od.price AS product_price, \n" +
-            "    f.rating AS avg_rating, \n" +
+            "    AVG(f.rating) AS avg_rating, \n" +
             "    st.store_name, \n" +
             "    st.picture_url, \n" +
             "    inv.total_amount, \n" +
@@ -89,7 +89,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    FROM shipping_status\n" +
             "    GROUP BY order_id\n" +
             ") status_times ON o.order_id = status_times.order_id\n" +
-            "WHERE o.order_id = :orderId",
+            "WHERE o.order_id = :orderId\n" +
+            "GROUP BY o.order_id, p.product_id, p.store_id, p.product_name, pi.thumbnail, c.category_name, s.size_name, clr.color_name, od.price, od.quantity, st.store_name, st.picture_url, inv.total_amount, inv.shipping_fee, pay.payment_method, pay.payment_status, o.shipping_address, latest_status.status, latest_status.previous_status, o.order_code, status_times.pending_time, status_times.confirmed_time, status_times.processing_time, status_times.dispatched_time, status_times.shipping_time, status_times.failed_time, status_times.delivered_time, status_times.completed_time, status_times.cancelled_time, status_times.returned_time",
             nativeQuery = true)
     List<Object[]> getOrderDetails(@Param("orderId") Long orderId);
 
