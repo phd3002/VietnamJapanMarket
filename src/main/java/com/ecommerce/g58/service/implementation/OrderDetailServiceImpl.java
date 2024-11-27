@@ -81,9 +81,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             }
             dto.setQuantity((Integer) result[8]);
             dto.setProductTotalPrice((Integer) result[9]);
-            dto.setAvgRating((Integer) result[10]);
+//            dto.setAvgRating((Integer) result[10]);
+            if (result[10] instanceof BigDecimal) {
+                dto.setAvgRating(((BigDecimal) result[10]).intValue());
+            } else if (result[10] instanceof Integer) {
+                dto.setAvgRating((Integer) result[10]);
+            }
             dto.setStoreName((String) result[11]);
-            dto.setStoreImage((String) result[12]);  // Added
+            dto.setStoreImage((String) result[12]);
             dto.setTotalAmount((Integer) result[13]);
             dto.setShippingFee((Integer) result[14]);
             dto.setPaymentMethod((String) result[15]);

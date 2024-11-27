@@ -114,7 +114,8 @@
                         <div class="form-group col-md-6">
                             <label class="control-label">Địa Chỉ</label>
                             <input class="form-control" type="text" name="storeAddress"
-                                   th:value="${store.storeAddress.split('-')[1]}">
+                                   th:value="${store.storeAddress != null ? (store.storeAddress.contains('-') ? store.storeAddress.split('-')[1] : store.storeAddress) : ''}">
+
                         </div>
 
                         <!--                        <div class="form-group col-md-6">-->
