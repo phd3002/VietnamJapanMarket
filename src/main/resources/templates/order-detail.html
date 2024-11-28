@@ -234,9 +234,7 @@
                                                 </div>
                                                 <div class="product-right">
                                                 <span class="product-price"
-                                                      th:text="${detail.productTotalPrice}"></span>
-                                                    <span class="original-price"
-                                                          th:text="${detail.productTotalPrice}"></span><br>
+                                                      th:text="${detail.getPriceFormated()}"></span>
                                                     <span class="shop-rating"
                                                           th:text="${detail.avgRating} + ' ★'"></span>
                                                 </div>

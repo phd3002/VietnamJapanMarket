@@ -54,7 +54,7 @@
                                th:text="${wishlistItem.product.productName}"></a>
                         </td>
                         <td class="product-price" data-title="Price">
-                            <span th:text="${wishlistItem.product.price}"></span>
+                            <span th:text="${wishlistItem.product.getPriceFormated()}"></span>
                         </td>
                     </tr>
                     </tbody>
