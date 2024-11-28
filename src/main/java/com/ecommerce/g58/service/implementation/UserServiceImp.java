@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -34,8 +35,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    public UserServiceImp(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     private RoleRepository roleRepository;
