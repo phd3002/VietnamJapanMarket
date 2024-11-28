@@ -1,34 +1,62 @@
+
 @startuml
-skinparam componentStyle rectangle
 
-actor User as user
-node "Web Browser" as browser
-
-node "Spring MVC Framework" as mvc {
-    rectangle "Controller" as controller
-    rectangle "Model" as model
-    rectangle "View (Thymeleaf)" as view
+class Admin {
+    + String email
+    + String password
 }
 
-database "MySQL Database" as mysql
-cloud "Amazon S3" as s3
+class UserManagementController {
+    + String getAllUsers(int page, Model model)
+    + String editUser(Integer userId, Model model)
+    + String updateUser(Integer userId, String roleId, String username, ...)
+}
 
-' Connections
-user --> browser : HTTP Requests
-browser --> controller : Sends Requests
-controller --> model : Invokes Business Logic
-model --> mysql : Reads/Writes Data
-model --> s3 : Stores/Retrieves Files
-model --> view : Passes Data
-view --> browser : Renders Response
+class UserService {
+    + Page<Users> getAllUsers(Pageable pageable)
+    + Users getUserById(Integer userId)
+    + void updateUser(Users user)
+}
 
-' Technologies
-note bottom of view
-Thymeleaf (UI Rendering)
-end note
+class RoleService {
+    + List<Roles> getAllRoles()
+    + Roles getRoleById(Integer roleId)
+}
 
-note bottom of mvc
-Spring Boot (Core Framework)
-end note
+class UserRepository {
+    + Page<Users> findAll(Pageable pageable)
+    + Optional<Users> findById(Integer userId)
+    + Users save(Users user)
+}
+
+class RoleRepository {
+    + List<Roles> findAll()
+    + Optional<Roles> findByRoleId(Integer roleId)
+}
+
+class Users {
+    - Integer userId
+    - String username
+    - String email
+    - String password
+    - String firstName
+    - String lastName
+    - String phoneNumber
+    - LocalDateTime createdAt
+    - String status
+    * Roles roleId
+}
+
+class Roles {
+    - Integer roleId
+    - String roleName
+}
+
+Admin --> UserManagementController : Uses
+UserManagementController --> UserService : Uses
+UserManagementController --> RoleService : Uses
+UserService --> UserRepository : Uses
+RoleService --> RoleRepository : Uses
+Users --> Roles : roleId (ManyToOne)
 
 @enduml
