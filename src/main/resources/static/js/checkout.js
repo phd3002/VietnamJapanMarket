@@ -54,13 +54,22 @@ document.querySelectorAll('.payment-btn').forEach(function (button) {
 });
 
 // Update the total shipping fee and total order price when the shipping method is changed
+// Function to round to the nearest multiple (e.g., 1000 or 100)
+function roundToNearest(value, multiple) {
+    return Math.round(value / multiple) * multiple;
+}
+
+// Update the total shipping fee and total order price when the shipping method is changed
 document.getElementById("shipping-method").addEventListener("change", function () {
     const selectedOption = this.options[this.selectedIndex];
     const shippingFeePerKg = parseFloat(selectedOption.getAttribute("data-fee")); // Fee per kg
     const totalWeight = parseFloat(document.getElementById("total-weight").textContent); // Total cart weight
 
     // Calculate total shipping fee
-    const shippingFee = shippingFeePerKg * totalWeight;
+    let shippingFee = shippingFeePerKg * totalWeight;
+
+    // Round the shipping fee to the nearest thousand
+    shippingFee = roundToNearest(shippingFee, 1000); // Adjust `1000` for nearest rounding (e.g., 100 or 10)
 
     // Get the total product price
     const totalProductPrice = parseFloat(document.getElementById("total-product-price").textContent.replace(/,/g, ''));

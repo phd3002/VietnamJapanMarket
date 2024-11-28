@@ -69,7 +69,7 @@
                                        th:text="${item.productId.productName}">Product Name</a>
                                 </td>
                                 <td class="product-price" data-title="Price">
-                                    <span th:text="${item.price}">Price</span>
+                                    <span th:text="${item.getPriceFormated()}">Price</span>
                                 </td>
                                 <td class="product-quantity" data-title="Qty">
                                     <form action="/update_cart_quantity" method="post">
@@ -82,7 +82,7 @@
                                     </form>
                                 </td>
                                 <td class="product-subtotal" data-title="Subtotal">
-                                    <span th:text="${item.price * item.quantity}">Tổng</span>
+                                    <span th:text="${item.getTotalPriceFormated()}">Tổng</span>
                                 </td>
                             </tr>
                             </tbody>

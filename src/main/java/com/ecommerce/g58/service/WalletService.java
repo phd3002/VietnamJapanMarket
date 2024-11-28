@@ -21,5 +21,5 @@ public interface WalletService {
 
     void createWalletForUser(Users userId, long initialBalance);
 
-//    void addToWalletForLogistics( Long amount, int orderId);
+    void recharge(Integer amount);
 }
