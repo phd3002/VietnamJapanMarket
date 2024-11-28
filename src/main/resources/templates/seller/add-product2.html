@@ -270,7 +270,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Kích thước</label>
+                                <label class="control-label">Loại</label>
                                 <select class="form-control" th:field="*{size.sizeId}" required>
                                     <option value="" disabled selected>-- Chọn kích thước --</option>
                                     <option th:each="size : ${sizes}" th:value="${size.sizeId}"
