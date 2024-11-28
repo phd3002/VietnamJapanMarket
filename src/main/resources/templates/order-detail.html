@@ -235,10 +235,8 @@
                                                 <div class="product-right">
                                                 <span class="product-price"
                                                       th:text="${detail.productTotalPrice}"></span>
-                                                    <span class="original-price"
-                                                          th:text="${detail.productTotalPrice}"></span><br>
                                                     <span class="shop-rating"
-                                                          th:text="${detail.avgRating} + ' ★'"></span>
+                                                          th:text="${detail.avgRating != null} ? (detail.avgRating + ' ★') : 'Chưa có đánh giá'"></span>
                                                 </div>
                                             </div>
                                         </a>
@@ -270,10 +268,6 @@
                                             <span class="summary-label total">Còn lại</span>
                                             <span th:text="${remaining_balance}">0</span>
                                         </div>
-                                    </div>
-                                    <div class="payment-method">
-                                        <span class="summary-label">Phương thức thanh toán: </span>
-                                        <span th:text="${paymentMethod}"></span>
                                     </div>
                                 </div>
                             </div>
