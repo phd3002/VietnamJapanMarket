@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
+
 @Entity
 @Data
 @Builder
@@ -67,4 +69,8 @@ public class Orders {
 
     @Column(name = "order_code")
     private String orderCode;
+
+    public String getPriceFormated() {
+        return formatCurrency(BigDecimal.valueOf(totalPrice));
+    }
 }

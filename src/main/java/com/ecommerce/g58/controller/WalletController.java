@@ -5,6 +5,7 @@ import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
 import com.ecommerce.g58.service.implementation.ProfileService;
+import com.ecommerce.g58.utils.FormatVND;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class WalletController {
 
         // lấy số dư ví của user và thêm vào model
         long walletBalance = walletService.getUserWalletBalance(user.getUserId());
-        model.addAttribute("balance", walletBalance);
+        model.addAttribute("balance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
 
         // lấy lịch sử giao dịch của user và thêm vào model
         List<WalletDTO> walletTransactions = walletService.getTransactionsForUserId(user.getUserId());

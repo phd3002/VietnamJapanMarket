@@ -3,11 +3,9 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.PaymentMethod;
 import com.ecommerce.g58.repository.InvoiceRepository;
-import com.ecommerce.g58.service.CartItemService;
-import com.ecommerce.g58.service.CartService;
-import com.ecommerce.g58.service.OrderService;
-import com.ecommerce.g58.service.ShippingUnitService;
+import com.ecommerce.g58.service.*;
 import com.ecommerce.g58.service.implementation.VNPayService;
+import com.ecommerce.g58.utils.FormatVND;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +34,16 @@ public class VNPayController {
     @Autowired
     private VNPayService vnPayService;
     @Autowired
+    private WalletService walletService;
+    @Autowired
     private ShippingUnitService shippingUnitService;
     @Autowired
     private InvoiceRepository invoiceRepository;
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private CartItemService cartItemService;
@@ -94,9 +96,8 @@ public class VNPayController {
 
     @GetMapping("/vnpay-payment")
     public String vnpayPaymentReturn(HttpServletRequest request, Model model, HttpSession session) {
-        System.out.println("vnpayPaymentReturn called");
         int paymentStatus = vnPayService.orderReturn(request);
-        System.out.println("Payment status: " + paymentStatus);
+
         String orderInfo = request.getParameter("vnp_OrderInfo");
         String paymentTime = request.getParameter("vnp_PayDate");
         String transactionId = request.getParameter("vnp_TransactionNo");
@@ -167,7 +168,7 @@ public class VNPayController {
                 invoice.setOrderId(newOrder);
                 invoiceRepository.save(invoice);
                 cartItemService.removeCartItemsByIds(cartItemIds);
-                model.addAttribute("totalPrice", invoice.getDeposit());
+                model.addAttribute("totalPrice", FormatVND.formatCurrency(invoice.getDeposit()));
                 return "checkout-complete-vnpay";
             } catch (Exception e) {
                 e.printStackTrace();
@@ -179,6 +180,58 @@ public class VNPayController {
             return "homepage";
         }
     }
+
+    @GetMapping("/vnpay-recharge")
+    public String rechargeWallet(@RequestParam("recharge-amount") int rechargeAmount,
+                                 HttpServletRequest request, HttpServletResponse httpServletResponse) {
+
+        String serverPath;
+        String serverHost = request.getHeader("X-Forwarded-Host");
+        if (!StringUtils.isEmpty(serverHost)) {
+            serverPath = "https://" + serverHost;
+            System.out.println("Using X-Forwarded-Host: " + serverHost);
+        } else {
+            String urlFixed = String.valueOf(request.getRequestURL());
+            serverPath = urlFixed.replace(request.getRequestURI(), "");
+            System.out.println("Using request URL: " + urlFixed);
+        }
+
+        String vnpayUrl = vnPayService.recharge(rechargeAmount, "orderInfo", serverPath);
+        System.out.println("VNPay URL created: " + vnpayUrl);
+
+        httpServletResponse.setHeader("Location", vnpayUrl);
+        httpServletResponse.setStatus(302);
+        System.out.println("Redirecting to VNPay URL");
+
+        return null;
+
+    }
+
+    @GetMapping("/vnpay-recharge-return")
+    public String rechargeWalletReturn(HttpServletRequest request,  Model model) {
+        int paymentStatus = vnPayService.orderReturn(request);
+
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+        String paymentTime = request.getParameter("vnp_PayDate");
+        String transactionId = request.getParameter("vnp_TransactionNo");
+        int rechargeAmount = Integer.parseInt(request.getParameter("vnp_Amount")) / 100;
+
+        model.addAttribute("orderId", orderInfo);
+        model.addAttribute("rechargeAmount", FormatVND.formatCurrency(BigDecimal.valueOf(rechargeAmount)));
+        model.addAttribute("paymentTime", paymentTime);
+        model.addAttribute("transactionId", transactionId);
+        System.out.println("ok");
+        if (paymentStatus == 1) {
+            walletService.recharge(rechargeAmount);
+            model.addAttribute("message", "Recharge successful!");
+            return "recharge-complete";
+        } else {
+            System.out.println("Nạp nok");
+            model.addAttribute("errorMessage", "Nạp tiền thất bại.");
+            return "redirect:/wallet";
+        }
+    }
+
 
     @Data
     @Builder

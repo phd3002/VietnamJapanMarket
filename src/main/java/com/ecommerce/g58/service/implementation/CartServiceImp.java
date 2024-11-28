@@ -1,11 +1,9 @@
 package com.ecommerce.g58.service.implementation;
 
+import com.ecommerce.g58.dto.OrderDetailDTO;
 import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.entity.*;
-import com.ecommerce.g58.repository.CartItemRepository;
-import com.ecommerce.g58.repository.CartRepository;
-import com.ecommerce.g58.repository.ProductRepository;
-import com.ecommerce.g58.repository.ProductVariationRepository;
+import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +21,12 @@ public class CartServiceImp implements CartService {
 
     @Autowired
     private CartRepository cartRepository;
+
+   @Autowired
+    private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Autowired
     private CartItemRepository cartItemRepository;
@@ -170,6 +174,41 @@ public class CartServiceImp implements CartService {
         }
         logger.info("Successfully restored item quantities for user ID: {}", userId);
     }
+
+    @Override
+    public void restoreItemQuantitiesToStock(Integer userId, Integer orderId) {
+        // Find the order by ID
+        Orders orders = orderRepository.findOrdersByOrderId(orderId);
+
+        if (orders == null) {
+            throw new IllegalArgumentException("Order with ID " + orderId + " not found.");
+        }
+
+        // Retrieve order details for the given order
+        List<OrderDetails> details = orderDetailRepository.findByOrderId(orderId);
+
+        if (details.isEmpty()) {
+            throw new IllegalArgumentException("No order details found for Order ID " + orderId);
+        }
+
+        for (OrderDetails detail : details) {
+            ProductVariation variation = detail.getVariationId(); // Get the product variation
+            int quantityToRestore = detail.getQuantity(); // Get the quantity from the order details
+
+            if (variation != null) {
+                // Update the stock of the product variation
+                int updatedStock = variation.getStock() + quantityToRestore;
+                variation.setStock(updatedStock);
+                productVariationRepository.save(variation); // Save the updated variation
+            } else {
+                throw new IllegalArgumentException("Product variation not found for order detail with ID " + detail.getOrderDetailId());
+            }
+        }
+
+        // Optionally: Log the restoration
+        logger.info("Restored item quantities to stock for Order ID {} by User ID {}", orderId, userId);
+    }
+
 
     @Override
     public void clearCart(Integer userId) {

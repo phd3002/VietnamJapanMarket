@@ -7,6 +7,7 @@ import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.Reason;
 import com.ecommerce.g58.enums.TransactionType;
 import com.ecommerce.g58.repository.*;
+import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.NotificationService;
 import com.ecommerce.g58.entity.Feedback;
 import com.ecommerce.g58.repository.*;
@@ -38,6 +39,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Autowired
     WalletRepository walletRepository;
+    @Autowired
+    CartService cartService;
     @Autowired
     NotificationService notificationService;
     @Autowired
@@ -304,6 +307,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
 
                 transactionRepository.save(userTransactions);
+
+                cartService.restoreItemQuantitiesToStock(order.getUserId().getUserId(), orderId);
             }
             return true;
         } else {

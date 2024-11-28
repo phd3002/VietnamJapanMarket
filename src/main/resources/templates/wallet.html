@@ -28,6 +28,9 @@
                         </aside>
                     </div>
                     <!-- Dashboard Content -->
+                    <div th:if="${errorMessage}" class="error-message">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
                     <div class="col-xl-9 col-md-8">
                         <div class="tab-content">
                             <!-- Wallet Tab -->
@@ -38,7 +41,7 @@
                                         <div class="col-md-6">
                                             <p style="margin: 0px">Số dư hiện tại:
                                             <h4 style="margin: 0px" id="wallet-balance"
-                                                th:text="${balance ?: 0} + ' VND'"></h4>
+                                                th:text="${balance ?: 0}"></h4>
                                         </div>
                                         <div class="col-md-6"
                                              style="text-align: right; color: #007b01; font-size: 40px">
@@ -111,15 +114,12 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Nạp Tiền</h2>
-            <form id="depositForm">
-                <label for="bank-name">Tên Ngân Hàng:</label>
-                <input type="text" id="bank-name" name="bank-name" required><br><br>
-                <label for="account-number">Số Tài Khoản:</label>
-                <input type="text" id="account-number" name="account-number" required><br><br>
-                <label for="amount">Số Tiền Nạp:</label>
-                <input type="number" id="amount" name="amount" required><br><br>
+            <form method="GET" action="/vnpay-recharge">
+                <label for="recharge-amount">Số Tiền Nạp:</label>
+                <input type="number" id="recharge-amount" name="recharge-amount" required step="10000"><br><br>
                 <button type="submit">Xác nhận</button>
             </form>
+
         </div>
     </div>
 
@@ -199,34 +199,6 @@
             .then(message => {
                 alert(message);
                 document.getElementById("withdrawModal").style.display = "none";
-                location.reload();
-            })
-            .catch(error => console.error("Error:", error));
-    };
-
-    // Gửi yêu cầu nạp tiền
-    document.getElementById("depositForm").onsubmit = function (event) {
-        event.preventDefault();
-        const amount = document.getElementById("amount").value;
-        const bankName = document.getElementById("bank-name").value;
-        const accountNumber = document.getElementById("account-number").value;
-
-        fetch("/wallet/deposit", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-                userId: userId,
-                amount: amount,
-                bankName: bankName,
-                accountNumber: accountNumber
-            })
-        })
-            .then(response => response.text())
-            .then(message => {
-                alert(message);
-                document.getElementById("depositModal").style.display = "none";
                 location.reload();
             })
             .catch(error => console.error("Error:", error));

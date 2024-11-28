@@ -32,6 +32,6 @@ public interface CartService {
     void subtractItemQuantitiesFromStock(Integer userId); // tru so luong mon hang trong kho
 
     void restoreItemQuantitiesToStock(Integer userId); // phuc hoi so luong mon hang trong kho
-
+    void restoreItemQuantitiesToStock(Integer userId, Integer orderId);
     void clearCart(Integer userId);
 }

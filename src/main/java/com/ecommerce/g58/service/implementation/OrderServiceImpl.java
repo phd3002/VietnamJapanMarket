@@ -217,6 +217,23 @@ public class OrderServiceImpl implements OrderService {
                     sellerTransactions.setDescription("Nhận " + invoice.getRemainingBalance() + " từ đơn hàng " + order.getOrderCode() + " giao thành công");
                     transactionRepository.save(sellerTransactions);
 
+
+                    Transactions logisticTransactions = new Transactions();
+                    logisticTransactions.setCreatedAt(LocalDateTime.now());
+                    logisticTransactions.setToWalletId(logisticWallet.get());
+                    logisticTransactions.setAmount(invoice.getRemainingBalance().abs().longValue());
+                    logisticTransactions.setTransactionType("Nhận tiền hàng");
+                    logisticTransactions.setDescription("Nhận " + invoice.getRemainingBalance() + " từ khách hàng ");
+                    transactionRepository.save(logisticTransactions);
+
+                    Transactions logisticTransactions2 = new Transactions();
+                    logisticTransactions2.setCreatedAt(LocalDateTime.now());
+                    logisticTransactions2.setFromWalletId(sellWallet.get());
+                    logisticTransactions2.setAmount(invoice.getRemainingBalance().abs().longValue());
+                    logisticTransactions2.setTransactionType("Trả tiền hàng");
+                    logisticTransactions2.setDescription("Trả " + invoice.getRemainingBalance() + " cho seller của đơn hàng  "+ order.getOrderCode());
+                    transactionRepository.save(logisticTransactions);
+
                     // Tạo thông báo
                     createNotification(sellWallet.get().getUserId(), "Đơn hàng giao thành công",
                             "Đơn hàng " + order.getOrderCode() + " đã giao thành công. Số tiền nhận: " + invoice.getRemainingBalance(),
