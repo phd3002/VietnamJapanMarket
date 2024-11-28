@@ -213,8 +213,8 @@ public class UserController {
                 model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
                 return "sign-in";
             }
-            System.out.println(email);
-            System.out.println(password);
+//            System.out.println(email);
+//            System.out.println(password);
             // Xác thực người dùng bằng AuthenticationManager
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());

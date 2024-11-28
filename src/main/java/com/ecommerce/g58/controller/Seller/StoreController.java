@@ -53,7 +53,7 @@ public class StoreController {
         List<Countries> countries = countryService.getAllCountries();
         if (storeOwner.isPresent()) {
             model.addAttribute("store", storeOwner.get());
-            System.out.println(storeOwner.get().getDistrict());
+//            System.out.println(storeOwner.get().getDistrict());
             model.addAttribute("countries", countries);
         } else {
             model.addAttribute("error", "Store information not found.");

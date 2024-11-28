@@ -302,7 +302,7 @@
                             <div class="order-price">
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Tổng tiền hàng:</h6>
-                                    <span id="total-product-price" th:text="${totalPrice} + 'đ'"></span>
+                                    <span id="total-product-price" th:text="${totalPrice} + ''"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -314,12 +314,12 @@
 
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Thuế (8%):</h6>
-                                    <span id="total-tax-fee" th:text="${tax} + 'đ'"></span>
+                                    <span id="total-tax-fee" th:text="${tax} + ''"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="title mb-0">Tổng thanh toán:</h5>
                                     <h6 id="total-order-price" style="color: #bb2d3b;"
-                                        th:text="${totalWithShipping} + 'đ'"></h6>
+                                        th:text="${totalWithShipping} + 'VND'"></h6>
                                 </div>
                                 <div class="order-weight" style="display: none">
                                     <h6>Total Weight:</h6>
