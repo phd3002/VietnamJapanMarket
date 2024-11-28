@@ -181,7 +181,7 @@ public class ProductServiceImp implements ProductService {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new SecurityException("User not authenticated");
         }
-        System.out.println(authentication.getName());
+//        System.out.println(authentication.getName());
         Users owner = userRepository.findByEmail(authentication.getName());
         Optional<Stores> storeOwner = storeRepository.findByOwnerId(owner);
         return productRepository.findByStoreId(storeOwner.get(), pageable);

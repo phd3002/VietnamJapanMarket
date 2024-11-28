@@ -112,7 +112,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "        SUM(od.quantity * od.price) as subtotal,\n" +
             "        iv.shipping_fee,\n" +
             "        iv.tax,\n" +
-            "        SUM(od.quantity * od.price * (1 + iv.tax/100)) + iv.shipping_fee as total_price\n" +
+            "        SUM(od.quantity * od.price + (iv.tax)) + iv.shipping_fee as total_price\n" +
             "    FROM orders o\n" +
             "    LEFT JOIN order_details od ON o.order_id = od.order_id\n" +
             "    LEFT JOIN invoice iv ON iv.order_id = o.order_id\n" +
@@ -137,7 +137,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    (od.quantity * od.price) AS product_price,\n" +
             "    iv.shipping_fee,\n" +
             "    iv.tax,\n" +
-            "    pm.payment_method,\n" +
+            "    o.payment_method,\n" +
             "    ot.total_price AS total_order_price\n" +
             "FROM orders o\n" +
             "LEFT JOIN users u ON o.user_id = u.user_id\n" +
@@ -148,7 +148,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "LEFT JOIN size sz ON sz.size_id = pv.size_id\n" +
             "LEFT JOIN stores s ON p.store_id = s.store_id\n" +
             "LEFT JOIN invoice iv ON iv.order_id = o.order_id\n" +
-            "LEFT JOIN payment pm ON pm.order_id = o.order_id\n" +
+//            "LEFT JOIN payment pm ON pm.order_id = o.order_id\n" +
             "LEFT JOIN order_shipping os ON os.order_id = o.order_id\n" +
             "LEFT JOIN order_total ot ON ot.order_id = o.order_id\n" +
             "WHERE o.order_id = :orderId",

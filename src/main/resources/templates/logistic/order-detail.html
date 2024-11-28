@@ -134,12 +134,12 @@
                                             <td class="text-end" th:text="${order.productName}"></td>
                                             <td class="text-end" th:text="${order.productType}"></td>
                                             <td class="text-end" th:text="${order.quantity}"></td>
-                                            <td class="text-end" th:text="${order.productPrice}"></td>
-                                            <td class="text-end" th:text="${order.totalPrice}"></td>
+                                            <td class="text-end" th:text="${order.getFormattedProductPrice()}"></td>
+                                            <td class="text-end" th:text="${order.getFormattedTotalPrice()}"></td>
                                         </tr>
                                         <tr>
                                             <td colspan="4" class="text-lg-right">Cộng tiền thuế GTGT:</td>
-                                            <td class="text-end" th:text="'8%'"></td>
+                                            <td class="text-end" th:text="${tax} +''"></td>
                                         </tr>
                                         <tr>
                                             <td colspan="4" class="text-lg-right">Phí vận chuyển:</td>
@@ -147,8 +147,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="4" class="text-lg-right"><b>Phương thức thanh toán:</b></td>
-                                            <td class="text-end"><b th:text="${paymentMethod}"></b></td>
-                                        </tr>
+                                            <td class="text-end"><b th:text="${paymentMethod == 1 ? 'Thanh toán bằng VNPay' : 'Thanh toán bằng ví điện tử'}"></b></td>                                        </tr>
                                         <tr>
                                             <td colspan="4" class="text-lg-right"><b>Tổng cộng tiền thanh toán (áp dụng
                                                 mã giảm giá):</b></td>

@@ -122,7 +122,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "    CONCAT(u.first_name, ' ', u.last_name) AS customerName, \n" +
             "    GROUP_CONCAT(DISTINCT p.product_name SEPARATOR ', ') AS productNames, \n" +
             "    SUM(od.quantity) AS totalProducts, \n" +
-            "    (o.total_price + COALESCE(MAX(i.shipping_fee), 0)) AS order_price,\n" +
+//            "    (o.total_price + COALESCE(MAX(i.shipping_fee), 0) + i.tax) AS order_price,\n" +
+            "    (o.total_price) AS order_price,\n" +
             "    (SELECT ss.status \n" +
             "     FROM shipping_status ss \n" +
             "     WHERE ss.order_id = o.order_id \n" +
@@ -164,7 +165,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "    CONCAT(u.first_name, ' ', u.last_name) AS customerName, \n" +
             "    GROUP_CONCAT(DISTINCT p.product_name SEPARATOR ', ') AS productNames, \n" +
             "    SUM(od.quantity) AS totalProducts, \n" +
-            "    (o.total_price + COALESCE(MAX(i.shipping_fee), 0)) AS order_price,\n" +
+            "    (o.total_price) AS order_price,\n" +
             "    (SELECT ss.status \n" +
             "     FROM shipping_status ss \n" +
             "     WHERE ss.order_id = o.order_id \n" +

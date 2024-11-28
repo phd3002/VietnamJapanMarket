@@ -75,7 +75,7 @@ public class ProductManagementController {
         });
     }
 
-    @GetMapping("/seller-products/")
+    @GetMapping("/seller-products")
     public String getProductsByStore(Model model, @RequestParam(defaultValue = "0") int page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // Ensure the user is authenticated

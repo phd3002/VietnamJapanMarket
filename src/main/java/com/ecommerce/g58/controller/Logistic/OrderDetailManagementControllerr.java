@@ -2,12 +2,14 @@ package com.ecommerce.g58.controller.Logistic;
 
 import com.ecommerce.g58.dto.OrderDetailManagerDTO;
 import com.ecommerce.g58.service.OrderDetailService;
+import com.ecommerce.g58.utils.FormatVND;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -33,8 +35,8 @@ public class OrderDetailManagementControllerr {
             model.addAttribute("customerAddress", firstDetail.getCustomerAddress());
             model.addAttribute("customerPhone", firstDetail.getCustomerPhone());
             model.addAttribute("orderDate", firstDetail.getOrderDate());
-            model.addAttribute("shippingFee", firstDetail.getShippingFee());
-            model.addAttribute("tax", firstDetail.getTax());
+            model.addAttribute("shippingFee", FormatVND.formatCurrency(BigDecimal.valueOf(firstDetail.getShippingFee())));
+            model.addAttribute("tax", firstDetail.getFormattedTax());
             model.addAttribute("paymentMethod", firstDetail.getPaymentMethod());
             model.addAttribute("totalAmount", firstDetail.getTotalAmount());
         }

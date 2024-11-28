@@ -236,8 +236,7 @@
                                                 <span class="product-price"
                                                       th:text="${detail.productTotalPrice}"></span>
                                                     <span class="shop-rating"
-                                                          th:text="${detail.avgRating != null} ? (detail.avgRating + ' ★') : 'Chưa có đánh giá'"></span>
-                                                </div>
+                                                          th:text="${detail.avgRating != null ? detail.avgRating + ' ★' : 'Chưa có đánh giá'}"></span>                                                </div>
                                             </div>
                                         </a>
                                     </div>
