@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface ShippingStatusRepository extends JpaRepository<ShippingStatus, Integer> {
@@ -21,4 +23,8 @@ public interface ShippingStatusRepository extends JpaRepository<ShippingStatus, 
     ShippingStatus findShippingStatusByOrderId_OrderId(Integer id);
     ShippingStatus findByOrderId(Integer orderId);
     ShippingStatus findByOrderIdOrderId(Integer orderId);
+
+    @Query("SELECT s FROM ShippingStatus s WHERE s.status = :status AND s.updatedAt <= :date")
+    List<ShippingStatus> findByStatusAndUpdatedAtBefore(String status, LocalDateTime date);
+
 }

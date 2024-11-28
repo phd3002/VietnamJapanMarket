@@ -56,6 +56,9 @@
                                         <option value="Returned" th:selected="${status == 'Returned'}">
                                             Trả hàng/Hoàn tiền nào
                                         </option>
+                                        <option value="Returned" th:selected="${status == 'Failed'}">
+                                            Thất bại
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="axil-dashboard-order" th:if="orders != null">
@@ -77,7 +80,7 @@
                                                 <td th:text="${order.orderDate}"></td>
                                                 <td th:text="${order.status}"></td>
                                                 <td th:text="${order.totalQuantity}"></td>
-                                                <td th:text="${order.totalPrice}"></td>
+                                                <td th:text="${order.getFormattedPrice()}"></td>
                                                 <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"
                                                        class="axil-btn view-btn">Xem</a></td>
                                             </tr>

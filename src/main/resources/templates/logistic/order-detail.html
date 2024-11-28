@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" th:href="@{/seller/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/logistic/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -31,7 +31,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/sign-in"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -39,29 +39,17 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" href="store-info-manager.html"><i class='app-menu__icon bx bx-info-square'></i><span
-                class="app-menu__label">Thông tin cửa hàng</span></a></li>
-        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item" href="/logistic/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item" href="product-manager.html"><i
-                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
-        </li>
-        <li><a class="app-menu__item active" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item active" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item" href="feedback-manager.html"><i
-                class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
-        </li>
-        <li><a class="app-menu__item" href="shipping-manager.html"><i
-                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
-        </li>
-        <li><a class="app-menu__item" href="income-manager.html"><i
-                class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
-        </li>
+        <li><a class="app-menu__item" href="income-manager.html"><i class='app-menu__icon bx bx-dollar'></i><span
+                class="app-menu__label">Quản lý doanh thu</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
@@ -151,7 +139,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="4" class="text-lg-right">Cộng tiền thuế GTGT:</td>
-                                            <td class="text-end" th:text="${tax} +'%'"></td>
+                                            <td class="text-end" th:text="'8%'"></td>
                                         </tr>
                                         <tr>
                                             <td colspan="4" class="text-lg-right">Phí vận chuyển:</td>
@@ -179,11 +167,11 @@
 </main>
 
 <!-- Essential javascripts for application to work-->
-<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
-<script th:src="@{/seller/js/popper.min.js}"></script>
-<script th:src="@{/seller/js/bootstrap.min.js}"></script>
-<script th:src="@{/seller/js/main.js}"></script>
+<script th:src="@{/logistic/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/logistic/js/popper.min.js}"></script>
+<script th:src="@{/logistic/js/bootstrap.min.js}"></script>
+<script th:src="@{/logistic/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top-->
-<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+<script th:src="@{/logistic/js/plugins/pace.min.js}"></script>
 </body>
 </html>

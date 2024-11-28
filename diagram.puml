@@ -1,0 +1,62 @@
+
+@startuml
+
+class Admin {
+    + String email
+    + String password
+}
+
+class UserManagementController {
+    + String getAllUsers(int page, Model model)
+    + String editUser(Integer userId, Model model)
+    + String updateUser(Integer userId, String roleId, String username, ...)
+}
+
+class UserService {
+    + Page<Users> getAllUsers(Pageable pageable)
+    + Users getUserById(Integer userId)
+    + void updateUser(Users user)
+}
+
+class RoleService {
+    + List<Roles> getAllRoles()
+    + Roles getRoleById(Integer roleId)
+}
+
+class UserRepository {
+    + Page<Users> findAll(Pageable pageable)
+    + Optional<Users> findById(Integer userId)
+    + Users save(Users user)
+}
+
+class RoleRepository {
+    + List<Roles> findAll()
+    + Optional<Roles> findByRoleId(Integer roleId)
+}
+
+class Users {
+    - Integer userId
+    - String username
+    - String email
+    - String password
+    - String firstName
+    - String lastName
+    - String phoneNumber
+    - LocalDateTime createdAt
+    - String status
+    * Roles roleId
+}
+
+class Roles {
+    - Integer roleId
+    - String roleName
+}
+
+Admin --> UserManagementController : Uses
+UserManagementController --> UserService : Uses
+UserManagementController --> RoleService : Uses
+UserService --> UserRepository : Uses
+RoleService --> RoleRepository : Uses
+Users --> Roles : roleId (ManyToOne)
+
+@enduml

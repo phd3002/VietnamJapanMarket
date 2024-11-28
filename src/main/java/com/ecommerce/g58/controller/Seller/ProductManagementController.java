@@ -1,11 +1,15 @@
 package com.ecommerce.g58.controller.Seller;
 
 import com.ecommerce.g58.entity.*;
+import com.ecommerce.g58.repository.StoreRepository;
+import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,6 +26,10 @@ import java.util.Optional;
 @Controller
 //@RequestMapping("/seller/seller-management")
 public class ProductManagementController {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private StoreRepository storeRepository;
     @Autowired
     private ProductService productService;
 
@@ -67,16 +75,21 @@ public class ProductManagementController {
         });
     }
 
-    @GetMapping("/seller-products/{storeId}")
-    public String getProductsByStore(@PathVariable Integer storeId, Model model, @RequestParam(defaultValue = "0") int page) {
-        Stores store = new Stores();
-        store.setStoreId(storeId);
+    @GetMapping("/seller-products/")
+    public String getProductsByStore(Model model, @RequestParam(defaultValue = "0") int page) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Ensure the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+        Users owner = userRepository.findByEmail(authentication.getName());
+        Optional<Stores> storeOwner = storeRepository.findByOwnerId(owner);
         Pageable pageable = PageRequest.of(page, 4);
-        Page<Products> productsPage = productService.getProductsByStoreId(store, pageable);
+        Page<Products> productsPage = productService.getProductsByStoreId(pageable);
         model.addAttribute("products", productsPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productsPage.getTotalPages());
-        model.addAttribute("storeId", storeId);
+        model.addAttribute("storeId", storeOwner.get().getStoreId());
         return "seller/product-manager";
     }
 
@@ -178,7 +191,7 @@ public class ProductManagementController {
             redirectAttributes.addFlashAttribute("errorMessage", "Mô tả sản phẩm không được để trống và không được vượt quá 500 ký tự và không được để trống.");
             return "redirect:/addProductForm2/" + storeId;
         }
-        if (product.getPrice() == null || product.getPrice() < 20000 || product.getPrice() > 50000000)  {
+        if (product.getPrice() == null || product.getPrice() < 20000 || product.getPrice() > 50000000) {
             redirectAttributes.addFlashAttribute("errorMessage", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000 và không được để trống.");
             return "redirect:/addProductForm2/" + storeId;
         }
@@ -244,7 +257,6 @@ public class ProductManagementController {
         redirectAttributes.addFlashAttribute("successMessage", "Thêm sản phẩm thành công!");
         return "redirect:/addProductForm2/" + storeId;
     }
-
 
 
     @GetMapping("/delete-product/{productId}")

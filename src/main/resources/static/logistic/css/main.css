@@ -3,6 +3,7 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:300,400,400i,700);
 @import url(https://fonts.googleapis.com/css?family=Niconne);
 @import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
+@import "https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Poppins:wght@400;500;600;700&display=swap";
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 :root {
   --blue: #007bff;
@@ -31,7 +32,7 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sarabun:  'Roboto', sans-serif;
+  --font-family-sarabun:  'DM Sans', sans-serif;
   --btn-fun: #4bac4d;
 }
 
@@ -13900,7 +13901,7 @@ be a descendant of the grid when it is being dragged.
 .app-sidebar__user-avatar {
   background: white;
   border-radius: .357rem;
-  width: 70px;
+  width: 150px;
   border: 3px solid white;
   margin-bottom: 10px;
 }

@@ -7,6 +7,7 @@ import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.Reason;
 import com.ecommerce.g58.enums.TransactionType;
 import com.ecommerce.g58.repository.*;
+import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.NotificationService;
 import com.ecommerce.g58.entity.Feedback;
 import com.ecommerce.g58.repository.*;
@@ -38,6 +39,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Autowired
     WalletRepository walletRepository;
+    @Autowired
+    CartService cartService;
     @Autowired
     NotificationService notificationService;
     @Autowired
@@ -81,9 +84,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             }
             dto.setQuantity((Integer) result[8]);
             dto.setProductTotalPrice((Integer) result[9]);
-            dto.setAvgRating((Integer) result[10]);
+//            dto.setAvgRating((Integer) result[10]);
+            if (result[10] instanceof BigDecimal) {
+                dto.setAvgRating(((BigDecimal) result[10]).intValue());
+            } else if (result[10] instanceof Integer) {
+                dto.setAvgRating((Integer) result[10]);
+            }
             dto.setStoreName((String) result[11]);
-            dto.setStoreImage((String) result[12]);  // Added
+            dto.setStoreImage((String) result[12]);
             dto.setTotalAmount((Integer) result[13]);
             dto.setShippingFee((Integer) result[14]);
             dto.setPaymentMethod((String) result[15]);
@@ -191,7 +199,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             dto.setStoreAddress((String) result[1]);
             dto.setStorePhone((String) result[2]);
             dto.setOrderStatus((String) result[3]);
-            dto.setTrackingNumber((String) result[4]);
+            dto.setOrderCode((String) result[4]);
 //            dto.setStatusTime((LocalDateTime) result[5]);
             if (result[5] instanceof Timestamp) {
                 Timestamp statusTimestamp = (Timestamp) result[5];
@@ -306,6 +314,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
 
                 transactionRepository.save(userTransactions);
+
+                cartService.restoreItemQuantitiesToStock(order.getUserId().getUserId(), orderId);
             }
             return true;
         } else {
@@ -324,6 +334,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         }
 
         // Truy vấn đơn hàng từ cơ sở dữ liệu
+        System.out.println(authentication.getName());
+
+        // Fetch the order and validate ownership
         Orders order = orderRepository.findOrdersByOrderId(orderId);
 
         // Kiểm tra hóa đơn liên quan đến đơn hàng

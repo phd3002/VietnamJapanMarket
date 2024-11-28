@@ -5,6 +5,7 @@ import com.ecommerce.g58.enums.PaymentMethod;
 import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.*;
 import com.ecommerce.g58.service.implementation.VNPayService;
+import com.ecommerce.g58.utils.FormatVND;
 import com.ecommerce.g58.utils.RandomOrderCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CheckoutController {
@@ -95,7 +99,7 @@ public class CheckoutController {
             Integer userId = (Integer) session.getAttribute("userId");
             if (userId != null) {
                 logger.info("Restoring item quantities for user ID: {}", userId);
-                cartService.restoreItemQuantitiesToStock(userId);
+//                cartService.restoreItemQuantitiesToStock(userId);
             }
             session.invalidate();
             logger.info("Session expired and invalidated. Redirecting to homepage.");
@@ -130,7 +134,7 @@ public class CheckoutController {
         }
 
         // Gọi hàm trừ số lượng sản phẩm trong kho khi bắt đầu quá trình thanh toán
-        cartService.subtractItemQuantitiesFromStock(userId);
+//        cartService.subtractItemQuantitiesFromStock(userId);
 
         // Lấy giỏ hàng của người dùng
         Cart userCart = cartService.getCartByUserId(userId);
@@ -144,29 +148,38 @@ public class CheckoutController {
                 .sum();
         logger.info("Total cart price calculated: {}", totalPrice);
 
+        double totalWeight = cartItems.stream()
+                .mapToDouble(item -> item.getProductId().getWeight() * item.getQuantity())
+                .sum();
+
+        totalWeight = Math.max(totalWeight, 1.0);
+        // Lấy tất cả các đơn vị vận chuyển để hiển thị trong dropdown
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        model.addAttribute("shippingUnits", shippingUnits);
         // Lấy phí vận chuyển từ bảng shipping_unit dựa trên shippingUnitId
-        long shippingFee = 0;
+        long shippingFee = (long) (shippingUnits.get(0).getUnitPrice().longValue() * totalWeight);
         if (shippingUnitId != null) {
             Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
             if (shippingUnitOpt.isPresent()) {
-                shippingFee = shippingUnitOpt.get().getShippingRevenue().longValue();
+                shippingFee = Math.round(shippingUnitOpt.get().getUnitPrice().longValue() * totalWeight);
                 model.addAttribute("selectedShippingUnit", shippingUnitOpt.get());
-                logger.info("Shipping fee retrieved for shipping unit ID {}: {}", shippingUnitId, shippingFee);
             } else {
-                logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
-                model.addAttribute("errorMessage", "Đơn vị vận chuyển không hợp lệ.");
+                shippingFee = (long) (shippingUnits.get(0).getUnitPrice().longValue() * totalWeight);
+                model.addAttribute("errorMessage", "Invalid shipping unit selected.");
             }
+
         }
 
         double taxRate = 0.08; // 8% tax rate
         long baseTotal = totalPrice + shippingFee; // Total before tax
-        long taxAmount = Math.round(baseTotal * taxRate); // Tax applied to the base total
+        long taxAmount = (long) (totalPrice * taxRate); // Tax applied to the base total
         long totalWithShipping = baseTotal + taxAmount; // Final total including tax
 
 // Debugging logs
         logger.info("Base total (price + shipping): {}", baseTotal);
         logger.info("Tax amount calculated: {}", taxAmount);
         logger.info("Total with shipping and tax: {}", totalWithShipping);
+
 
         model.addAttribute("tax", taxAmount);
         model.addAttribute("cartItems", cartItems);
@@ -175,9 +188,8 @@ public class CheckoutController {
         model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("cartItemIds", cartItemIds);
 
-        // Lấy tất cả các đơn vị vận chuyển để hiển thị trong dropdown
-        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
-        model.addAttribute("shippingUnits", shippingUnits);
+        model.addAttribute("totalWeight", totalWeight);
+
 
         // Lấy hình ảnh cho từng sản phẩm trong giỏ hàng
         Map<Integer, String> productImages = new HashMap<>();
@@ -192,7 +204,7 @@ public class CheckoutController {
 
         // Lấy số dư ví của người dùng
         long walletBalance = walletService.getUserWalletBalance(user.getUserId());
-        model.addAttribute("walletBalance", walletBalance);
+        model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
         logger.info("Wallet balance retrieved for user ID {}: {}", user.getUserId(), walletBalance);
 
         return "checkout";
@@ -200,17 +212,17 @@ public class CheckoutController {
 
     @PostMapping("/checkout")
     public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
-                                    @RequestParam("shippingAddress") String shippingAddress,
+                                    @RequestParam("formattedShippingAddress") String formattedShippingAddress,
                                     @RequestParam("cartItemIdsString") String cartItemIdsString,
                                     @RequestParam(value = "shippingUnitId") Integer shippingUnitId,
                                     @RequestParam(value = "paymentMethod", defaultValue = "WALLET") PaymentMethod paymentMethod,
-                                    @RequestParam(value = "paymentType", defaultValue = "full") String paymentType) {
+                                    @RequestParam(value = "paymentType", defaultValue = "full") String paymentType,
+                                    RedirectAttributes redirectAttributes) {
         List<Integer> cartItemIds = Arrays.stream(cartItemIdsString.replaceAll("\\[|\\]", "").split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())  // Filter out empty strings
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
-        System.out.println("cartId: " + cartItemIds);
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (principal == null) {
             logger.warn("User not authenticated. Redirecting to sign-in.");
@@ -236,15 +248,25 @@ public class CheckoutController {
         logger.info("Total cart price calculated: {}", totalPrice);
 
         // Tính phí vận chuyển dựa trên đơn vị vận chuyển được chọn
-        long shippingFee = 0;
-        Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
-        if (shippingUnitOpt.isPresent()) {
-            shippingFee = shippingUnitOpt.get().getUnitPrice().longValue();
-            logger.info("Shipping fee retrieved from ShippingUnit ID {}: {}", shippingUnitId, shippingFee);
-        } else {
-            logger.warn("Shipping unit not found for ID: {}", shippingUnitId);
-            model.addAttribute("errorMessage", "Đơn vị vận chuyển không hợp lệ.");
-            return "checkout"; // Quay lại trang checkout nếu không tìm thấy đơn vị vận chuyển
+        double totalWeight = cartItems.stream()
+                .mapToDouble(item -> item.getProductId().getWeight() * item.getQuantity())
+                .sum();
+
+        totalWeight = Math.max(totalWeight, 1.0);
+        // Lấy tất cả các đơn vị vận chuyển để hiển thị trong dropdown
+
+
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        long shippingFee = (long) (shippingUnits.get(0).getUnitPrice().longValue() * totalWeight);
+        if (shippingUnitId != null) {
+            Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
+            if (shippingUnitOpt.isPresent()) {
+                shippingFee = Math.round(shippingUnitOpt.get().getUnitPrice().longValue() * totalWeight);
+                model.addAttribute("selectedShippingUnit", shippingUnitOpt.get());
+            } else {
+                return "checkout";
+            }
+
         }
 
         // Calculate the final total based on payment type
@@ -258,6 +280,7 @@ public class CheckoutController {
             invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
             invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
             invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
+            invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
             invoice.setRemainingBalance(BigDecimal.valueOf(totalPrice - (totalPrice / 2)));
 
         } else {
@@ -265,11 +288,32 @@ public class CheckoutController {
             invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
             invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
             invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
+            invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
             invoice.setRemainingBalance(BigDecimal.valueOf(0));
         }
         logger.info("Total with shipping calculated based on payment type '{}': {}", paymentType, totalWithShipping);
 
         // Handle payment methods using PaymentMethod enum
+        for (CartItem item : cartItems) {
+            ProductVariation variation = item.getVariationId(); // Retrieve the selected ProductVariation
+            int cartQuantity = item.getQuantity();
+            int availableStock = variation.getStock(); // Stock is now validated at the variation level
+
+            if (cartQuantity > availableStock) {
+                String encodedCartItemIds = URLEncoder.encode(cartItemIdsString.replaceAll("\\[|\\]", ""), StandardCharsets.UTF_8);
+
+                logger.warn("Insufficient stock for product variation ID {}. Cart quantity: {}, Available stock: {}",
+                        variation.getVariationId(), cartQuantity, availableStock);
+                redirectAttributes.addFlashAttribute("errorMessage", "Sản phẩm \"" + variation.getProductId().getProductName() +
+                        "\" (Màu: " + variation.getColor().getColorName() + ", Kích thước: " + variation.getSize().getSizeName() +
+                        ") không đủ hàng trong kho. Vui lòng giảm số lượng hoặc xóa sản phẩm này khỏi giỏ hàng.");
+                redirectAttributes.addFlashAttribute("cartItems", cartItems);
+                return "redirect:/checkout?cartItemIds=" + encodedCartItemIds; // Return to the checkout page with an error
+            }
+        }
+        // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
+
+        cartService.subtractItemQuantitiesFromStock(userId);
         if (paymentMethod == PaymentMethod.WALLET) {
             long walletBalance = walletService.getUserWalletBalance(userId);
             logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
@@ -278,17 +322,23 @@ public class CheckoutController {
             if (walletBalance < totalWithShipping) {
                 model.addAttribute("errorMessage", "Bạn không đủ số dư để thực hiện giao dịch.");
                 model.addAttribute("totalWithShipping", totalWithShipping);
-                model.addAttribute("walletBalance", walletBalance);
+                model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
 
+
+            // **Check product stock before proceeding**
+
+            session.setAttribute("userId", userId);
+            session.setAttribute("checkoutStartTime", LocalDateTime.now());
+            logger.info("Stock quantities updated and checkout started for user ID {}.", userId);
             // Trừ tiền trong ví của người mua
             walletService.deductFromWallet(userId, totalWithShipping, paymentType);
             logger.info("Đã trừ số dư ví cho người dùng ID {}. Số tiền trừ: {}. Loại thanh toán: {}", userId, totalWithShipping, paymentType);
-
+            logger.info(formattedShippingAddress + "s");
             // Lấy thực thể Stores từ sản phẩm trong giỏ hàng
             Stores store = cartItems.get(0).getProductId().getStoreId();
 
@@ -302,16 +352,9 @@ public class CheckoutController {
                 walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping, paymentType);
                 logger.info("Đã cộng {} vào ví của chủ cửa hàng có ID {}. Loại thanh toán: {}", totalWithShipping, storeId, paymentType);
             }
-
-
-            // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
-            cartService.subtractItemQuantitiesFromStock(userId);
-            session.setAttribute("userId", userId);
-            session.setAttribute("checkoutStartTime", LocalDateTime.now());
-            logger.info("Stock quantities updated and checkout started for user ID {}.", userId);
-
             // Xác nhận và lưu đơn hàng
             order.setUserId(user);
+            order.setShippingAddress(formattedShippingAddress);
             order.setOrderDate(LocalDateTime.now());
             order.setTotalPrice(totalWithShipping);
             logger.info("Order prepared for user ID {}. Total with shipping: {}", userId, totalWithShipping);
@@ -368,7 +411,10 @@ public class CheckoutController {
             return "checkout-complete";
         } else if (paymentMethod == PaymentMethod.VNPAY) {
             session.setAttribute("userOrderOn", user);
-            session.setAttribute("addressOrderOn", shippingAddress);
+            session.setAttribute("paymentType", paymentType);
+            session.setAttribute("totalWeight", totalWeight);
+            session.setAttribute("shippingUnitId", shippingUnitId);
+            session.setAttribute("addressOrderOn", formattedShippingAddress);
             session.setAttribute("paymentMethodOrderOn", paymentMethod);
             session.setAttribute("cartItemIdsOrderOn", cartItemIds);
             model.addAttribute("totalOrderPrice", totalWithShipping);
@@ -402,8 +448,8 @@ public class CheckoutController {
         logger.info("User ID {} is canceling checkout.", userId);
 
         // Khôi phục số lượng sản phẩm trong kho cho giỏ hàng người dùng
-        cartService.restoreItemQuantitiesToStock(userId);
-        logger.info("Item quantities restored for user ID {}.", userId);
+//        cartService.restoreItemQuantitiesToStock(userId);
+//        logger.info("Item quantities restored for user ID {}.", userId);
 
         // Xóa các thuộc tính liên quan đến checkout khỏi session
         session.removeAttribute("checkoutStartTime");
@@ -442,7 +488,7 @@ public class CheckoutController {
             Integer userId = (Integer) session.getAttribute("userId");
             if (userId != null) {
                 logger.info("Session expired for user ID: {}. Restoring item quantities.", userId);
-                cartService.restoreItemQuantitiesToStock(userId);
+//                cartService.restoreItemQuantitiesToStock(userId);
                 logger.info("Items restored for user ID: {}", userId);
             } else {
                 logger.warn("User ID not found in session. Unable to restore items.");

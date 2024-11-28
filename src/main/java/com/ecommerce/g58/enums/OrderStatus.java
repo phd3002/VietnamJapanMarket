@@ -1,5 +1,8 @@
 package com.ecommerce.g58.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum OrderStatus {
     PENDING("Chờ xác nhận"),
     CONFIRMED("Đã xác nhận"),
@@ -18,7 +21,4 @@ public enum OrderStatus {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
 }

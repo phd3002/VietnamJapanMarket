@@ -27,20 +27,22 @@
 <body>
 <div class="axil-signin-area">
 
-    <!-- Start Header -->
-    <div class="signin-header">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <a href="homepage.html" class="site-logo"><img src="../static/images/logo/vj-market.png" alt="logo"></a>
-            </div>
-        </div>
-    </div>
-    <!-- End Header -->
+<!--    &lt;!&ndash; Start Header &ndash;&gt;-->
+<!--    <div class="signin-header">-->
+<!--        <div class="row align-items-center">-->
+<!--            <div class="col-md-6">-->
+<!--                <a href="/homepage" class="site-logo"><img src="../static/images/logo/vj-market.png" alt="logo"></a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; End Header &ndash;&gt;-->
 
     <div class="row">
         <div class="col-xl-4 col-lg-6">
             <div class="axil-signin-banner bg_image bg_image--10">
-                <h3 class="title">We Offer the Best Products</h3>
+                <a href="/homepage" class="site-logo"><img th:src="@{/images/logo/vj-market.png}" alt="logo"></a>
+                <br><br>
+                <h3 class="title">Chúng tôi cung cấp những sản phẩm tốt nhất</h3>
             </div>
         </div>
         <div class="col-lg-6 offset-xl-2">
@@ -59,7 +61,7 @@
 
                         <div class="form-group">
                             <label>Số điện thoại <span>*</span></label>
-                            <input type="text" class="form-control" name="storePhone" value="0123123" required>
+                            <input type="text" class="form-control" name="storePhone" required>
                         </div>
 
                         <div class="form-group">
@@ -108,12 +110,12 @@
                         <div id="japanFields" class="address-fields hidden">
                             <div class="form-group">
                                 <label>郵便番号 (Mã bưu điện)</label>
-                                <input type="text" id="jpPostalCode" name="postalCode" placeholder="XXX-XXXX" maxlength="8">
+                                <input type="text" id="jpPostalCode" name="postalCode" placeholder="XXX-XXXX" maxlength="8" required>
                             </div>
 
                             <div class="form-group">
                                 <label>都道府県 (Tỉnh)</label>
-                                <select id="jpPrefecture" name="city">
+                                <select id="jpPrefecture" name="city" required>
                                     <option value="">Chọn tỉnh</option>
                                     <option value="Tokyo">Tokyo</option>
                                     <option value="Osaka">Osaka</option>
@@ -123,7 +125,7 @@
 
                             <div class="form-group">
                                 <label>市区町村 (Thành phố/Quận)</label>
-                                <select id="jpCity" name="district">
+                                <select id="jpCity" name="district" required>
                                     <option value="">Chọn thành phố/quận</option>
                                     <option value="Shibuya">Shibuya</option>
                                     <option value="Shinjuku">Shinjuku</option>
@@ -133,7 +135,7 @@
 
                             <div class="form-group">
                                 <label>住所 (Địa chỉ chi tiết)</label>
-                                <input type="text" id="jpStoreAddress" name="storeAddress" placeholder="Số nhà, tên đường...">
+                                <input type="text" id="jpStoreAddress" name="storeAddress" placeholder="Số nhà, tên đường..." required>
                             </div>
                         </div>
 

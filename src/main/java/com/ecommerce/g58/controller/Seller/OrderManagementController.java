@@ -2,7 +2,10 @@ package com.ecommerce.g58.controller.Seller;
 
 import com.ecommerce.g58.dto.OrderManagerDTO;
 import com.ecommerce.g58.entity.ShippingStatus;
+import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.repository.StoreRepository;
+import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.OrderDetailService;
 import com.ecommerce.g58.service.OrderService;
 import com.ecommerce.g58.service.ShippingStatusService;
@@ -22,10 +25,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class OrderManagementController {
-
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private StoreRepository storeRepository;
     @Autowired
     private OrderService orderService;
     @Autowired
@@ -37,25 +44,32 @@ public class OrderManagementController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/seller/order-manager")
-    public String listOrders(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-            return "redirect:/sign-in";
-        }
-        String email = authentication.getName();
-        Users user = userService.findByEmail(email);
-        Integer userId = user.getUserId();
-        List<OrderManagerDTO> orders = orderService.getOrdersForStore(userId);
-        model.addAttribute("orderss", orders);
-        return "seller/order-manager";
-    }
+//    @GetMapping("/seller/order-manager")
+//    public String listOrders(Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+//            return "redirect:/sign-in";
+//        }
+//        String email = authentication.getName();
+//        Users user = userService.findByEmail(email);
+//        Integer userId = user.getUserId();
+//        List<OrderManagerDTO> orders = orderService.getOrdersForStore(userId);
+//        model.addAttribute("orderss", orders);
+//        return "seller/order-manager";
+//    }
 
-    @GetMapping("/seller/order-manager/{storeId}")
-    public String getOrderManagementPage(@PathVariable("storeId") Integer storeId, Model model, Principal principal) {
-        List<OrderManagerDTO> orders = orderService.getOrdersByStoreId(storeId);
+    @GetMapping("/seller/order-manager")
+    public String getOrderManagementPage( Model model, Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Ensure the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+        Users owner = userRepository.findByEmail(authentication.getName());
+        Optional<Stores> storeOwner = storeRepository.findByOwnerId(owner);
+        List<OrderManagerDTO> orders = orderService.getOrdersByStoreId(storeOwner.get().getStoreId());
         model.addAttribute("orders", orders);
-        model.addAttribute("storeId", storeId);
+        model.addAttribute("storeId", storeOwner.get().getStoreId());
         return "seller/order-manager2";
     }
 

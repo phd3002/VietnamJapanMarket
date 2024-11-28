@@ -1,16 +1,19 @@
 spring:
   main:
-    lazy-initialization: true
+    lazy-initialization: false
     log-startup-info: true
     devtools:
       add-properties: false
       remote:
         restart:
           enabled: false
+  aop:
+      proxy-target-class: true
+
   datasource:
     url: jdbc:mysql://localhost:3306/vietnam_japan_market
     username: root
-    password: 1234
+    password: 12345
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
@@ -72,3 +75,7 @@ vnpay:
   tmnCode: 41LRT5WB
   hashSecret: S3J1BIDEMYA6KYWRU82T6ZFJZO2TF6J6
   paymentUrl: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+logging:
+  level:
+    org.springframework.scheduling: DEBUG
+    com.ecommerce.g58: DEBUG

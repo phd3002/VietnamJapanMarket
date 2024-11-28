@@ -54,10 +54,22 @@ document.querySelectorAll('.payment-btn').forEach(function (button) {
 });
 
 // Update the total shipping fee and total order price when the shipping method is changed
+// Function to round to the nearest multiple (e.g., 1000 or 100)
+function roundToNearest(value, multiple) {
+    return Math.round(value / multiple) * multiple;
+}
+
+// Update the total shipping fee and total order price when the shipping method is changed
 document.getElementById("shipping-method").addEventListener("change", function () {
-    // Get the selected option and retrieve the shipping fee from its data-fee attribute
     const selectedOption = this.options[this.selectedIndex];
-    const shippingFee = parseFloat(selectedOption.getAttribute("data-fee"));
+    const shippingFeePerKg = parseFloat(selectedOption.getAttribute("data-fee")); // Fee per kg
+    const totalWeight = parseFloat(document.getElementById("total-weight").textContent); // Total cart weight
+
+    // Calculate total shipping fee
+    let shippingFee = shippingFeePerKg * totalWeight;
+
+    // Round the shipping fee to the nearest thousand
+    shippingFee = roundToNearest(shippingFee, 1000); // Adjust `1000` for nearest rounding (e.g., 100 or 10)
 
     // Get the total product price
     const totalProductPrice = parseFloat(document.getElementById("total-product-price").textContent.replace(/,/g, ''));
@@ -66,14 +78,13 @@ document.getElementById("shipping-method").addEventListener("change", function (
     const taxRate = 0.08;
     const taxAmount = totalProductPrice * taxRate;
 
-    // Calculate the total with shipping and tax
+    // Calculate total with shipping and tax
     const totalWithShipping = totalProductPrice + shippingFee + taxAmount;
 
-    // Update the UI with the new shipping fee, tax, and total order price
+    // Update UI
     document.getElementById("total-shipping-fee").textContent = shippingFee.toLocaleString() + "đ";
     document.getElementById("total-tax-fee").textContent = taxAmount.toLocaleString() + "đ";
     document.getElementById("total-order-price").textContent = totalWithShipping.toLocaleString() + "đ";
-
 });
 
 

@@ -64,32 +64,35 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable) {
-        Page<Object[]> results = orderRepository.findOrdersByUserIdAndStatus(userId, status, pageable);
-        return results.map(result -> {
+        // Dynamically filter by status if provided, otherwise fetch all
+        Page<Orders> ordersPage;
+        if (status == null || status.isEmpty()) {
+            ordersPage = orderRepository.findByUserId_UserId(userId, pageable); // New method for all statuses
+        } else {
+            ordersPage = orderRepository.findByUserId_UserIdAndShippingStatus_Status(userId, status, pageable);
+        }
+
+        // Map `Orders` to `OrdersDTO` (same as before)
+        return ordersPage.map(order -> {
             OrdersDTO dto = new OrdersDTO();
-            dto.setOrderId((int) result[0]);
-
-            if (result[1] != null) {
-                Timestamp orderDateTimestamp = (Timestamp) result[1];
-                dto.setOrderDate(orderDateTimestamp.toLocalDateTime());
-            }
-
-            dto.setStatus((String) result[2]);
-
-            if (result[3] != null) {
-                if (result[3] instanceof Number) {
-                    dto.setTotalQuantity(((Number) result[3]).intValue());
-                }
-            }
-
-            if (result[4] != null) {
-                if (result[4] instanceof Number) {
-                    dto.setTotalPrice(((Number) result[4]).longValue());
-                }
-            }
+            dto.setOrderId(order.getOrderId());
+            dto.setOrderDate(order.getOrderDate());
+            dto.setStatus(order.getShippingStatus()
+                    .stream()
+                    .max(Comparator.comparing(ShippingStatus::getUpdatedAt))
+                    .map(ShippingStatus::getStatus)
+                    .orElse(null));
+            dto.setTotalQuantity(order.getOrderDetails()
+                    .stream()
+                    .mapToInt(OrderDetails::getQuantity)
+                    .sum());
+            dto.setTotalPrice(order.getTotalPrice());
+            dto.setFormattedPrice(order.getTotalPrice());
             return dto;
         });
     }
+
+
 
     @Override
     public List<OrderManagerDTO> getOrdersForStore(Integer userId) {
@@ -193,7 +196,8 @@ public class OrderServiceImpl implements OrderService {
                 createNotification(sellWallet.get().getUserId(), "Đơn hàng đã được gửi đi",
                         "Đơn hàng " + order.getOrderCode() + " đã được gửi đi. Phí vận chuyển: " + invoice.getShippingFee(),
                         "http://localhost:8080/order-detail/" + orderId);
-
+                shippingStatusRepository.updateOrderStatus(orderId, status);
+                System.out.println("Order status updated to " + status);
             }
         } else if (status.equalsIgnoreCase("Delivered")) {
             if (sellWallet.isPresent() && logisticWallet.isPresent()) {
@@ -213,6 +217,23 @@ public class OrderServiceImpl implements OrderService {
                     sellerTransactions.setDescription("Nhận " + invoice.getRemainingBalance() + " từ đơn hàng " + order.getOrderCode() + " giao thành công");
                     transactionRepository.save(sellerTransactions);
 
+
+                    Transactions logisticTransactions = new Transactions();
+                    logisticTransactions.setCreatedAt(LocalDateTime.now());
+                    logisticTransactions.setToWalletId(logisticWallet.get());
+                    logisticTransactions.setAmount(invoice.getRemainingBalance().abs().longValue());
+                    logisticTransactions.setTransactionType("Nhận tiền hàng");
+                    logisticTransactions.setDescription("Nhận " + invoice.getRemainingBalance() + " từ khách hàng ");
+                    transactionRepository.save(logisticTransactions);
+
+                    Transactions logisticTransactions2 = new Transactions();
+                    logisticTransactions2.setCreatedAt(LocalDateTime.now());
+                    logisticTransactions2.setFromWalletId(sellWallet.get());
+                    logisticTransactions2.setAmount(invoice.getRemainingBalance().abs().longValue());
+                    logisticTransactions2.setTransactionType("Trả tiền hàng");
+                    logisticTransactions2.setDescription("Trả " + invoice.getRemainingBalance() + " cho seller của đơn hàng  "+ order.getOrderCode());
+                    transactionRepository.save(logisticTransactions);
+
                     // Tạo thông báo
                     createNotification(sellWallet.get().getUserId(), "Đơn hàng giao thành công",
                             "Đơn hàng " + order.getOrderCode() + " đã giao thành công. Số tiền nhận: " + invoice.getRemainingBalance(),
@@ -222,17 +243,19 @@ public class OrderServiceImpl implements OrderService {
                             "http://localhost:8080/order-detail/" + orderId);
                 }
             }
+            shippingStatusRepository.updateOrderStatus(orderId, status);
+            System.out.println("Order status updated to " + status);
         } else if (status.equalsIgnoreCase("Failed")) {
             ShippingStatus shippingStatus = shippingStatusRepository.findShippingStatusByOrderId_OrderId(orderId);
             if (shippingStatus.getPrevious_status() == null) {
-                shippingStatus.setPrevious_status("Thất bại");
-                shippingStatus.setStatus("Đang vận chuyển");
+                shippingStatus.setPrevious_status("Fail");
+                shippingStatus.setStatus("Shipping");
                 shippingStatus.setUpdatedAt(LocalDateTime.now());
                 shippingStatusRepository.save(shippingStatus);
             } else {
-                shippingStatus.setStatus("Đã hủy");
-                shippingStatus.setPrevious_status("Thất bại");
-                shippingStatus.setReason("Giao hàng thất bại");
+                shippingStatus.setStatus("Cancelled");
+                shippingStatus.setPrevious_status("Failed");
+                shippingStatus.setReason("Shipping failed");
                 shippingStatus.setUpdatedAt(LocalDateTime.now());
                 shippingStatusRepository.save(shippingStatus);
 
@@ -259,9 +282,9 @@ public class OrderServiceImpl implements OrderService {
                         "Đơn hàng " + order.getOrderCode() + " giao thất bại. Đã hoàn tiền: " + invoice.getDeposit(),
                         "http://localhost:8080/order-detail/" + orderId);
             }
+        } else {
+            shippingStatusRepository.updateOrderStatus(orderId, status);
         }
-        shippingStatusRepository.updateOrderStatus(orderId, status);
-
     }
 
     private void createNotification(Users user, String title, String content, String url) {
@@ -354,6 +377,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return order;
+    }
+
+    @Override
+    public Orders getOrderByCode(String code) {
+        return orderRepository.findFirstByOrderCode(code);
     }
 
     @Override

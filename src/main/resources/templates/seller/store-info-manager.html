@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Thông tin cửa hàng | Kênh người bán</title>
@@ -31,7 +31,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/homepage"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -39,29 +39,25 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item active" href="store-info-manager.html"><i
+        <li><a class="app-menu__item active" href="/store-info"><i
                 class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
-        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item" href="/seller/dashboard"><i
+                class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item" href="product-manager.html"><i
+        <li><a class="app-menu__item" href="/seller-products"><i
                 class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
         </li>
-        <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item" href="/seller/order-manager"><i
+                class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item" href="feedback-manager.html"><i
+        <li><a class="app-menu__item" href="/seller/feedback-manager"><i
                 class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
-        </li>
-        <li><a class="app-menu__item" href="shipping-manager.html"><i
-                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
-        </li>
-        <li><a class="app-menu__item" href="income-manager.html"><i
-                class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
         </li>
     </ul>
 </aside>
@@ -89,38 +85,53 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Email</label>
-                            <input class="form-control" type="text" name="storeMail" th:value="${store.storeMail}" readonly>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Địa Chỉ</label>
-                            <input class="form-control" type="text" name="storeAddress" th:value="${store.storeAddress}">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Thành Phố</label>
-                            <input class="form-control" type="text" name="storeCity" th:value="${store.city}">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Quận/Huyện</label>
-                            <input class="form-control" type="text" name="storeDistrict" th:value="${store.district}">
+                            <input class="form-control" type="text" name="storeMail" th:value="${store.storeMail}"
+                                   readonly>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Mã Bưu Điện</label>
                             <input class="form-control" type="text" name="postalCode" th:value="${store.postalCode}">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="countrySelected" class="control-label">Quốc gia</label>
-                            <select class="form-control" id="countrySelected" name="countryId">
-                                <option th:each="country : ${countries}"
-                                        th:value="${country.countryId}"
-                                        th:text="${country.countryName}"
-                                        th:selected="${country.countryId == store.country?.countryId}">
-                                </option>
+                            <label class="control-label">Thành phố (Prefecture)</label>
+                            <select id="geoapi-prefectures" class="form-control" name="storeCity">
+                                <option value="">Chọn Thành phố</option>
                             </select>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Quận/Huyện (City)</label>
+                            <select id="geoapi-cities" class="form-control" name="storeDistrict">
+                                <option value="">Chọn Quận/Huyện</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Phường/Xã (Town)</label>
+                            <select id="geoapi-towns" class="form-control" name="storeTown">
+                                <option value="">Chọn Phường/Xã</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Địa Chỉ</label>
+                            <input class="form-control" type="text" name="storeAddress"
+                                   th:value="${store.storeAddress != null ? (store.storeAddress.contains('-') ? store.storeAddress.split('-')[1] : store.storeAddress) : ''}">
+
+                        </div>
+
+                        <!--                        <div class="form-group col-md-6">-->
+                        <!--                            <label for="countrySelected" class="control-label">Quốc gia</label>-->
+                        <!--                            <select class="form-control" id="countrySelected" name="countryId">-->
+                        <!--                                <option th:each="country : ${countries}"-->
+                        <!--                                        th:value="${country.countryId}"-->
+                        <!--                                        th:text="${country.countryName}"-->
+                        <!--                                        th:selected="${country.countryId == store.country?.countryId}">-->
+                        <!--                                </option>-->
+                        <!--                            </select>-->
+                        <!--                        </div>-->
                         <div class="form-group col-md-12">
                             <label class="control-label">Ảnh cửa hàng</label>
                             <div id="mainImageUpload">
-                                <input type="file" id="mainImage" name="storeImg" accept="image/*" onchange="readMainImage(this);">
+                                <input type="file" id="mainImage" name="storeImg" accept="image/*"
+                                       onchange="readMainImage(this);">
                             </div>
                             <div id="mainThumbbox">
                                 <img th:src="${store.pictureUrl}" height="200" width="200" style="object-fit:cover;">
@@ -128,7 +139,8 @@
                         </div>
                         <div class="form-group col-md-12">
                             <label class="control-label">Mô tả cửa hàng</label>
-                            <textarea class="form-control" name="storeDescription" id="mota" th:text="${store.storeDescription}"></textarea>
+                            <textarea class="form-control" name="storeDescription" id="mota"
+                                      th:text="${store.storeDescription}"></textarea>
                             <script>CKEDITOR.replace('mota');</script>
                         </div>
                         <div class="col-md-12">
@@ -226,6 +238,91 @@
             }
         });
     });
+</script>
+<script th:inline="javascript">
+    const selectedPrefecture = /*[[${store.city}]]*/ '';
+    const selectedCity = /*[[${store.district}]]*/ '';
+    const selectedTown = /*[[${store.storeAddress != null ? store.storeAddress.split('-')[0] : ''}]]*/ '';
+
+    console.log('Selected Prefecture:', selectedPrefecture);
+    console.log('Selected City:', selectedCity);
+    console.log('Selected Town:', selectedTown);
+</script>
+<script>
+    const geoapiUrl = "http://geoapi.heartrails.com/api/json?jsonp=?";
+
+
+
+
+    // Initialize Prefectures
+    function geoApiInitializePrefectures() {
+        $("#geoapi-prefectures").html('<option value="">Chọn Thành phố</option>');
+        $.getJSON(geoapiUrl, { method: "getPrefectures" }, (json) => {
+            const prefectures = json.response.prefecture;
+            prefectures.forEach((prefecture) => {
+                const isSelected = prefecture === selectedPrefecture ? "selected" : "";
+                const option = `<option value="${prefecture}" ${isSelected}>${prefecture}</option>`;
+                $("#geoapi-prefectures").append(option);
+            });
+
+            // Trigger change to load cities if a prefecture is preselected
+            if (selectedPrefecture) {
+                $("#geoapi-prefectures").trigger("change");
+            }
+        });
+    }
+
+    // Initialize Cities when a prefecture is selected
+    function geoApiChangePrefecture() {
+        const selectedPrefecture = $("#geoapi-prefectures").val();
+        $("#geoapi-cities").html('<option value="">Chọn Quận/Huyện</option>');
+        $("#geoapi-towns").html('<option value="">Chọn Phường/Xã</option>');
+
+        if (selectedPrefecture) {
+            $.getJSON(geoapiUrl, { method: "getCities", prefecture: selectedPrefecture }, (json) => {
+                const cities = json.response.location;
+                cities.forEach((city) => {
+                    const isSelected = city.city === selectedCity ? "selected" : "";
+                    const option = `<option value="${city.city}" ${isSelected}>${city.city}</option>`;
+                    $("#geoapi-cities").append(option);
+                });
+
+                // Trigger change to load towns if a city is preselected
+                if (selectedCity) {
+                    $("#geoapi-cities").trigger("change");
+                }
+            });
+        }
+    }
+
+    // Initialize Towns when a city is selected
+    function geoApiChangeCity() {
+        const selectedCity = $("#geoapi-cities").val();
+        $("#geoapi-towns").html('<option value="">Chọn Phường/Xã</option>');
+
+        if (selectedCity) {
+            $.getJSON(geoapiUrl, { method: "getTowns", city: selectedCity }, (json) => {
+                const towns = json.response.location;
+                towns.forEach((town) => {
+                    // Normalize and compare town names
+                    const isSelected = town.town.trim() === selectedTown.trim() ? "selected" : "";
+                    const option = `<option value="${town.town}" ${isSelected}>${town.town}</option>`;
+                    $("#geoapi-towns").append(option);
+                });
+            });
+        }
+    }
+
+    // Attach change event listeners to dropdowns
+    $(document).ready(() => {
+        geoApiInitializePrefectures();
+
+        $("#geoapi-prefectures").change(geoApiChangePrefecture);
+        $("#geoapi-cities").change(geoApiChangeCity);
+    });
+
+</script>
+
 </script>
 </body>
 </html>

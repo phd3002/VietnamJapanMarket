@@ -3,6 +3,10 @@ package com.ecommerce.g58.entity;
 import lombok.*;
 import javax.persistence.*;
 
+import java.math.BigDecimal;
+
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
+
 @Entity
 @Data
 @Builder
@@ -33,4 +37,12 @@ public class CartItem {
 
     @Column(name = "price", nullable = false)
     private Integer price;
+
+    public String getPriceFormated() {
+        return formatCurrency(BigDecimal.valueOf(price));
+    }
+    public String getTotalPriceFormated() {
+        return formatCurrency(BigDecimal.valueOf((long) price * quantity));
+    }
+
 }

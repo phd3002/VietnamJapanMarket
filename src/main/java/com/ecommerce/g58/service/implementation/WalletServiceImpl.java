@@ -1,7 +1,6 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.WalletDTO;
-import com.ecommerce.g58.entity.Orders;
 import com.ecommerce.g58.entity.Transactions;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.entity.Wallet;
@@ -10,8 +9,9 @@ import com.ecommerce.g58.repository.TransactionRepository;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.repository.WalletRepository;
 import com.ecommerce.g58.service.WalletService;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.ecommerce.g58.utils.FormatVND;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -230,6 +231,34 @@ public class WalletServiceImpl implements WalletService {
         wallet.setLastUpdated(LocalDateTime.now()); // Cập nhật thời gian cập nhật cuối cùng
 
         walletRepository.save(wallet); // Lưu ví mới vào cơ sở dữ liệu
+    }
+
+    @Override
+    public void recharge(Integer amount) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Ensure the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("User not authenticated");
+        }
+
+        Users user = userRepository.findByEmail(authentication.getName());
+
+        Optional<Wallet> userWallet = walletRepository.findByUserId(user);
+        if (userWallet.isPresent()) {
+            Wallet wallet = userWallet.get();
+            wallet.setBalance(amount + wallet.getBalance());
+            wallet.setLastUpdated(LocalDateTime.now());
+            walletRepository.save(wallet);
+
+            Transactions transactions = new Transactions();
+            transactions.setAmount(amount);
+            transactions.setToWalletId(userWallet.get());
+            transactions.setTransactionType("Nạp tiền");
+            transactions.setDescription("Nạp thành công " + FormatVND.formatCurrency(BigDecimal.valueOf(amount)) + " vào tài khoản của bạn ");
+            transactions.setCreatedAt(LocalDateTime.now());
+            transactionRepository.save(transactions);
+        }
     }
 
 }
