@@ -5,6 +5,7 @@ import com.ecommerce.g58.enums.PaymentMethod;
 import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.*;
 import com.ecommerce.g58.service.implementation.VNPayService;
+import com.ecommerce.g58.utils.FormatVND;
 import com.ecommerce.g58.utils.RandomOrderCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CheckoutController {
@@ -95,7 +99,7 @@ public class CheckoutController {
             Integer userId = (Integer) session.getAttribute("userId");
             if (userId != null) {
                 logger.info("Restoring item quantities for user ID: {}", userId);
-                cartService.restoreItemQuantitiesToStock(userId);
+//                cartService.restoreItemQuantitiesToStock(userId);
             }
             session.invalidate();
             logger.info("Session expired and invalidated. Redirecting to homepage.");
@@ -130,7 +134,7 @@ public class CheckoutController {
         }
 
         // Gọi hàm trừ số lượng sản phẩm trong kho khi bắt đầu quá trình thanh toán
-        cartService.subtractItemQuantitiesFromStock(userId);
+//        cartService.subtractItemQuantitiesFromStock(userId);
 
         // Lấy giỏ hàng của người dùng
         Cart userCart = cartService.getCartByUserId(userId);
@@ -200,7 +204,7 @@ public class CheckoutController {
 
         // Lấy số dư ví của người dùng
         long walletBalance = walletService.getUserWalletBalance(user.getUserId());
-        model.addAttribute("walletBalance", walletBalance);
+        model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
         logger.info("Wallet balance retrieved for user ID {}: {}", user.getUserId(), walletBalance);
 
         return "checkout";
@@ -212,13 +216,13 @@ public class CheckoutController {
                                     @RequestParam("cartItemIdsString") String cartItemIdsString,
                                     @RequestParam(value = "shippingUnitId") Integer shippingUnitId,
                                     @RequestParam(value = "paymentMethod", defaultValue = "WALLET") PaymentMethod paymentMethod,
-                                    @RequestParam(value = "paymentType", defaultValue = "full") String paymentType) {
+                                    @RequestParam(value = "paymentType", defaultValue = "full") String paymentType,
+                                    RedirectAttributes redirectAttributes) {
         List<Integer> cartItemIds = Arrays.stream(cartItemIdsString.replaceAll("\\[|\\]", "").split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())  // Filter out empty strings
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
-        System.out.println("cartId: " + cartItemIds);
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (principal == null) {
             logger.warn("User not authenticated. Redirecting to sign-in.");
@@ -290,6 +294,26 @@ public class CheckoutController {
         logger.info("Total with shipping calculated based on payment type '{}': {}", paymentType, totalWithShipping);
 
         // Handle payment methods using PaymentMethod enum
+        for (CartItem item : cartItems) {
+            ProductVariation variation = item.getVariationId(); // Retrieve the selected ProductVariation
+            int cartQuantity = item.getQuantity();
+            int availableStock = variation.getStock(); // Stock is now validated at the variation level
+
+            if (cartQuantity > availableStock) {
+                String encodedCartItemIds = URLEncoder.encode(cartItemIdsString.replaceAll("\\[|\\]", ""), StandardCharsets.UTF_8);
+
+                logger.warn("Insufficient stock for product variation ID {}. Cart quantity: {}, Available stock: {}",
+                        variation.getVariationId(), cartQuantity, availableStock);
+                redirectAttributes.addFlashAttribute("errorMessage", "Sản phẩm \"" + variation.getProductId().getProductName() +
+                        "\" (Màu: " + variation.getColor().getColorName() + ", Kích thước: " + variation.getSize().getSizeName() +
+                        ") không đủ hàng trong kho. Vui lòng giảm số lượng hoặc xóa sản phẩm này khỏi giỏ hàng.");
+                redirectAttributes.addFlashAttribute("cartItems", cartItems);
+                return "redirect:/checkout?cartItemIds=" + encodedCartItemIds; // Return to the checkout page with an error
+            }
+        }
+        // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
+
+        cartService.subtractItemQuantitiesFromStock(userId);
         if (paymentMethod == PaymentMethod.WALLET) {
             long walletBalance = walletService.getUserWalletBalance(userId);
             logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
@@ -298,13 +322,19 @@ public class CheckoutController {
             if (walletBalance < totalWithShipping) {
                 model.addAttribute("errorMessage", "Bạn không đủ số dư để thực hiện giao dịch.");
                 model.addAttribute("totalWithShipping", totalWithShipping);
-                model.addAttribute("walletBalance", walletBalance);
+                model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
 
+
+            // **Check product stock before proceeding**
+
+            session.setAttribute("userId", userId);
+            session.setAttribute("checkoutStartTime", LocalDateTime.now());
+            logger.info("Stock quantities updated and checkout started for user ID {}.", userId);
             // Trừ tiền trong ví của người mua
             walletService.deductFromWallet(userId, totalWithShipping, paymentType);
             logger.info("Đã trừ số dư ví cho người dùng ID {}. Số tiền trừ: {}. Loại thanh toán: {}", userId, totalWithShipping, paymentType);
@@ -322,14 +352,6 @@ public class CheckoutController {
                 walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping, paymentType);
                 logger.info("Đã cộng {} vào ví của chủ cửa hàng có ID {}. Loại thanh toán: {}", totalWithShipping, storeId, paymentType);
             }
-
-
-            // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
-            cartService.subtractItemQuantitiesFromStock(userId);
-            session.setAttribute("userId", userId);
-            session.setAttribute("checkoutStartTime", LocalDateTime.now());
-            logger.info("Stock quantities updated and checkout started for user ID {}.", userId);
-
             // Xác nhận và lưu đơn hàng
             order.setUserId(user);
             order.setShippingAddress(formattedShippingAddress);
@@ -426,8 +448,8 @@ public class CheckoutController {
         logger.info("User ID {} is canceling checkout.", userId);
 
         // Khôi phục số lượng sản phẩm trong kho cho giỏ hàng người dùng
-        cartService.restoreItemQuantitiesToStock(userId);
-        logger.info("Item quantities restored for user ID {}.", userId);
+//        cartService.restoreItemQuantitiesToStock(userId);
+//        logger.info("Item quantities restored for user ID {}.", userId);
 
         // Xóa các thuộc tính liên quan đến checkout khỏi session
         session.removeAttribute("checkoutStartTime");
@@ -466,7 +488,7 @@ public class CheckoutController {
             Integer userId = (Integer) session.getAttribute("userId");
             if (userId != null) {
                 logger.info("Session expired for user ID: {}. Restoring item quantities.", userId);
-                cartService.restoreItemQuantitiesToStock(userId);
+//                cartService.restoreItemQuantitiesToStock(userId);
                 logger.info("Items restored for user ID: {}", userId);
             } else {
                 logger.warn("User ID not found in session. Unable to restore items.");

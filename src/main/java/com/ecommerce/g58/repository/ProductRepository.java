@@ -99,6 +99,10 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
             "WHERE p.price IS NOT NULL AND pi.thumbnail IS NOT NULL", nativeQuery = true)
     List<Object[]> findProductDetailsNative();
 
-    @Query(value = "SELECT * FROM Products p WHERE p.category_id = :categoryId", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT p.* " +
+            "FROM Products p " +
+            "JOIN product_variation pv ON p.product_id = pv.product_id " +
+            "WHERE p.category_id = :categoryId AND pv.stock > 0", nativeQuery = true)
     List<Products> findByCategoryId(@Param("categoryId") Long categoryId);
+
 }

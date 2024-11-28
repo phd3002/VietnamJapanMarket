@@ -70,7 +70,7 @@
                             <div class="inner">
                                 <!-- Product title and price -->
                                 <h2 class="product-title" th:text="${productDetail.productName}">Tên sản phẩm</h2>
-                                <span class="price-amount" th:text="${productDetail.price}">Giá</span>
+                                <span class="price-amount" th:text="${productDetail.getPriceFormated()}">Giá</span>
                                 <!-- Rating and review count -->
                                 <div class="product-rating">
                                     <div class="star-rating">
