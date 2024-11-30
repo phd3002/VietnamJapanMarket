@@ -14,8 +14,8 @@
             gap: 20px;
         }
 
-        .user-info, .order-summary {
-            flex: 1;
+        .user-info {
+            flex: 0 0 40%; /* Take 40% of the container width */
             padding: 20px;
             box-sizing: border-box;
             background-color: #f9f9f9;
@@ -23,7 +23,11 @@
         }
 
         .order-summary {
-            margin-left: 10px;
+            flex: 0 0 60%; /* Take 60% of the container width */
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
         }
 
         /* Make the layout stack vertically on smaller screens */
@@ -32,9 +36,12 @@
                 flex-direction: column;
             }
 
-            .user-info, .order-summary {
-                width: 100%;
-                margin: 0;
+            .user-info {
+                flex: 0 0 40%; /* Take 40% of the container width */
+                padding: 20px;
+                box-sizing: border-box;
+                background-color: #f9f9f9;
+                border: 1px solid #ddd;
             }
         }
 
@@ -56,11 +63,6 @@
             background-color: #616eff;
         }
 
-        .checkout-btn-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
         .payment-btn {
             width: 75%;
             padding: 10px 20px;
@@ -75,6 +77,24 @@
         }
 
         .payment-btn.selected, .payment-btn:hover {
+            background-color: #616eff;
+            color: #ffffff;
+        }
+
+        .payment-type-btn {
+            width: 50%;
+            padding: 10px 20px;
+            border: 1px solid #616eff;
+            background-color: #ffffff;
+            color: #616eff;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 3px;
+        }
+
+        .payment-type-btn.selected, .payment-type-btn:hover {
             background-color: #616eff;
             color: #ffffff;
         }
@@ -93,42 +113,107 @@
         <div class="container">
             <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
             </div>
-            <div id="insufficient-balance-alert" class="alert alert-danger" style="display: none;">
-                Bạn không đủ số dư để thực hiện giao dịch.
+            <div id="insufficient-balance-alert" th:if="${errorMessage}" class="alert alert-danger">
+                <p th:text="${errorMessage}"></p>
             </div>
             <form action="/checkout" method="post">
-                <div th:if="${errorMessage}" class="alert alert-danger">
-                    <p th:text="${errorMessage}"></p>
-                </div>
+                <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">
+                <input type="hidden" name="totalOrderPrice" th:value="${totalOrderPrice}">
+                <!--                <input type="hidden" id="store-country" th:value="${store.country.countryId}">-->
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
                         <h4 class="title mb--40">Thông tin người mua</h4>
                         <div class="form-group">
-                            <span>Họ tên</span>
+                            <label>Họ tên <span>*</span></label>
                             <input type="text" id="full-name">
                         </div>
                         <div class="form-group">
-                            <span>Số điện thoại</span>
+                            <label>Số điện thoại <span>*</span></label>
                             <input type="text" name="phoneNumber" id="phone-number" required>
                         </div>
                         <div class="form-group">
-                            <span>Địa chỉ email</span>
-                            <input type="text" id="email-address">
+                            <label>Địa chỉ email <span>*</span></label>
+                            <input type="text" id="email-address" required>
                         </div>
                         <div class="form-group">
-                            <span>Quốc gia</span>
-                            <select id="country">
-                                <option value="vietnam">Việt Nam</option>
-                                <option value="nhatban">Nhật Bản</option>
+                            <label for="city">Tỉnh thành</label>
+                            <select id="city" required>
+                                <option value="" selected>Chọn tỉnh thành</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <span>Địa chỉ chi tiết</span>
-                            <input type="text" name="shippingAddress" id="shipping-address" required>
-                        </div>
-                    </div>
+                            <label for="district">Tỉnh thành</label>
+                            <select id="district" required>
+                                <option value="" selected>Vui lòng chọn tỉnh thành</option>
+                            </select>
+                            <label for="ward">Tỉnh thành</label>
+                            <select id="ward" required>
+                                <option value="" selected>Vui lòng chọn quận huyện</option>
+                            </select>
+                            <label for="shipping-address">Địa chỉ chi tiết <span>*</span></label>
+                            <input class="form-group" type="text" name="shippingAddress" id="shipping-address"
+                                   required>
 
+                            <input type="hidden" id="formatted-shipping-address" name="formattedShippingAddress">
+
+                        </div>
+
+                    </div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+                            referrerpolicy="no-referrer"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+                    <script>
+                        const host = "https://provinces.open-api.vn/api/";
+                        var callAPI = (api) => {
+                            return axios.get(api)
+                                .then((response) => {
+                                    renderData(response.data, "city");
+                                });
+                        }
+                        callAPI('https://provinces.open-api.vn/api/?depth=1');
+                        var callApiDistrict = (api) => {
+                            return axios.get(api)
+                                .then((response) => {
+                                    renderData(response.data.districts, "district");
+                                });
+                        }
+                        var callApiWard = (api) => {
+                            return axios.get(api)
+                                .then((response) => {
+                                    renderData(response.data.wards, "ward");
+                                });
+                        }
+
+                        var renderData = (array, select) => {
+                            let row = ' <option disable value="">Chọn</option>';
+                            array.forEach(element => {
+                                row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`
+                            });
+                            document.querySelector("#" + select).innerHTML = row
+                        }
+
+                        $("#city").change(() => {
+                            callApiDistrict(host + "p/" + $("#city").find(':selected').data('id') + "?depth=2");
+                            printResult();
+                        });
+                        $("#district").change(() => {
+                            callApiWard(host + "d/" + $("#district").find(':selected').data('id') + "?depth=2");
+                            printResult();
+                        });
+                        $("#ward").change(() => {
+                            printResult();
+                        })
+
+                        var printResult = () => {
+                            if ($("#district").find(':selected').data('id') != "" && $("#city").find(':selected').data('id') != "" &&
+                                $("#ward").find(':selected').data('id') != "") {
+                                let result = $("#city option:selected").text() +
+                                    " | " + $("#district option:selected").text() + " | " +
+                                    $("#ward option:selected").text();
+                                $("#result").text(result)
+                            }
+
+                        }
+                    </script>
                     <!-- Order Summary Section -->
                     <div class="order-summary">
                         <h5 class="title mb--20">Đơn hàng của bạn</h5>
@@ -136,10 +221,11 @@
                             <table class="table summery-table">
                                 <thead>
                                 <tr>
-                                    <th width="70%">Sản phẩm</th>
-                                    <th width="10%">Đơn giá</th>
-                                    <th width="10%">Số lượng</th>
-                                    <th width="10%">Thành tiền</th>
+                                    <th scope="col">Sản phẩm</th>
+                                    <th scope="col">Đơn giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Khối lượng</th>
+                                    <th scope="col">Thành tiền</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -156,6 +242,7 @@
                                     </td>
                                     <td th:text="${item.price}"></td>
                                     <td th:text="${item.quantity}"></td>
+                                    <td th:text="${item.getProductId().getWeight()}"></td>
                                     <td th:text="${item.price * item.quantity}"></td>
                                 </tr>
                                 </tbody>
@@ -165,10 +252,12 @@
                         <div class="order-shipping-method">
                             <h5 class="title mb--20">Phương thức vận chuyển</h5>
                             <div class="form-group">
-                                <select name="shippingMethod" id="shipping-method">
-                                    <option value="standard">Giao hàng tiêu chuẩn - 50,000đ</option>
-                                    <option value="express">Giao hàng nhanh - 100,000đ</option>
-                                    <option value="same-day">Giao hàng trong ngày - 150,000đ</option>
+                                <select name="shippingUnitId" id="shipping-method">
+                                    <option th:each="unit : ${shippingUnits}"
+                                            th:value="${unit.unitId}"
+                                            th:data-fee="${unit.unitPrice}"
+                                            th:text="${unit.unitName + ' - ' + unit.unitPrice + 'đ / kg'}">
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -177,36 +266,66 @@
                             <div class="row">
                                 <div class="col-sm-12 d-flex justify-content-between">
                                     <div>
-                                        <button id="wallet" class="payment-btn btn-common selected" data-method="wallet" type="button">Ví VJ-Market</button>
-                                        <button id="cod" class="payment-btn btn-common" data-method="cod" type="button">Thanh toán khi nhận hàng</button>
+                                        <button id="wallet" class="payment-btn btn-common selected" data-method="WALLET"
+                                                type="button">Ví VJ-Market
+                                        </button>
+                                        <button id="vnpay" class="payment-btn btn-common" data-method="VNPAY"
+                                                type="button">Thanh toán VNPay
+                                        </button>
                                     </div>
                                     <div>
                                         <div class="payment-details" id="walletDetails">
-                                            <p>Số dư ví của bạn: <strong th:text="${walletBalance} + 'đ'">0đ</strong></p>
+                                            <p>Số dư ví của bạn: <strong th:text="${walletBalance} + ''">0đ</strong>
+                                            </p>
                                         </div>
-                                        <div class="payment-details" id="codDetails" style="display:none;">
-                                            <p>Trả tiền mặt khi nhận hàng.</p>
+                                        <div class="payment-details" id="vnpayDetails" style="display:none;">
+                                            <p>Bạn đang chọn thanh toán qua VNPay.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Payment type options -->
+                            <div class="payment-type-options">
+                                <h6 class="title mb--10">Hình thức thanh toán</h6>
+                                <button id="fullPayment" class="payment-type-btn selected" data-type="full"
+                                        type="button">Trả đủ
+                                </button>
+                                <button id="depositPayment" class="payment-type-btn" data-type="deposit" type="button">
+                                    Đặt cọc 50%
+                                </button>
+                            </div>
                             <!-- Hidden input to hold selected payment method -->
-                            <input type="hidden" id="paymentMethod" name="paymentMethod" value="wallet">
+                            <input type="hidden" id="paymentMethod" name="paymentMethod" value="WALLET">
+                            <input type="hidden" name="paymentMethod" value="VNPAY">
+                            <input type="hidden" id="paymentType" name="paymentType" value="full">
                             <br><br>
                             <div class="order-price">
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Tổng tiền hàng:</h6>
-                                    <span id="total-product-price" th:text="${totalPrice}"></span>
+                                    <span id="total-product-price" th:text="${totalPrice} + ''"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <h6 class="title mb-0">Tổng tiền phí vận chuyển:</h6>
-                                    <span id="total-shipping-fee">50000</span>
+                                    <h6 class="title mb-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Các đơn hàng có khối lượng dưới 1kg sẽ được làm tròn thành 1kg để tính phí vận chuyển.">
+                                        Tổng tiền phí vận chuyển<span class="font-weight-bold" style="color: red">(?)</span>:
+                                    </h6>
+                                    <span id="total-shipping-fee" th:text="${shippingFee}"></span>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="title mb-0">Thuế (8%):</h6>
+                                    <span id="total-tax-fee" th:text="${tax} + ''"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="title mb-0">Tổng thanh toán:</h5>
                                     <h6 id="total-order-price" style="color: #bb2d3b;"
-                                        th:text="${totalWithShipping}"></h6>
+                                        th:text="${totalWithShipping} + 'VND'"></h6>
                                 </div>
+                                <div class="order-weight" style="display: none">
+                                    <h6>Total Weight:</h6>
+                                    <span id="total-weight" th:text="${totalWeight} + ' kg'"></span>
+                                </div>
+
                             </div>
                         </div>
                         <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán</button>
@@ -220,149 +339,6 @@
 
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>
-
-<script>
-    // Tính phí vận chuyển khi thay đổi phương thức vận chuyển
-    document.getElementById("shipping-method").addEventListener("change", function () {
-        const shippingMethod = this.value;
-
-        fetch(`/calculate-shipping?shippingMethod=${shippingMethod}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("total-shipping-fee").textContent = data.shippingFee.toLocaleString() + "đ";
-                document.getElementById("total-order-price").textContent = data.totalWithShipping.toLocaleString() + "đ";
-            })
-            .catch(error => console.error("Error calculating shipping:", error));
-    });
-</script>
-
-<script>
-    // Kiểm tra số dư ví trước khi thanh toán
-    document.querySelector(".checkout-btn").addEventListener("click", function(event) {
-        event.preventDefault(); // Ngăn chặn form gửi ngay lập tức
-
-        // Lấy phương thức thanh toán
-        const paymentMethod = document.querySelector(".payment-btn.selected").getAttribute("data-method");
-
-        // Nếu thanh toán qua ví VJ-Market, kiểm tra số dư ví
-        if (paymentMethod === "wallet") {
-            const walletBalance = parseInt(document.querySelector("#walletDetails p strong").innerText.replace(/\D/g, ""));
-            const totalOrderPrice = parseInt(document.getElementById("total-order-price").innerText.replace(/\D/g, ""));
-
-            if (walletBalance < totalOrderPrice) {
-                document.getElementById("insufficient-balance-alert").style.display = "block";
-                return; // Không cho phép tiếp tục nếu không đủ số dư
-            }
-        }
-
-        // Nếu đủ điều kiện, gửi form để tiếp tục thanh toán
-        document.getElementById("insufficient-balance-alert").style.display = "none";
-        document.querySelector("form").submit();
-    });
-
-    // Cập nhật giao diện khi chọn phương thức thanh toán
-    document.querySelectorAll(".payment-btn").forEach(button => {
-        button.addEventListener("click", function() {
-            document.querySelectorAll(".payment-btn").forEach(btn => btn.classList.remove("selected"));
-            this.classList.add("selected");
-
-            // Cập nhật hiển thị chi tiết phương thức thanh toán
-            if (this.getAttribute("data-method") === "wallet") {
-                document.getElementById("walletDetails").style.display = "block";
-                document.getElementById("codDetails").style.display = "none";
-            } else {
-                document.getElementById("walletDetails").style.display = "none";
-                document.getElementById("codDetails").style.display = "block";
-            }
-        });
-    });
-</script>
-
-<script>
-    // Xử lý sự kiện khi trang web tải xong
-    document.addEventListener("DOMContentLoaded", function() {
-        const walletButton = document.getElementById("wallet");
-        const codButton = document.getElementById("cod");
-        const walletDetails = document.getElementById("walletDetails");
-        const codDetails = document.getElementById("codDetails");
-        const paymentMethodInput = document.getElementById("paymentMethod");
-
-        // Chọn phương thức thanh toán mặc định
-        function selectPaymentMethod(method) {
-            if (method === "wallet") {
-                walletButton.classList.add("selected");
-                codButton.classList.remove("selected");
-                walletDetails.style.display = "block";
-                codDetails.style.display = "none";
-                paymentMethodInput.value = "wallet";
-            } else if (method === "cod") {
-                codButton.classList.add("selected");
-                walletButton.classList.remove("selected");
-                codDetails.style.display = "block";
-                walletDetails.style.display = "none";
-                paymentMethodInput.value = "cod";
-            }
-        }
-
-        // Xử lý sự kiện khi người dùng chọn phương thức thanh toán
-        walletButton.addEventListener("click", function() {
-            selectPaymentMethod("wallet");
-        });
-
-        codButton.addEventListener("click", function() {
-            selectPaymentMethod("cod");
-        });
-    });
-</script>
-
-<script>
-    // kiem tra session co con ton tai hay khong
-    let sessionCheckInterval = setInterval(function () {
-        console.log('Checking session status...');
-        fetch('/session-status')
-            .then(response => response.json())
-            .then(data => {
-                // Neu session het han thi chuyen huong ve trang chu
-                if (!data.sessionValid) {
-                    console.log('Session expired, redirecting to homepage...');
-                    clearInterval(sessionCheckInterval); // dung kiem tra session neu het han
-                    window.location.href = '/';
-                }
-            })
-            .catch(error => {
-                console.error('Error checking session status:', error);
-                clearInterval(sessionCheckInterval); // dung kiem tra session neu gap loi
-            });
-    }, 60000); // kiem tra session moi 60 giay
-
-    // Dung kiem tra session khi nguoi dung roi khoi trang
-    window.addEventListener('beforeunload', function () {
-        clearInterval(sessionCheckInterval);
-    });
-</script>
-
-<script>
-    // kiem tra thoi gian con lai de thanh toan
-    function checkTimeRemaining() {
-        // lay thoi gian con lai tu server
-        fetch('/checkout-time-remaining')
-            .then(response => response.json())
-            .then(data => {
-                // neu thoi gian con lai < 5 phut thi hien thi thong bao
-                if (data.showWarning) {
-                    document.getElementById("timeoutWarning").style.display = "block";
-                } else {
-                    document.getElementById("timeoutWarning").style.display = "none";
-                }
-            })
-            .catch(error => console.error('Error checking time remaining:', error));
-    }
-
-    // kiem tra moi 10 giay
-    setInterval(checkTimeRemaining, 10000);
-    // ban dau an thong bao
-    document.getElementById("timeoutWarning").style.display = "none";
-</script>
 
 <!-- JS
 ============================================ -->
@@ -384,5 +360,79 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
 <script th:src="@{/js/checkout.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy các phần tử input từ form
+        const fullNameInput = document.getElementById("full-name");
+        const phoneNumberInput = document.getElementById("phone-number");
+        const emailAddressInput = document.getElementById("email-address");
+        const shippingAddressInput = document.getElementById("shipping-address");
+
+        const citySelect = document.getElementById("city");
+        const districtSelect = document.getElementById("district");
+        const wardSelect = document.getElementById("ward");
+
+        // Thêm sự kiện submit cho form (hoặc bạn có thể thêm sự kiện riêng cho button submit)
+        const checkoutButton = document.querySelector(".checkout-btn");
+        checkoutButton.addEventListener("click", function (event) {
+            // Dừng việc submit mặc định để kiểm tra dữ liệu
+            event.preventDefault();
+
+            // Kiểm tra tên đầy đủ
+            if (fullNameInput.value.trim() === "") {
+                alert("Họ tên không được bỏ trống.");
+                fullNameInput.focus();
+                return;
+            }
+
+            // Kiểm tra số điện thoại (chỉ cho phép số và phải từ 10-11 chữ số)
+            const phoneRegex = /^[0-9]{10,11}$/;
+            if (!phoneRegex.test(phoneNumberInput.value)) {
+                alert("Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại có 10-11 chữ số.");
+                phoneNumberInput.focus();
+                return;
+            }
+
+            // Kiểm tra email (phải có định dạng email hợp lệ)
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(emailAddressInput.value)) {
+                alert("Địa chỉ email không hợp lệ.");
+                emailAddressInput.focus();
+                return;
+            }
+// Validate city
+            if (citySelect.value === "" || citySelect.value === "Chọn") {
+                alert("Vui lòng chọn tỉnh/thành phố.");
+                citySelect.focus();
+                return;
+            }
+
+            // Validate district
+            if (districtSelect.value === "" || districtSelect.value === "Chọn") {
+                alert("Vui lòng chọn quận/huyện.");
+                districtSelect.focus();
+                return;
+            }
+
+            // Validate ward
+            if (wardSelect.value === "" || wardSelect.value === "Chọn") {
+                alert("Vui lòng chọn phường/xã.");
+                wardSelect.focus();
+                return;
+            }
+            // Kiểm tra địa chỉ giao hàng
+            if (shippingAddressInput.value.trim() === "") {
+                alert("Địa chỉ chi tiết không được bỏ trống.");
+                shippingAddressInput.focus();
+                return;
+            }
+            const formattedAddress = ` ${shippingAddressInput.value.trim()} - ${wardSelect.value} - ${districtSelect.value} - ${citySelect.value} `;
+            document.getElementById("formatted-shipping-address").value = formattedAddress;
+
+            // Nếu tất cả đều hợp lệ thì submit form
+            event.target.closest("form").submit();
+        });
+    });
+</script>
 </body>
 </html>

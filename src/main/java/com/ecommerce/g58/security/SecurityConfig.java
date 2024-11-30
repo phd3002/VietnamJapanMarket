@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
@@ -17,9 +18,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
+    @Autowired
+    public SecurityConfig(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
     @Bean
     public HttpFirewall allowUrlWithDoubleSlash() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
@@ -44,14 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
         auth.setUserDetailsService(userService);
-        auth.setPasswordEncoder(passwordEncoder());
+        auth.setPasswordEncoder(passwordEncoder);
         return auth;
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
@@ -69,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
                 // Public pages and resources
                 .antMatchers(
-                        "/","/**", "/sign-up/confirm-code/**",
+                        "/", "/**", "/sign-up/confirm-code/**",
                         "/address/**", "/cart-detail/**",
                         "/coming-soon/**", "/confirm-code/**", "/footer/**",
                         "/head/**", "/header/**",
@@ -81,7 +83,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/terms-of-service/**", "/view-store/**", "/wallet/**",
                         "/wishlist/**", "/forgot-password/**", "/reset-password/**",
                         "/add_to_cart", "/cart-items", "/product/**",
-                        "/store-info/**", "/store-save/**", "/addProductFull/**","/addProductForm2/**"
+                        "/notification",
+                        "/store-info/**", "/store-save/**", "/addProductFull/**", "/addProductForm2/**",
+                        "/vn/**", "/submitOrder/**", "/now/**", "/vnpay-payment/**"
                 ).permitAll()
 
                 // Checkout page requires authentication

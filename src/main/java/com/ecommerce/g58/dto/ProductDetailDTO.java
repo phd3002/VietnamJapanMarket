@@ -3,6 +3,10 @@ package com.ecommerce.g58.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
+
 @Getter
 @Setter
 public class ProductDetailDTO {
@@ -79,5 +83,9 @@ public class ProductDetailDTO {
         this.color = color;
         this.stock = stock;
         this.imageId = imageId;
+    }
+
+    public String getPriceFormated() {
+        return formatCurrency(BigDecimal.valueOf(price));
     }
 }

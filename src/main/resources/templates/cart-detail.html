@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title th:text="${pageTitle} ?: 'Your Cart'"></title>
@@ -23,29 +23,28 @@
             <div class="axil-product-cart-wrap">
                 <div class="product-table-heading">
                     <h4 class="title">Your Cart</h4>
-                    <a href="#" class="cart-clear">Clear Shopping Cart</a>
                 </div>
 
                 <!-- Display empty cart message -->
                 <div th:if="${isCartEmpty}" class="alert alert-warning" role="alert">
-                    <span>Giỏ hàng của bạn đang trống.</span>
+                    <span>Giỏ hàng của bạn đang trống. <a href="/product-list">Mua ngay</a>. </span>
                 </div>
 
                 <!-- Cart Items Table -->
                 <div th:each="storeEntry : ${cartItemGroupedByStore}">
                     <div class="store-name">
-                        <h5 th:text="${storeEntry.key.storeName}"></h5>
+                        Cửa hàng: <h5 th:text="${storeEntry.key.storeName}"></h5>
                     </div>
                     <div class="table-responsive">
-                        <table class="table axil-product-table axil-cart-table mb--40">
+                        <table class="table axil-product-table">
                             <thead>
                             <tr>
-                                <th scope="col" class="product-remove"></th>
-                                <th scope="col" class="product-thumbnail">Product</th>
-                                <th scope="col" class="product-title">Product Name</th>
-                                <th scope="col" class="product-price">Price</th>
-                                <th scope="col" class="product-quantity">Quantity</th>
-                                <th scope="col" class="product-subtotal">Subtotal</th>
+                                <th scope="col"></th>
+                                <th scope="col">Sản phẩm</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Tổng</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -61,7 +60,7 @@
                                 </td>
 
                                 <td class="product-thumbnail">
-                                    <a href="product-detail.html">
+                                    <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}">
                                         <img th:src="@{${item.variationId.imageId.thumbnail}}" alt="Product Image">
                                     </a>
                                 </td>
@@ -70,36 +69,34 @@
                                        th:text="${item.productId.productName}">Product Name</a>
                                 </td>
                                 <td class="product-price" data-title="Price">
-                                    <span class="currency-symbol">$</span>
-                                    <span th:text="${item.price}">Price</span>
+                                    <span th:text="${item.getPriceFormated()}">Price</span>
                                 </td>
                                 <td class="product-quantity" data-title="Qty">
                                     <form action="/update_cart_quantity" method="post">
                                         <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
+                                        <div class="pro-qty">
                                         <input type="number" name="quantity" class="quantity-input"
                                                th:value="${item.quantity}" min="1">
-                                        <button type="submit">Update</button>
+                                        </div>
+                                        <button type="submit">Cập nhật</button>
                                     </form>
                                 </td>
                                 <td class="product-subtotal" data-title="Subtotal">
-                                    <span class="currency-symbol">$</span>
-                                    <span th:text="${item.price * item.quantity}">Subtotal</span>
+                                    <span th:text="${item.getTotalPriceFormated()}">Tổng</span>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="cart-update-btn-area" style="margin-right: 10%; text-align: right">
+                <div class="cart-update-btn-area" style="display: flex; justify-content: flex-end; margin-right: 10%" th:if="${!isCartEmpty}">
                     <div class="update-btn">
-                        <form action="/checkout" method="get">
-                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4" th:disabled="${isCartEmpty}">
-                                Check out
+                        <form id="checkoutForm" action="/checkout" method="get">
+                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4; color: white" th:disabled="${isCartEmpty}">
+                                Thanh toán
                             </button>
+                            <input type="hidden" name="cartItemIds" id="cartItemIds">
                         </form>
-<!--                        <form id="checkoutForm" action="/checkout" method="get" style="display: none;">-->
-<!--                            <input type="hidden" name="cartItemIds" id="cartItemIds">-->
-<!--                        </form>-->
                     </div>
                 </div>
 
@@ -108,267 +105,127 @@
     </div>
 
     <!-- Start Recently Viewed Product Area  -->
-    <div class="axil-product-area bg-color-white axil-section-gap pb--50 pb_sm--30">
-        <div class="container">
-            <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i> Your Recently</span>
-                <h2 class="title">Viewed Items</h2>
-            </div>
-            <div class="recent-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-01.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">20% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">3D™ wireless headset</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$30</span>
-                                    <span class="price current-price">$30</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-02.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">40% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">Media remote</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$80</span>
-                                    <span class="price current-price">$50</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">30% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$60</span>
-                                    <span class="price current-price">$45</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">50% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$70</span>
-                                    <span class="price current-price">$35</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">25% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$50</span>
-                                    <span class="price current-price">$38</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">30% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$60</span>
-                                    <span class="price current-price">$45</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">50% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$70</span>
-                                    <span class="price current-price">$35</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-                <div class="slick-single-layout">
-                    <div class="axil-product">
-                        <div class="thumbnail">
-                            <a href="product-detail.html">
-                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">
-                            </a>
-                            <div class="label-block label-right">
-                                <div class="product-badget">25% OFF</div>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="wishlist"><a href="wishlist.html"><i class="far fa-heart"></i></a></li>
-                                    <li class="select-option"><a href="cart-detail.html">Add to Cart</a></li>
-                                    <li class="quickview"><a href="#" data-bs-toggle="modal"
-                                                             data-bs-target="#quick-view-modal"><i
-                                            class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <div class="inner">
-                                <h5 class="title"><a href="product-detail.html">PS5 Remote Control</a></h5>
-                                <div class="product-price-variant">
-                                    <span class="price old-price">$50</span>
-                                    <span class="price current-price">$38</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End .slick-single-layout -->
-
-            </div>
-        </div>
-    </div>
-    <!-- End Recently Viewed Product Area  -->
+<!--    <div class="axil-product-area bg-color-white axil-section-gap pb&#45;&#45;50 pb_sm&#45;&#45;30">-->
+<!--        <div class="container">-->
+<!--            <div class="section-title-wrapper">-->
+<!--                <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i> Your Recently</span>-->
+<!--                <h2 class="title">Viewed Items</h2>-->
+<!--            </div>-->
+<!--            <div class="recent-product-activation slick-layout-wrapper&#45;&#45;15 axil-slick-arrow arrow-top-slide">-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-01.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">20% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">3D™ wireless headset</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$30</span>-->
+<!--                                    <span class="price current-price">$30</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-02.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">40% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">Media remote</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$80</span>-->
+<!--                                    <span class="price current-price">$50</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">30% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$60</span>-->
+<!--                                    <span class="price current-price">$45</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">50% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$70</span>-->
+<!--                                    <span class="price current-price">$35</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--                <div class="slick-single-layout">-->
+<!--                    <div class="axil-product">-->
+<!--                        <div class="thumbnail">-->
+<!--                            <a href="product-detail.html">-->
+<!--                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">-->
+<!--                            </a>-->
+<!--                            <div class="label-block label-right">-->
+<!--                                <div class="product-badget">25% OFF</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="product-content">-->
+<!--                            <div class="inner">-->
+<!--                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>-->
+<!--                                <div class="product-price-variant">-->
+<!--                                    <span class="price old-price">$50</span>-->
+<!--                                    <span class="price current-price">$38</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; End Recently Viewed Product Area  &ndash;&gt;-->
 </main>
 
 <!-- Include Footer Fragment -->
@@ -393,5 +250,20 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get all cart item elements that have a hidden input with their ID
+        const cartItemElements = document.querySelectorAll('input[name="cartItemId"]');
+        const cartItemIds = [];
+
+        // Extract the IDs and add them to the cartItemIds array
+        cartItemElements.forEach(item => {
+            cartItemIds.push(item.value);
+        });
+
+        // Set the value of the hidden input field to the list of IDs, joined by commas
+        document.getElementById('cartItemIds').value = cartItemIds.join(',');
+    });
+</script>
 </body>
 </html>

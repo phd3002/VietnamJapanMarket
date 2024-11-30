@@ -9,6 +9,8 @@ import com.ecommerce.g58.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -41,6 +43,11 @@ public class ProductServiceImp implements ProductService {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private StoreRepository storeRepository;
 
     public List<ProductDTO> getProductDetails() {
         List<Object[]> results = productRepository.findProductDetailsNative();
@@ -168,8 +175,16 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Page<Products> getProductsByStoreId(Stores storeId, Pageable pageable) {
-        return productRepository.findByStoreId(storeId, pageable);
+    public Page<Products> getProductsByStoreId(Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Ensure the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("User not authenticated");
+        }
+//        System.out.println(authentication.getName());
+        Users owner = userRepository.findByEmail(authentication.getName());
+        Optional<Stores> storeOwner = storeRepository.findByOwnerId(owner);
+        return productRepository.findByStoreId(storeOwner.get(), pageable);
     }
 
     public List<ProductDetailDTO> getProductDetailsByStoreId(Stores storeId) {

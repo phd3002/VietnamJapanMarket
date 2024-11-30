@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Danh sách đơn hàng | Kênh người bán</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" th:href="@{/seller/css/main.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- or -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+    <!-- Font-icon seller-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl">
+<!-- Navbar-->
+<header class="app-header">
+    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                    aria-label="Hide Sidebar"></a>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+
+
+        <!-- User Menu-->
+        <li><a class="app-nav__item" href="/homepage"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+
+        </li>
+    </ul>
+</header>
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar">
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
+                                        alt="User Image">
+    </div>
+    <hr>
+    <ul class="app-menu">
+        <li><a class="app-menu__item" href="/store-info"><i
+                class='app-menu__icon bx bx-info-square'></i><span
+                class="app-menu__label">Thông tin cửa hàng</span></a></li>
+        <li><a class="app-menu__item" href="/seller/dashboard"><i
+                class='app-menu__icon bx bx-tachometer'></i><span
+                class="app-menu__label">Bảng điều khiển</span></a></li>
+        <li><a class="app-menu__item" href="/seller-products"><i
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+        </li>
+        <li><a class="app-menu__item active" href="/seller/order-manager"><i
+                class='app-menu__icon bx bx-task'></i><span
+                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="/seller/feedback-manager"><i
+                class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
+        </li>
+    </ul>
+</aside>
+<main class="app-content">
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item active"><a href="#"><b>Danh sách đơn hàng</b></a></li>
+        </ul>
+        <div id="clock"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div th:if="${message != null}"
+                         class="alert alert-dismissible"
+                         th:classappend="${messageType == 'success'} ? 'alert-success' : 'alert-danger'">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                        <p th:text="${message}"></p>
+                    </div>
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                        <tr>
+                            <th>ID Đơn hàng</th>
+                            <th>Khách hàng</th>
+                            <th>Đơn hàng</th>
+                            <th>Số lượng</th>
+                            <th>Tổng tiền</th>
+                            <th>Tình trạng</th>
+                            <th>Tính năng</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.orderId}"></td>
+                            <td th:text="${order.customerName}"></td>
+                            <td th:text="${order.productNames}"></td>
+                            <td th:text="${order.totalProducts}"></td>
+                            <td th:text="${order.totalPrice}"></td>
+                            <td>
+                                <form method="post" th:action="@{/seller/update-order-status}">
+                                    <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+                                    <select class="form-control status-dropdown" id="order-status" name="status"
+                                            th:value="${order.latestStatus}"
+                                            data-current-status="${order.latestStatus}">
+                                        <option value="Pending" th:selected="${order.latestStatus == 'Pending'}"
+                                                disabled>Chờ xử lý
+                                        </option>
+                                        <option value="Confirmed" th:selected="${order.latestStatus == 'Confirmed'}"
+                                                th:disabled="${order.latestStatus != 'Pending'}">Xác nhận
+                                        </option>
+                                        <option value="Processing" th:selected="${order.latestStatus == 'Processing'}"
+                                                th:disabled="${order.latestStatus != 'Pending' && order.latestStatus != 'Confirmed'}">
+                                            Đang xử đóng gói
+                                        </option>
+                                        <option value="Dispatched" th:selected="${order.latestStatus == 'Dispatched'}"
+                                                th:disabled="${order.latestStatus != 'Pending' && order.latestStatus != 'Confirmed' && order.latestStatus != 'Processing'} ">
+                                            Đã giao cho vận chuyển
+                                        </option>
+                                        <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'}"
+                                                disabled>Đang vận chuyển
+                                        </option>
+                                        <option value="Delivered" th:selected="${order.latestStatus == 'Delivered'}"
+                                                disabled>Đã giao
+                                        </option>
+                                        <option value="Completed" th:selected="${order.latestStatus == 'Completed'}"
+                                                disabled>Hoàn tất
+                                        </option>
+                                        <option value="Failed" th:selected="${order.latestStatus == 'Failed'}" disabled>
+                                            Giao hàng thất bại
+                                        </option>
+                                        <option value="Returned" th:selected="${order.latestStatus == 'Returned'}"
+                                                disabled>Hoàn trả
+                                        </option>
+                                        <option value="Cancelled" th:selected="${order.latestStatus == 'Cancelled'}"
+                                                disabled>Đã hủy
+                                        </option>
+                                        <option th:if="${order.previous_status != null}" value="Canceled"
+                                                th:selected="${order.previous_status == 'Returned'}"
+                                                disabled>Đã hoàn trả
+                                        </option>
+                                    </select>
+                                </form>
+
+                            </td>
+                            <td style="display: flex; gap: 5px">
+
+                                <a th:href="@{/seller/order-detail/{orderId}(orderId=${order.orderId})}">
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </a>
+                                <form th:if="${order.latestStatus == 'Returned' && order.previous_status ==  null}"
+                                      th:attr="data-order-id=${order.orderId}" th:action="@{/seller/return}"
+                                      method="post">
+                                    <input type="hidden" name="storeId" th:value="${storeId}">
+                                    <input type="hidden" name="orderId" th:value="${order.orderId}">
+                                    <button
+                                            class="btn btn-primary btn-sm btn-save"
+                                            type="button"
+                                            title="Chấp nhận"
+                                            th:data-order-id="${order.orderId}"
+                                            th:data-order-reason="${order.reason != null ? order.reason : 'Không có lý do'}"
+                                            onclick="openAcceptModal(this)">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </button>
+
+
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmation -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title">Xác nhận thay đổi trạng thái</h2>
+            <p>Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này thành "Đã giao cho vận chuyển"? <br><span
+                    style="color: red;">Hành động này không thể hoàn tác!</span></p>
+            <div class="modal-buttons">
+                <button id="confirmBtn" class="btn btn-success">Đồng ý</button>
+                <button class="btn btn-danger" onclick="closeModal()">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+    <div id="acceptModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAcceptModal()">&times;</span>
+            <h2 class="modal-title">Xác nhận chấp nhận đơn hàng</h2>
+            <p>
+                <strong>Lý do trả hàng:</strong>
+                <span id="acceptOrderReason" style="color: red;"></span>
+            </p>
+            <p>Bạn có chắc chắn muốn chấp nhận đơn hàng này?</p>
+            <div class="modal-buttons">
+                <button id="confirmAcceptOrderBtn" class="btn btn-success">Đồng ý</button>
+                <button class="btn btn-danger" onclick="closeAcceptModal()">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Open the modal
+        // Open the modal and store the form reference
+        function openModal(select) {
+            const form = select.closest("form"); // Get the closest form element
+
+            // Display the modal
+            document.getElementById('confirmModal').style.display = 'block';
+
+            // Bind the click event for the confirm button (bind only once)
+            const confirmButton = document.getElementById('confirmBtn');
+            confirmButton.onclick = function () {
+                // Submit the form after user confirms
+                swal({
+                    title: "Xác nhận",
+                    text: "Trạng thái đã được thay đổi thành công.",
+                    icon: "success",
+                    buttons: false,
+                    timer: 1500
+                }).then(() => {
+                    form.submit(); // Submit the specific form
+                    closeModal();
+                });
+            };
+        }
+
+        // Close the modal
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            // location.reload();
+        }
+
+        // Handle status dropdown changes
+        document.querySelectorAll('.status-dropdown').forEach(function (select) {
+            select.addEventListener('change', function () {
+                handleStatusChange(select);
+            });
+        });
+
+        function handleStatusChange(select) {
+            const selectedStatus = select.value;
+
+            // Trigger modal only for "Dispatched"
+            if (selectedStatus === 'Dispatched') {
+                openModal(select); // Pass the select element
+            } else {
+                select.closest("form").submit(); // Submit directly for other statuses
+            }
+        }
+
+        // for accept modal
+
+        function openAcceptModal(button) {
+            // Retrieve orderId and reason from data attributes
+            var orderId = button.getAttribute('data-order-id');
+            var reason = button.getAttribute('data-order-reason') || "Không có lý do";
+
+            // Set the reason in the modal
+            document.getElementById("acceptOrderReason").innerText = reason;
+
+            // Store the order ID for the confirm action
+            document.getElementById("confirmAcceptOrderBtn").setAttribute("data-order-id", orderId);
+
+            // Show the modal
+            document.getElementById("acceptModal").style.display = "block";
+        }
+
+
+        function closeAcceptModal() {
+            // Hide the modal
+            document.getElementById("acceptModal").style.display = "none";
+
+        }
+
+        // Handle confirm accept button click
+        document.getElementById("confirmAcceptOrderBtn").addEventListener("click", function () {
+            const orderId = this.getAttribute("data-order-id");
+
+            // Submit the form or send an API request
+            document.querySelector(`form[data-order-id="${orderId}"]`).submit();
+        });
+
+    </script>
+
+
+    <!--
+  MODAL
+-->
+    <!--    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"-->
+    <!--         data-keyboard="false">-->
+    <!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
+    <!--            <div class="modal-content">-->
+    <!--                <div class="modal-body">-->
+    <!--                    <div class="row">-->
+    <!--                        <div class="form-group  col-md-12">-->
+    <!--                              <span class="thong-tin-thanh-toan">-->
+    <!--                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>-->
+    <!--                              </span>-->
+    <!--                        </div>-->
+    <!--                        <div class="form-group col-md-12">-->
+    <!--                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>-->
+    <!--                            <select class="form-control" id="exampleSelect1">-->
+    <!--                                <option>Chờ xác nhận</option>-->
+    <!--                                <option>Đang đóng gói</option>-->
+    <!--                                <option>Chờ lấy hàng</option>-->
+    <!--                                <option>Đã giao cho đơn vị vận chuyển</option>-->
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                    <BR>-->
+    <!--                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>-->
+    <!--                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>-->
+    <!--                    <BR>-->
+    <!--                </div>-->
+    <!--                <div class="modal-footer">-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--
+    MODAL
+    -->
+</main>
+<!-- Essential javascripts for application to work-->
+<script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/seller/js/popper.min.js}"></script>
+<script th:src="@{/seller/js/bootstrap.min.js}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script th:src="@{/seller/js/jquery.table2excel.js}"></script>
+<script th:src="@{/seller/js/main.js}"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+<!-- Page specific javascripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<!-- Data table plugin -->
+<script th:src="@{/seller/js/plugins/jquery.dataTables.min.js}" type="text/javascript"></script>
+<script th:src="@{/seller/js/plugins/dataTables.bootstrap.min.js}" type="text/javascript"></script>
+<script type="text/javascript">$('#sampleTable').DataTable();</script>
+<script>
+    //Thời Gian
+    function time() {
+        var today = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Chủ Nhật";
+        weekday[1] = "Thứ Hai";
+        weekday[2] = "Thứ Ba";
+        weekday[3] = "Thứ Tư";
+        weekday[4] = "Thứ Năm";
+        weekday[5] = "Thứ Sáu";
+        weekday[6] = "Thứ Bảy";
+        var day = weekday[today.getDay()];
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        nowTime = h + " giờ " + m + " phút " + s + " giây";
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+        tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+            '</span>';
+        document.getElementById("clock").innerHTML = tmp;
+        clocktime = setTimeout("time()", "1000", "Javascript");
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+    }
+
+    //In dữ liệu
+    var myApp = new function () {
+        this.printTable = function () {
+            var tab = document.getElementById('sampleTable');
+            var win = window.open('', '', 'height=700,width=700');
+            win.document.write(tab.outerHTML);
+            win.document.close();
+            win.print();
+        }
+    }
+    //     //Sao chép dữ liệu
+    //     var copyTextareaBtn = document.querySelector('.js-textareacopybtn');
+
+    // copyTextareaBtn.addEventListener('click', function(event) {
+    //   var copyTextarea = document.querySelector('.js-copytextarea');
+    //   copyTextarea.focus();
+    //   copyTextarea.select();
+
+    //   try {
+    //     var successful = document.execCommand('copy');
+    //     var msg = successful ? 'successful' : 'unsuccessful';
+    //     console.log('Copying text command was ' + msg);
+    //   } catch (err) {
+    //     console.log('Oops, unable to copy');
+    //   }
+    // });
+
+
+    //Modal
+    // $("#show-emp").on("click", function () {
+    //     $("#ModalUP").modal({backdrop: false, keyboard: false})
+    // });
+</script>
+</body>
+
+</html>

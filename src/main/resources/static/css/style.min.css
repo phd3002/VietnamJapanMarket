@@ -7188,7 +7188,7 @@ a.axil-btn.btn-size-md i, button.axil-btn.btn-size-md i {
 }
 
 .header-style-1 {
-    background-color: #f9f3f0;
+    background-color: #F68A0C;
     padding-bottom: 30px
 }
 
@@ -7712,6 +7712,21 @@ a.axil-btn.btn-size-md i, button.axil-btn.btn-size-md i {
     transform: scale(1)
 }
 
+.header-action .shopping-cart .cart-dropdown-btn .cart-count {
+    text-align: center;
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-white);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+    border-radius: 50%;
+    height: 22px;
+    width: 22px;
+    line-height: 19px;
+    position: absolute;
+    top: -12px;
+    right: -12px
+}
 .header-action .shopping-cart .cart-dropdown-btn .cart-count {
     text-align: center;
     background-color: var(--color-primary);

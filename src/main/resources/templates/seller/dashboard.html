@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách nhân viên | Kênh người bán</title>
@@ -18,6 +18,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <style>
+        .legend-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legend-label {
+            font-size: 14px;
+        }
+    </style>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -30,7 +54,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/dashboard.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/homepage"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -38,29 +62,25 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="#" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item" th:href="@{'/store-info/' + ${storeId}}"><i class='app-menu__icon bx bx-info-square'></i><span
+        <li><a class="app-menu__item" href="/store-info"><i
+                class='app-menu__icon bx bx-info-square'></i><span
                 class="app-menu__label">Thông tin cửa hàng</span></a></li>
-        <li><a class="app-menu__item active" href="/seller/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item active" href="/seller/dashboard"><i
+                class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item" th:href="@{'/seller-products/' + ${storeId}}"><i
+        <li><a class="app-menu__item" href="/seller-products"><i
                 class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
         </li>
-
-        <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item" href="/seller/order-manager"><i
+                class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item" href="feedback-manager.html"><i
+        <li><a class="app-menu__item" href="/seller/feedback-manager"><i
                 class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
-        </li>
-        <li><a class="app-menu__item" href="shipping-manager.html"><i
-                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
-        </li>
-        <li><a class="app-menu__item" href="income-manager.html"><i
-                class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
         </li>
     </ul>
 </aside>
@@ -79,23 +99,41 @@
         <!--Left-->
         <div class="col-md-12 col-lg-6">
             <div class="row">
+                <div class="col-md-12" style="text-align: right">
+                    <!-- Phần input date -->
+                    <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+                    <div class="form-group d-flex align-items-center gap-3 mb-3" style="margin-left: 10%">
+                        <label class="control-label">Từ ngày:</label>
+                        <input class="form-control" style="width: 150px; margin-left: 5px; margin-right: 5px;"
+                               type="date" id="startDate">
+
+                        <label class="control-label">Đến ngày:</label>
+                        <input class="form-control" style="width: 150px; margin-left: 5px; margin-right: 5px;"
+                               type="date" id="endDate">
+                    </div>
+
+                    <!-- Button xuống dòng và căn trái -->
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="filterData()">
+                            <i class="fa fa-fw fa-lg fa-search"></i>Lọc dữ liệu
+                        </button>
+                    </div>
+                </div>
                 <!-- col-6 -->
-                <div class="col-md-6">
-                    <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'></i>
+                <div class="col-md-12">
+                    <div class="widget-small primary coloured-icon"><i class='icon fa-3x bx bxs-chart'></i>
                         <div class="info">
-                            <h4>Tổng khách hàng</h4>
-                            <p><b>56 khách hàng</b></p>
-                            <p class="info-tong">Tổng số khách hàng được quản lý.</p>
+                            <h4>Tổng thu nhập</h4>
+                            <p><b th:text="${totalRevenue} + ' đ'"></b></p>
                         </div>
                     </div>
                 </div>
                 <!-- col-6 -->
                 <div class="col-md-6">
-                    <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x'></i>
+                    <div class="widget-small info coloured-icon"><i class='icon bx bxs-purchase-tag-alt fa-3x'></i>
                         <div class="info">
-                            <h4>Tổng sản phẩm</h4>
-                            <p><b>1850 sản phẩm</b></p>
-                            <p class="info-tong">Tổng số sản phẩm được quản lý.</p>
+                            <h4>Tổng sản phẩm đã bán</h4>
+                            <p><b th:text="${totalProducts} + ' sản phẩm'"></b></p>
                         </div>
                     </div>
                 </div>
@@ -104,118 +142,61 @@
                     <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'></i>
                         <div class="info">
                             <h4>Tổng đơn hàng</h4>
-                            <p><b>247 đơn hàng</b></p>
-                            <p class="info-tong">Tổng số hóa đơn bán hàng trong tháng.</p>
+                            <p><b th:text="${totalOrders} +' đơn hàng'"></b></p>
                         </div>
                     </div>
                 </div>
                 <!-- col-6 -->
                 <div class="col-md-6">
-                    <div class="widget-small danger coloured-icon"><i class='icon bx bxs-error-alt fa-3x'></i>
+                    <div class="widget-small primary coloured-icon"><i class='icon bx bxs-shopping-bag-alt fa-3x'></i>
                         <div class="info">
-                            <h4>Sắp hết hàng</h4>
-                            <p><b>4 sản phẩm</b></p>
-                            <p class="info-tong">Số sản phẩm cảnh báo hết cần nhập thêm.</p>
+                            <h4>Đơn hàng thành công</h4>
+                            <p><b th:text="${totalOrdersCompleted} +' đơn hàng'"></b></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="widget-small danger coloured-icon"><i class='icon fa-3x bx bxs-receipt'></i>
+                        <div class="info">
+                            <h4>Đơn hàng hủy và hoàn trả</h4>
+                            <p><b th:text="${totalOrdersCancelledAndReturned} +' đơn hàng'"></b></p>
                         </div>
                     </div>
                 </div>
                 <!-- col-12 -->
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Tình trạng đơn hàng</h3>
                         <div>
-                            <table class="table table-bordered">
+                            <h3 class="tile-title">SẢN PHẨM BÁN CHẠY</h3>
+                        </div>
+                        <div class="tile-body">
+                            <table class="table table-hover table-bordered" id="sampleTable">
                                 <thead>
                                 <tr>
-                                    <th>ID đơn hàng</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Trạng thái</th>
+                                    <th>Mã sản phẩm</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá tiền</th>
+                                    <th>Danh mục</th>
+                                    <th>Đã bán</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>AL3947</td>
-                                    <td>Phạm Thị Ngọc</td>
-                                    <td>
-                                        19.770.000 đ
-                                    </td>
-                                    <td><span class="badge bg-info">Chờ xử lý</span></td>
+                                <tr th:each="products : ${bestSellingProducts}"
+                                    th:if="${not #lists.isEmpty(bestSellingProducts)}">
+                                    <td th:text="${products.productCode}"></td>
+                                    <td th:text="${products.productName}"></td>
+                                    <td th:text="${products.price} + ' đ'"></td>
+                                    <td th:text="${products.category}"></td>
+                                    <td th:text="${products.quantitySold}"></td>
                                 </tr>
-                                <tr>
-                                    <td>ER3835</td>
-                                    <td>Nguyễn Thị Mỹ Yến</td>
-                                    <td>
-                                        16.770.000 đ
-                                    </td>
-                                    <td><span class="badge bg-warning">Đang vận chuyển</span></td>
-                                </tr>
-                                <tr>
-                                    <td>MD0837</td>
-                                    <td>Triệu Thanh Phú</td>
-                                    <td>
-                                        9.400.000 đ
-                                    </td>
-                                    <td><span class="badge bg-success">Đã hoàn thành</span></td>
-                                </tr>
-                                <tr>
-                                    <td>MT9835</td>
-                                    <td>Đặng Hoàng Phúc</td>
-                                    <td>
-                                        40.650.000 đ
-                                    </td>
-                                    <td><span class="badge bg-danger">Đã hủy	</span></td>
+                                <!-- Hiển thị dòng thông báo khi danh sách rỗng -->
+                                <tr th:unless="${not #lists.isEmpty(bestSellingProducts)}">
+                                    <td colspan="5" style="text-align: center;">Không có dữ liệu</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <!-- / div trống-->
-                    </div>
-                </div>
-                <!-- / col-12 -->
-                <!-- col-12 -->
-                <div class="col-md-12">
-                    <div class="tile">
-                        <h3 class="tile-title">Khách hàng mới</h3>
-                        <div>
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Số điện thoại</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>#183</td>
-                                    <td>Hột vịt muối</td>
-                                    <td>21/7/1992</td>
-                                    <td><span class="tag tag-success">0921387221</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#219</td>
-                                    <td>Bánh tráng trộn</td>
-                                    <td>30/4/1975</td>
-                                    <td><span class="tag tag-warning">0912376352</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#627</td>
-                                    <td>Cút rang bơ</td>
-                                    <td>12/3/1999</td>
-                                    <td><span class="tag tag-primary">01287326654</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#175</td>
-                                    <td>Hủ tiếu nam vang</td>
-                                    <td>4/12/20000</td>
-                                    <td><span class="tag tag-danger">0912376763</span></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
                     </div>
                 </div>
                 <!-- / col-12 -->
@@ -227,17 +208,36 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Dữ liệu 6 tháng đầu vào</h3>
-                        <div class="embed-responsive embed-responsive-16by9">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9" id="lineChartContainer">
                             <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="tile">
+                        <h3 class="tile-title">Biểu đồ tỷ lệ đơn hàng</h3>
+                        <div class="embed-responsive embed-responsive-16by9" id="pieChartContainer">
+                            <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
+                        </div>
+                        <div class="legend-container">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #01ff02"></div>
+                                <span class="legend-label">Hoàn thành (<span id="completedPercent">0</span>%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #b10000"></div>
+                                <span class="legend-label">Hủy và hoàn trả (<span
+                                        id="cancelledPercent">0</span>%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
                         <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
+                        <div class="embed-responsive embed-responsive-16by9" id="radarChartContainer">
+                            <canvas class="embed-responsive-item" id="radarChartDemo"></canvas>
                         </div>
                     </div>
                 </div>
@@ -259,37 +259,92 @@
 <!--===============================================================================================-->
 <script th:src="@{/seller/js/plugins/chart.js}" type="text/javascript"></script>
 <!--===============================================================================================-->
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
     var data = {
-        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+        labels: ["5 tháng trước", "4 tháng trước", "3 tháng trước", "2 tháng trước", "Tháng trước", "Tháng này"],
         datasets: [{
-            label: "Dữ liệu đầu tiên",
-            fillColor: "rgba(255, 213, 59, 0.767), 212, 59)",
-            strokeColor: "rgb(255, 212, 59)",
-            pointColor: "rgb(255, 212, 59)",
-            pointStrokeColor: "rgb(255, 212, 59)",
+            label: "Doanh thu",
+            fillColor: "rgba(255, 193, 7, 0.5)",
+            strokeColor: "rgb(255, 193, 7)",
+            pointColor: "rgb(255, 193, 7)",
+            pointStrokeColor: "rgb(255, 193, 7)",
             pointHighlightFill: "rgb(255, 212, 59)",
             pointHighlightStroke: "rgb(255, 212, 59)",
-            data: [20, 59, 90, 51, 56, 100]
+            data: [
+                [[${totalRevenueLast5Months}]],
+                [[${totalRevenueLast4Months}]],
+                [[${totalRevenueLast3Months}]],
+                [[${totalRevenueLast2Months}]],
+                [[${totalRevenueLastMonth}]],
+                [[${totalRevenueCurrentMonth}]]
+            ]
         },
-            {
-                label: "Dữ liệu kế tiếp",
-                fillColor: "rgba(9, 109, 239, 0.651)  ",
-                pointColor: "rgb(9, 109, 239)",
-                strokeColor: "rgb(9, 109, 239)",
-                pointStrokeColor: "rgb(9, 109, 239)",
-                pointHighlightFill: "rgb(9, 109, 239)",
-                pointHighlightStroke: "rgb(9, 109, 239)",
-                data: [48, 48, 49, 39, 86, 10]
-            }
         ]
     };
-    var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-    var lineChart = new Chart(ctxl).Line(data);
+    var allZero = data.datasets[0].data.every(function (value) {
+        return value === 0;
+    });
+    if (allZero) {
+        document.getElementById("lineChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
+    } else {
+        var ctxl = $("#lineChartDemo").get(0).getContext("2d");
+        var lineChart = new Chart(ctxl).Line(data);
+    }
 
-    var ctxb = $("#barChartDemo").get(0).getContext("2d");
-    var barChart = new Chart(ctxb).Bar(data);
+    // Dữ liệu cho biểu đồ tròn
+    var pieData = [
+        {value: [[${totalOrdersCompleted}]], color: "#01ff02", highlight: "#007b01", label: "Hoàn thành"},
+        {
+            value: [[${totalOrdersCancelledAndReturned}]],
+            color: "#b10000",
+            highlight: "#ff0000",
+            label: "Hủy và hoàn trả"
+        },
+    ];
+
+    var totalValue = pieData.reduce((sum, item) => sum + item.value, 0);
+
+    if (totalValue === 0) {
+        document.getElementById("pieChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
+    } else {
+        document.getElementById("completedPercent").textContent =
+            ((pieData[0].value / totalValue) * 100).toFixed(1);
+        document.getElementById("cancelledPercent").textContent =
+            ((pieData[1].value / totalValue) * 100).toFixed(1);
+        var ctxp = document.getElementById("pieChartDemo").getContext("2d");
+        var pieChart = new Chart(ctxp).Pie(pieData);
+    }
+
+    // Dữ liệu cho biểu đồ radar
+    var radarData = {
+        labels: ["5 sao", "4 sao", "3 sao", "2 sao", "1 sao"],
+        datasets: [
+            {
+                label: "Dữ liệu đầu tiên",
+                fillColor: "rgba(255, 213, 59, 0.7)",
+                strokeColor: "rgb(255, 212, 59)",
+                pointColor: "rgb(255, 212, 59)",
+                data: [
+                    [[${count5StarFeedback}]],
+                    [[${count4StarFeedback}]],
+                    [[${count3StarFeedback}]],
+                    [[${count2StarFeedback}]],
+                    [[${count1StarFeedback}]]
+                ]
+            },
+        ]
+    };
+    var allZeroData = radarData.datasets[0].data.every(function (value) {
+        return value === 0;
+    });
+    if (allZeroData) {
+        document.getElementById("radarChartContainer").innerHTML = "<p style='text-align: center; color: gray;'>Không có dữ liệu để hiển thị</p>";
+    } else {
+        var ctxr = document.getElementById("radarChartDemo").getContext("2d");
+        var radarChart = new Chart(ctxr).Radar(radarData);
+    }
+
 </script>
 <script type="text/javascript">
     //Thời Gian
@@ -331,6 +386,54 @@
             }
             return i;
         }
+    }
+</script>
+<script>
+
+    function filterData() {
+
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const today = moment();
+        const sixMonthsAgo = moment().subtract(6, 'months');
+
+        if (startDate && moment(startDate).isAfter(endDate)) {
+            showErrorMessage('Ngày bắt đầu không thể lớn hơn ngày kết thúc.');
+        } else if (startDate && moment(startDate).isAfter(today)) {
+            showErrorMessage('Ngày bắt đầu không thể lớn hơn ngày hiện tại.');
+        } else if (endDate && moment(endDate).isAfter(today)) {
+            showErrorMessage('Ngày kết thúc không thể lớn hơn ngày hiện tại.');
+        } else if (startDate && moment(startDate).isBefore(sixMonthsAgo)) {
+            showErrorMessage('Ngày bắt đầu không thể nhỏ hơn 6 tháng so với hiện tại.');
+        } else if (endDate && moment(endDate).isBefore(sixMonthsAgo)) {
+            showErrorMessage('Ngày kết thúc không thể nhỏ hơn 6 tháng so với hiện tại.');
+        } else {
+            // Ẩn thông báo lỗi
+            document.getElementById('errorMessage').style.display = 'none';
+            let url = '/seller/dashboard';
+            const params = [];
+
+            if (startDate) {
+                params.push(`startDate=${startDate}`);
+            }
+
+            if (endDate) {
+                params.push(`endDate=${endDate}`);
+            }
+
+            if (params.length > 0) {
+                url += '?' + params.join('&');
+            }
+
+            window.location.href = url;
+        }
+    }
+
+    function showErrorMessage(message) {
+        // Hiển thị thông báo lỗi trong giao diện
+        const errorMessageElement = document.getElementById('errorMessage');
+        errorMessageElement.textContent = message;
+        errorMessageElement.style.display = 'block';
     }
 </script>
 </body>

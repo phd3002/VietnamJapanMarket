@@ -32,33 +32,37 @@
                         <div class="tab-content">
                             <!-- Orders Tab -->
                             <div class="tab-pane fade show active" id="nav-orders" role="tabpanel">
+
+                                <div class="filter-section">
+                                    <label for="statusFilter">Lọc theo trạng thái: </label>
+                                    <select id="statusFilter" name="status"
+                                            onchange="filterOrdersByStatus(this.value)">
+                                        <option value="" th:selected="${status == 'null'}">Tất cả</option>
+                                        <option value="Pending" th:selected="${status == 'Pending'}">
+                                            Chờ xử lý
+                                        </option>
+                                        <option value="Processing" th:selected="${status == 'Processing'}">
+                                            Đang gói hàng
+                                        </option>
+                                        <option value="Shipping" th:selected="${status == 'Shipping'}">
+                                            Đang vận chuyển
+                                        </option>
+                                        <option value="Completed" th:selected="${status == 'Completed'}">
+                                            Hoàn thành
+                                        </option>
+                                        <option value="Cancelled" th:selected="${status == 'Cancelled'}">
+                                            Đã hủy
+                                        </option>
+                                        <option value="Returned" th:selected="${status == 'Returned'}">
+                                            Trả hàng/Hoàn tiền nào
+                                        </option>
+                                        <option value="Returned" th:selected="${status == 'Failed'}">
+                                            Thất bại
+                                        </option>
+                                    </select>
+                                </div>
                                 <div class="axil-dashboard-order" th:if="orders != null">
                                     <div class="table-responsive" th:if="${message == null}">
-                                        <div class="filter-section">
-                                            <label for="statusFilter">Lọc theo trạng thái: </label>
-                                            <select id="statusFilter" name="status"
-                                                    onchange="filterOrdersByStatus(this.value)">
-                                                <option value="" th:selected="${status == 'null'}">Tất cả</option>
-                                                <option value="Pending" th:selected="${status == 'Pending'}">
-                                                    Chờ xử lý
-                                                </option>
-                                                <option value="Processing" th:selected="${status == 'Processing'}">
-                                                    Đang gói hàng
-                                                </option>
-                                                <option value="Shipping" th:selected="${status == 'Shipping'}">
-                                                    Đang vận chuyển
-                                                </option>
-                                                <option value="Completed" th:selected="${status == 'Completed'}">
-                                                    Hoàn thành
-                                                </option>
-                                                <option value="Cancelled" th:selected="${status == 'Cancelled'}">
-                                                    Đã hủy
-                                                </option>
-                                                <option value="Returned" th:selected="${status == 'Returned'}">
-                                                    Trả hàng/Hoàn tiền nào
-                                                </option>
-                                            </select>
-                                        </div>
                                         <table class="table">
                                             <thead>
                                             <tr>
@@ -76,7 +80,7 @@
                                                 <td th:text="${order.orderDate}"></td>
                                                 <td th:text="${order.status}"></td>
                                                 <td th:text="${order.totalQuantity}"></td>
-                                                <td th:text="${order.totalPrice}"></td>
+                                                <td th:text="${order.getFormattedPrice()}"></td>
                                                 <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"
                                                        class="axil-btn view-btn">Xem</a></td>
                                             </tr>
@@ -91,7 +95,7 @@
                                                         <li class="page-item"
                                                             th:classappend="${currentPage == 0} ? 'disabled'">
                                                             <a class="page-link"
-                                                               th:href="@{/orders(page=0, size=10, status=${status != null && status != '' ? status : ''})}">
+                                                               th:href="@{/orders(page=0, size=${size}, status=${status})}">
                                                                 Đầu
                                                             </a>
                                                         </li>
@@ -100,7 +104,7 @@
                                                         <li class="page-item"
                                                             th:classappend="${currentPage == 0} ? 'disabled'">
                                                             <a class="page-link"
-                                                               th:href="@{/orders(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}"
+                                                               th:href="@{/orders(page=${currentPage - 1}, size=${size}, status=${status})}"
                                                                th:if="${currentPage > 0}">
                                                                 Trước
                                                             </a>
@@ -111,7 +115,7 @@
                                                             th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
                                                             th:classappend="${pageNum == currentPage} ? 'active'">
                                                             <a class="page-link"
-                                                               th:href="@{/orders(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}"
+                                                               th:href="@{/orders(page=${pageNum}, size=${size}, status=${status})}"
                                                                th:text="${pageNum + 1}">
                                                             </a>
                                                         </li>
@@ -120,7 +124,7 @@
                                                         <li class="page-item"
                                                             th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                                                             <a class="page-link"
-                                                               th:href="@{/orders(page=${currentPage + 1}, size=10, status=${status != null && status != '' ? status : ''})}"
+                                                               th:href="@{/orders(page=${currentPage + 1}, size=${size}, status=${status})}"
                                                                th:if="${currentPage < totalPages - 1}">
                                                                 Sau
                                                             </a>
@@ -130,7 +134,7 @@
                                                         <li class="page-item"
                                                             th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                                                             <a class="page-link"
-                                                               th:href="@{/orders(page=${totalPages - 1}, size=10, status=${status != null && status != '' ? status : ''})}">
+                                                               th:href="@{/orders(page=${totalPages - 1}, size=${size}, status=${status})}">
                                                                 Cuối
                                                             </a>
                                                         </li>

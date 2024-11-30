@@ -2,7 +2,6 @@ package com.ecommerce.g58.entity;
 
 import lombok.*;
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +28,7 @@ public class Transactions {
     private Wallet toWalletId;
 
     @Column(name = "amount", nullable = false)
-    private BigDecimal amount;
+    private long amount;
 
     @Column(name = "transaction_type")
     private String transactionType;
@@ -42,4 +41,7 @@ public class Transactions {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "payment_type")
+    private String paymentType;
 }

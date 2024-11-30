@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title th:text="${pageTitle} ?: 'Product Detail'"></title>
@@ -69,26 +69,27 @@
                         <div class="single-product-content">
                             <div class="inner">
                                 <!-- Product title and price -->
-                                <h2 class="product-title" th:text="${productDetail.productName}">Product Name</h2>
-                                <span class="price-amount" th:text="${productDetail.price} + ' $'">Price</span>
+                                <h2 class="product-title" th:text="${productDetail.productName}">Tên sản phẩm</h2>
+                                <span class="price-amount" th:text="${productDetail.getPriceFormated()}">Giá</span>
                                 <!-- Rating and review count -->
                                 <div class="product-rating">
                                     <div class="star-rating">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
+                                        <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, fullStars)}"
+                                           th:if="${fullStars > 0}"></i>
+                                        <i class="fas fa-star-half-alt" th:if="${halfStars > 0}"></i>
+                                        <i class="far fa-star" th:each="i : ${#numbers.sequence(1, emptyStars)}"
+                                           th:if="${emptyStars > 0}"></i>
                                     </div>
                                     <div class="review-link">
-                                        <a href="#">(<span>2</span> customer reviews)</a>
+                                        <span th:text="${avgText}"></span> (<span
+                                            th:text="${feedbacks.size()}"></span> đánh giá của khách hàng)
                                     </div>
                                 </div>
                                 <!-- Product variations -->
                                 <div class="product-variations-wrapper">
                                     <!-- Colors Section -->
                                     <div class="product-variation">
-                                        <h6 class="title">Colors:</h6>
+                                        <h6 class="title">Màu sắc: </h6>
                                         <div class="color-variant-wrapper">
                                             <ul class="color-variant">
                                                 <li class="color-extra-01" th:each="color : ${availableColors}">
@@ -101,7 +102,7 @@
                                     </div>
                                     <!-- Sizes Section -->
                                     <div class="product-variation product-size-variation">
-                                        <h6 class="title">Size:</h6>
+                                        <h6 class="title">Loại: </h6>
                                         <ul class="range-variant">
                                             <li th:each="size : ${availableSizes}"
                                                 th:data-size-name="${size}"
@@ -117,59 +118,36 @@
                                     <div th:if="${error}" class="alert alert-danger" role="alert">
                                         <span th:text="${error}"></span>
                                     </div>
-                                    <form th:action="@{/add_to_cart}" method="post">
+                                </div>
+                            </div>
+                            <div class="product-action-wrapper d-flex-center">
+                                <div class="wishlist-form-container d-flex">
+                                    <!-- Add to Cart Form -->
+                                    <form th:action="@{/add_to_cart}" method="post" style="margin-right: 10px;">
                                         <input type="hidden" name="productId" th:value="${productDetail.productId}">
                                         <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
                                         <input type="hidden" name="productName" th:value="${productDetail.productName}">
                                         <input type="hidden" name="imageId" th:value="${productDetail.thumbnail}">
-                                        <input type="hidden" name="selectedSize" id="selectedSizeInput" value=""> <!-- This will hold the selected size -->
-                                        <input type="hidden" name="quantity" value="1"> <!-- Default quantity -->
+                                        <input type="hidden" name="selectedSize" id="selectedSizeInput" value="">
+                                        <input type="hidden" name="quantity" value="1">
                                         <input type="hidden" name="price" th:value="${productDetail.price}">
 
-                                        <button type="submit" id="addToCartButton" class="btn btn-primary" disabled>
-                                            Add to Cart
+                                        <!-- Set width to 100% for both buttons -->
+                                        <button type="submit" id="addToCartButton" class="btn btn-primary"
+                                                style="width: 155px; height: 60px" disabled>Thêm vào giỏ hàng
                                         </button>
                                     </form>
-                                    <!-- Script to enable Add to Cart button when a size is selected -->
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", function () {
-                                            const sizeOptions = document.querySelectorAll('.size-option');
-                                            const addToCartButton = document.getElementById('addToCartButton');
-                                            const selectedSizeInput = document.getElementById('selectedSizeInput');
 
-                                            sizeOptions.forEach(option => {
-                                                option.addEventListener('click', function () {
-                                                    sizeOptions.forEach(s => s.classList.remove('selected'));
-                                                    this.classList.add('selected');
-
-                                                    // Set the selected size name to the hidden input
-                                                    const selectedSize = this.getAttribute('data-size-name');
-                                                    selectedSizeInput.value = selectedSize; // Set the selected size
-
-                                                    // Enable Add to Cart button
-                                                    addToCartButton.removeAttribute('disabled');
-                                                });
-                                            });
-                                        });
-                                    </script>
-                                </div>
-                            </div>
-                            <!-- Wishlist Form -->
-                            <div class="product-action-wrapper d-flex-center">
-                                <ul class="product-action d-flex-center mb--0">
-                                    <!-- Original actions inside ul, without form or div -->
-                                    <li class="wishlist">
-                                        <!-- Any existing wishlist icon here -->
-                                        <a href="#" class="add-wishlist-icon"><i class="fal fa-heart"></i></a>
-                                    </li>
-                                    <!-- Other list items here if needed -->
-                                </ul>
-                                <!-- Place the form separately, outside the ul -->
-                                <div class="wishlist-form-container">
+                                    <!-- Add to Wishlist Form -->
                                     <form th:action="@{/add_to_wishlist}" method="post">
                                         <input type="hidden" name="productId" th:value="${productDetail.productId}">
                                         <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
-                                        <button type="submit" class="axil-btn wishlist-btn">Add to Wishlist</button>
+
+                                        <!-- Set same width for this button as well -->
+                                        <button type="submit" class="btn btn-primary"
+                                                style="width: 155px; height: 60px; background-color: #ff497c; border: none">
+                                            Thêm vào danh sách mong muốn
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -184,22 +162,19 @@
                 <div class="axil-dashboard-author">
                     <div class="media">
                         <div class="thumbnail">
-                            <a href="#"><img th:src="@{${product.storeId.pictureUrl}}"
-                                             alt="Hello Annie"
-                                             class="author-image"></a>
+                            <a th:href="@{/view-store/{id}(id=${product.storeId.storeId})}"><img
+                                    th:src="@{${product.storeId.pictureUrl}}"
+                                    alt="Hello Annie"
+                                    class="author-image"></a>
                         </div>
                         <div class="media-body-1">
                             <div class="info-row">
                                 <span class="name"><h3 style="margin-bottom: 8px;"
                                                        th:text="${product.storeId.storeName}"></h3></span>
-                                <span class="joining-date">Register Since Sep 2020</span>
-                                <span class="email">Email: annie@example.com</span>
                             </div>
                             <div class="info-row">
-                                <a href="#"><i class="flaticon-chat hover-flip-item"> Chat with shop</i></a>
-                                <span class="address">Address: 123 Street Name</span>
                                 <a th:href="@{/view-store/{id}(id=${product.storeId.storeId})}"><i
-                                        class="flaticon-shop hover-flip-item"> View Shop</i></a>
+                                        class="flaticon-shop hover-flip-item"> Xem Cửa hàng</i></a>
                             </div>
                         </div>
                     </div>
@@ -211,22 +186,22 @@
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
-                    <h4 class="mb--60 desc-heading">Description</h4>
+                    <h4 class="mb--60 desc-heading">Mô tả</h4>
                     <div class="row mb--15">
                         <div class="col-lg-6 mb--30">
                             <div class="single-desc">
-                                <h5 class="title">Specifications:</h5>
+                                <h5 class="title">Thông số: </h5>
                                 <p th:text="${productDetail.productDescription}"></p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="reviews-wrapper">
-                    <h4 class="mb--60">Reviews</h4>
+                    <h4 class="mb--60">Đánh giá</h4>
                     <div class="row">
                         <div class="col-lg-12 mb--40">
                             <div class="axil-comment-area pro-desc-commnet-area">
-                                <h5 class="title" th:text="${feedbacks.size() + ' Review for this product'}"></h5>
+                                <h5 class="title" th:text="${feedbacks.size() + ' Đánh giá cho sản phẩm này'}"></h5>
                                 <ul class="comment-list" th:each="feedback : ${feedbacks}">
                                     <li class="comment">
                                         <div class="comment-body">
@@ -252,21 +227,22 @@
                                                         <p th:text="${'“' + feedback.comment + '”'}"></p>
                                                     </div>
                                                     <!-- Phần hiển thị reply -->
-                                                    <div class="comment-replies">
+                                                    <div class="comment-replies" th:if="${feedback.sellerFeedback}">
                                                         <div class="single-comment reply-comment">
                                                             <div class="comment-img">
-                                                                <img th:src="@{/images/others/author1.png}" alt="Author Images">
+                                                                <img th:src="@{/images/others/author1.png}"
+                                                                     alt="Author Images">
                                                             </div>
                                                             <div class="comment-inner">
                                                                 <h6 class="commenter">
                                                                     <a class="hover-flip-item-wrapper">
                                                                         <span class="hover-flip-item">
-                                                                            <span data-text="Reply Author">ABC Store</span>
+                                                                            <span th:text="${feedback.storeId.storeName}"></span>
                                                                         </span>
                                                                     </a>
                                                                 </h6>
                                                                 <div class="comment-text">
-                                                                    <p>"This is a reply to the comment above."</p>
+                                                                    <p th:text="${'“' + feedback.sellerFeedback + '”'}"></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -280,14 +256,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center pt--30">
-                    <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
-                </div>
+                <!--                <div class="text-center pt&#45;&#45;30">-->
+                <!--                    <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>-->
+                <!--                </div>-->
             </div>
         </div>
     </div>
 </main>
-
+<br>
+<br>
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>
 
@@ -310,5 +287,27 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<!-- Script to enable Add to Cart button when a size is selected -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sizeOptions = document.querySelectorAll('.size-option');
+        const addToCartButton = document.getElementById('addToCartButton');
+        const selectedSizeInput = document.getElementById('selectedSizeInput');
+
+        sizeOptions.forEach(option => {
+            option.addEventListener('click', function () {
+                sizeOptions.forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+
+                // Set the selected size name to the hidden input
+                const selectedSize = this.getAttribute('data-size-name');
+                selectedSizeInput.value = selectedSize; // Set the selected size
+
+                // Enable Add to Cart button
+                addToCartButton.removeAttribute('disabled');
+            });
+        });
+    });
+</script>
 </body>
 </html>

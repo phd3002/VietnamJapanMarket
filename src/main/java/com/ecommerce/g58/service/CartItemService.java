@@ -18,4 +18,9 @@ public interface CartItemService {
 
     List<CartItem> getCartItemsByIds(List<Integer> cartItemId);
 
+    CartItem getCartItemById(Integer cartItemId);
+
+    void removeCartItemsByIds(List<Integer> cartItemIds);
+
+
 }

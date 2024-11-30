@@ -1,137 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Danh sách đơn hàng | Kênh vận chuyển</title>
+    <title>Danh sách đơn hàng | Kênh người bán</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
-    <!-- Font-icon seller-->
+    <link rel="stylesheet" type="text/css" th:href="@{/logistic/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+    <!-- Font-icon seller-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
-    <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
-    <script>
 
-        function readURL(input, thumbimage) {
-            if (input.files && input.files[0]) { //Sử dụng  cho Firefox - chrome
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $("#thumbimage").attr('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            } else { // Sử dụng cho IE
-                $("#thumbimage").attr('src', input.value);
-
-            }
-            $("#thumbimage").show();
-            $('.filename').text($("#uploadfile").val());
-            $('.Choicefile').css('background', '#14142B');
-            $('.Choicefile').css('cursor', 'default');
-            $(".removeimg").show();
-            $(".Choicefile").unbind('click');
-
-        }
-
-        $(document).ready(function () {
-            $(".Choicefile").bind('click', function () {
-                $("#uploadfile").click();
-
-            });
-            $(".removeimg").click(function () {
-                $("#thumbimage").attr('src', '').hide();
-                $("#myfileupload").html('<input type="file" id="uploadfile"  onchange="readURL(this);" />');
-                $(".removeimg").hide();
-                $(".Choicefile").bind('click', function () {
-                    $("#uploadfile").click();
-                });
-                $('.Choicefile').css('background', '#14142B');
-                $('.Choicefile').css('cursor', 'pointer');
-                $(".filename").text("");
-            });
-        })
-    </script>
 </head>
 
-<body class="app sidebar-mini rtl">
-<style>
-    .Choicefile {
-        display: block;
-        background: #14142B;
-        border: 1px solid #fff;
-        color: #fff;
-        width: 150px;
-        text-align: center;
-        text-decoration: none;
-        cursor: pointer;
-        padding: 5px 0px;
-        border-radius: 5px;
-        font-weight: 500;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .Choicefile:hover {
-        text-decoration: none;
-        color: white;
-    }
-
-    #uploadfile,
-    .removeimg {
-        display: none;
-    }
-
-    #thumbbox {
-        position: relative;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .removeimg {
-        height: 25px;
-        position: absolute;
-        background-repeat: no-repeat;
-        top: 5px;
-        left: 5px;
-        background-size: 25px;
-        width: 25px;
-        /* border: 3px solid red; */
-        border-radius: 50%;
-
-    }
-
-    .removeimg::before {
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        content: '';
-        border: 1px solid red;
-        background: red;
-        text-align: center;
-        display: block;
-        margin-top: 11px;
-        transform: rotate(45deg);
-    }
-
-    .removeimg::after {
-        /* color: #FFF; */
-        /* background-color: #DC403B; */
-        content: '';
-        background: red;
-        border: 1px solid red;
-        text-align: center;
-        display: block;
-        transform: rotate(-45deg);
-        margin-top: -2px;
-    }
-</style>
+<body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
 <header class="app-header">
     <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
@@ -141,7 +31,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/sign-in"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -149,14 +39,14 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item" href="/logistic/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item active" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item active" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="income-manager.html"><i class='app-menu__icon bx bx-dollar'></i><span
                 class="app-menu__label">Quản lý doanh thu</span></a></li>
@@ -164,228 +54,123 @@
 </aside>
 <main class="app-content">
     <div class="app-title">
-        <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item">Danh sách đơn hàng</li>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item active"><a href="#"><b>Chi tiết đơn hàng</b></a></li>
         </ul>
+        <div class="col-sm-2">
+            <a class="btn btn-delete btn-sm print-file" type="button" title="In" onclick="myApp.printTable()"><i
+                    class="fas fa-print"></i> In hóa đơn</a>
+        </div>
+        <div id="clock"></div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tile">
-                <h3 class="tile-title">Thông tin người gửi</h3>
-                <div class="tile-body">
-                    <form class="row">
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Tên người gửi</label>
-                            <input class="form-control" type="text" value="Meo" readonly>
+    <div class="page-wrapper">
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-body printableArea" id="sample">
+                        <h3><b>Hóa đơn</b> <span class="pull-right" name="id" th:text="'#' + ${trackingNumber}"></span></h3>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-left col-4">
+                                    <address>
+                                        <div>Đơn vị bán:
+                                            &nbsp;<b class="text-danger text-uppercase" th:text="${storeName}"></b>
+                                        </div>
+                                        <div>Địa chỉ:
+                                            <b class="text-secondary" th:text="${storeAddress}"></b>
+                                        </div>
+                                        <div>Số điện thoại:
+                                            <b class="text-secondary" th:text="${storePhone}"></b>
+                                        </div>
+                                    </address>
+                                </div>
+                                <div class="pull-right text-end">
+                                    <address>
+                                        <div>Người mua:
+                                            &nbsp;<b class="text-danger text-uppercase" th:text="${customerName}"></b>
+                                        </div>
+                                        <div>Địa chỉ:
+                                            <b class="text-secondary" th:text="${customerAddress}"></b>
+                                        </div>
+                                        <div>Số điện thoại:
+                                            <b class="text-secondary" th:text="${customerPhone}"></b>
+                                        </div>
+                                        <div>Ngày đặt:
+                                            <b class="text-secondary" th:text="${orderDate}"></b>
+                                        </div>
+                                    </address>
+                                </div>
+                                <div class="pull-right col-4">
+                                    <address>
+                                        <div>Trạng thái hiện tại:
+                                            &nbsp;<b class="text-danger text-uppercase" th:text="${orderStatus}"></b>
+                                        </div>
+                                        <div>Ngày cập nhật gần nhất:
+                                            <b class="text-secondary" th:text="${updateTime}"></b>
+                                        </div>
+                                    </address>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="table-responsive mt-5" style="clear: both">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-end">Tên sản phẩm</th>
+                                            <th class="text-end">Màu sắc x Kích thước</th>
+                                            <th class="text-end">Số lượng</th>
+                                            <th class="text-end">Đơn giá</th>
+                                            <th class="text-end">Thành tiền</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="order : ${orderDetails}">
+                                            <td class="text-end" th:text="${order.productName}"></td>
+                                            <td class="text-end" th:text="${order.productType}"></td>
+                                            <td class="text-end" th:text="${order.quantity}"></td>
+                                            <td class="text-end" th:text="${order.getFormattedProductPrice()}"></td>
+                                            <td class="text-end" th:text="${order.getFormattedTotalPrice()}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-lg-right">Cộng tiền thuế GTGT:</td>
+                                            <td class="text-end" th:text="${tax} +''"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-lg-right">Phí vận chuyển:</td>
+                                            <td class="text-end" th:text="${shippingFee}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-lg-right"><b>Phương thức thanh toán:</b></td>
+                                            <td class="text-end"><b th:text="${paymentMethod == 1 ? 'Thanh toán bằng VNPay' : 'Thanh toán bằng ví điện tử'}"></b></td>                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-lg-right"><b>Tổng cộng tiền thanh toán (áp dụng
+                                                mã giảm giá):</b></td>
+                                            <td class="text-end"><b th:text="${totalAmount}"></b></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Tên sản phẩm</label>
-                            <input class="form-control" type="text" value="Meo" readonly>
-                        </div>
-                        <div class="form-group col-md-3 ">
-                            <label class="control-label">Số lượng</label>
-                            <input class="form-control" type="text" value="2" readonly>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Khối lượng(gram)</label>
-                            <input class="form-control" type="text" value="500" readonly>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Thông tin thanh toán</label>
-                            <input class="form-control" type="text" value="Đã thanh toán" readonly>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Địa chỉ nhận hàng</label>
-                            <input class="form-control" type="text" value="Meo" readonly>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Số điện thoại</label>
-                            <input class="form-control" type="text" value="0123123123" readonly>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Yêu cầu vận chuyển</label>
-                            <textarea class="form-control" name="mota" id="mota"></textarea>
-                            <script>CKEDITOR.replace('mota');</script>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                <br>
-                <h3 class="tile-title">Thông tin người nhận</h3>
-                <div class="tile-body">
-                    <form class="row">
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Tên người nhận</label>
-                            <input class="form-control" type="text" value="Meo" readonly>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Địa chỉ nhận hàng</label>
-                            <input class="form-control" type="text" value="Meo" readonly>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Số điện thoại</label>
-                            <input class="form-control" type="text" value="0123123123" readonly>
-                        </div>
-                    </form>
-                </div>
-                <br>
-                <h3 class="tile-title">Thông tin vận chuyển</h3>
-                <div class="tile-body">
-                    <form class="row">
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Tình trạng vận chuyển</label>
-                            <input class="form-control" type="text" value="Đang vận chuyển" readonly>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Mã vận chuyển</label>
-                            <input class="form-control" type="text" value="ABC1231231" readonly>
-                        </div>
-                    </form>
-                </div>
-                <a class="btn btn-cancel" href="order-manager.html">Quay về</a>
             </div>
         </div>
     </div>
 </main>
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
-<script src="../../static/seller/js/main.js"></script>
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
-<script>
-    let additionalImageFiles = [];  // Store additional image files for deletion handling
 
-    // Function to handle main image preview
-    function readMainImage(input) {
-        const mainThumbbox = document.getElementById('mainThumbbox');
-        mainThumbbox.innerHTML = ""; // Clear any existing images
-
-        if (input.files && input.files[0]) {
-            const file = input.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.margin = "10px";
-                img.height = 200;  // Main image height
-                img.width = 200;   // Main image width
-                img.style.objectFit = "cover";  // Cover the thumbnail area
-                img.style.position = "relative";
-
-                // Create red "X" icon for removing the image
-                const removeButton = document.createElement('span');
-                removeButton.innerHTML = "&#10006;";  // Unicode for "X"
-                removeButton.style.position = "absolute";
-                removeButton.style.top = "5px";
-                removeButton.style.right = "5px";
-                removeButton.style.color = "red";
-                removeButton.style.fontSize = "20px";
-                removeButton.style.cursor = "pointer";
-
-                // Remove the main image on click
-                removeButton.addEventListener('click', function () {
-                    input.value = "";  // Clear the input
-                    mainThumbbox.innerHTML = "";  // Remove the preview
-                });
-
-                // Create a container for the image and the remove button
-                const imageContainer = document.createElement('div');
-                imageContainer.style.position = "relative";
-                imageContainer.style.display = "inline-block";
-                imageContainer.appendChild(img);
-                imageContainer.appendChild(removeButton);
-
-                mainThumbbox.appendChild(imageContainer);  // Display the main image
-            }
-
-            reader.readAsDataURL(file);
-        }
-    }
-</script>
-<script>
-    // Function to handle the "Lưu lại" button click event
-    document.getElementById("saveButton").addEventListener("click", function () {
-        // Display a confirmation popup similar to the delete confirmation
-        swal({
-            title: "Xác nhận",
-            text: "Bạn có chắc chắn muốn tạo sản phẩm này?",
-            buttons: ["Hủy bỏ", "Đồng ý"],
-        }).then((willSave) => {
-            if (willSave) {
-                // After confirmation, display success message
-                swal("Sản phẩm đã được tạo thành công!", {
-                    icon: "success",
-                }).then(() => {
-                    // After success message, redirect to another page (e.g., back to the order list)
-                    window.location.href = "product-manager.html";  // Redirect to order management page
-                });
-            }
-        });
-    });
-</script>
-<script>
-    document.getElementById('add-variant').addEventListener('click', function () {
-        const variantTemplate = document.querySelector('.variant-item').cloneNode(true);
-
-        // Reset the cloned input fields
-        const imageInput = variantTemplate.querySelector('input[type="file"]');
-        const imagePreview = variantTemplate.querySelector('#variantThumbbox');
-
-        // Clear the image input and preview
-        imageInput.value = "";
-        imagePreview.innerHTML = "";
-
-        document.getElementById('variants-container').appendChild(variantTemplate);
-    });
-</script>
-<script>
-    // Function to handle variant image preview
-    function readVariantImage(input) {
-        const variantThumbbox = input.parentNode.nextElementSibling;  // The div for displaying the image
-        variantThumbbox.innerHTML = ""; // Clear any existing images
-
-        if (input.files && input.files[0]) {
-            const file = input.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.margin = "10px";
-                img.height = 100;  // Thumbnail height
-                img.width = 100;   // Thumbnail width
-                img.style.objectFit = "cover";
-
-                // Create red "X" icon for removing the image
-                const removeButton = document.createElement('span');
-                removeButton.innerHTML = "&#10006;";  // Unicode for "X"
-                removeButton.style.position = "absolute";
-                removeButton.style.top = "5px";
-                removeButton.style.right = "5px";
-                removeButton.style.color = "red";
-                removeButton.style.fontSize = "20px";
-                removeButton.style.cursor = "pointer";
-
-                // Remove the variant image on click
-                removeButton.addEventListener('click', function () {
-                    input.value = "";  // Clear the input
-                    variantThumbbox.innerHTML = "";  // Remove the preview
-                });
-
-                // Create a container for the image and the remove button
-                const imageContainer = document.createElement('div');
-                imageContainer.style.position = "relative";
-                imageContainer.style.display = "inline-block";
-                imageContainer.appendChild(img);
-                imageContainer.appendChild(removeButton);
-
-                variantThumbbox.appendChild(imageContainer);  // Display the variant image
-            }
-
-            reader.readAsDataURL(file);
-        }
-    }
-</script>
+<!-- Essential javascripts for application to work-->
+<script th:src="@{/logistic/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/logistic/js/popper.min.js}"></script>
+<script th:src="@{/logistic/js/bootstrap.min.js}"></script>
+<script th:src="@{/logistic/js/main.js}"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script th:src="@{/logistic/js/plugins/pace.min.js}"></script>
 </body>
-
 </html>

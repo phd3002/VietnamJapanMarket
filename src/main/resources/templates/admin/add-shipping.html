@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách vận chuyển | Kênh người bán</title>
@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -31,7 +31,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/sign-in"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -39,16 +39,16 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item " href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item" href="/admin/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item" href="user-manager.html"><i class='app-menu__icon bx bx-id-card'></i>
+        <li><a class="app-menu__item" href="/admin/user-manager"><i class='app-menu__icon bx bx-id-card'></i>
             <span class="app-menu__label">Quản lý người dùng</span></a></li>
-        <li><a class="app-menu__item active" href="shipping-manager.html"><i
+        <li><a class="app-menu__item active" href="/list-shipping-unit"><i
                 class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
         </li>
         <li><a class="app-menu__item" href="income-manager.html"><i
@@ -68,38 +68,40 @@
             <div class="tile">
                 <h3 class="tile-title">Tạo mới đơn vị vận chuyển</h3>
                 <div class="tile-body">
-                    <form class="row">
+                    <form class="row" th:action="@{/add-shipping-unit}" method="post" th:object="${shippingUnit}">
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên đơn vị vận chuyển</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" th:field="*{unitName}" required>
                         </div>
-                        <div class="form-group  col-md-3">
+                        <div class="form-group col-md-3">
                             <label class="control-label">Số điện thoại</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" th:field="*{unitPhone}" required>
                         </div>
-                        <div class="form-group col-md-3 ">
+                        <div class="form-group col-md-3">
                             <label class="control-label">Địa chỉ</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" th:field="*{unitAddress}" required>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Giá cước(VND/kg)</label>
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="text" th:field="*{shippingRevenue}" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <button class="btn btn-save" type="submit">Lưu lại</button>
+                            <a class="btn btn-cancel" th:href="@{/list-shipping-unit}">Hủy bỏ</a>
                         </div>
                     </form>
                 </div>
-                <button class="btn btn-save" type="button" id="saveButton">Lưu lại</button>
-                <a class="btn btn-cancel" href="shipping-manager.html">Hủy bỏ</a>
             </div>
         </div>
     </div>
 </main>
 <!-- Essential javascripts for application to work-->
-<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
-<script src="../../static/seller/js/popper.min.js"></script>
-<script src="../../static/seller/js/bootstrap.min.js"></script>
-<script src="../../static/seller/js/main.js"></script>
+<script th:src="@{/admin/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/admin/js/popper.min.js}"></script>
+<script th:src="@{/admin/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top-->
-<script src="../../static/seller/js/plugins/pace.min.js"></script>
+<script th:src="@{/admin/js/plugins/pace.min.js}"></script>
 <script>
     // Function to handle the "Lưu lại" button click event
     document.getElementById("saveButton").addEventListener("click", function () {

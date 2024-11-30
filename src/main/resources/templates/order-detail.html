@@ -61,6 +61,12 @@
         background: var(--color-primary);
         color: var(--color-white);
     }
+
+    #refund-order:hover {
+        background: white !important;
+        border: 2px solid var(--color-danger) !important;
+        color: var(--color-danger) !important;
+    }
 </style>
 
 <body class="sticky-header">
@@ -78,23 +84,7 @@
                 <!-- Dashboard Sidebar -->
                 <div class="row">
                     <div class="col-xl-3 col-md-4">
-                        <aside class="axil-dashboard-aside">
-                            <nav class="axil-dashboard-nav">
-                                <div class="nav nav-tabs" role="tablist">
-                                    <a class="nav-item nav-link" href="my-account.html"
-                                       aria-selected="false"><i class="fas fa-user"></i>Tài khoản</a>
-                                    <a class="nav-item nav-link" href="my-shop.html"
-                                       aria-selected="false"><i class="fas fa-store"></i>Cửa hàng</a>
-                                    <a class="nav-item nav-link active" href="order.html"
-                                       aria-selected="true"><i class="fas fa-shopping-basket"></i>Đơn hàng</a>
-                                    <a class="nav-item nav-link" href="wallet.html"
-                                       aria-selected="false"><i class="fas fa-wallet"></i>Ví</a>
-                                    <a class="nav-item nav-link" href="address.html"
-                                       aria-selected="false"><i class="fas fa-home"></i>Địa chỉ</a>
-                                    <a class="nav-item nav-link" href="notification.html"
-                                       aria-selected="false"><i class="fas fa-bell"></i>Thông báo</a>
-                                </div>
-                            </nav>
+                        <aside th:insert="~{sidebar :: sidebar}">
                         </aside>
                     </div>
                     <!-- Dashboard Content -->
@@ -103,22 +93,29 @@
                             <!-- Order Details Tab -->
                             <div id="nav-order-detail" class="tab-pane fade show active" role="tabpanel">
                                 <div class="order-detail axil-dashboard-order">
+                                    <div th:if="${message != null}"
+                                         class="alert alert-dismissible"
+                                         th:classappend="${messageType == 'success'} ? 'alert-success' : 'alert-danger'">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                        <p th:text="${message}"></p>
+                                    </div>
                                     <h4 style="text-align: center">Mã: <span
                                             id="order-id" th:text="${trackingNumber}"></span></h4>
                                     <h4 style="text-align: center">Trạng thái: <span
                                             id="status-order" th:text="${shippingStatus}"></span></h4>
                                     <div class="order-progress"
-                                         th:if="${shippingStatus} != 'Cancelled' and ${shippingStatus} != 'Returned'">
-                                        <div th:classappend="${pendingTime != null or confirmedTime != null} ? 'active' : ''"
+                                         th:if="${shippingStatus} != 'Cancelled'">
+                                        <div th:classappend="${pendingTime != null or confirmedTime != null or previousStatus == 'Pending'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-calendar"></i>
                                             <p class="order-status">Đơn hàng</p>
-                                            <small th:text="${confirmedTime == null} ? 'Chờ xác nhận' : 'Đơn hàng đã đặt'"></small><br>
+                                            <small th:if="${shippingStatus == 'Pending'}" th:text="${confirmedTime == null} ? 'Chờ xác nhận' : 'Đơn hàng đã đặt'"></small><br>
                                             <small id="order-placed-date"
                                                    th:text="${confirmedTime == null ? #temporals.format(pendingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(confirmedTime, 'HH:mm dd-MM-yyyy')}">
                                             </small>
                                         </div>
-                                        <div th:classappend="${processingTime != null or dispatchedTime != null} ? 'active' : ''"
+                                        <div th:classappend="${processingTime != null or dispatchedTime != null or previousStatus == 'Processing'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-box"></i>
                                             <p class="order-status">Xử lý</p>
@@ -127,7 +124,7 @@
                                             <small id="payment-confirmed-date"
                                                    th:text="${dispatchedTime == null ? #temporals.format(processingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(dispatchedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div th:classappend="${shippingTime != null or failedTime != null} ? 'active' : ''"
+                                        <div th:classappend="${shippingTime != null or failedTime != null or previousStatus == 'Shipping'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-truck"></i>
                                             <p class="order-status">Vận chuyển</p>
@@ -136,7 +133,7 @@
                                             <small id="shipped-date"
                                                    th:text="${failedTime == null ? #temporals.format(shippingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(failedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div th:classappend="${deliveredTime != null} ? 'active' : ''"
+                                        <div th:classappend="${deliveredTime != null or previousStatus == 'Delivered'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-quality"></i>
                                             <p class="order-status">Đã giao</p>
@@ -145,7 +142,7 @@
                                             <small id="delivered-date"
                                                    th:text="${#temporals.format(deliveredTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
-                                        <div th:classappend="${completedTime != null} ? 'active' : ''"
+                                        <div th:classappend="${completedTime != null or previousStatus == 'Completed'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-star"></i>
                                             <p class="order-status">Hoàn tất</p>
@@ -165,21 +162,33 @@
                                         <div class="col-7">
                                             <div class="order-actions text-right"
                                                  style="display: flex; justify-content: end;">
+<!--                                                <input th:if="${shippingStatus == 'Pending' || shippingStatus == 'Processing'}" type="submit"-->
+<!--                                                       id="cancel-order-pending"-->
+<!--                                                       class="axil-btn btn-bg-secondary btn-sm"-->
+<!--                                                       onclick="pendingCancelOrder()"-->
+<!--                                                       value="Huỷ đơn hàng">-->
                                                 <!-- Khi hang da giao muon danh gia(khi da nhan duoc hang va xac nhan) -->
                                                 <input th:if="${shippingStatus == 'Delivered'}" type="submit"
                                                        id="rate-product"
                                                        class="axil-btn btn-bg-secondary btn-sm"
-                                                       value="đánh giá đơn hàng">
+                                                       value="Đánh giá đơn hàng">
                                                 <!-- Huy don hang(chi hien thi khi chua nhan hang) -->
-                                                <input type="submit" id="cancel-order"
+                                                <input type="submit" th:if="${shippingStatus == 'Pending'}"
+                                                       id="cancel-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        style="background-color: red; border: none; margin-left: 10px;"
-                                                       value="Huy don hang">
+                                                       value="Hủy đơn hàng">
                                                 <!-- yeu cau hoan tra tien(khi da nhan hang) -->
-                                                <input type="submit" id="refund-order"
+                                                <input th:if="${shippingStatus == 'Delivered'}" type="submit" id="refund-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
-                                                       style="background-color: red; border: none; margin-left: 10px;"
-                                                       value="Yeu cau hoan tra tien">
+                                                       onclick="requestReturn()"
+                                                       style="background-color: red; color: white; border: solid var(--color-danger) 2px; margin-left: 10px;"
+                                                       value="Yêu cầu trả hàng">
+                                                <!-- chuyen sang Delivered khi dang shipping -->
+<!--                                                <input th:if="${shippingStatus == 'Shipping'}" type="submit" id="switch-to-delivered" onclick="switchToDeliver()"-->
+<!--                                                       class="axil-btn btn-bg-secondary btn-sm"-->
+<!--                                                       style="background-color: green; color: white; border: none; margin-left: 10px;"-->
+<!--                                                       value="Delivered">-->
                                             </div>
                                         </div>
                                     </div>
@@ -226,11 +235,8 @@
                                                 <div class="product-right">
                                                 <span class="product-price"
                                                       th:text="${detail.productTotalPrice}"></span>
-                                                    <span class="original-price"
-                                                          th:text="${detail.productTotalPrice}"></span><br>
                                                     <span class="shop-rating"
-                                                          th:text="${detail.avgRating} + ' ★'"></span>
-                                                </div>
+                                                          th:text="${detail.avgRating != null ? detail.avgRating + ' ★' : 'Chưa có đánh giá'}"></span>                                                </div>
                                             </div>
                                         </a>
                                     </div>
@@ -245,24 +251,22 @@
                                             <span class="summary-value"
                                                   th:text="${shippingFee}"></span>
                                         </div>
-                                        <!--                                        <div class="summary-row">-->
-                                        <!--                                            <span class="summary-label">Tax(10%)</span>-->
-                                        <!--                                            <span class="summary-value">10$</span>-->
-                                        <!--                                        </div>-->
-                                        <!--                                        <div class="summary-row">-->
-                                        <!--                                            <span class="summary-label">Voucher from Shop</span>-->
-                                        <!--                                            <span class="summary-value">-5$</span>-->
-                                        <!--                                        </div>-->
+                                        <div class="summary-row">
+                                            <span class="summary-label">Tax(8%)</span>
+                                            <span class="summary-value" th:text="${tax}"> </span>
+                                        </div>
+
                                         <div class="summary-row">
                                             <span class="summary-label total">Tổng chi phí</span>
-                                            <span th:if="${totalAmount != null and shippingFee != null}"
-                                                  th:text="${totalAmount + shippingFee}">0</span>
-                                            <span th:if="${totalAmount == null or shippingFee == null}">0</span>
-
+                                            <span th:text="${finalTotal}">0</span>
+                                        </div> <div class="summary-row">
+                                            <span class="summary-label total">Đã Thanh toán</span>
+                                            <span th:text="${deposit}">0</span>
                                         </div>
-                                    </div>
-                                    <div class="payment-method">
-                                        <p th:text="${paymentMethod}"></p>
+                                        <div class="summary-row">
+                                            <span class="summary-label total">Còn lại</span>
+                                            <span th:text="${remaining_balance}">0</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -307,15 +311,41 @@
     <!-- Pending Modal -->
     <div id="pendingConfirmationModal" class="modal" style="display:none;">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" onclick="closeAllModals()">&times;</span>
             <h2>Xác nhận thông tin</h2>
-            <form id="pendingForm">
+            <form action="/order-detail/cancel" method="POST">
+                <input type="hidden" id="cancel-order-id" name="orderId" value="">
                 <label for="reason-name">Lý do mà bạn gửi yêu cầu:</label>
-                <input type="text" id="reason-name" name="reason-name" required><br><br>
+                <input type="text" id="reason-name" name="reason" required><br><br>
                 <button type="submit">Gửi</button>
             </form>
         </div>
     </div>
+    <script>
+        const cancel_orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id");
+        document.getElementById('cancel-order-id').value = cancel_orderId;
+
+    </script>
+    <!--    Refund Modal-->
+    <div id="refundModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Xác nhận thông tin</h2>
+            <form action="/order-detail/return" method="POST">
+                <input type="hidden" id="refund-order-id" name="orderId" value="">
+                <label for="reason">Lý do mà bạn gửi yêu cầu:</label>
+                <select id="reason" name="reason" required>
+                    <option value="" disabled selected>Chọn lý do</option>
+                    <option value="not_as_described">Hàng không như mô tả</option>
+                    <option value="damaged">Hàng bị vỡ</option>
+                </select><br><br>
+                <input type="hidden" name="status" value="Returned"><br><br>
+
+                <button type="submit">Gửi</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Success Modal -->
     <div id="successModal-rating" class="modal" style="display:none;">
         <div class="modal-content">
@@ -333,101 +363,7 @@
     </div>
 </main>
 
-
-<div class="service-area">
-    <div class="container">
-        <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service1.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Fast &amp; Secure Delivery</h6>
-                        <p>Tell about your service.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service2.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Money Back Guarantee</h6>
-                        <p>Within 10 days.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service3.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">24 Hour Return Policy</h6>
-                        <p>No question ask.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service4.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Pro Quality Support</h6>
-                        <p>24/7 Live support.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Start Footer Area  -->
-<footer class="axil-footer-area footer-style-2">
-    <!-- Start Footer Top Area  -->
-    <div class="footer-top separator-top">
-        <div class="container">
-            <div class="row">
-                <!-- Start Single Widget  -->
-                <div class="col-lg-6 col-sm-6">
-                    <div class="axil-footer-widget">
-                        <h5 class="widget-title">Support</h5>
-                        <div class="inner">
-                            <p>685 Market Street, Las Vegas, LA 95820</p>
-                            <ul class="support-list-item">
-                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
-                                    example@domain.com</a></li>
-                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
-                                </li>
-                                <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Widget  -->
-                <!-- Start Single Widget  -->
-                <div class="col-lg-6 col-sm-6">
-                    <div class="axil-footer-widget">
-                        <h5 class="widget-title">Account</h5>
-                        <div class="inner">
-                            <ul>
-                                <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="sign-up.html">Login / Register</a></li>
-                                <li><a href="cart-detail.html">Cart</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="product-list.html">Shop</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Single Widget  -->
-            </div>
-        </div>
-    </div>
-    <!-- End Footer Top Area  -->
-</footer>
+<div th:replace="base :: footer"></div>
 <!-- End Footer Area  -->
 
 <!-- Header Search Modal End -->
@@ -465,14 +401,18 @@
         document.getElementById('pendingConfirmationModal').style.display = "none";
         document.getElementById('successModal-rating').style.display = "none";
         document.getElementById('successModal-pending').style.display = "none";
+        document.getElementById('refundModal').style.display = "none";
     }
 
     // Hiển thị modal xác nhận đã nhận hàng
-    document.getElementById('rate-product').addEventListener('click', function () {
-        closeAllModals();
-        document.getElementById('rateProductModal').style.display = "block";
-        document.getElementById('rating-modal').style.opacity = '1';
-        // document.getElementById('confirmDeliveryModal').style.display = "block";
+    document.addEventListener('click', function (event) {
+        // document.getElementById('rate-product').addEventListener('click', function (event) {
+        if (event.target.id === 'rate-product') {
+            closeAllModals();
+            document.getElementById('rateProductModal').style.display = "block";
+            document.getElementById('rating-modal').style.opacity = '1';
+            // document.getElementById('confirmDeliveryModal').style.display = "block";
+        }
     });
 
     // Khi xác nhận đã nhận hàng, mở modal đánh giá
@@ -481,6 +421,13 @@
         closeAllModals();
         document.getElementById('rateProductModal').style.display = "block";
     });
+    const refund_orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id");
+    document.getElementById('refund-order-id').value = refund_orderId;
+
+    document.getElementById('close-model-btn').addEventListener('click', function (event) {
+        event.preventDefault();
+        closeAllModals();
+    })
 
     // Khi người dùng xác nhận đánh giá, mở modal thành công và reload trang
     document.getElementById('rateForm').addEventListener('submit', function (event) {
@@ -494,19 +441,28 @@
 
         fetch(`http://localhost:8080/order-detail/${orderId}/rating?rateText=${feedbackText}&rateStar=${rating}`, {
             method: "GET",
-        }).then(res => {
+        }).then(async (res) => {
             if (res.status === 200) {
-                Swal.fire({
-                    title: "Success!",
-                    text: "Rate order successfully.",
-                    icon: "success",
-                    showConfirmButton: false,
-                    showCancelButton: false,
-                    timer: 2000,
-                });
-                document.getElementById('feedback-text').value = "";
-                document.getElementById('rating').value = "";
-                document.getElementById('rate-product').disabled = true;
+                const res = await fetch(`http://localhost:8080/update-order-status/${orderId}?` + new URLSearchParams({
+                    status: 'Completed',
+                }).toString())
+
+                if (res.status === 200) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Rate order successfully.",
+                        icon: "success",
+                        showConfirmButton: false,
+                        showCancelButton: false,
+                        timer: 2000,
+                    }).then(() => {
+                        window.location.reload();
+                    })
+                }
+
+                // document.getElementById('feedback-text').value = "";
+                // document.getElementById('rating').value = "";
+                // document.getElementById('rate-product').disabled = true;
             } else {
                 Swal.fire({
                     icon: "error",
@@ -520,27 +476,30 @@
     });
 
     // Khi nhấn "Hủy đơn hàng" hoặc "Yêu cầu hoàn trả", mở modal yêu cầu lý do
-    document.getElementById('cancel-order').addEventListener('click', function () {
-        closeAllModals();
-        document.getElementById('pendingConfirmationModal').style.display = "block";
+    document.addEventListener('click', function (event) {
+        if (event.target.id === 'cancel-order') {
+            closeAllModals();
+            document.getElementById('pendingConfirmationModal').style.display = "block";
+        }
+
+        if (event.target.id === 'refund-order') {
+            closeAllModals();
+            document.getElementById('refundModal').style.display = "block";
+        }
     });
 
-    document.getElementById('refund-order').addEventListener('click', function () {
-        closeAllModals();
-        document.getElementById('pendingConfirmationModal').style.display = "block";
-    });
 
     // Sau khi nhập lý do và gửi yêu cầu, hiển thị modal thành công và reload trang
-    document.getElementById('pendingForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Ngăn không tải lại trang khi submit form
-        closeAllModals();
-        document.getElementById('successModal-pending').style.display = "block";
-
-        // Sau 2 giây reload lại trang
-        setTimeout(function () {
-            location.reload();
-        }, 2000);
-    });
+    // document.getElementById('pendingForm').addEventListener('submit', function (event) {
+    //     event.preventDefault(); // Ngăn không tải lại trang khi submit form
+    //     closeAllModals();
+    //     document.getElementById('successModal-pending').style.display = "block";
+    //
+    //     // Sau 2 giây reload lại trang
+    //     setTimeout(function () {
+    //         location.reload();
+    //     }, 2000);
+    // });
 
     // Đóng modal khi nhấn nút close (dấu "x")
     var closeButtons = document.getElementsByClassName('close');
@@ -548,6 +507,66 @@
         closeButtons[i].onclick = function () {
             closeAllModals();
         };
+    }
+
+
+    async function switchToDeliver() {
+        const orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id")
+
+        const res = await fetch(`http://localhost:8080/update-order-status/${orderId}?` + new URLSearchParams({
+            status: 'Delivered',
+        }).toString())
+
+        if (res.ok) {
+            Swal.fire({
+                title: "Success!",
+                text: "Order delivered successfully",
+                icon: "success",
+                showConfirmButton: false,
+                showCancelButton: false,
+                timer: 2000,
+            }).then(() => {
+                location.reload();
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                confirmButtonColor: "#3085d6",
+                footer: '<a href="#">Why do I have this issue?</a>'
+            });
+        }
+    }
+
+    async function pendingCancelOrder() {
+        const orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id")
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to cancel this order",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+        }).then(async (result) =>  {
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8080/update-order-status/${orderId}?` + new URLSearchParams({
+                    status: 'Canceled',
+                }).toString())
+                if (res.ok) {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Order cancelled",
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        location.reload();
+                    })
+                }
+            }
+        });
     }
 </script>
 </body>

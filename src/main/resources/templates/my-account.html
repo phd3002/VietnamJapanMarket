@@ -38,14 +38,14 @@
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label>First Name</label>
+                                                        <label>Họ</label>
                                                         <input name="firstName" type="text" class="form-control"
                                                                th:value="${user.firstName}">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label>Last Name</label>
+                                                        <label>Tên</label>
                                                         <input name="lastName" type="text" class="form-control"
                                                                th:value="${user.lastName}">
                                                     </div>
@@ -59,28 +59,28 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group mb--40">
-                                                        <label>Phone</label>
+                                                        <label>Điện thoại</label>
                                                         <input name="phoneNumber" type="number" class="form-control"
                                                                th:value="${user.phoneNumber}">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
-                                                    <h5 class="title">Password Change</h5>
+                                                    <h5 class="title">Thay đổi mật khẩu</h5>
                                                     <div class="form-group">
-                                                        <label>Password</label>
+                                                        <label>Mật khẩu</label>
                                                         <input name="password" type="password" class="form-control">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>New Password</label>
+                                                        <label>Mật khẩu mới</label>
                                                         <input name="newPassword" type="password" class="form-control">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Confirm New Password</label>
+                                                        <label>Xác nhận mật khẩu mới</label>
                                                         <input name="confirmPassword" type="password"
                                                                class="form-control">
                                                     </div>
                                                     <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Save Changes"
+                                                        <input type="submit" class="axil-btn" value="Lưu thay đổi"
                                                                id="saveChangesBtn">
                                                     </div>
                                                 </div>
@@ -95,26 +95,6 @@
             </div>
         </div>
     </div>
-    </div>
-    <div id="signupModal" style="display: none;">
-        <p>Bạn đang chưa có cửa hàng, bạn có muốn đăng ký làm người bán hàng?</p>
-        <button onclick="window.location.href='/sign-up-seller'">Tôi muốn đăng kí làm người bán hàng</button>
-    </div>
-    <script>
-        function showSignupModal() {
-            Swal.fire({
-                title: 'Bạn đang chưa có cửa hàng',
-                text: 'Bạn có muốn đăng ký làm người bán hàng?',
-                showCancelButton: true,
-                confirmButtonText: 'Tôi muốn đăng kí làm người bán hàng',
-                cancelButtonText: 'Đóng'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/sign-up-seller';
-                }
-            });
-        }
-    </script>
 
 </main>
 

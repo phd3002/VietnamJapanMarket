@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Danh sách vận chuyển | Quản trị Admin</title>
@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="../../static/logistic/css/main.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/logistic/css/main.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
@@ -30,7 +30,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/sign-in"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -38,14 +38,14 @@
 <!-- Sidebar menu-->
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item active" href="dashboard.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item active" href="/logistic/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item" href="order-manager.html"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="income-manager.html"><i class='app-menu__icon bx bx-dollar'></i><span
                 class="app-menu__label">Quản lý doanh thu</span></a></li>
@@ -162,24 +162,56 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="doughnutChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="polarAreaChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <canvas class="embed-responsive-item" id="radarChartDemo"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
         <!--END right-->
     </div>
 </main>
-<script src="../../static/logistic/js/jquery-3.2.1.min.js"></script>
+<script th:src="@{/logistic/js/jquery-3.2.1.min.js}"></script>
 <!--===============================================================================================-->
-<script src="../../static/logistic/js/popper.min.js"></script>
+<script th:src="@{/logistic/js/popper.min.js}"></script>
 <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
 <!--===============================================================================================-->
-<script src="../../static/logistic/js/bootstrap.min.js"></script>
+<script th:src="@{/logistic/js/bootstrap.min.js}"></script>
 <!--===============================================================================================-->
-<script src="../../static/logistic/js/main.js"></script>
+<script th:src="@{/logistic/js/main.js}"></script>
 <!--===============================================================================================-->
-<script src="../../static/logistic/js/plugins/pace.min.js"></script>
+<script th:src="@{/logistic/js/plugins/pace.min.js}"></script>
 <!--===============================================================================================-->
-<script type="text/javascript" src="../../static/logistic/js/plugins/chart.js"></script>
+<script th:src="@{/logistic/js/plugins/chart.js}" type="text/javascript"></script>
 <!--===============================================================================================-->
 <script type="text/javascript">
     var data = {
@@ -211,6 +243,51 @@
 
     var ctxb = $("#barChartDemo").get(0).getContext("2d");
     var barChart = new Chart(ctxb).Bar(data);
+    var pieData = [
+        { value: 120, color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1" },
+        { value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2" },
+        { value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3" }
+    ];
+    var ctxp = document.getElementById("pieChartDemo").getContext("2d");
+    var pieChart = new Chart(ctxp).Pie(pieData);
+    var ctxd = document.getElementById("doughnutChartDemo").getContext("2d");
+    var doughnutChart = new Chart(ctxd).Doughnut(pieData);
+    // Dữ liệu cho biểu đồ cực
+    var polarData = [
+        { value: 120, color: "#F7464A", highlight: "#FF5A5E", label: "Dữ liệu 1" },
+        { value: 80, color: "#46BFBD", highlight: "#5AD3D1", label: "Dữ liệu 2" },
+        { value: 100, color: "#FDB45C", highlight: "#FFC870", label: "Dữ liệu 3" },
+        { value: 90, color: "#949FB1", highlight: "#A8B3C5", label: "Dữ liệu 4" }
+    ];
+
+    // Biểu đồ cực
+    var ctxpo = document.getElementById("polarAreaChartDemo").getContext("2d");
+    var polarAreaChart = new Chart(ctxpo).PolarArea(polarData);
+
+    // Dữ liệu cho biểu đồ radar
+    var radarData = {
+        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+        datasets: [
+            {
+                label: "Dữ liệu đầu tiên",
+                fillColor: "rgba(255, 213, 59, 0.7)",
+                strokeColor: "rgb(255, 212, 59)",
+                pointColor: "rgb(255, 212, 59)",
+                data: [65, 59, 90, 81, 56, 55]
+            },
+            {
+                label: "Dữ liệu kế tiếp",
+                fillColor: "rgba(9, 109, 239, 0.65)",
+                strokeColor: "rgb(9, 109, 239)",
+                pointColor: "rgb(9, 109, 239)",
+                data: [28, 48, 40, 19, 96, 27]
+            }
+        ]
+    };
+
+    // Biểu đồ radar
+    var ctxr = document.getElementById("radarChartDemo").getContext("2d");
+    var radarChart = new Chart(ctxr).Radar(radarData);
 </script>
 <script type="text/javascript">
     //Thời Gian

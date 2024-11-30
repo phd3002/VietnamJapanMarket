@@ -1,10 +1,13 @@
 package com.ecommerce.g58.entity;
 
+import com.ecommerce.g58.enums.PaymentMethod;
 import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
 
 @Entity
 @Data
@@ -27,7 +30,7 @@ public class Orders {
     private LocalDateTime orderDate = LocalDateTime.now();
 
     @Column(name = "total_price", nullable = false)
-    private Double totalPrice;
+    private Long totalPrice;
 
     @Column(name = "shipping_address", nullable = false)
     private String shippingAddress;
@@ -48,10 +51,6 @@ public class Orders {
     private BigDecimal remainingBalance;
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
-    private Countries countryId;
-
-    @ManyToOne
     @JoinColumn(name = "rate_id")
     private ShippingRate rateId;
 
@@ -64,4 +63,14 @@ public class Orders {
 
     @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
     private List<ShippingStatus> shippingStatus;
+
+    @Column(name = "payment_method")
+    private PaymentMethod paymentMethod;
+
+    @Column(name = "order_code")
+    private String orderCode;
+
+    public String getPriceFormated() {
+        return formatCurrency(BigDecimal.valueOf(totalPrice));
+    }
 }

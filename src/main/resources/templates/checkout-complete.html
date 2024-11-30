@@ -46,7 +46,7 @@
             <table>
                 <tr>
                     <th>Tổng giá:</th>
-                    <td th:text="${order.totalPrice}"></td>
+                    <td th:text="${paymentMethod == 'cod' ? 'Thanh toán khi nhận hàng' : order.getPriceFormated() + ' đ'}"></td>
                 </tr>
                 <tr>
                     <th>Ngày tạo đơn:</th>
@@ -58,7 +58,7 @@
                 </tr>
             </table>
         </div>
-        <a href="/orders" class="axil-btn btn-bg-primary">View My Orders</a>
+        <a href="/orders" class="axil-btn btn-bg-primary">Xem đơn hàng</a>
     </div>
 </main>
 
