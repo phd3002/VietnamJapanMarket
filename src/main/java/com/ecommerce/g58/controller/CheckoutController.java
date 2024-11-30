@@ -184,8 +184,8 @@ public class CheckoutController {
         model.addAttribute("tax", FormatVND.formatCurrency(BigDecimal.valueOf(taxAmount)));
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalPrice)));
-        model.addAttribute("totalWithShipping", FormatVND.formatCurrency(BigDecimal.valueOf(totalWithShipping)));
-        model.addAttribute("shippingFee", FormatVND.formatCurrency(BigDecimal.valueOf(shippingFee)));
+        model.addAttribute("totalWithShipping", totalWithShipping);
+        model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("cartItemIds", cartItemIds);
 
         model.addAttribute("totalWeight", totalWeight);

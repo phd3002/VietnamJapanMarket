@@ -25,11 +25,23 @@ public class OrderManagementControllerr {
     private UserService userService;
 
     @GetMapping("/logistic/order-manager")
-    public String getOrderManagementPage(Model model, Principal principal) {
-        List<OrderManagerDTO> orders = orderService.getOrders();
+    public String getOrderManagementPage(
+            @RequestParam(value = "status", required = false) String status,
+            Model model,
+            Principal principal) {
+
+        List<OrderManagerDTO> orders;
+        if (status == null || status.isEmpty()) {
+            orders = orderService.getOrders();
+        } else {
+            orders = orderService.getOrdersByStatus(status);
+        }
+
         model.addAttribute("orders", orders);
+        model.addAttribute("status", status); // Pass selected status to the template
         return "logistic/order-manager";
     }
+
 
     @PostMapping("/logistic/update-order-status")
     public String updateOrderStatus(@RequestParam("orderId") Integer orderId, @RequestParam("status") String status, HttpServletRequest request) {

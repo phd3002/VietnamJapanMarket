@@ -14,8 +14,8 @@ import java.util.Optional;
 @Service
 public interface ProductService {
     List<ProductDTO> getProductDetails();
-
-    List<Products> getProductsByCategory(Long categoryId);
+    Page<Products> getAllProducts(Pageable pageable);
+    Page<Products>getProductsByCategory(Long categoryId, Pageable pageable);
 
     List<ProductDTO> getSearchProduct();
 

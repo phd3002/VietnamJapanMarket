@@ -70,7 +70,7 @@
                                 <h5 class="title"><a th:href="@{/product-detail/{id}(id=${product.productId})}"
                                                      th:text="${product.productName}"></a></h5>
                                 <div class="product-price-variant">
-                                    <span class="price current-price" th:text="${'$' + product.price}"></span>
+                                    <span class="price current-price" th:text="${product.getPriceFormated()}"></span>
                                 </div>
                             </div>
                         </div>

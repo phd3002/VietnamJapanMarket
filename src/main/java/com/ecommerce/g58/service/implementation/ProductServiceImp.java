@@ -76,9 +76,13 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findProductDetailByProductIdAndVariationId(productId, variationId);
     }
 
-    public List<Products> getProductsByCategory(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId);
+    public Page<Products> getProductsByCategory(Long categoryId, Pageable pageable) {
+        return productRepository.findByCategoryId(categoryId, pageable);
     }
+    public Page<Products> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
 
     /**
      * Fetch product details using a native query that joins products, product variations, and product images.
@@ -88,6 +92,7 @@ public class ProductServiceImp implements ProductService {
         List<Object[]> results = productRepository.findProductDetailsNative();
         return results.stream().map(result ->
                 new ProductDTO(
+                        (Integer) result[0],
                         (String) result[2],  // productName
                         (result[1] != null ? (String) result[1] : "default-image.png"),  // Handle null thumbnail
                         (Integer) result[3]  // price
@@ -146,6 +151,7 @@ public class ProductServiceImp implements ProductService {
                     String thumbnail = productImages.isEmpty() ? "default-image.png" : productImages.get(0).getThumbnail();
 
                     return new ProductDTO(
+                            product.getProductId(),
                             product.getProductName(),
                             thumbnail,  // Fetch the thumbnail from ProductImage
                             product.getPrice()

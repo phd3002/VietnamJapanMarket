@@ -3,7 +3,10 @@ package com.ecommerce.g58.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
 
 //import java.math.BigDecimal;
 
@@ -23,7 +26,8 @@ public class ProductDTO {
 
 
     // Constructor
-    public ProductDTO(String productName, String thumbnail, Integer price) {
+    public ProductDTO(Integer productId, String productName, String thumbnail, Integer price) {
+       this.productId = productId;
         this.productName = productName;
         this.thumbnail = thumbnail;
         this.price = price;
@@ -48,5 +52,7 @@ public class ProductDTO {
 
     public ProductDTO() {
     }
-
+    public String getPriceFormated() {
+        return formatCurrency(BigDecimal.valueOf(price));
+    }
 }
