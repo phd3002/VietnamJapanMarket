@@ -33,7 +33,7 @@
                             <!-- Orders Tab -->
                             <div class="tab-pane fade show active" id="nav-orders" role="tabpanel">
 
-                                <div class="filter-section">
+                                <div class="filter-section" th:if="${message == null}">
                                     <label for="statusFilter">Lọc theo trạng thái: </label>
                                     <select id="statusFilter" name="status"
                                             onchange="filterOrdersByStatus(this.value)">
