@@ -25,4 +25,6 @@ public interface OrderService {
     Orders createOrder(Users user, String address, PaymentMethod paymentMethod, List<Integer> cartItemIds);
     Orders getOrderByCode(String code);
     List<OrderManagerDTO> getOrders();
+
+    List<OrderManagerDTO> getOrdersByStatus(String status);
 }

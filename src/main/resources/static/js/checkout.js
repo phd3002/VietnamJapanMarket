@@ -82,9 +82,9 @@ document.getElementById("shipping-method").addEventListener("change", function (
     const totalWithShipping = totalProductPrice + shippingFee + taxAmount;
 
     // Update UI
-    document.getElementById("total-shipping-fee").textContent = shippingFee.toLocaleString() + "đ";
-    document.getElementById("total-tax-fee").textContent = taxAmount.toLocaleString() + "đ";
-    document.getElementById("total-order-price").textContent = totalWithShipping.toLocaleString() + "đ";
+    document.getElementById("total-shipping-fee").textContent = shippingFee.toLocaleString() + "VND";
+    document.getElementById("total-tax-fee").textContent = taxAmount.toLocaleString() + "VND";
+    document.getElementById("total-order-price").textContent = totalWithShipping.toLocaleString() + "VND";
 });
 
 
@@ -183,7 +183,7 @@ function updateTotalAmount() {
     }
 
     // Update the displayed total amount
-    document.getElementById("total-order-price").textContent = finalOrderTotal.toLocaleString() + "đ";
+    document.getElementById("total-order-price").textContent = finalOrderTotal.toLocaleString() + " VND";
 
 }
 

@@ -240,10 +240,10 @@
                                             <span th:text="${item.variationId.size.sizeName}"></span>
                                         </span>
                                     </td>
-                                    <td th:text="${item.price}"></td>
+                                    <td th:text="${item.getPriceFormated()}"></td>
                                     <td th:text="${item.quantity}"></td>
                                     <td th:text="${item.getProductId().getWeight()}"></td>
-                                    <td th:text="${item.price * item.quantity}"></td>
+                                    <td th:text="${item.getTotalPriceFormated()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -302,24 +302,24 @@
                             <div class="order-price">
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Tổng tiền hàng:</h6>
-                                    <span id="total-product-price" th:text="${totalPrice} + 'đ'"></span>
+                                    <span id="total-product-price" th:text="${totalPrice} + ' VND'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0" data-bs-toggle="tooltip" data-bs-placement="top"
                                         title="Các đơn hàng có khối lượng dưới 1kg sẽ được làm tròn thành 1kg để tính phí vận chuyển.">
                                         Tổng tiền phí vận chuyển<span class="font-weight-bold" style="color: red">(?)</span>:
                                     </h6>
-                                    <span id="total-shipping-fee" th:text="${shippingFee}"></span>
+                                    <span id="total-shipping-fee" th:text="${shippingFee} + ' VND'"></span>
                                 </div>
 
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0">Thuế (8%):</h6>
-                                    <span id="total-tax-fee" th:text="${tax} + 'đ'"></span>
+                                    <span id="total-tax-fee" th:text="${tax} + ' VND'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="title mb-0">Tổng thanh toán:</h5>
                                     <h6 id="total-order-price" style="color: #bb2d3b;"
-                                        th:text="${totalWithShipping} + 'đ'"></h6>
+                                        th:text="${totalWithShipping} + ' VND'"></h6>
                                 </div>
                                 <div class="order-weight" style="display: none">
                                     <h6>Total Weight:</h6>

@@ -38,22 +38,6 @@ public class Orders {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "commission_fee")
-    private BigDecimal commissionFee;
-
-    @Column(name = "additional_fee")
-    private BigDecimal additionalFee;
-
-    @Column(name = "deposit")
-    private BigDecimal deposit;
-
-    @Column(name = "remaining_balance")
-    private BigDecimal remainingBalance;
-
-    @ManyToOne
-    @JoinColumn(name = "rate_id")
-    private ShippingRate rateId;
-
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private ShippingUnit unitId;

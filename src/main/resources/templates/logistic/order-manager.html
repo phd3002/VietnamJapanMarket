@@ -47,7 +47,8 @@
         <li><a class="app-menu__item" href="/logistic/dashboard"><i
                 class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
-        <li><a class="app-menu__item active" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
+        <li><a class="app-menu__item active" href="/logistic/order-manager"><i
+                class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="income-manager.html"><i class='app-menu__icon bx bx-dollar'></i><span
                 class="app-menu__label">Quản lý doanh thu</span></a></li>
@@ -60,10 +61,31 @@
         </ul>
         <div id="clock"></div>
     </div>
+
+
     <div class="row">
         <div class="col-md-12">
             <div class="tile">
                 <div class="tile-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form th:action="@{/logistic/order-manager}" method="get">
+                                <label for="statusFilter">Lọc theo trạng thái:</label>
+                                <select id="statusFilter" name="status" class="form-control" onchange="this.form.submit()">
+                                    <option value="" th:selected="${status == null || status == ''}" selected>Tất cả</option>
+                                    <option value="Pending" th:selected="${status == 'Pending'}">Chờ xử lý</option>
+                                    <option value="Confirmed" th:selected="${status == 'Confirmed'}">Xác nhận</option>
+                                    <option value="Processing" th:selected="${status == 'Processing'}">Đang đóng gói</option>
+                                    <option value="Dispatched" th:selected="${status == 'Dispatched'}">Đã giao cho vận chuyển</option>
+                                    <option value="Shipping" th:selected="${status == 'Shipping'}">Đang vận chuyển</option>
+                                    <option value="Delivered" th:selected="${status == 'Delivered'}">Đã giao</option>
+                                    <option value="Failed" th:selected="${status == 'Failed'}">Thất bại</option>
+                                    <option value="Returned" th:selected="${status == 'Returned'}">Hoàn trả</option>
+                                    <option value="Cancelled" th:selected="${status == 'Cancelled'}">Đã hủy</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                         <tr>
@@ -309,6 +331,13 @@
         });
     });
 </script>
+
+<script>
+    document.getElementById("statusFilter").addEventListener("change", function () {
+        this.form.submit();
+    });
+</script>
+
 </body>
 
 </html>

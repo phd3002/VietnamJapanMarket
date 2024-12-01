@@ -26,6 +26,8 @@ public interface UserService extends UserDetailsService {
 
     boolean isEmailExist(String email);
 
+    boolean isUsernameExist(String username);
+
     boolean checkPassword(String rawPassword, String encodedPassword);
 
     //forgot pass

@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="review-link">
                                         <span th:text="${avgText}"></span> (<span
-                                                th:text="${feedbacks.size()}"></span> đánh giá của khách hàng)
+                                            th:text="${feedbacks.size()}"></span> đánh giá của khách hàng)
                                     </div>
                                 </div>
                                 <!-- Product variations -->
@@ -102,7 +102,7 @@
                                     </div>
                                     <!-- Sizes Section -->
                                     <div class="product-variation product-size-variation">
-                                        <h6 class="title">Kích cỡ: </h6>
+                                        <h6 class="title">Loại: </h6>
                                         <ul class="range-variant">
                                             <li th:each="size : ${availableSizes}"
                                                 th:data-size-name="${size}"
@@ -162,9 +162,10 @@
                 <div class="axil-dashboard-author">
                     <div class="media">
                         <div class="thumbnail">
-                            <a th:href="@{/view-store/{id}(id=${product.storeId.storeId})}"><img th:src="@{${product.storeId.pictureUrl}}"
-                                             alt="Hello Annie"
-                                             class="author-image"></a>
+                            <a th:href="@{/view-store/{id}(id=${product.storeId.storeId})}"><img
+                                    th:src="@{${product.storeId.pictureUrl}}"
+                                    alt="Hello Annie"
+                                    class="author-image"></a>
                         </div>
                         <div class="media-body-1">
                             <div class="info-row">
@@ -226,7 +227,7 @@
                                                         <p th:text="${'“' + feedback.comment + '”'}"></p>
                                                     </div>
                                                     <!-- Phần hiển thị reply -->
-                                                    <div class="comment-replies">
+                                                    <div class="comment-replies" th:if="${feedback.sellerFeedback}">
                                                         <div class="single-comment reply-comment">
                                                             <div class="comment-img">
                                                                 <img th:src="@{/images/others/author1.png}"
@@ -255,9 +256,9 @@
                         </div>
                     </div>
                 </div>
-<!--                <div class="text-center pt&#45;&#45;30">-->
-<!--                    <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>-->
-<!--                </div>-->
+                <!--                <div class="text-center pt&#45;&#45;30">-->
+                <!--                    <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>-->
+                <!--                </div>-->
             </div>
         </div>
     </div>

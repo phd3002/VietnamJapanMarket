@@ -3,7 +3,10 @@ package com.ecommerce.g58.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
 
 @Getter
 @Setter
@@ -39,4 +42,7 @@ public class OrderDetailDTO {
     private LocalDateTime completedTime;
     private LocalDateTime cancelledTime;
     private LocalDateTime returnedTime;
+    public String getPriceFormated() {
+        return formatCurrency(BigDecimal.valueOf(productTotalPrice));
+    }
 }
