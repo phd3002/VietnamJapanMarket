@@ -181,9 +181,9 @@ public class CheckoutController {
         logger.info("Total with shipping and tax: {}", totalWithShipping);
 
 
-        model.addAttribute("tax", FormatVND.formatCurrency(BigDecimal.valueOf(taxAmount)));
+        model.addAttribute("tax", taxAmount);
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("totalPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalPrice)));
+        model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("totalWithShipping", totalWithShipping);
         model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("cartItemIds", cartItemIds);
@@ -324,7 +324,7 @@ public class CheckoutController {
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
-                model.addAttribute("totalPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalPrice)));
+                model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }

@@ -71,9 +71,16 @@ public class UserController {
         try {
             // Kiểm tra xem username có trống không
             if (users.getUsername() == null || users.getUsername().isEmpty()) {
-                model.addAttribute("errorMessage", "Username không được để trống.");
+                model.addAttribute("errorMessage", "Tên đăng nhập không được để trống.");
                 return "sign-up";
             }
+
+            // Kiểm tra xem username đã tồn tại chưa
+            if (userService.isUsernameExist(users.getUsername())) {
+                model.addAttribute("errorMessage", "Tên đăng nhập đã được sử dụng.");
+                return "sign-up";
+            }
+
 
             // Kiểm tra xem email có trống không
             if (users.getEmail() == null || users.getEmail().isEmpty()) {
@@ -86,6 +93,13 @@ public class UserController {
                 model.addAttribute("errorMessage", "Mật khẩu không được để trống.");
                 return "sign-up";
             }
+
+            // Kiểm tra xem mật khẩu có ít nhất 6 ký tự không
+            if (users.getPassword().length() < 6) {
+                model.addAttribute("errorMessage", "Mật khẩu phải có ít nhất 6 ký tự.");
+                return "sign-up";
+            }
+
             // Kiểm tra xem mật khẩu và confirmPassword có khớp không
             if (!users.getPassword().equals(confirmPassword)) {
                 model.addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
@@ -94,7 +108,7 @@ public class UserController {
 
             // Kiểm tra email đã tồn tại chưa
             if (userService.isEmailExist(users.getEmail())) {
-                model.addAttribute("errorMessage", "Email đã tồn tại.");
+                model.addAttribute("errorMessage", "Email đã được sử dụng.");
                 return "sign-up";
             }
 
@@ -225,6 +239,8 @@ public class UserController {
                 return "redirect:/logistic/dashboard";
             } else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Admin"))) {
                 return "redirect:/admin/dashboard";
+            }else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Seller"))) {
+                return "redirect:/seller/dashboard";
             }
 
             return "redirect:/homepage"; // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
