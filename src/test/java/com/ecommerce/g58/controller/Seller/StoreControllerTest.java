@@ -78,7 +78,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -109,7 +109,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -141,7 +141,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -173,7 +173,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -204,7 +204,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -235,7 +235,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -266,7 +266,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -297,7 +297,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -328,7 +328,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -359,7 +359,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -390,7 +390,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -421,7 +421,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -452,7 +452,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -483,7 +483,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -515,7 +515,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -547,7 +547,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -579,7 +579,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -611,7 +611,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -643,7 +643,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -675,7 +675,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -707,7 +707,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -739,7 +739,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -770,7 +770,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -801,7 +801,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -832,7 +832,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -863,7 +863,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -894,7 +894,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -925,7 +925,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -956,7 +956,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -987,7 +987,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1020,7 +1020,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1053,7 +1053,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1086,7 +1086,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1119,7 +1119,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1152,7 +1152,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1185,7 +1185,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1218,7 +1218,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1251,7 +1251,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1284,7 +1284,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1317,7 +1317,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1351,7 +1351,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1385,7 +1385,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1419,7 +1419,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1453,7 +1453,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1487,7 +1487,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1521,7 +1521,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1555,7 +1555,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1589,7 +1589,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1623,7 +1623,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1657,7 +1657,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1690,7 +1690,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1723,7 +1723,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1756,7 +1756,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1789,7 +1789,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1822,7 +1822,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1855,7 +1855,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1888,7 +1888,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1921,7 +1921,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1954,7 +1954,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -1987,7 +1987,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2018,7 +2018,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2049,7 +2049,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2080,7 +2080,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2111,7 +2111,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2142,7 +2142,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2173,7 +2173,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2204,7 +2204,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2235,7 +2235,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2266,7 +2266,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2297,7 +2297,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2329,7 +2329,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2361,7 +2361,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2393,7 +2393,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2425,7 +2425,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2457,7 +2457,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2489,7 +2489,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2521,7 +2521,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2553,7 +2553,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2585,7 +2585,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2617,7 +2617,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2648,7 +2648,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2679,7 +2679,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2710,7 +2710,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2741,7 +2741,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2772,7 +2772,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2803,7 +2803,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2834,7 +2834,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2865,7 +2865,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2896,7 +2896,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2927,7 +2927,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2959,7 +2959,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -2991,7 +2991,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3023,7 +3023,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3055,7 +3055,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3087,7 +3087,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3119,7 +3119,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3151,7 +3151,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3183,7 +3183,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3215,7 +3215,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3247,7 +3247,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3280,7 +3280,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3313,7 +3313,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3346,7 +3346,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3379,7 +3379,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3412,7 +3412,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3445,7 +3445,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3478,7 +3478,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3511,7 +3511,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3544,7 +3544,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3577,7 +3577,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3609,7 +3609,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3641,7 +3641,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3673,7 +3673,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3705,7 +3705,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3737,7 +3737,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3769,7 +3769,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3801,7 +3801,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3833,7 +3833,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3865,7 +3865,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3897,7 +3897,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3932,7 +3932,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -3967,7 +3967,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4002,7 +4002,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4037,7 +4037,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4072,7 +4072,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4107,7 +4107,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4138,7 +4138,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4169,7 +4169,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4200,7 +4200,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4231,7 +4231,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4262,7 +4262,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4293,7 +4293,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4324,7 +4324,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4355,7 +4355,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4386,7 +4386,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4417,7 +4417,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4448,7 +4448,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4479,7 +4479,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);
@@ -4510,7 +4510,7 @@
 //        when(fileS3Service.uploadFile(storeImg)).thenReturn(storeImgUrl);
 //        when(storeImg.isEmpty()).thenReturn(false);
 //        String result = storeController.saveStoreInfo(
-//                storeId, storeName, storePhone, storeAddress, countryId,
+//                storeId, storeName, storePhone, storeAddress, countryId.toString(),
 //                storeDescription, storeCity, storeDistrict, postalCode,
 //                storeMail, storeImg, redirectAttributes, model);
 //        assertEquals("redirect:/store-info/" + storeId, result);

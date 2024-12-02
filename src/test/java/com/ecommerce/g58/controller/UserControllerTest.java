@@ -198,21 +198,21 @@ public class UserControllerTest {
     }
 
 
-//---------------------------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------------------------
     // testLoginSubmit tc1
     @Test
     public void testLoginSubmit_tc1() {
-    when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
-    UserDetails userDetails = mock(UserDetails.class);
-    when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(userDetails);
-    when(userDetails.getPassword()).thenReturn("123456");
-    when(userService.checkPassword("password", "123456")).thenReturn(true);
-    String result = userController.loginSubmit("lequyet180902@gmail.com", "password", model);
-    assertEquals("redirect:/homepage", result);
-    verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
-    verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
-    verify(userService, times(1)).checkPassword("password", "123456");
-}
+        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
+        UserDetails userDetails = mock(UserDetails.class);
+        when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(userDetails);
+        when(userDetails.getPassword()).thenReturn("123456");
+        when(userService.checkPassword("password", "123456")).thenReturn(true);
+        String result = userController.loginSubmit("lequyet180902@gmail.com", "password", model);
+        assertEquals("redirect:/homepage", result);
+        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
+        verify(userService, times(1)).checkPassword("password", "123456");
+    }
 
     // testLoginSubmit tc2
     @Test
@@ -503,7 +503,5 @@ public class UserControllerTest {
         verify(redirectAttributes).addFlashAttribute("error", "OTP không hợp lệ. Vui lòng thử lại!");
         verify(userService, never()).registerUser(any(Users.class));
     }
-
-
 
 }
