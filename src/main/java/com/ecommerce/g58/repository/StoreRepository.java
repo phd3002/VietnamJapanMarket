@@ -30,7 +30,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "        JOIN orders o ON od.order_id = o.order_id\n" +
             "        JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "        WHERE s.user_id = :userId\n" +
-            "        AND ss.status = 'complete'\n" +
+            "        AND ss.status = 'completed'\n" +
             "        AND (\n" +
             "            (:startDate IS NULL AND :endDate IS NULL\n" +
             "             AND o.order_date >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')\n" +
@@ -131,7 +131,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "        JOIN orders o ON od.order_id = o.order_id\n" +
             "        JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "        WHERE s.user_id = :userId\n" +
-            "        AND ss.status = 'complete'\n" +
+            "        AND ss.status = 'completed'\n" +
             "        AND (\n" +
             "            (:startDate IS NULL AND :endDate IS NULL\n" +
             "             AND o.order_date >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')\n" +
@@ -211,7 +211,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "        JOIN stores s ON s.store_id = p.store_id\n" +
             "    WHERE \n" +
             "        s.user_id = :userId \n" +
-            "        AND ss.status = 'Complete'\n" +
+            "        AND ss.status = 'Completed'\n" +
             "        AND (\n" +
             "            (:startDate IS NULL AND :endDate IS NULL\n" +
             "             AND o.order_date >= DATE_FORMAT(CURDATE(), '%Y-%m-01')\n" +
@@ -397,7 +397,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "JOIN orders o ON od.order_id = o.order_id\n" +
             "JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "WHERE s.user_id = :userId\n" +
-            "AND ss.status = 'complete'\n" +
+            "AND ss.status = 'completed'\n" +
             "    AND (MONTH(o.order_date) = MONTH(CURRENT_DATE)\n" +
             "    AND YEAR(o.order_date) = YEAR(CURRENT_DATE))",
             nativeQuery = true)
@@ -410,7 +410,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "JOIN orders o ON od.order_id = o.order_id\n" +
             "JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "WHERE s.user_id = :userId\n" +
-            "AND ss.status = 'complete'\n" +
+            "AND ss.status = 'completed'\n" +
             "    AND (o.order_date >= DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 1 MONTH)\n" +
             "    AND o.order_date < DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'))",
             nativeQuery = true)
@@ -423,7 +423,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "JOIN orders o ON od.order_id = o.order_id\n" +
             "JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "WHERE s.user_id = :userId\n" +
-            "AND ss.status = 'complete'\n" +
+            "AND ss.status = 'completed'\n" +
             "    AND (o.order_date >= DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 2 MONTH)\n" +
             "    AND o.order_date < DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 1 MONTH))",
             nativeQuery = true)
@@ -436,7 +436,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "JOIN orders o ON od.order_id = o.order_id\n" +
             "JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "WHERE s.user_id = :userId\n" +
-            "AND ss.status = 'complete'\n" +
+            "AND ss.status = 'completed'\n" +
             "    AND (o.order_date >= DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 3 MONTH)\n" +
             "    AND o.order_date < DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 2 MONTH))",
             nativeQuery = true)
@@ -449,7 +449,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "JOIN orders o ON od.order_id = o.order_id\n" +
             "JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "WHERE s.user_id = :userId\n" +
-            "AND ss.status = 'complete'\n" +
+            "AND ss.status = 'completed'\n" +
             "    AND (o.order_date >= DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 4 MONTH)\n" +
             "    AND o.order_date < DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 3 MONTH))",
             nativeQuery = true)
@@ -462,7 +462,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "JOIN orders o ON od.order_id = o.order_id\n" +
             "JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "WHERE s.user_id = :userId\n" +
-            "AND ss.status = 'complete'\n" +
+            "AND ss.status = 'completed'\n" +
             "    AND (o.order_date >= DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 5 MONTH)\n" +
             "    AND o.order_date < DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 4 MONTH))",
             nativeQuery = true)
