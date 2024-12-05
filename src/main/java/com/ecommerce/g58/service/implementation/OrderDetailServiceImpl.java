@@ -300,7 +300,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 sellerTransactions.setAmount(-invoice.getDeposit().longValue());
                 sellerTransactions.setFromWalletId(sellerWallet.get());
                 sellerTransactions.setTransactionType("Hoàn tiền");
-                sellerTransactions.setDescription("Hoàn " + invoice.getDeposit() + " do khách hủy đơn " + order.getOrderCode());
+                sellerTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " do khách hủy đơn " + order.getOrderCode());
                 sellerTransactions.setCreatedAt(LocalDateTime.now());
 
                 transactionRepository.save(sellerTransactions);
@@ -309,7 +309,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 userTransactions.setAmount(invoice.getDeposit().longValue());
                 userTransactions.setToWalletId(userWallet.get());
                 userTransactions.setTransactionType("Thanh toán hoàn tiền");
-                userTransactions.setDescription("Hoàn " + invoice.getDeposit() + "tiền từ đơn hàng  do bạn đã hủy đơn " + order.getOrderCode());
+                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + "tiền từ đơn hàng  do bạn đã hủy đơn " + order.getOrderCode());
                 userTransactions.setCreatedAt(LocalDateTime.now());
 
 
