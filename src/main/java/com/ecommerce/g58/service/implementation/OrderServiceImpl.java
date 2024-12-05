@@ -218,7 +218,7 @@ public class OrderServiceImpl implements OrderService {
 
                 // Tạo thông báo
                 createNotification(sellWallet.get().getUserId(), "Đơn hàng đã được gửi đi",
-                        "Đơn hàng " + order.getOrderCode() + " đã được gửi đi. Phí vận chuyển: " + invoice.getShippingFee(),
+                        "Đơn hàng " + order.getOrderCode() + " đã được gửi đi. Phí vận chuyển: " + invoice.getFormattedShippingFee(),
                         "http://localhost:8080/order-detail/" + orderId);
                 shippingStatusRepository.updateOrderStatus(orderId, status);
                 System.out.println("Order status updated to " + status);
@@ -260,7 +260,7 @@ public class OrderServiceImpl implements OrderService {
 
                     // Tạo thông báo
                     createNotification(sellWallet.get().getUserId(), "Đơn hàng giao thành công",
-                            "Đơn hàng " + order.getOrderCode() + " đã giao thành công. Số tiền nhận: " + invoice.getRemainingBalance(),
+                            "Đơn hàng " + order.getOrderCode() + " đã giao thành công. Số tiền nhận: " + invoice.getFormatedRemainingBalance(),
                             "http://localhost:8080/order-detail/" + orderId);
                     createNotification(order.getUserId(), "Đơn hàng giao thành công",
                             "Đơn hàng " + order.getOrderCode() + " của bạn đã được giao thành công.",
@@ -299,11 +299,11 @@ public class OrderServiceImpl implements OrderService {
 
                 // Tạo thông báo
                 createNotification(order.getUserId(), "Đơn hàng thất bại",
-                        "Đơn hàng " + order.getOrderCode() + " giao thất bại. Số tiền đã hoàn: " + invoice.getDeposit(),
+                        "Đơn hàng " + order.getOrderCode() + " giao thất bại. Số tiền đã hoàn: " + invoice.getFormatedDeposit(),
                         "http://localhost:8080/order-detail/" + orderId
                 );
                 createNotification(sellerWallet.getUserId(), "Đơn hàng thất bại",
-                        "Đơn hàng " + order.getOrderCode() + " giao thất bại. Đã hoàn tiền: " + invoice.getDeposit(),
+                        "Đơn hàng " + order.getOrderCode() + " giao thất bại. Đã hoàn tiền: " + invoice.getFormatedDeposit(),
                         "http://localhost:8080/order-detail/" + orderId);
             }
         } else {
