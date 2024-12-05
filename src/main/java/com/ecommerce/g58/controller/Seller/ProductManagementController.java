@@ -1,6 +1,7 @@
 package com.ecommerce.g58.controller.Seller;
 
 import com.ecommerce.g58.entity.*;
+import com.ecommerce.g58.repository.ProductVariationRepository;
 import com.ecommerce.g58.repository.StoreRepository;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.*;
@@ -24,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-//@RequestMapping("/seller/seller-management")
 public class ProductManagementController {
     @Autowired
     private UserRepository userRepository;
@@ -32,6 +32,8 @@ public class ProductManagementController {
     private StoreRepository storeRepository;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductVariationRepository productVariationRepository;
 
     @Autowired
     private StoreService storeService;
@@ -339,5 +341,25 @@ public class ProductManagementController {
         redirectAttributes.addFlashAttribute("successMessage", "Thêm biến thể sản phẩm thành công!");
         System.out.println("Product variation added successfully");
         return "redirect:/seller-products/" + product.get().getStoreId().getStoreId();
+    }
+
+    @PostMapping("/update-stock")
+    public String updateStock(@RequestParam("variationId") Integer variationId,
+                              @RequestParam("newStock") Integer newStock,
+                              RedirectAttributes redirectAttributes) {
+        ProductVariation variation = productService.findProductVariationById(variationId);
+
+        // Validate newStock
+        if (newStock < 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số lượng mới không thể âm.");
+            return "redirect:/seller-products";
+        }
+
+        variation.setStock(newStock);
+        productVariationRepository.save(variation);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật số lượng thành công.");
+
+        return "redirect:/seller-products";
     }
 }
