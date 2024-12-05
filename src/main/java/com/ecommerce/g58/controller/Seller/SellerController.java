@@ -62,9 +62,9 @@ public class SellerController {
 
     @PostMapping("/sign-up-seller")
     public String registerStore(@ModelAttribute Stores store,
-//                                @RequestParam("countryId") Integer countryId,
-                                @RequestParam("city") String city,
-                                @RequestParam("district") String district,
+                                @RequestParam String storeAddress,
+                                @RequestParam String storeTown,
+                                @RequestParam String storeCity, @RequestParam String storeDistrict,
                                 @RequestParam("postalCode") String postalCode,
                                 RedirectAttributes redirectAttributes,
                                 HttpServletRequest request) {
@@ -84,11 +84,11 @@ public class SellerController {
             redirectAttributes.addFlashAttribute("errorMessage", "Địa chỉ cửa hàng không được để trống và không được vượt quá 255 ký tự.");
             return "redirect:/sign-up-seller";
         }
-        if (city == null || city.isEmpty() || city.length() > 100) {
+        if (storeCity == null || storeCity.isEmpty() || storeCity.length() > 100) {
             redirectAttributes.addFlashAttribute("errorMessage", "Thành phố không được để trống và không được vượt quá 100 ký tự.");
             return "redirect:/sign-up-seller";
         }
-        if (district == null || district.isEmpty() || district.length() > 100) {
+        if (storeDistrict == null || storeDistrict.isEmpty() || storeDistrict.length() > 100) {
             redirectAttributes.addFlashAttribute("errorMessage", "Quận/huyện không được để trống và không được vượt quá 100 ký tự.");
             return "redirect:/sign-up-seller";
         }
@@ -96,10 +96,12 @@ public class SellerController {
             redirectAttributes.addFlashAttribute("errorMessage", "Mã bưu chính không được vượt quá 20 ký tự.");
             return "redirect:/sign-up-seller";
         }
+        String  detailAddress = storeTown + "-" + storeAddress.trim();
         store.setOwnerId(user);
         store.setStoreMail(user.getEmail()); // Automatically assign the store's email to the user's email
-        store.setCity(city != null ? city.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
-        store.setDistrict(district != null ? district.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
+        store.setCity(storeCity);
+        store.setDistrict(storeDistrict);
+        store.setStoreAddress(detailAddress);
         store.setPostalCode(postalCode != null ? postalCode.replaceAll("^,\\s*|,\\s*$", "").trim() : null);
 
         Countries country = countryService.getCountryById(2);

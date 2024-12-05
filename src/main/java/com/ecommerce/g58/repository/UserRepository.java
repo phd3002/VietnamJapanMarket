@@ -13,10 +13,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<Users, Integer> {
     // Tìm kiếm người dùng theo tên đăng nhập (username)
-//    Users findByUsername(String username);
+    Users findByUsername(String username);
+
     Users findByEmail(String email);
 
-    Optional<Users> findByUsername(String username);
+//    Optional<Users> findByUsername(String username);
 
     List<Users> findAllByRoleId(Roles roleId);
 

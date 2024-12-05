@@ -8,11 +8,13 @@ import com.ecommerce.g58.enums.PaymentMethod;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderService {
 
-    Page<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable);
+    Page<OrdersDTO> getOrdersByUserIdAndStatusAndDate(Integer userId, String status, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
     List<OrderManagerDTO> getOrdersForStore(Integer userId);
 
@@ -23,6 +25,18 @@ public interface OrderService {
     void updateOrderStatuss(Integer orderId, String status);
 
     Orders createOrder(Users user, String address, PaymentMethod paymentMethod, List<Integer> cartItemIds);
+
     Orders getOrderByCode(String code);
+
     List<OrderManagerDTO> getOrders();
+
+    List<OrderManagerDTO> getOrdersByStatus(String status);
+
+    List<OrderManagerDTO> getOrdersByFilters(String status, LocalDate startDate, LocalDate endDate);
+
+    List<OrderManagerDTO> getOrdersByFilters(String status, LocalDate startDate, LocalDate endDate, Integer storeId);
+
+   void bulkUpdateOrderStatus(String currentStatus, String newStatus, LocalDate startDate, LocalDate endDate, Integer storeId) ;
+   void bulkUpdateOrderStatus(String currentStatus, String newStatus, LocalDate startDate, LocalDate endDate) ;
+
 }

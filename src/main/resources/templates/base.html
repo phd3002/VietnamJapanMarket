@@ -25,6 +25,7 @@
             display: inline-block; /* Ensure it is visible */
             visibility: visible;
         }
+
         .item-content {
             display: flex;
             justify-content: space-between; /* Ensures space between title and time */
@@ -110,7 +111,8 @@
                                         <div th:each="notification : ${topNotifications}" class="notification-item">
 
                                             <form th:action="@{/notification/read}" method="post">
-                                                <input type="hidden" name="notificationId" th:value="${notification.notificationId}" />
+                                                <input type="hidden" name="notificationId"
+                                                       th:value="${notification.notificationId}"/>
                                                 <div class="item-content row" onclick="this.parentElement.submit()">
                                                     <h3 th:if="${!notification.read}" class="item-title"
                                                         th:text="${notification.title}">Notification Title</h3>
@@ -191,7 +193,7 @@
             <div class="card-body" id="search-results" style="display: none;">
                 <div class="search-result-header">
                     <h6 class="title"><span id="result-count">0</span> Kết quả tìm thấy</h6>
-                    <a href="product-list" class="view-all">Xem tất cả</a>
+                    <a href="products" class="view-all">Xem tất cả</a>
                 </div>
                 <div class="search-results">
                     <!-- Dynamic search result items should go here -->
@@ -267,7 +269,8 @@
                     <div class="axil-footer-widget">
                         <h5 class="widget-title">Support</h5>
                         <div class="inner">
-                            <p>Đại học FPT, Khu Công Nghệ Cao Hòa Lạc, Km29 Đại lộ Thăng Long, Thạch Hoà, Thạch Thất, Hà Nội 13100</p>
+                            <p>Đại học FPT, Khu Công Nghệ Cao Hòa Lạc, Km29 Đại lộ Thăng Long, Thạch Hoà, Thạch Thất, Hà
+                                Nội 13100</p>
                             <ul class="support-list-item">
                                 <li><a href="hungdphe170721@fpt.edu.vn"><i class="fal fa-envelope-open"></i>
                                     hungdphe170721@fpt.edu.vn</a></li>

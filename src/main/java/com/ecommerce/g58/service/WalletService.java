@@ -2,13 +2,15 @@ package com.ecommerce.g58.service;
 
 import com.ecommerce.g58.dto.WalletDTO;
 import com.ecommerce.g58.entity.Users;
+import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface WalletService {
-    // lay ra tat ca cac giao dich cua user
-    List<WalletDTO> getTransactionsForUserId(Integer userId);
+
+    Page<WalletDTO> getTransactionsForUserId(Integer userId, LocalDateTime startDate, LocalDateTime endDate, int page, int size);
 
     // lay ra so du cua user
     long getUserWalletBalance(Integer userId);

@@ -102,7 +102,14 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
     @Query(value = "SELECT DISTINCT p.* " +
             "FROM Products p " +
             "JOIN product_variation pv ON p.product_id = pv.product_id " +
-            "WHERE p.category_id = :categoryId AND pv.stock > 0", nativeQuery = true)
-    List<Products> findByCategoryId(@Param("categoryId") Long categoryId);
+            "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) AND pv.stock > 0",
+            countQuery = "SELECT COUNT(DISTINCT p.product_id) " +
+                    "FROM Products p " +
+                    "JOIN product_variation pv ON p.product_id = pv.product_id " +
+                    "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) AND pv.stock > 0",
+            nativeQuery = true)
+    Page<Products> findByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
+
+    Page<Products> findByStoreIdStoreId(Integer storeId, Pageable pageable);
 
 }

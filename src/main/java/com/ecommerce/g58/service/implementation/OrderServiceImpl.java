@@ -15,10 +15,14 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import com.ecommerce.g58.utils.OrderSpecification;
+import org.springframework.data.jpa.domain.Specification;
+
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -62,17 +66,16 @@ public class OrderServiceImpl implements OrderService {
         this.orderRepository = orderRepository;
     }
 
-    @Override
-    public Page<OrdersDTO> getOrdersByUserIdAndStatus(Integer userId, String status, Pageable pageable) {
-        // Dynamically filter by status if provided, otherwise fetch all
-        Page<Orders> ordersPage;
-        if (status == null || status.isEmpty()) {
-            ordersPage = orderRepository.findByUserId_UserId(userId, pageable); // New method for all statuses
-        } else {
-            ordersPage = orderRepository.findByUserId_UserIdAndShippingStatus_Status(userId, status, pageable);
-        }
 
-        // Map `Orders` to `OrdersDTO` (same as before)
+    @Override
+    public Page<OrdersDTO> getOrdersByUserIdAndStatusAndDate(Integer userId, String status, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+        Specification<Orders> spec = Specification.where(OrderSpecification.hasUserId(userId))
+                .and(OrderSpecification.hasStatus(status))
+                .and(OrderSpecification.hasOrderDateBetween(startDate, endDate));
+
+        Page<Orders> ordersPage = orderRepository.findAll(spec, pageable);
+
+        // Mapping logic remains the same
         return ordersPage.map(order -> {
             OrdersDTO dto = new OrdersDTO();
             dto.setOrderId(order.getOrderId());
@@ -91,7 +94,6 @@ public class OrderServiceImpl implements OrderService {
             return dto;
         });
     }
-
 
 
     @Override
@@ -125,14 +127,36 @@ public class OrderServiceImpl implements OrderService {
         List<OrderManagerDTO> orders = new ArrayList<>();
         for (Object[] result : results) {
             OrderManagerDTO order = new OrderManagerDTO();
-            order.setOrderId((Integer) result[0]);
-            order.setCustomerName((String) result[1]);
-            order.setProductNames((String) result[2]);
-            order.setTotalProducts(((Number) result[3]).intValue());
-            order.setTotalPrice(((Number) result[4]).intValue());
-            order.setLatestStatus((String) result[5]);
-            order.setReason((String) result[6]);
-            order.setPrevious_status((String) result[7]);
+            order.setOrderId(result[0] != null ? ((Number) result[0]).intValue() : null); // orderId
+            order.setCustomerName(result[1] != null ? result[1].toString() : ""); // customerName
+            order.setProductNames(result[2] != null ? result[2].toString() : ""); // productNames
+            order.setTotalProducts(result[3] != null ? ((Number) result[3]).intValue() : 0); // totalProducts
+            order.setTotalPrice(result[4] != null ? ((Number) result[4]).intValue() : 0); // order_price
+            order.setOrderDate(null); // Initialize orderDate
+
+            // Correctly assign orderDate from result[5]
+            if (result[5] != null) { // orderDate
+                if (result[5] instanceof java.sql.Date) {
+                    order.setOrderDate(((java.sql.Date) result[5]).toLocalDate());
+                } else if (result[5] instanceof java.sql.Timestamp) {
+                    order.setOrderDate(((java.sql.Timestamp) result[5]).toLocalDateTime().toLocalDate());
+                } else if (result[5] instanceof LocalDate) {
+                    order.setOrderDate((LocalDate) result[5]);
+                } else {
+                    order.setOrderDate(null);
+                }
+            }
+
+            // Correctly assign latestStatus from result[6]
+            order.setLatestStatus(result[6] != null ? result[6].toString() : "");
+
+            // Assign latestReason from result[7]
+            order.setReason(result[7] != null ? result[7].toString() : "");
+
+            // Assign oldStatus from result[8]
+            order.setPrevious_status(result[8] != null ? result[8].toString() : "");
+
+            // Add to the list
             orders.add(order);
         }
         return orders;
@@ -231,8 +255,8 @@ public class OrderServiceImpl implements OrderService {
                     logisticTransactions2.setFromWalletId(sellWallet.get());
                     logisticTransactions2.setAmount(invoice.getRemainingBalance().abs().longValue());
                     logisticTransactions2.setTransactionType("Trả tiền hàng");
-                    logisticTransactions2.setDescription("Trả " + invoice.getRemainingBalance() + " cho seller của đơn hàng  "+ order.getOrderCode());
-                    transactionRepository.save(logisticTransactions);
+                    logisticTransactions2.setDescription("Trả " + invoice.getRemainingBalance() + " cho seller của đơn hàng  " + order.getOrderCode());
+                    transactionRepository.save(logisticTransactions2);
 
                     // Tạo thông báo
                     createNotification(sellWallet.get().getUserId(), "Đơn hàng giao thành công",
@@ -390,16 +414,125 @@ public class OrderServiceImpl implements OrderService {
         List<OrderManagerDTO> orders = new ArrayList<>();
         for (Object[] result : results) {
             OrderManagerDTO order = new OrderManagerDTO();
+            order.setOrderId(result[0] != null ? ((Number) result[0]).intValue() : null);
+            order.setCustomerName(result[1] != null ? result[1].toString() : "");
+            order.setProductNames(result[2] != null ? result[2].toString() : "");
+            order.setTotalProducts(result[3] != null ? ((Number) result[3]).intValue() : 0);
+            order.setTotalPrice(result[4] != null ? ((Number) result[4]).intValue() : 0);
+
+            // Map orderDate from result[5]
+            if (result[5] != null) { // orderDate
+                if (result[5] instanceof java.sql.Date) {
+                    order.setOrderDate(((java.sql.Date) result[5]).toLocalDate());
+                } else if (result[5] instanceof java.sql.Timestamp) {
+                    order.setOrderDate(((java.sql.Timestamp) result[5]).toLocalDateTime().toLocalDate());
+                } else if (result[5] instanceof LocalDate) {
+                    order.setOrderDate((LocalDate) result[5]);
+                } else {
+                    order.setOrderDate(null);
+                }
+            } else {
+                order.setOrderDate(null);
+            }
+
+            order.setLatestStatus(result[6] != null ? result[6].toString() : "");
+            order.setReason(result[7] != null ? result[7].toString() : "");
+            order.setPrevious_status(result[8] != null ? result[8].toString() : "");
+
+            orders.add(order);
+        }
+        return orders;
+    }
+
+
+    @Override
+    public List<OrderManagerDTO> getOrdersByStatus(String status) {
+        List<Object[]> results = orderRepository.findOrdersByStatus(status);
+        List<OrderManagerDTO> orders = new ArrayList<>();
+        for (Object[] result : results) {
+            OrderManagerDTO order = new OrderManagerDTO();
             order.setOrderId((Integer) result[0]);
             order.setCustomerName((String) result[1]);
             order.setProductNames((String) result[2]);
             order.setTotalProducts(((Number) result[3]).intValue());
             order.setTotalPrice(((Number) result[4]).intValue());
             order.setLatestStatus((String) result[5]);
-            order.setReason((String) result[6]);
-            order.setPrevious_status((String) result[7]);
             orders.add(order);
         }
         return orders;
+    }
+
+    @Override
+    public List<OrderManagerDTO> getOrdersByFilters(String status, LocalDate startDate, LocalDate endDate) {
+        List<Object[]> results = orderRepository.findOrdersByFilters(status, startDate, endDate);
+        List<OrderManagerDTO> orders = new ArrayList<>();
+        for (Object[] result : results) {
+            OrderManagerDTO order = new OrderManagerDTO();
+            order.setOrderId((Integer) result[0]);
+            order.setCustomerName((String) result[1]);
+            order.setProductNames((String) result[2]);
+            order.setTotalProducts(((Number) result[3]).intValue());
+            order.setTotalPrice(((Number) result[4]).intValue());
+            order.setLatestStatus((String) result[5]);
+            if (result[6] != null) {
+                if (result[6] instanceof java.sql.Date) {
+                    order.setOrderDate(((java.sql.Date) result[6]).toLocalDate());
+                } else if (result[6] instanceof java.sql.Timestamp) {
+                    order.setOrderDate(((java.sql.Timestamp) result[6]).toLocalDateTime().toLocalDate());
+                } else {
+                    order.setOrderDate(null);
+                }
+            } else {
+                order.setOrderDate(null);
+            }
+            orders.add(order);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<OrderManagerDTO> getOrdersByFilters(String status, LocalDate startDate, LocalDate endDate, Integer storeId) {
+        List<Object[]> results = orderRepository.findOrdersByFiltersForStore(status, startDate, endDate, storeId);
+        List<OrderManagerDTO> orders = new ArrayList<>();
+        for (Object[] result : results) {
+            OrderManagerDTO order = new OrderManagerDTO();
+            order.setOrderId((Integer) result[0]);
+            order.setCustomerName((String) result[1]);
+            order.setProductNames((String) result[2]);
+            order.setTotalProducts(((Number) result[3]).intValue());
+            order.setTotalPrice(((Number) result[4]).intValue());
+            order.setLatestStatus((String) result[5]);
+            if (result[6] != null) {
+                if (result[6] instanceof java.sql.Date) {
+                    order.setOrderDate(((java.sql.Date) result[6]).toLocalDate());
+                } else if (result[6] instanceof java.sql.Timestamp) {
+                    order.setOrderDate(((java.sql.Timestamp) result[6]).toLocalDateTime().toLocalDate());
+                } else {
+                    order.setOrderDate(null);
+                }
+            } else {
+                order.setOrderDate(null);
+            }
+            orders.add(order);
+        }
+        return orders;
+    }
+
+    @Override
+    @Transactional
+    public void bulkUpdateOrderStatus(String currentStatus, String newStatus, LocalDate startDate, LocalDate endDate, Integer storeId) {
+        List<OrderManagerDTO> ordersToUpdate = getOrdersByFilters(currentStatus, startDate, endDate, storeId);
+
+        for (OrderManagerDTO orderDTO : ordersToUpdate) {
+            updateOrderStatuss(orderDTO.getOrderId(), newStatus);
+        }
+    }
+
+    @Override
+    public void bulkUpdateOrderStatus(String currentStatus, String newStatus, LocalDate startDate, LocalDate endDate) {
+        List<OrderManagerDTO> ordersToUpdate = getOrdersByFilters(currentStatus, startDate, endDate);
+        for (OrderManagerDTO orderDTO : ordersToUpdate) {
+            updateOrderStatuss(orderDTO.getOrderId(), newStatus);
+        }
     }
 }

@@ -2,7 +2,7 @@
 <html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title th:text="${pageTitle} ?: 'My Orders'"></title>
+    <title th:text="${pageTitle} ?: 'My Orders'">My Orders</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Including CSS Files from base.html -->
@@ -33,37 +33,53 @@
                             <!-- Orders Tab -->
                             <div class="tab-pane fade show active" id="nav-orders" role="tabpanel">
 
+                                <!-- Filter Section -->
+                                <!-- Remove the th:if condition -->
                                 <div class="filter-section">
-                                    <label for="statusFilter">Lọc theo trạng thái: </label>
-                                    <select id="statusFilter" name="status"
-                                            onchange="filterOrdersByStatus(this.value)">
-                                        <option value="" th:selected="${status == 'null'}">Tất cả</option>
-                                        <option value="Pending" th:selected="${status == 'Pending'}">
-                                            Chờ xử lý
-                                        </option>
-                                        <option value="Processing" th:selected="${status == 'Processing'}">
-                                            Đang gói hàng
-                                        </option>
-                                        <option value="Shipping" th:selected="${status == 'Shipping'}">
-                                            Đang vận chuyển
-                                        </option>
-                                        <option value="Completed" th:selected="${status == 'Completed'}">
-                                            Hoàn thành
-                                        </option>
-                                        <option value="Cancelled" th:selected="${status == 'Cancelled'}">
-                                            Đã hủy
-                                        </option>
-                                        <option value="Returned" th:selected="${status == 'Returned'}">
-                                            Trả hàng/Hoàn tiền nào
-                                        </option>
-                                        <option value="Returned" th:selected="${status == 'Failed'}">
-                                            Thất bại
-                                        </option>
-                                    </select>
+                                    <form th:action="@{/orders}" method="get" class="mb-4">
+                                        <div class="row align-items-end">
+                                            <!-- Status Filter -->
+                                            <div class="col-md-4 mb-3">
+                                                <label for="statusFilter" class="form-label">Lọc theo trạng thái:</label>
+                                                <select id="statusFilter" name="status" class="form-control">
+                                                    <option value="" th:selected="${status == null || status == ''}">Tất cả</option>
+                                                    <option value="Pending" th:selected="${status == 'Pending'}">Chờ xử lý</option>
+                                                    <option value="Processing" th:selected="${status == 'Processing'}">Đang gói hàng</option>
+                                                    <option value="Shipping" th:selected="${status == 'Shipping'}">Đang vận chuyển</option>
+                                                    <option value="Completed" th:selected="${status == 'Completed'}">Hoàn thành</option>
+                                                    <option value="Cancelled" th:selected="${status == 'Cancelled'}">Đã hủy</option>
+                                                    <option value="Returned" th:selected="${status == 'Returned'}">Trả hàng/Hoàn tiền</option>
+                                                    <option value="Failed" th:selected="${status == 'Failed'}">Thất bại</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Start Date Filter -->
+                                            <div class="col-md-3 mb-3">
+                                                <label for="startDate" class="form-label">Từ ngày:</label>
+                                                <input type="date" id="startDate" name="startDate" class="form-control"
+                                                       th:value="${startDate}">
+                                            </div>
+
+                                            <!-- End Date Filter -->
+                                            <div class="col-md-3 mb-3">
+                                                <label for="endDate" class="form-label">Đến ngày:</label>
+                                                <input type="date" id="endDate" name="endDate" class="form-control"
+                                                       th:value="${endDate}">
+                                            </div>
+
+                                            <!-- Submit Button -->
+                                            <div class="col-md-2 mb-3">
+                                                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="axil-dashboard-order" th:if="orders != null">
-                                    <div class="table-responsive" th:if="${message == null}">
-                                        <table class="table">
+
+                                <!-- Orders Table -->
+                                <div class="axil-dashboard-order">
+                                    <!-- Check if there are orders -->
+                                    <div class="table-responsive" th:if="${orders != null and orders.size() > 0}">
+                                        <table class="table table-bordered">
                                             <thead>
                                             <tr>
                                                 <th scope="col">Đơn hàng</th>
@@ -76,84 +92,63 @@
                                             </thead>
                                             <tbody>
                                             <tr th:each="order : ${orders}">
-                                                <td th:text="${order.orderId}"></td>
-                                                <td th:text="${order.orderDate}"></td>
-                                                <td th:text="${order.status}"></td>
-                                                <td th:text="${order.totalQuantity}"></td>
-                                                <td th:text="${order.getFormattedPrice()}"></td>
-                                                <td><a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"
-                                                       class="axil-btn view-btn">Xem</a></td>
+                                                <td th:text="${order.orderId}">#12345</td>
+                                                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
+                                                <td th:text="${order.status}">Pending</td>
+                                                <td th:text="${order.totalQuantity}">3</td>
+                                                <td th:text="${order.getFormattedPrice()}">₫150,000</td>
+                                                <td>
+                                                    <a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"
+                                                       class="btn btn-sm btn-info">Xem</a>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <!-- Phân trang -->
+
+                                        <!-- Pagination -->
                                         <div class="pagination-section" th:if="${totalPages > 0}">
-                                            <div class="d-flex justify-content-center">
-                                                <nav>
-                                                    <ul class="pagination">
-                                                        <!-- First -->
-                                                        <li class="page-item"
-                                                            th:classappend="${currentPage == 0} ? 'disabled'">
-                                                            <a class="page-link"
-                                                               th:href="@{/orders(page=0, size=${size}, status=${status})}">
-                                                                Đầu
-                                                            </a>
-                                                        </li>
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination justify-content-center">
+                                                    <!-- Previous Page -->
+                                                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                        <a class="page-link"
+                                                           th:href="@{/orders(page=${currentPage - 1}, size=${size}, status=${status}, startDate=${startDate}, endDate=${endDate})}"
+                                                           aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
 
-                                                        <!-- Previous -->
-                                                        <li class="page-item"
-                                                            th:classappend="${currentPage == 0} ? 'disabled'">
-                                                            <a class="page-link"
-                                                               th:href="@{/orders(page=${currentPage - 1}, size=${size}, status=${status})}"
-                                                               th:if="${currentPage > 0}">
-                                                                Trước
-                                                            </a>
-                                                        </li>
+                                                    <!-- Page Numbers -->
+                                                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                                                        th:classappend="${pageNum == currentPage} ? 'active'">
+                                                        <a class="page-link"
+                                                           th:href="@{/orders(page=${pageNum}, size=${size}, status=${status}, startDate=${startDate}, endDate=${endDate})}"
+                                                           th:text="${pageNum + 1}">1</a>
+                                                    </li>
 
-                                                        <!-- Page Numbers -->
-                                                        <li class="page-item"
-                                                            th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
-                                                            th:classappend="${pageNum == currentPage} ? 'active'">
-                                                            <a class="page-link"
-                                                               th:href="@{/orders(page=${pageNum}, size=${size}, status=${status})}"
-                                                               th:text="${pageNum + 1}">
-                                                            </a>
-                                                        </li>
-
-                                                        <!-- Next -->
-                                                        <li class="page-item"
-                                                            th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                                            <a class="page-link"
-                                                               th:href="@{/orders(page=${currentPage + 1}, size=${size}, status=${status})}"
-                                                               th:if="${currentPage < totalPages - 1}">
-                                                                Sau
-                                                            </a>
-                                                        </li>
-
-                                                        <!-- Last -->
-                                                        <li class="page-item"
-                                                            th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                                            <a class="page-link"
-                                                               th:href="@{/orders(page=${totalPages - 1}, size=${size}, status=${status})}">
-                                                                Cuối
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </nav>
-                                            </div>
+                                                    <!-- Next Page -->
+                                                    <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                                                        <a class="page-link"
+                                                           th:href="@{/orders(page=${currentPage + 1}, size=${size}, status=${status}, startDate=${startDate}, endDate=${endDate})}"
+                                                           aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
 
                                             <!-- Pagination Info -->
-                                            <div class="text-center mt-3">
-                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span>
-                                                <br/>
+                                            <div class="text-center mt-2">
+                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span><br/>
                                                 <span>Tổng đơn: [[${totalItems}]]</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Message when no orders -->
-                                    <div th:if="${message}" class="text-center">
-                                        <p th:text="${message}"></p>
-                                        <a th:href="${productListLink}" class="axil-btn">Mua ngay</a>
+
+                                    <!-- Message When No Orders -->
+                                    <div th:if="${orders == null or orders.size() == 0}" class="text-center">
+                                        <p th:text="${message ?: 'Không có đơn hàng nào.'}">Không có đơn hàng nào.</p>
+                                        <a th:href="@{/product-list}" class="btn btn-primary">Mua ngay</a>
                                     </div>
                                 </div>
                             </div>
@@ -168,8 +163,7 @@
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>
 
-<!-- JS
-============================================ -->
+<!-- JS Files -->
 <script th:src="@{/js/vendor/modernizr.min.js}"></script>
 <script th:src="@{/js/vendor/jquery.js}"></script>
 <script th:src="@{/js/vendor/popper.min.js}"></script>
@@ -187,14 +181,28 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+
+<!-- Optional JavaScript for Frontend Validations -->
 <script>
-    function filterOrdersByStatus(status) {
-        let url = '/orders';
-        if (status !== null && status !== '') {
-            url += '?status=' + status;
+    // Ensure endDate is not before startDate
+    document.getElementById('startDate').addEventListener('change', function () {
+        const startDate = this.value;
+        const endDateInput = document.getElementById('endDate');
+        if (endDateInput.value && startDate > endDateInput.value) {
+            alert('Ngày bắt đầu không được sau ngày kết thúc.');
+            endDateInput.value = '';
         }
-        window.location.href = url;
-    }
+    });
+
+    document.getElementById('endDate').addEventListener('change', function () {
+        const endDate = this.value;
+        const startDateInput = document.getElementById('startDate');
+        if (startDateInput.value && endDate < startDateInput.value) {
+            alert('Ngày kết thúc không được trước ngày bắt đầu.');
+            this.value = '';
+        }
+    });
 </script>
+
 </body>
 </html>

@@ -79,6 +79,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
+    public boolean isUsernameExist(String username) {
+        return userRepository.findByUsername(username) != null;
+    }
+
+    @Override
     public void registerUser(Users users) {
         // Mã hóa mật khẩu
         users.setUsername(users.getUsername());

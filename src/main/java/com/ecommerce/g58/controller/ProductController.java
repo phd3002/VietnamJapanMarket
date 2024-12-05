@@ -97,13 +97,33 @@ public class ProductController {
 //    }
 
     @GetMapping("/products")
-    public String getProductsByCategory(@RequestParam("categoryId") Long categoryId, Model model) {
-        logger.info("Fetching products for category ID: {}", categoryId);
-        List<Products> products = productService.getProductsByCategory(categoryId);
-        logger.info("Number of products found: {}", products.size());
-        model.addAttribute("products", products);
+    public String getProductsByCategory(
+            @RequestParam(value = "categoryId", required = false) Long categoryId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Products> productPage;
+
+        if (categoryId == null) {
+            logger.info("Fetching all products, page: {}, size: {}", page, size);
+            productPage = productService.getAllProducts(pageable);
+        } else {
+            logger.info("Fetching products for category ID: {}, page: {}, size: {}", categoryId, page, size);
+            productPage = productService.getProductsByCategory(categoryId, pageable);
+        }
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("categoryId", categoryId);
+
         return "product-list";
     }
+
+
+
 
     private Map<String, Integer> calculateStars(double averageRating) {
         Map<String, Integer> stars = new HashMap<>();
