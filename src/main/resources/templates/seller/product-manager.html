@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Danh sách nhân viên | Kênh người bán</title>
+    <title>Danh sách sản phẩm | Kênh người bán</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,6 +72,24 @@
         <div class="col-md-12">
             <div class="tile">
                 <div class="tile-body">
+                    <!-- Success and Error Messages -->
+                    <!-- Success Message -->
+                    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Thành công!</strong> <span th:text="${successMessage}"></span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Lỗi!</strong> <span th:text="${errorMessage}"></span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Action Buttons -->
                     <div class="row element-button">
                         <div class="col-sm-2">
                             <a class="btn btn-add btn-sm" th:href="@{'/addProductForm2/' + ${storeId}}" title="Thêm"><i
@@ -101,7 +119,7 @@
                             <td th:text="${product.productName}"></td>
                             <td>
                                 <img th:if="${product.productVariations != null && product.productVariations.size() > 0}"
-                                     th:src="${product.productVariations[0].imageId != null ? product.productVariations[0].imageId.thumbnail : '/images/default-thumbnail.png'}"
+                                     th:src="${product.productVariations.get(0).imageId != null ? product.productVariations.get(0).imageId.thumbnail : '/images/default-thumbnail.png'}"
                                      alt="Product Image" width="150px">
                             </td>
                             <td>
@@ -111,8 +129,23 @@
                                     </li>
                                 </ul>
                             </td>
-                            <td th:text="${product.productVariations.size() > 0 ? product.productVariations[0].stock : 'N/A'}"></td>
-                            <td th:text="${product.price} + ' đ'"></td>
+                            <td>
+                                <ul>
+                                    <li th:each="variation : ${product.productVariations}"
+                                        class="d-flex align-items-center">
+                                        <span th:text="${variation.stock}"></span>
+                                        <!-- Pen Icon Button -->
+                                        <button type="button" class="btn btn-link btn-sm edit-stock-btn"
+                                                data-toggle="modal"
+                                                data-target="#updateStockModal"
+                                                th:attr="data-variation-id=${variation.variationId}, data-stock=${variation.stock}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </td>
+
+                            <td th:text="${product.getPriceFormated()}"></td>
                             <td th:text="${product.categoryId != null ? product.categoryId.categoryName : 'N/A'}"></td>
                             <td th:text="${product.createdAt != null ? #temporals.format(product.createdAt, 'yyyy-MM-dd') : 'N/A'}"></td>
                             <td>
@@ -132,36 +165,56 @@
                             </td>
                         </tr>
                         </tbody>
+
                     </table>
-                    <div class="pagination">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item" th:if="${currentPage > 0}">
-                                <a class="page-link"
-                                   th:href="@{'/seller-products/' + ${storeId} + '?page=' + (${currentPage - 1})}">Lùi</a>
-                            </li>
-                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                                th:classappend="${i == currentPage} ? 'active'">
-                                <a class="page-link" th:href="@{'/seller-products/' + ${storeId} + '?page=' + ${i}}"
-                                   th:text="${i + 1}"></a>
-                            </li>
-                            <li class="page-item" th:if="${currentPage < totalPages - 1}">
-                                <a class="page-link"
-                                   th:href="@{'/seller-products/' + ${storeId} + '?page=' + (${currentPage + 1})}">Tiếp</a>
-                            </li>
-                        </ul>
-                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </main>
 
+<!-- Update Stock Modal -->
+<div class="modal fade" id="updateStockModal" tabindex="-1" role="dialog" aria-labelledby="updateStockModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="updateStockForm" method="post" th:action="@{/update-stock}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateStockModalLabel">Cập nhật số lượng</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Hidden input to store variation ID -->
+                    <input type="hidden" id="variationId" name="variationId">
+
+                    <!-- Display current stock -->
+                    <div class="form-group">
+                        <label for="currentStock">Số lượng hiện tại:</label>
+                        <input type="number" class="form-control" id="currentStock" name="currentStock" readonly>
+                    </div>
+
+                    <!-- Input for new stock -->
+                    <div class="form-group">
+                        <label for="newStock">Số lượng mới:</label>
+                        <input type="number" class="form-control" id="newStock" name="newStock" required min="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!-- Essential javascripts for application to work-->
 <script th:src="@{/seller/js/jquery-3.2.1.min.js}"></script>
 <script th:src="@{/seller/js/popper.min.js}"></script>
 <script th:src="@{/seller/js/bootstrap.min.js}"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script th:src="@{/seller/js/jquery.table2excel.js}"></script>
 <script th:src="@{/seller/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top-->
@@ -245,6 +298,27 @@
         e.stopImmediatePropagation();
     });
 </script>
+
+<script>
+    $(document).ready(function () {
+        // When the modal is about to be shown
+        $('#updateStockModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var variationId = button.data('variation-id'); // Extract info from data-* attributes
+            var currentStock = button.data('stock');
+
+            console.log("Variation ID:", variationId);
+            console.log("Current Stock:", currentStock);
+
+            // Update the modal's content.
+            var modal = $(this);
+            modal.find('#variationId').val(variationId);
+            modal.find('#currentStock').val(currentStock);
+            modal.find('#newStock').val(currentStock); // Optionally initialize with current stock
+        });
+    });
+</script>
+
 </body>
 
 </html>
