@@ -66,23 +66,93 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="row">
-                        <div class="col-md-4">
-                            <form th:action="@{/logistic/order-manager}" method="get">
-                                <label for="statusFilter">Lọc theo trạng thái:</label>
-                                <select id="statusFilter" name="status" class="form-control" onchange="this.form.submit()">
-                                    <option value="" th:selected="${status == null || status == ''}" selected>Tất cả</option>
-                                    <option value="Pending" th:selected="${status == 'Pending'}">Chờ xử lý</option>
-                                    <option value="Confirmed" th:selected="${status == 'Confirmed'}">Xác nhận</option>
-                                    <option value="Processing" th:selected="${status == 'Processing'}">Đang đóng gói</option>
-                                    <option value="Dispatched" th:selected="${status == 'Dispatched'}">Đã giao cho vận chuyển</option>
-                                    <option value="Shipping" th:selected="${status == 'Shipping'}">Đang vận chuyển</option>
-                                    <option value="Delivered" th:selected="${status == 'Delivered'}">Đã giao</option>
-                                    <option value="Failed" th:selected="${status == 'Failed'}">Thất bại</option>
-                                    <option value="Returned" th:selected="${status == 'Returned'}">Hoàn trả</option>
-                                    <option value="Cancelled" th:selected="${status == 'Cancelled'}">Đã hủy</option>
-                                </select>
+                        <form th:action="@{/logistic/order-manager}" method="get" class="w-100">
+                            <div class="form-row">
+                                <!-- Status Filter -->
+                                <div class="form-group col-md-3 col-sm-6">
+                                    <label for="statusFilter">Lọc theo trạng thái:</label>
+                                    <select id="statusFilter" name="status" class="form-control"
+                                            onchange="this.form.submit()">
+                                        <option value="" th:selected="${status == null || status == ''}" selected>Tất
+                                            cả
+                                        </option>
+                                        <option value="Pending" th:selected="${status == 'Pending'}">Chờ xử lý</option>
+                                        <option value="Confirmed" th:selected="${status == 'Confirmed'}">Xác nhận
+                                        </option>
+                                        <option value="Processing" th:selected="${status == 'Processing'}">Đang đóng
+                                            gói
+                                        </option>
+                                        <option value="Dispatched" th:selected="${status == 'Dispatched'}">Đã giao cho
+                                            vận chuyển
+                                        </option>
+                                        <option value="Shipping" th:selected="${status == 'Shipping'}">Đang vận chuyển
+                                        </option>
+                                        <option value="Delivered" th:selected="${status == 'Delivered'}">Đã giao
+                                        </option>
+                                        <option value="Failed" th:selected="${status == 'Failed'}">Thất bại</option>
+                                        <option value="Returned" th:selected="${status == 'Returned'}">Hoàn trả</option>
+                                        <option value="Cancelled" th:selected="${status == 'Cancelled'}">Đã hủy</option>
+                                    </select>
+                                </div>
+
+                                <!-- Start Date -->
+                                <div class="form-group col-md-3 col-sm-6">
+                                    <label for="startDate">Từ ngày:</label>
+                                    <input type="date" id="startDate" name="startDate" class="form-control"
+                                           th:value="${startDate}">
+                                </div>
+
+                                <!-- End Date -->
+                                <div class="form-group col-md-3 col-sm-6">
+                                    <label for="endDate">Đến ngày:</label>
+                                    <input type="date" id="endDate" name="endDate" class="form-control"
+                                           th:value="${endDate}">
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="form-group col-md-3 col-sm-6 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary mr-2 mb-2">Lọc</button>
+                                    <button type="button" class="btn btn-secondary mb-2"
+                                            onclick="window.location.href='/logistic/order-manager'">Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <!-- Button to Change Dispatched to Shipping -->
+                            <form th:if="${status == 'Dispatched'}" th:action="@{/logistic/bulk-update-status}"
+                                  method="post" id="bulkFormDispatched">
+                                <input type="hidden" name="statusFilter" th:value="${status}"/>
+                                <input type="hidden" name="startDate" th:value="${startDate}"/>
+                                <input type="hidden" name="endDate" th:value="${endDate}"/>
+                                <input type="hidden" name="newStatus" value="Shipping"/>
+                                <button type="button" class="btn btn-warning"
+                                        onclick="openBulkConfirmModal('bulkFormDispatched')">
+                                    Chuyển tất cả "Đã giao cho vận chuyển" thành "Đang vận chuyển"
+                                </button>
+                            </form>
+
+                            <!-- Button to Change Shipping to Delivered -->
+                            <form th:if="${status == 'Shipping'}" th:action="@{/logistic/bulk-update-status}"
+                                  method="post" id="bulkFormShipping">
+                                <input type="hidden" name="statusFilter" th:value="${status}"/>
+                                <input type="hidden" name="startDate" th:value="${startDate}"/>
+                                <input type="hidden" name="endDate" th:value="${endDate}"/>
+                                <input type="hidden" name="newStatus" value="Delivered"/>
+                                <button type="button" class="btn btn-success"
+                                        onclick="openBulkConfirmModal('bulkFormShipping')">
+                                    Chuyển tất cả "Đang vận chuyển" thành "Đã giao"
+                                </button>
                             </form>
                         </div>
+                    </div>
+                    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                        <span th:text="${successMessage}"></span>
+                    </div>
+                    <div th:if="${errorMessage}" class="alert alert-success" role="alert">
+                        <span th:text="${errorMessage}"></span>
                     </div>
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
@@ -92,6 +162,7 @@
                             <th>Đơn hàng</th>
                             <th>Số lượng</th>
                             <th>Tổng tiền</th>
+                            <th>Ngày tạo</th>
                             <th>Tình trạng</th>
                             <th>Tính năng</th>
                         </tr>
@@ -102,7 +173,8 @@
                             <td th:text="${order.customerName}"></td>
                             <td th:text="${order.productNames}"></td>
                             <td th:text="${order.totalProducts}"></td>
-                            <td th:text="${order.totalPrice}"></td>
+                            <td th:text="${order.getPriceFormated()}"></td>
+                            <td th:text="${order.getFormattedOrderDate()}"></td>
                             <td>
                                 <form method="post" th:action="@{/logistic/update-order-status}">
                                     <input type="hidden" name="orderId" th:value="${order.orderId}"/>
@@ -166,6 +238,17 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="bulkConfirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBulkConfirmModal()">&times;</span>
+            <h2 class="modal-title">Xác nhận thay đổi trạng thái</h2>
+            <p id="bulkConfirmMessage"></p>
+            <div class="modal-buttons">
+                <button id="confirmBulkBtn" class="btn btn-success">Đồng ý</button>
+                <button class="btn btn-danger" onclick="closeBulkConfirmModal()">Hủy bỏ</button>
             </div>
         </div>
     </div>
@@ -335,7 +418,37 @@
         this.form.submit();
     });
 </script>
+<script>
+    function openBulkConfirmModal(formId) {
+        let newStatus;
+        let message = "";
+        if (formId === 'bulkFormDispatched') {
+            newStatus = 'Shipping';
+            message = 'Bạn có chắc chắn muốn chuyển tất cả đơn hàng "Đã giao cho vận chuyển" thành "Đang vận chuyển"?';
+        } else if (formId === 'bulkFormShipping') {
+            newStatus = 'Delivered';
+            message = 'Bạn có chắc chắn muốn chuyển tất cả đơn hàng "Đang vận chuyển" thành "Đã giao"?';
+        }
+        document.getElementById('bulkConfirmMessage').innerHTML = message + '<br><span style="color: red;">Hành động này không thể hoàn tác!</span>';
+        document.getElementById('bulkConfirmModal').style.display = 'block';
 
+        // Store the form ID in the confirm button's data attribute
+        document.getElementById('confirmBulkBtn').setAttribute('data-form-id', formId);
+    }
+
+    // Function to close the bulk confirmation modal
+    function closeBulkConfirmModal() {
+        document.getElementById('bulkConfirmModal').style.display = 'none';
+    }
+
+    // Handle the confirm button click in the bulk confirmation modal
+    document.getElementById('confirmBulkBtn').addEventListener('click', function () {
+        const formId = this.getAttribute('data-form-id');
+        const form = document.getElementById(formId);
+        form.submit(); // Submit the corresponding form
+        closeBulkConfirmModal();
+    });
+</script>
 </body>
 
 </html>
