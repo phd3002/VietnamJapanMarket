@@ -24,7 +24,9 @@
                 <div class="product-table-heading">
                     <h4 class="title">Your Cart</h4>
                 </div>
-
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text="${error}"></span>
+                </div>
                 <!-- Display empty cart message -->
                 <div th:if="${isCartEmpty}" class="alert alert-warning" role="alert">
                     <span>Giỏ hàng của bạn đang trống. <a href="/product-list">Mua ngay</a>. </span>

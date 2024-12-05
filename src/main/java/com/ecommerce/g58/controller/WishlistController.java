@@ -33,10 +33,11 @@ public class WishlistController {
     private ProductService productService;
 
     @GetMapping("/wishlist")
-    public String getWishlist(Model model) {
+    public String getWishlist(Model model, RedirectAttributes redirectAttributes) {
         // Get authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng đăng nhập để thêm sản phẩm vào danh sách mong muốn");
             return "redirect:/sign-in";
         }
 
