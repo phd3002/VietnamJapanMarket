@@ -50,6 +50,7 @@
                     <div th:if="${errorMessage}" class="error-message">
                         <p th:text="${errorMessage}"></p>
                     </div>
+                    <br>
                     <form th:action="@{/sign-up}" th:object="${users}" method="post" class="singin-form">
                         <!-- CSRF Token -->
 <!--                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
