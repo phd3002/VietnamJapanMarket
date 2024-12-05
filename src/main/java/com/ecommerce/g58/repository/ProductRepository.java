@@ -110,6 +110,6 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
             nativeQuery = true)
     Page<Products> findByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 
-
+    Page<Products> findByStoreIdStoreId(Integer storeId, Pageable pageable);
 
 }

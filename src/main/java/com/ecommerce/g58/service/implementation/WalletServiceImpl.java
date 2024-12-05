@@ -10,6 +10,8 @@ import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.repository.WalletRepository;
 import com.ecommerce.g58.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -46,70 +48,6 @@ public class WalletServiceImpl implements WalletService {
         this.walletRepository = walletRepository;
     }
 
-    @Override
-    public List<WalletDTO> getTransactionsForUserId(Integer userId) {
-        List<Object[]> results = walletRepository.findTransactionsForUserId(userId);
-        List<WalletDTO> transactions = new ArrayList<>();
-        for (Object[] result : results) {
-            WalletDTO dto = new WalletDTO();
-
-            // Set transaction date
-            Timestamp transactionDateTimestamp = (Timestamp) result[0];
-            dto.setTransactionDate(transactionDateTimestamp.toLocalDateTime());
-
-            // Set transaction type
-            String transactionType = (String) result[1];
-            dto.setTransactionType(transactionType);
-
-            // Set amount
-            if (result[2] instanceof BigInteger) {
-                dto.setAmount(new BigDecimal((BigInteger) result[2]));
-            } else if (result[2] instanceof BigDecimal) {
-                dto.setAmount((BigDecimal) result[2]);
-            }
-
-            // Safely retrieve paymentType (checking if it exists)
-            String paymentType = (result.length > 6 && result[6] != null) ? (String) result[6] : null;
-
-            // Set description based on transaction type and paymentType
-            if ("deposit".equalsIgnoreCase(paymentType)) {
-                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
-                    dto.setDescription("Người mua đặt cọc 50% khi mua hàng");
-                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
-                    dto.setDescription("Đặt cọc 50% khi mua hàng");
-                }
-            } else if ("full".equalsIgnoreCase(paymentType)) {
-                // For full payment transactions
-                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
-                    dto.setDescription("Người mua thanh toán đầy đủ khi mua hàng");
-                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
-                    dto.setDescription("Thanh toán đầy đủ khi mua hàng");
-                }
-            } else {
-                dto.setDescription((String) result[3]); // Default description for other types
-            }
-
-            // Set transactionParty based on transaction type
-            if ("Trừ tiền".equals(transactionType)) {
-                dto.setTransactionParty("Đã gửi cho shop");
-            } else if ("Cộng tiền".equals(transactionType)) {
-                dto.setTransactionParty("Đã nhận từ người mua");
-            } else {
-                dto.setTransactionParty("Unknown"); // Fallback, if needed
-            }
-
-            // Set wallet balance
-            if (result[5] instanceof BigInteger) {
-                dto.setWalletBalance(new BigDecimal((BigInteger) result[5]));
-            } else if (result[5] instanceof BigDecimal) {
-                dto.setWalletBalance((BigDecimal) result[5]);
-            }
-
-            // Add the DTO to the list
-            transactions.add(dto);
-        }
-        return transactions;
-    }
 
     @Override
     public long getUserWalletBalance(Integer userId) {
@@ -260,5 +198,73 @@ public class WalletServiceImpl implements WalletService {
             transactionRepository.save(transactions);
         }
     }
+    @Override
+    public Page<WalletDTO> getTransactionsForUserId(Integer userId, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
+        // Create a Pageable object
+        PageRequest pageable = PageRequest.of(page, size);
 
+        // Fetch transactions with pagination and date filtering
+        Page<Object[]> results = walletRepository.findTransactionsForUserId(userId, startDate, endDate, pageable);
+
+        // Map the results to WalletDTO
+        Page<WalletDTO> walletPage = results.map(result -> {
+            WalletDTO dto = new WalletDTO();
+
+            // Set transaction date
+            Timestamp transactionDateTimestamp = (Timestamp) result[0];
+            dto.setTransactionDate(transactionDateTimestamp.toLocalDateTime());
+
+            // Set transaction type
+            String transactionType = (String) result[1];
+            dto.setTransactionType(transactionType);
+
+            // Set amount
+            if (result[2] instanceof BigInteger) {
+                dto.setAmount(new BigDecimal((BigInteger) result[2]));
+            } else if (result[2] instanceof BigDecimal) {
+                dto.setAmount((BigDecimal) result[2]);
+            }
+
+            // Safely retrieve paymentType (checking if it exists)
+            String paymentType = (result.length > 6 && result[6] != null) ? (String) result[6] : null;
+
+            // Set description based on transaction type and paymentType
+            if ("deposit".equalsIgnoreCase(paymentType)) {
+                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
+                    dto.setDescription("Người mua đặt cọc 50% khi mua hàng");
+                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
+                    dto.setDescription("Đặt cọc 50% khi mua hàng");
+                }
+            } else if ("full".equalsIgnoreCase(paymentType)) {
+                // For full payment transactions
+                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
+                    dto.setDescription("Người mua thanh toán đầy đủ khi mua hàng");
+                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
+                    dto.setDescription("Thanh toán đầy đủ khi mua hàng");
+                }
+            } else {
+                dto.setDescription((String) result[3]); // Default description for other types
+            }
+
+            // Set transactionParty based on transaction type
+            if ("Trừ tiền".equals(transactionType)) {
+                dto.setTransactionParty("Đã gửi cho shop");
+            } else if ("Cộng tiền".equals(transactionType)) {
+                dto.setTransactionParty("Đã nhận từ người mua");
+            } else {
+                dto.setTransactionParty("Unknown"); // Fallback, if needed
+            }
+
+            // Set wallet balance
+            if (result[5] instanceof BigInteger) {
+                dto.setWalletBalance(new BigDecimal((BigInteger) result[5]));
+            } else if (result[5] instanceof BigDecimal) {
+                dto.setWalletBalance((BigDecimal) result[5]);
+            }
+
+            return dto;
+        });
+
+        return walletPage;
+    }
 }

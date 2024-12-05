@@ -57,7 +57,7 @@
         <div class="container">
             <!-- Products  -->
             <div class="row row--15">
-                <div th:each="product : ${store.products}" class="col-xl-3 col-lg-4 col-sm-6">
+                <div th:each="product : ${productPage.content}" class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
                             <a th:href="@{/product-detail/{id}(id=${product.productId})}">
@@ -77,7 +77,45 @@
                     </div>
                 </div>
             </div>
-<!--            <div class="text-center pt&#45;&#45;30">-->
+            <div class="pagination-section" th:if="${totalPages > 0}">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous Page -->
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/view-store/{id}(id=${store.storeId}, page=${currentPage - 1}, size=${size})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- Page Numbers -->
+                        <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                            th:classappend="${pageNum == currentPage} ? 'active'">
+                            <a class="page-link"
+                               th:href="@{/view-store/{id}(id=${store.storeId}, page=${pageNum}, size=${size})}"
+                               th:text="${pageNum + 1}">1</a>
+                        </li>
+
+                        <!-- Next Page -->
+                        <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/view-store/{id}(id=${store.storeId}, page=${currentPage + 1}, size=${size})}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Pagination Info -->
+                <div class="text-center mt--2">
+                    <span th:text="'Trang ' + (${currentPage + 1}) + ' trên ' + (${totalPages})">Trang 1 trên 10</span><br/>
+                    <span th:text="'Tổng sản phẩm: ' + (${totalItems})">Tổng sản phẩm: 120</span>
+                </div>
+            </div>
+
+            <!--            <div class="text-center pt&#45;&#45;30">-->
 <!--                <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>-->
 <!--            </div>-->
         </div>
