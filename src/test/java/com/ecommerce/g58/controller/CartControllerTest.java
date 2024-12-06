@@ -413,7 +413,7 @@ public class CartControllerTest {
     }
 
     @Test
-    public void testAddToCart_tc19() {
+    public void testAddToCart_tc18() {
         RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
         Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
@@ -442,7 +442,7 @@ public class CartControllerTest {
     }
 
     @Test
-    public void testAddToCart_tc20() {
+    public void testAddToCart_tc19() {
         RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
         Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
@@ -463,13 +463,6 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail", result);
         verify(mockRedirectAttributes, times(1)).addFlashAttribute("error", "Đã có lỗi xảy ra khi thêm vào giỏ hảng");
     }
-
-
-
-
-
-
-
 
     //--------------------------------------------------------------------------------------------------------------
     /// testUpdateCartQuantity tc1

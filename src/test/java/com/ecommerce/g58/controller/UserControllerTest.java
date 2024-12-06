@@ -2,6 +2,7 @@ package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.service.WalletService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -37,6 +37,12 @@ public class UserControllerTest {
 
     @InjectMocks
     private UserController userController;
+
+    @Mock
+    private WalletService walletService;
+
+    @Mock
+    private Users user;
 
     @Mock
     private HttpSession session;
@@ -96,7 +102,7 @@ public class UserControllerTest {
         user.setPassword("123456");
         when(userService.isEmailExist(user.getEmail())).thenReturn(true);
         String result = userController.registerUser(user, "123456", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Email đã tồn tại.");
+        verify(model).addAttribute("errorMessage", "Email đã được sử dụng.");
         assertEquals("sign-up", result);
     }
 
@@ -193,7 +199,7 @@ public class UserControllerTest {
         user.setEmail("lequyet180902@gmail.com");
         user.setPassword("123456");
         String result = userController.registerUser(user, "123@", model, redirectAttributes, request);
-        verify(model).addAttribute("errorMessage", "Username không được để trống.");
+        verify(model).addAttribute("errorMessage", "Tên đăng nhập không được để trống.");
         assertEquals("sign-up", result);
     }
 
@@ -452,17 +458,26 @@ public class UserControllerTest {
     // testShowVerifyOtpForm_Success tc1
     @Test
     public void testProcessVerifyOtp_Success() throws Exception {
-        String otp = "123456";
-        Users user = new Users();
-        temporaryUsers.put(otp, user);
-        when(session.getAttribute("otp")).thenReturn(otp);
-        when(request.getParameter("otp")).thenReturn(otp);
+        // Arrange
+        String otpFromSession = "123456";
+        String otpFromRequest = "123456";
+
+        when(session.getAttribute("otp")).thenReturn(otpFromSession);
+        when(request.getParameter("otp")).thenReturn(otpFromRequest);
+        when(temporaryUsers.get(otpFromSession)).thenReturn(user);
+
+        // Act
         String result = userController.processVerifyOtp(request, session, redirectAttributes);
-        assertEquals("/sign-in", result);
+
+        // Assert
+        assertEquals("/sign-in", result); // Should redirect to sign-in page
+
+        // Verify interactions with the mock objects
         verify(userService).registerUser(user);
+        verify(walletService).createWalletForUser(user, 0);
         verify(session).setAttribute("verificationSuccessMessage", "Xác minh OTP thành công!");
         verify(session).removeAttribute("otp");
-        assertFalse(temporaryUsers.containsKey(otp));
+        verify(temporaryUsers).remove(otpFromSession);
     }
 
     // testProcessVerifyOtp_MistakeOtp tc2
