@@ -1,39 +1,28 @@
 package com.ecommerce.g58.controller.Seller;
 
+import com.ecommerce.g58.repository.ProductVariationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.ecommerce.g58.controller.Seller.StoreController;
 import com.ecommerce.g58.entity.Products;
 import com.ecommerce.g58.entity.ProductVariation;
 import com.ecommerce.g58.entity.ProductImage;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.service.FileS3Service;
 import com.ecommerce.g58.service.ProductService;
-import com.ecommerce.g58.service.CategoriesService;
 import com.ecommerce.g58.service.StoreService;
-
 import javax.servlet.http.HttpSession;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
 import java.util.Optional;
-import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
+
 
 @RunWith(MockitoJUnitRunner.class)
 class ProductManagementControllerTest {
@@ -50,10 +39,10 @@ class ProductManagementControllerTest {
     private FileS3Service fileS3Service;
 
     @Mock
-    private CategoriesService categoriesService;
+    private HttpSession session;
 
     @Mock
-    private HttpSession session;
+    private ProductVariationRepository productVariationRepository;
 
     @Mock
     private Model model;
@@ -63,11 +52,6 @@ class ProductManagementControllerTest {
 
     @Mock
     private MultipartFile thumbnail, firstImage, secondImage, thirdImage;
-
-    private Products product;
-    private ProductVariation productVariation;
-    private Stores store;
-    private ProductImage productImage;
 
     @BeforeEach
     void setUp() {
@@ -271,7 +255,6 @@ class ProductManagementControllerTest {
                 .addFlashAttribute("errorMessage", "Khối lượng sản phẩm phải trong khoảng từ 0.1kg đến 20kg.");
         assertEquals("redirect:/addProductForm2/" + storeId, result);
     }
-
 
     // testAddProductFull tc10
     @Test
@@ -555,6 +538,92 @@ class ProductManagementControllerTest {
         assertEquals("redirect:/edit-product/" + productId, result);
         verify(redirectAttributes, times(1)).addFlashAttribute("error", "Không tìm thấy sản phẩm.");
     }
+//-----------------------------------------------------------
+    @Test
+    void testUpdateStock_tc1() {
+        Integer variationId = 1;
+        Integer newStock = 1;
+        ProductVariation variation = new ProductVariation();
+        when(productService.findProductVariationById(variationId)).thenReturn(variation);
+        RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateStock(variationId, newStock, mockRedirectAttributes);
+        assertEquals("redirect:/seller-products", result);
+        assertEquals(newStock, variation.getStock());
+        verify(productVariationRepository, times(1)).save(variation);
+        verify(mockRedirectAttributes, times(1)).addFlashAttribute("successMessage", "Cập nhật số lượng thành công.");
+    }
 
+    @Test
+    void testUpdateStock_tc2() {
+        Integer variationId = 1;
+        Integer newStock = -1;
+        ProductVariation variation = new ProductVariation();
+        when(productService.findProductVariationById(variationId)).thenReturn(variation);
+        RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
+        String result = ProductManagementController.updateStock(variationId, newStock, mockRedirectAttributes);
+        assertEquals("redirect:/seller-products", result);
+        verify(mockRedirectAttributes, times(1)).addFlashAttribute("errorMessage", "Số lượng mới không thể âm.");
+        verify(productVariationRepository, never()).save(variation);
+    }
+
+    //--------------------------------------------------
+    @Test
+    void testAddProductVariation_tc1() throws Exception {
+        Integer productId = 1;
+        Products product = new Products();
+        product.setProductId(productId);
+        product.setStoreId(new Stores());
+        product.getStoreId().setStoreId(1);
+        ProductVariation productVariation = new ProductVariation();
+        ProductImage productImage = new ProductImage();
+        productImage.setImageId(1);
+        when(productService.findById(productId)).thenReturn(Optional.of(product));
+        when(fileS3Service.uploadFile(any(MultipartFile.class))).thenReturn("http://example.com/image.jpg");
+        when(productService.getMaxImageId()).thenReturn(productImage);
+        String result = ProductManagementController.addProductVariation(
+                productId, productVariation, thumbnail, firstImage, secondImage, thirdImage,
+                "Test Image", redirectAttributes, session
+        );
+        assertEquals("redirect:/seller-products/1", result);
+        verify(productService, times(1)).addProductImage(any(ProductImage.class));
+        verify(productService, times(1)).addProductVariation(productVariation);
+        verify(redirectAttributes, times(1)).addFlashAttribute("successMessage", "Thêm biến thể sản phẩm thành công!");
+    }
+
+    @Test
+    void testAddProductVariation_tc2() {
+        Integer productId = 1;
+        when(productService.findById(productId)).thenReturn(Optional.empty());
+        when(session.getAttribute("storeId")).thenReturn(1);
+        String result = ProductManagementController.addProductVariation(
+                productId, new ProductVariation(), thumbnail, firstImage, secondImage, thirdImage,
+                "Test Image", redirectAttributes, session
+        );
+        assertEquals("redirect:/seller-products/1", result);
+        verify(redirectAttributes, times(1)).addFlashAttribute("errorMessage", "Không tìm thấy sản phẩm");
+        verify(productService, never()).addProductImage(any(ProductImage.class));
+        verify(productService, never()).addProductVariation(any(ProductVariation.class));
+    }
+
+    @Test
+    void testAddProductVariation_tc3() throws Exception {
+        Integer productId = 1;
+        Products product = new Products();
+        product.setProductId(productId);
+        product.setStoreId(new Stores());
+        product.getStoreId().setStoreId(1);
+        ProductVariation productVariation = new ProductVariation();
+        when(productService.findById(productId)).thenReturn(Optional.of(product));
+        when(fileS3Service.uploadFile(any(MultipartFile.class))).thenThrow(new RuntimeException("Upload error"));
+        String result = ProductManagementController.addProductVariation(
+                productId, productVariation, thumbnail, firstImage, secondImage, thirdImage,
+                "Test Image", redirectAttributes, session
+        );
+        assertEquals("redirect:/addProductVariationForm/1", result);
+        verify(redirectAttributes, times(1)).addFlashAttribute(
+                "errorMessage", "Không thể tải lên hình ảnh. Vui lòng thử lại.");
+        verify(productService, never()).addProductImage(any(ProductImage.class));
+        verify(productService, never()).addProductVariation(any(ProductVariation.class));
+    }
 
 }
