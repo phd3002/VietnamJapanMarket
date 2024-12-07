@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@RunWith(MockitoJUnitRunner.class)
+
 public class CartControllerTest {
     @InjectMocks
     private CartController cartController;
@@ -85,9 +85,9 @@ public class CartControllerTest {
         redirectAttributes = new RedirectAttributesModelMap();
     }
 
-    // testAddToCart_UserNotAuthenticated tc1
+    // testAddToCarttc1
     @Test
-    public void testAddToCart_UserNotAuthenticatedtc1() {
+    public void testAddToCart_tc1() {
         // Given
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -100,9 +100,9 @@ public class CartControllerTest {
         assertEquals("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("errorMessage"));
     }
 
-    // testAddToCart_ProductAddedSuccessfully tc2
+    // testAddToCart tc2
     @Test
-    public void testAddToCart_ProductAddedSuccessfullytc2() {
+    public void testAddToCart_tc2() {
         // Given
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -122,9 +122,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc3
+    // testAddToCart tc3
     @Test
-    public void testAddToCart_ProductNotFoundtc3() {
+    public void testAddToCart_tc3() {
         // Given
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -142,9 +142,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductQuantitytc4
+    // testAddToCart tc4
     @Test
-    public void testAddToCart_ProductQuantitytc4() {
+    public void testAddToCart_tc4() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -163,9 +163,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductQuantitytc5
+    // testAddToCart tc5
     @Test
-    public void testAddToCart_ProductQuantitytc5() {
+    public void testAddToCart_tc5() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -183,9 +183,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // ttestAddToCart_ProductQuantitytc6
+    // testAddToCart tc6
     @Test
-    public void testAddToCart_ProductQuantitytc6() {
+    public void testAddToCart_tc6() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -203,9 +203,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc7
+    // testAddToCart tc7
     @Test
-    public void testAddToCart_ProductNotFoundtc7() {
+    public void testAddToCart_tc7() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -222,9 +222,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc8
+    // testAddToCart tc8
     @Test
-    public void testAddToCart_ProductNotFoundtc8() {
+    public void testAddToCart_tc8() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -241,9 +241,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc9
+    // testAddToCart tc9
     @Test
-    public void testAddToCart_ProductNotFoundtc9() {
+    public void testAddToCart_tc9() {
         // Given
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -261,10 +261,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-
-    // testAddToCart_ProductNotFound tc10
+    // testAddToCart tc10
     @Test
-    public void testAddToCart_ProductNotFoundtc10() {
+    public void testAddToCart_tc10() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -281,9 +280,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc11
+    // testAddToCart tc11
     @Test
-    public void testAddToCart_ProductNotFoundtc11() {
+    public void testAddToCart_tc11() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -300,9 +299,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc12
+    // testAddToCart tc12
     @Test
-    public void testAddToCart_ProductNotFoundtc12() {
+    public void testAddToCart_tc12() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -318,9 +317,9 @@ public class CartControllerTest {
         assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
-    // testAddToCart_ProductNotFound tc13
+    // testAddToCart tc13
     @Test
-    public void testAddToCart_ProductNotFoundtc13() {
+    public void testAddToCart_tc13() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -337,9 +336,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc14
+    // testAddToCart_ tc14
     @Test
-    public void testAddToCart_ProductNotFoundtc14() {
+    public void testAddToCart_tc14() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -356,9 +355,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc15
+    // testAddToCart tc15
     @Test
-    public void testAddToCart_ProductNotFoundtc15() {
+    public void testAddToCart_tc15() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -375,9 +374,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc16
+    // testAddToCart tc16
     @Test
-    public void testAddToCart_ProductNotFoundtc16() {
+    public void testAddToCart_tc16() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -394,9 +393,9 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
-    // testAddToCart_ProductNotFound tc17
+    // testAddToCart tc17
     @Test
-    public void testAddToCart_ProductNotFoundtc17() {
+    public void testAddToCart_tc17() {
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -413,66 +412,62 @@ public class CartControllerTest {
         assertEquals("redirect:/product-detail/1", result);
     }
 
+    @Test
+    public void testAddToCart_tc18() {
+        RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("test@example.com");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Users user = new Users();
+        user.setUserId(1);
+        user.setEmail("test@example.com");
+        when(userService.findByEmail("test@example.com")).thenReturn(user);
+        ProductDetailDTO productDetail = new ProductDetailDTO();
+        productDetail.setStoreId(2);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 2)).thenReturn(productDetail);
+        CartItem existingCartItem = new CartItem();
+        Products existingProduct = new Products();
+        Stores existingStore = new Stores();
+        existingStore.setStoreId(1);
+        existingProduct.setStoreId(existingStore);
+        existingCartItem.setProductId(existingProduct);
+        List<CartItem> cartItems = Collections.singletonList(existingCartItem);
+        when(cartItemService.getCartItemsByUserId(1)).thenReturn(cartItems);
+        when(request.getHeader("Referer")).thenReturn("/product-detail");
+        String result = cartController.addToCart(1, 2, 3, mockRedirectAttributes, request);
+        assertEquals("redirect:/product-detail", result);
+        verify(mockRedirectAttributes, times(1)).addFlashAttribute("error",
+                "Bạn không thể thêm sản phẩm từ cửa hàng khác vào giỏ hàng. Vui lòng thanh toán hoặc xóa các sản phẩm hiện tại trong giỏ hàng trước.");
+    }
 
-
+    @Test
+    public void testAddToCart_tc19() {
+        RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("test@example.com");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Users user = new Users();
+        user.setUserId(1);
+        user.setEmail("test@example.com");
+        when(userService.findByEmail("test@example.com")).thenReturn(user);
+        ProductDetailDTO productDetail = new ProductDetailDTO();
+        productDetail.setStoreId(1);
+        when(productService.getProductDetailByProductIdAndVariationId(1, 2)).thenReturn(productDetail);
+        Cart mockCart = mock(Cart.class);
+        when(cartService.getOrCreateCart(user)).thenReturn(mockCart);
+        doThrow(new IllegalArgumentException("Test exception")).when(cartService).addProductToCart(user, productDetail, 3, mockCart);
+        when(request.getHeader("Referer")).thenReturn("/product-detail");
+        String result = cartController.addToCart(1, 2, 3, mockRedirectAttributes, request);
+        assertEquals("redirect:/product-detail", result);
+        verify(mockRedirectAttributes, times(1)).addFlashAttribute("error", "Đã có lỗi xảy ra khi thêm vào giỏ hảng");
+    }
 
     //--------------------------------------------------------------------------------------------------------------
-    // testGetCartItems_UserNotAuthenticated tc1
+    /// testUpdateCartQuantity tc1
     @Test
-    public void testGetCartItems_UserNotAuthenticated() {
-        when(authentication.isAuthenticated()).thenReturn(false);
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        String result = cartController.getCartItems(model);
-        assertEquals("redirect:/sign-in", result);
-    }
-
-    // testGetCartItems_EmptyCart tc2
-    @Test
-    public void testGetCartItems_EmptyCart() {
-        when(authentication.isAuthenticated()).thenReturn(true);
-        when(authentication.getName()).thenReturn("lequyet180902@gmail.com");
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(userService.findByEmail("lequyet180902@gmail.com")).thenReturn(user);
-        when(user.getUserId()).thenReturn(1);
-        when(cartItemService.getCartItemsByUserId(1)).thenReturn(Collections.emptyList());
-        String result = cartController.getCartItems(model);
-        verify(model, times(1)).addAttribute("message", "Your cart is empty.");
-        assertEquals("cart-detail", result);
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------
-    // testGetCartItems_Success tc1
-    @Test
-    public void testRemoveCartItem_Success() {
-        Integer cartItemId = 1;
-        String result = cartController.removeCartItem(cartItemId);
-        verify(cartService, times(1)).removeCartItem(cartItemId);
-        assertEquals("redirect:/cart-items", result);
-    }
-
-    //----------------------------------------------------------------------------------------------------------------
-    // testGetCartItems_Success tc1
-    @Test
-    public void testUpdateCartQuantity_Success() {
-        Integer cartItemId = 1;
-        Integer quantity = 2;
-        int productStock = 5;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(java.util.Optional.of(cartItem));
-        when(cartItem.getVariationId()).thenReturn(productVariation);
-        when(productVariation.getStock()).thenReturn(productStock);
-        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        verify(cartItemService, times(1)).updateCartItemQuantity(cartItemId, quantity);
-        verify(redirectAttributes, times(1)).addFlashAttribute("message", "Quantity updated successfully");
-        assertEquals("redirect:/cart-items", result);
-    }
-    //--------------------------------------------------------------------------------------------------------------
-    /// testUpdateCartQuantity_SuccessfulUpdate tc1
-    @Test
-    public void testUpdateCartQuantity_SuccessfulUpdatetc1() {
+    public void testUpdateCartQuantity_tc1() {
         Integer cartItemId = 1;
         Integer quantity = 2;
         CartItem mockCartItem = new CartItem();
@@ -486,41 +481,9 @@ public class CartControllerTest {
         assertEquals("Cập nhật giỏ hàng thành công", redirectAttributes.getFlashAttributes().get("message"));
     }
 
-    // testUpdateCartQuantity_ExceedsStock tc2
+    // testUpdateCartQuantity tc2
     @Test
-    public void testUpdateCartQuantity_ExceedsStocktc2() {
-        Integer cartItemId = 1;
-        Integer quantity = 0;
-        CartItem mockCartItem = new CartItem();
-        ProductVariation productVariation = new ProductVariation();
-        productVariation.setStock(5);
-        mockCartItem.setVariationId(productVariation);
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(mockCartItem));
-        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        assertEquals("redirect:/cart-items", result);
-        verify(cartItemService, never()).updateCartItemQuantity(anyInt(), anyInt());
-        assertEquals("Error updating quantity: Exceeds stock limit", redirectAttributes.getFlashAttributes().get("error"));
-    }
-
-    // testUpdateCartQuantity_ExceedsStock tc3
-    @Test
-    public void testUpdateCartQuantity_ExceedsStocktc3() {
-        Integer cartItemId = 1;
-        Integer quantity = -1;
-        CartItem mockCartItem = new CartItem();
-        ProductVariation productVariation = new ProductVariation();
-        productVariation.setStock(-1);
-        mockCartItem.setVariationId(productVariation);
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(mockCartItem));
-        String result = cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        assertEquals("redirect:/cart-items", result);
-        verify(cartItemService, never()).updateCartItemQuantity(anyInt(), anyInt());
-        assertEquals("Error updating quantity: Exceeds stock limit", redirectAttributes.getFlashAttributes().get("error"));
-    }
-
-    // testUpdateCartQuantity_ExceedsStock tc4
-    @Test
-    public void testUpdateCartQuantity_ExceedsStocktc4() {
+    public void testUpdateCartQuantity_tc2() {
         Integer cartItemId = 1;
         Integer quantity = 999999999;
         CartItem mockCartItem = new CartItem();
@@ -534,9 +497,9 @@ public class CartControllerTest {
         assertEquals("Lỗi khi cập nhật số lượng: Vượt quá số lượng tồn kho", redirectAttributes.getFlashAttributes().get("error"));
     }
 
-    // testUpdateCartQuantity_ExceedsStock tc5
+    // testUpdateCartQuantity tc3
     @Test
-    public void testUpdateCartQuantity_ExceedsStocktc5() {
+    public void testUpdateCartQuantity_tc3() {
         Integer cartItemId = 1;
         Integer quantity = null;
         CartItem mockCartItem = new CartItem();
@@ -550,130 +513,15 @@ public class CartControllerTest {
         assertEquals("Đã xảy ra lỗi khi cập nhật số lượng", redirectAttributes.getFlashAttributes().get("error"));
     }
 
-    // testUpdateCartQuantity_CartItemNotFound tc6
+    // testUpdateCartQuantity tc4
     @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc6() {
-        Integer cartItemId = 0;
-        Integer quantity = 2;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
+    public void testUpdateCartQuantity_tc4() {
+        when(cartItemRepository.findById(1)).thenReturn(Optional.empty()); // Mock no cart item found
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            cartController.updateCartQuantity(1, 2, redirectAttributes);
         });
-        assertEquals("Cart item not found", exception.getMessage());
+        assertEquals("Không tìm thấy mục giỏ hàng", exception.getMessage());
     }
-
-    // testUpdateCartQuantity_CartItemNotFound tc7
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc7() {
-        Integer cartItemId = 0;
-        Integer quantity = 0;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-    // testUpdateCartQuantity_CartItemNotFound tc8
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc8() {
-        Integer cartItemId = 0;
-        Integer quantity = -1;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-    // testUpdateCartQuantity_CartItemNotFound tc9
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc9() {
-        Integer cartItemId = 0;
-        Integer quantity = 999999999;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-    // testUpdateCartQuantity_CartItemNotFound tc10
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc10() {
-        Integer cartItemId = 0;
-        Integer quantity = null;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-    // testUpdateCartQuantity_CartItemNotFound tc11
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc11() {
-        Integer cartItemId = -1;
-        Integer quantity = 2;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-    // testUpdateCartQuantity_CartItemNotFound tc12
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc12() {
-        Integer cartItemId = -1;
-        Integer quantity = 0;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-    // testUpdateCartQuantity_CartItemNotFound tc13
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc13() {
-        Integer cartItemId = -1;
-        Integer quantity = -1;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-    // testUpdateCartQuantity_CartItemNotFound tc14
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc14() {
-        Integer cartItemId = -1;
-        Integer quantity = 999999999;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-    // testUpdateCartQuantity_CartItemNotFound tc15
-    @Test
-    public void testUpdateCartQuantity_CartItemNotFoundtc15() {
-        Integer cartItemId = -1;
-        Integer quantity = null;
-        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            cartController.updateCartQuantity(cartItemId, quantity, redirectAttributes);
-        });
-        assertEquals("Cart item not found", exception.getMessage());
-    }
-
-
-
-
-
 
 
 
