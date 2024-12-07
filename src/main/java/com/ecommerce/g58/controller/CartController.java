@@ -159,7 +159,7 @@ public class CartController {
                                      RedirectAttributes redirectAttributes) {
         // Fetch cart item and check product stock
         CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy mục giỏ hàng"));
         int productStock = cartItem.getVariationId().getStock();
 
         try {
