@@ -48,9 +48,9 @@
                                         </div>
                                     </div>
                                     <br>
-                                    <a type="button" class="axil-btn"
-                                       style="background: blue; color: white" id="withdraw"><i
-                                            class="fas fa-arrow-alt-circle-up"></i> Rút tiền</a>
+<!--                                    <a type="button" class="axil-btn"-->
+<!--                                       style="background: blue; color: white" id="withdraw"><i-->
+<!--                                            class="fas fa-arrow-alt-circle-up"></i> Rút tiền</a>-->
                                     <a type="button" class="axil-btn"
                                        style="background: green; color: white" id="deposit"><i
                                             class="fas fa-arrow-alt-circle-down"></i> Nạp tiền</a>
@@ -87,7 +87,6 @@
                                             </div>
                                         </form>
                                     </div>
-
                                     <!-- Display Message When No Transactions Found -->
                                     <div class="text-center" th:if="${wallets == null or wallets.size() == 0}">
                                         <p th:text="${message ?: 'Không có lịch sử giao dịch để hiển thị.'}">Không có
@@ -170,21 +169,21 @@
             </div>
         </div>
         <!-- Modal Rút Tiền -->
-        <div id="withdrawModal" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Rút Tiền</h2>
-                <form id="withdrawForm">
-                    <label for="bank-name">Tên Ngân Hàng:</label>
-                    <input type="text" id="bank-name" name="bank-name" class="form-control" required><br><br>
-                    <label for="account-number">Số Tài Khoản:</label>
-                    <input type="text" id="account-number" name="account-number" class="form-control" required><br><br>
-                    <label for="amount">Số Tiền Rút:</label>
-                    <input type="number" id="amount" name="amount" class="form-control" required step="10000"><br><br>
-                    <button type="submit" class="btn btn-primary">Xác nhận</button>
-                </form>
-            </div>
-        </div>
+<!--        <div id="withdrawModal" class="modal" style="display:none;">-->
+<!--            <div class="modal-content">-->
+<!--                <span class="close">&times;</span>-->
+<!--                <h2>Rút Tiền</h2>-->
+<!--                <form id="withdrawForm">-->
+<!--                    <label for="bank-name">Tên Ngân Hàng:</label>-->
+<!--                    <input type="text" id="bank-name" name="bank-name" class="form-control" required><br><br>-->
+<!--                    <label for="account-number">Số Tài Khoản:</label>-->
+<!--                    <input type="text" id="account-number" name="account-number" class="form-control" required><br><br>-->
+<!--                    <label for="amount">Số Tiền Rút:</label>-->
+<!--                    <input type="number" id="amount" name="amount" class="form-control" required step="10000"><br><br>-->
+<!--                    <button type="submit" class="btn btn-primary">Xác nhận</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <!-- Modal Nạp Tiền -->
         <div id="depositModal" class="modal" style="display:none;">
@@ -231,25 +230,16 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
 <script>
-    const userId = [[${userId}]]; // Use [[${userId}]] without quotes for numeric value
+    // const userId = [[${userId}]]; // Use [[${userId}]] without quotes for numeric value
+    document.getElementById('deposit').addEventListener('click', function() {
+        var depositModal = document.getElementById('depositModal');
+        depositModal.style.display = 'block';
+    });
 
-    // Open withdraw modal
-    document.getElementById("withdraw").onclick = function () {
-        document.getElementById("withdrawModal").style.display = "block";
-    };
-
-    // Open deposit modal
-    document.getElementById("deposit").onclick = function () {
-        document.getElementById("depositModal").style.display = "block";
-    };
-
-    // Close all modals
-    document.querySelectorAll(".close").forEach(btn => {
-        btn.onclick = function () {
-            document.getElementById("withdrawModal").style.display = "none";
-            document.getElementById("depositModal").style.display = "none";
-            document.getElementById("successModal").style.display = "none";
-        }
+    // Đóng modal khi click nút đóng
+    document.querySelector('#depositModal .close').addEventListener('click', function() {
+        var depositModal = document.getElementById('depositModal');
+        depositModal.style.display = 'none';
     });
 
     // Close modals when clicking outside of them
