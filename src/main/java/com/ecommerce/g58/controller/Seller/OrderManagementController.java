@@ -122,7 +122,7 @@ public class OrderManagementController {
             redirectAttributes.addFlashAttribute("messageType", "error");
         }
 
-        return "redirect:order-manager/" + storeId;
+        return "redirect:order-manager/";
     }
     @PostMapping("/seller/bulk-update-status")
     public String bulkUpdateOrderStatus(

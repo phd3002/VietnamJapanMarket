@@ -58,8 +58,12 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
             + "JOIN ProductImage pi ON pv.imageId.imageId = pi.imageId "
             + "JOIN Size s ON pv.size.sizeId = s.sizeId "
             + "JOIN Color c ON pv.color.colorId = c.colorId "
-            + "WHERE p.productId = :productId AND c.colorId = :colorId")
-    ProductDetailDTO findProductDetailByProductIdAndColorId(@Param("productId") Integer productId, @Param("colorId") Integer colorId);
+            + "WHERE p.productId = :productId AND c.colorId = :colorId "
+            + "ORDER BY s.sizeId ASC")
+    List<ProductDetailDTO> findProductDetailsByProductIdAndColorId(
+            @Param("productId") Integer productId,
+            @Param("colorId") Integer colorId);
+
 
 
     @Query("SELECT DISTINCT c FROM Color c JOIN ProductVariation pv ON pv.color.colorId = c.colorId WHERE pv.productId.productId = :productId")

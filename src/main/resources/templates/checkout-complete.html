@@ -15,14 +15,17 @@
             background-color: #f9f9f9;
             border-radius: 8px;
         }
+
         .confirmation-container h2 {
             color: #4CAF50;
         }
+
         .order-summary {
             margin-top: 20px;
             text-align: left;
             margin-left: 35%;
         }
+
         .order-summary th, .order-summary td {
             padding: 10px;
         }
@@ -39,14 +42,14 @@
     <div class="confirmation-container">
         <h2>Cảm ơn vì bạn đã mua hàng!</h2>
         <p>Đã tạo đơn thành công.</p>
-        <p>Mã đơn hàng là: <span th:text="${order.orderId}"></span></p>
+        <p>Mã đơn hàng là: <span th:text="${order.orderCode}"></span></p>
 
         <div class="order-summary">
             <h3>Thông tin đơn hàng</h3>
             <table>
                 <tr>
                     <th>Tổng giá:</th>
-                    <td th:text="${paymentMethod == 'cod' ? 'Thanh toán khi nhận hàng' : order.getPriceFormated() + ' đ'}"></td>
+                    <td th:text="${paymentMethod == 'cod' ? 'Thanh toán khi nhận hàng' : order.getPriceFormated() + ' '}"></td>
                 </tr>
                 <tr>
                     <th>Ngày tạo đơn:</th>
@@ -54,7 +57,18 @@
                 </tr>
                 <tr>
                     <th>Trạng thái:</th>
-                    <td th:text="${order.shippingStatus[0].status}"></td>
+                    <td th:text="${order.shippingStatus[0].status == 'Pending' ? 'Chờ xử lý' :
+              order.shippingStatus[0].status == 'Confirmed' ? 'Xác nhận' :
+              order.shippingStatus[0].status == 'Processing' ? 'Đang đóng gói' :
+              order.shippingStatus[0].status == 'Dispatched' ? 'Đã giao cho vận chuyển' :
+              order.shippingStatus[0].status == 'Shipping' ? 'Đang vận chuyển' :
+              order.shippingStatus[0].status == 'Delivered' ? 'Đã giao' :
+              order.shippingStatus[0].status == 'Completed' ? 'Hoàn tất' :
+              order.shippingStatus[0].status == 'Failed' ? 'Thất bại' :
+              order.shippingStatus[0].status == 'Returned' ? 'Hoàn trả' :
+              order.shippingStatus[0].status == 'Cancelled' ? 'Đã hủy' :
+              order.shippingStatus[0].status}">
+                    </td>
                 </tr>
             </table>
         </div>

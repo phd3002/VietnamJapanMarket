@@ -58,8 +58,9 @@ public class ProductController {
         }
 
         // Fetch product details based on productId and colorId
-        ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndColorId(productId, colorId);
-
+        List<ProductDetailDTO> listProductDetails = productService.getProductDetailByProductIdAndColorId(productId, colorId);
+        // Pass the first product detail as the default detail
+        ProductDetailDTO productDetail = listProductDetails.get(0);
         if (productDetail == null) {
             return "error";  // Handle product not found
         }
@@ -67,11 +68,6 @@ public class ProductController {
         // Fetch available sizes
         List<String> availableSizes = productService.getAvailableSizesByProductIdAndColorId(productId, colorId);
         List<Color> availableColors = productService.getAvailableColors(productId);
-//        System.out.println("Available colors: " + availableColors);
-//        System.out.println("Available sizes: " + availableSizes);
-//        System.out.println("Selected size: " + sizeId);
-//        System.out.println(productDetail.getVariationId());
-//        System.out.println(productDetail.getStoreId());
         // Pass the product details, available colors, and sizes to the front-end
         model.addAttribute("productDetail", productDetail);
         model.addAttribute("availableColors", availableColors);

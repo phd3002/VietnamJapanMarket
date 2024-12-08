@@ -237,13 +237,16 @@
 
                         </td>
                         <td style="display: flex; gap: 5px">
-
+<!--                            <div>-->
+<!--                                <p>Latest Status: <span th:text="${order.latestStatus}"></span></p>-->
+<!--                                <p>Previous Status: <span th:text="${order.previous_status}"></span></p>-->
+<!--                            </div>-->
                             <a th:href="@{/seller/order-detail/{orderId}(orderId=${order.orderId})}">
                                 <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết">
                                     <i class="fa fa-eye"></i>
                                 </button>
                             </a>
-                            <form th:if="${order.latestStatus == 'Returned' && order.previous_status ==  null}"
+                            <form th:if="${order.latestStatus == 'Returned' && order.previous_status !=  'Returned'}"
                                   th:attr="data-order-id=${order.orderId}" th:action="@{/seller/return}"
                                   method="post">
                                 <input type="hidden" name="storeId" th:value="${storeId}">
@@ -257,8 +260,6 @@
                                         onclick="openAcceptModal(this)">
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
-
-
                             </form>
                         </td>
                     </tr>
