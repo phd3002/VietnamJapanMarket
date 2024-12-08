@@ -87,6 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/store-info/**", "/store-save/**", "/addProductFull/**", "/addProductForm2/**",
                         "/vn/**", "/submitOrder/**", "/now/**", "/vnpay-payment/**"
                 ).permitAll()
+                .antMatchers("/admin/user-manager","admin/**").hasRole("Admin")
                 // Checkout page requires authentication
                 .antMatchers("/checkout").authenticated()
 
