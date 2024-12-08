@@ -233,7 +233,7 @@ public class UserController {
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            System.out.println(userDetails.getAuthorities());
             // Redirect based on user role
             if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Logistic"))) {
                 return "redirect:/logistic/order-manager";
