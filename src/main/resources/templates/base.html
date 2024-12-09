@@ -6,7 +6,7 @@
     <title th:text="${pageTitle} ?: 'Default Title'"></title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
+    <link rel="shortcut icon" th:type="@{image/x-icon}" th:href="@{/images/favicon.png}">
 
     <!-- CSS Links -->
     <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}" type="text/css">

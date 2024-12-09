@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/public/**",
                         "/resources/**",
                         "/favicon.ico"
-                        , "/403"
+                        , "/403", "/404"
                 ).permitAll()
                 .antMatchers("/api/search", "/api/shipping-address/**").permitAll()
                 // Public pages and resources
@@ -131,8 +131,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/now/**",
                         "/vnpay-payment/**"
                 ).permitAll()
+                // **Seller URLs**
+                .antMatchers("/seller/**", "/store-info", "/store-save").hasRole("Seller")
                 // **Admin URLs - Must be after public URLs**
                 .antMatchers("/admin/user-manager/**", "/admin/**").hasRole("Admin")
+                .antMatchers("/logistic/**").hasRole("Logistic")
                 // Checkout page requires authentication
                 .antMatchers("/checkout").authenticated()
                 // Any other request must be authenticated

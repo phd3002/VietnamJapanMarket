@@ -10,7 +10,7 @@ public class CustomErrorController implements ErrorController {
     @RequestMapping("/error")
     public String handleError() {
         // This will be called for any error, including 403, 404, 500, etc.
-        return "403";  // Or any custom page, e.g., a generic error page
+        return "/error/404";  // Or any custom page, e.g., a generic error page
     }
 
     @Override
