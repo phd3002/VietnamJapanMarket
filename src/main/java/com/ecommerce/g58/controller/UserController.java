@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.ecommerce.g58.service.WalletService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -39,7 +41,9 @@ import java.util.Random;
 
 @Controller
 public class UserController {
-    private final Map<String, Users> temporaryUsers = new HashMap<>(); // Khai báo một bản đồ tạm thời để lưu trữ người dùng và OTP
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Map<String, Users> temporaryUsers = new HashMap<>(); // Temporary storage for OTP
+
     @Autowired
     private UserService userService;
 
@@ -63,104 +67,95 @@ public class UserController {
 
     @PostMapping("/sign-up")
     public String registerUser(@ModelAttribute("users") Users users,
-                               @RequestParam("confirmPassword") String confirmPassword,  // Nhận mật khẩu xác nhận từ form
+                               @RequestParam("confirmPassword") String confirmPassword,  // Confirm password from form
                                Model model,
                                RedirectAttributes redirectAttributes,
                                HttpServletRequest request) throws Exception {
 
         try {
-            // Kiểm tra xem username có trống không
+            // Validate fields...
             if (users.getUsername() == null || users.getUsername().isEmpty()) {
                 model.addAttribute("errorMessage", "Tên đăng nhập không được để trống.");
                 return "sign-up";
             }
 
-            // Kiểm tra xem username đã tồn tại chưa
             if (userService.isUsernameExist(users.getUsername())) {
                 model.addAttribute("errorMessage", "Tên đăng nhập đã được sử dụng.");
                 return "sign-up";
             }
 
-
-            // Kiểm tra xem email có trống không
             if (users.getEmail() == null || users.getEmail().isEmpty()) {
                 model.addAttribute("errorMessage", "Email không được để trống.");
                 return "sign-up";
             }
 
-            // Kiểm tra xem mật khẩu có trống không
             if (users.getPassword() == null || users.getPassword().isEmpty()) {
                 model.addAttribute("errorMessage", "Mật khẩu không được để trống.");
                 return "sign-up";
             }
 
-            // Kiểm tra xem mật khẩu có ít nhất 6 ký tự không
             if (users.getPassword().length() < 6) {
                 model.addAttribute("errorMessage", "Mật khẩu phải có ít nhất 6 ký tự.");
                 return "sign-up";
             }
 
-            // Kiểm tra xem mật khẩu và confirmPassword có khớp không
             if (!users.getPassword().equals(confirmPassword)) {
                 model.addAttribute("errorMessage", "Mật khẩu và mật khẩu xác nhận không khớp.");
                 return "sign-up";
             }
 
-            // Kiểm tra email đã tồn tại chưa
             if (userService.isEmailExist(users.getEmail())) {
                 model.addAttribute("errorMessage", "Email đã được sử dụng.");
                 return "sign-up";
             }
 
-            // Tạo OTP và lưu vào session
-            String otp = generateOTP(6); // Tạo mã OTP
-            temporaryUsers.put(otp, users); // Lưu người dùng và OTP vào bản đồ tạm thời
+            // Generate and send OTP
+            String otp = generateOTP(6); // Generate OTP
+            temporaryUsers.put(otp, users); // Store user and OTP temporarily
 
-            sendOTPByEmail(users.getEmail(), otp); // Gửi OTP qua email
-            request.getSession().setAttribute("otp", otp); // Lưu OTP vào session
-            users.setCreatedAt(LocalDateTime.now()); // Thiết lập thời gian tạo cho người dùng
-            return "redirect:/sign-up/confirm-code"; // Chuyển hướng đến trang xác nhận OTP
+            sendOTPByEmail(users.getEmail(), otp); // Send OTP via email
+            request.getSession().setAttribute("otp", otp); // Store OTP in session
+            users.setCreatedAt(LocalDateTime.now()); // Set creation time
+            return "redirect:/sign-up/confirm-code"; // Redirect to OTP confirmation page
 
         } catch (Exception e) {
-            e.printStackTrace(); // Thêm dòng in ra lỗi để kiểm tra
             redirectAttributes.addFlashAttribute("error", "Email không tồn tại");
-            return "redirect:/sign-up"; // Chuyển hướng lại trang đăng ký nếu lỗi
+            return "redirect:/sign-up"; // Redirect back to sign-up on error
         }
     }
-
 
     public String generateOTP(int length) {
-        Random random = new Random(); // Tạo đối tượng Random
-        StringBuilder otp = new StringBuilder(); // Tạo StringBuilder để xây dựng OTP
+        Random random = new Random(); // Create Random object
+        StringBuilder otp = new StringBuilder(); // StringBuilder for OTP
 
         for (int i = 0; i < length; i++) {
-            otp.append(random.nextInt(10)); // Thêm một chữ số ngẫu nhiên vào OTP
+            otp.append(random.nextInt(10)); // Append a random digit
         }
-        return otp.toString(); // Trả về OTP dưới dạng chuỗi
+        return otp.toString(); // Return OTP as string
     }
 
-    @GetMapping("/sign-up/confirm-code") // Xử lý yêu cầu GET
+    @GetMapping("/sign-up/confirm-code") // Handle GET request
     public String showVerifyOtpForm() {
         return "confirm-code";
     }
 
-    @PostMapping("/sign-up/confirm-code") // Xử lý yêu cầu POST tới /sign-up/verify
+    @PostMapping("/sign-up/confirm-code") // Handle POST request to confirm OTP
     public String processVerifyOtp(HttpServletRequest request,
                                    HttpSession session,
                                    RedirectAttributes redirectAttributes) throws Exception {
-        String otpFromSession = (String) session.getAttribute("otp"); // Lấy OTP từ session
-        if (otpFromSession != null && otpFromSession.equals(request.getParameter("otp"))) { // Kiểm tra xem OTP có khớp không
-            Users user = temporaryUsers.get(otpFromSession); // Lấy người dùng từ bản đồ tạm thời
-            user.setStatus("active"); // Đặt trạng thái của người dùng là "active"
-            userService.registerUser(user); // Đăng ký người dùng mới
-            walletService.createWalletForUser(user, 0); // Tạo ví cho người dùng mới
-            temporaryUsers.remove(otpFromSession); // Xóa người dùng khỏi bản đồ tạm thời
-            session.setAttribute("verificationSuccessMessage", "Xác minh OTP thành công!"); // Thêm thông báo thành công vào session
-            session.removeAttribute("otp"); // Xóa OTP khỏi session
-            return "/sign-in"; // Chuyển hướng đến trang đăng nhập
+        String otpFromSession = (String) session.getAttribute("otp"); // Retrieve OTP from session
+        if (otpFromSession != null && otpFromSession.equals(request.getParameter("otp"))) { // Validate OTP
+            Users user = temporaryUsers.get(otpFromSession); // Get user from temporary storage
+            user.setStatus("active"); // Set user status to active
+            userService.registerUser(user); // Register the user
+            walletService.createWalletForUser(user, 0); // Create wallet for the user
+            temporaryUsers.remove(otpFromSession); // Remove user from temporary storage
+            session.setAttribute("verificationSuccessMessage", "Xác minh OTP thành công!"); // Set success message
+            session.removeAttribute("otp"); // Remove OTP from session
+            return "redirect:/sign-in"; // Redirect to sign-in page
         } else {
-            redirectAttributes.addFlashAttribute("error", "OTP không hợp lệ. Vui lòng thử lại!"); // Thêm thông báo lỗi OTP vào redirectAttributes
-            return "redirect:/sign-up/confirm-code"; // Chuyển hướng lại trang xác minh OTP
+            redirectAttributes.addFlashAttribute("error", "OTP không hợp lệ. Vui lòng thử lại!"); // Set error message
+            return "redirect:/sign-up/confirm-code"; // Redirect back to OTP confirmation
         }
     }
 
@@ -181,10 +176,10 @@ public class UserController {
             helper.setSubject(subject);
             helper.setText(content, true);
 
-            mailSender.send(message);  // Gửi email
+            mailSender.send(message);  // Send email
 
         } catch (Exception e) {
-            e.printStackTrace();  // Thêm log để kiểm tra lỗi
+            logger.error("Error sending OTP email", e);
             throw new RuntimeException("Không thể gửi OTP qua email");
         }
     }
@@ -192,9 +187,14 @@ public class UserController {
     // Login form page
     @GetMapping("/sign-in")
     public String showLoginForm(Authentication authentication, Model model, HttpSession session) {
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Redirect to the admin dashboard if the authenticated user is an admin
-            if (authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Admin"))) {
+        if (authentication != null && authentication.isAuthenticated() &&
+                !(authentication instanceof org.springframework.security.authentication.AnonymousAuthenticationToken)) {
+            // Log user authorities
+            authentication.getAuthorities().forEach(auth ->
+                    logger.debug("User '{}' has authority: {}", authentication.getName(), auth.getAuthority()));
+
+            // Redirect based on roles
+            if (authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_Admin"))) {
                 return "redirect:/admin/dashboard";
             }
             return "redirect:/homepage";
@@ -227,31 +227,31 @@ public class UserController {
                 model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
                 return "sign-in";
             }
-//            System.out.println(email);
-//            System.out.println(password);
-            // Xác thực người dùng bằng AuthenticationManager
+
+            // Authenticate the user
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println(userDetails.getAuthorities());
+            logger.debug("User '{}' authenticated with authorities: {}", email, userDetails.getAuthorities());
+
             // Redirect based on user role
-            if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Logistic"))) {
+            if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_Logistic"))) {
                 return "redirect:/logistic/order-manager";
-            } else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Admin"))) {
+            } else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_Admin"))) {
                 return "redirect:/admin/dashboard";
-            }else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Seller"))) {
+            } else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_Seller"))) {
                 return "redirect:/seller/dashboard";
             }
 
-            return "redirect:/homepage"; // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
+            return "redirect:/homepage"; // Redirect to homepage after successful login
 
         } catch (BadCredentialsException e) {
+            logger.debug("BadCredentialsException: {}", e.getMessage());
             model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
-            System.out.println("lỗi ở đây");
             return "sign-in";
         } catch (Exception e) {
+            logger.debug("Exception during login: {}", e.getMessage());
             model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu.");
-            System.out.println("lỗi ở đây 2");
             return "sign-in";
         }
     }
@@ -264,6 +264,7 @@ public class UserController {
         model.addAttribute("successMessage", "Đăng xuất thành công.");
         return "redirect:/sign-in?logout"; // Redirect to login page after logout
     }
+
 
     //dẫn đến đường link forgot password
     @GetMapping("/forgot-password")
