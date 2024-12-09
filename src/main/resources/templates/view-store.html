@@ -57,7 +57,7 @@
         <div class="container">
             <!-- Products  -->
             <div class="row row--15">
-                <div th:each="product : ${store.products}" class="col-xl-3 col-lg-4 col-sm-6">
+                <div th:each="product : ${productPage.content}" class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
                             <a th:href="@{/product-detail/{id}(id=${product.productId})}">
@@ -77,207 +77,52 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center pt--30">
-                <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
+            <div class="pagination-section" th:if="${totalPages > 0}">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous Page -->
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/view-store/{id}(id=${store.storeId}, page=${currentPage - 1}, size=${size})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- Page Numbers -->
+                        <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                            th:classappend="${pageNum == currentPage} ? 'active'">
+                            <a class="page-link"
+                               th:href="@{/view-store/{id}(id=${store.storeId}, page=${pageNum}, size=${size})}"
+                               th:text="${pageNum + 1}">1</a>
+                        </li>
+
+                        <!-- Next Page -->
+                        <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/view-store/{id}(id=${store.storeId}, page=${currentPage + 1}, size=${size})}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Pagination Info -->
+                <div class="text-center mt--2">
+                    <span th:text="'Trang ' + (${currentPage + 1}) + ' trên ' + (${totalPages})">Trang 1 trên 10</span><br/>
+                    <span th:text="'Tổng sản phẩm: ' + (${totalItems})">Tổng sản phẩm: 120</span>
+                </div>
             </div>
+
+            <!--            <div class="text-center pt&#45;&#45;30">-->
+<!--                <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>-->
+<!--            </div>-->
         </div>
     </div>
 </main>
 
-<div class="service-area">
-    <div class="container">
-        <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service1.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Fast &amp; Secure Delivery</h6>
-                        <p>Tell about your service.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service2.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Money Back Guarantee</h6>
-                        <p>Within 10 days.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service3.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">24 Hour Return Policy</h6>
-                        <p>No question ask.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img th:src="@{/images/icons/service4.png}" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Pro Quality Support</h6>
-                        <p>24/7 Live support.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<footer class="axil-footer-area footer-style-2">
-    <div class="footer-top separator-top">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-sm-6">
-                    <div class="axil-footer-widget">
-                        <h5 class="widget-title">Support</h5>
-                        <div class="inner">
-                            <p>685 Market Street, Las Vegas, LA 95820</p>
-                            <ul class="support-list-item">
-                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
-                                    example@domain.com</a></li>
-                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01) 850-315-5862</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-sm-6">
-                    <div class="axil-footer-widget">
-                        <h5 class="widget-title">Account</h5>
-                        <div class="inner">
-                            <ul>
-                                <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="sign-up.html">Login / Register</a></li>
-                                <li><a href="cart-detail.html">Cart</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
-                                <li><a href="product-list.html">Shop</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<!-- Product Quick View Modal -->
-<div th:each="product : ${store.products}" class="modal fade quick-view-product"
-     th:attr="id=${'quick-view-modal-' + product.productId}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                        class="far fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="single-product-thumb">
-                    <div class="row">
-                        <div class="col-lg-7 mb--40">
-                            <div class="row">
-                                <div class="col-lg-10 order-lg-2">
-                                    <div class="single-product-thumbnail product-large-thumbnail axil-product thumbnail-badge zoom-gallery">
-                                        <div class="thumbnail" th:each="pv : ${product.productVariations}">
-                                            <img th:src="@{${pv.imageId.thumbnail}}" alt="Product Image"
-                                                 style="width: 400px; height: 300px;">
-                                            <div class="product-quick-view position-view">
-                                                <a th:src="@{${pv.imageId.thumbnail}}" class="popup-zoom">
-                                                    <i class="far fa-search-plus"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 order-lg-1">
-                                    <div class="product-small-thumb small-thumb-wrapper">
-                                        <div class="small-thumb-img" th:each="pv : ${product.productVariations}">
-                                            <img th:src="@{${pv.imageId.thumbnail}}"
-                                                 alt="thumb image"
-                                                 style="width: 69px; height: 42px">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 mb--40">
-                            <div class="single-product-content">
-                                <div class="inner">
-                                    <div class="product-rating">
-                                        <div class="star-rating">
-                                            <img th:src="@{/images/icons/rate.png}" alt="Rate Images">
-                                        </div>
-                                        <div class="review-link">
-                                            <a href="#">(<span>1</span> customer reviews)</a>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-title" th:text="${product.productName}"></h3>
-                                    <span class="price-amount" th:text="${'$' + product.price}"></span>
-                                    <ul class="product-meta">
-                                        <li><i class="fal fa-check"></i>In stock</li>
-                                        <li><i class="fal fa-check"></i>Free delivery available</li>
-                                        <li><i class="fal fa-check"></i>Sales 30% Off Use Code: MOTIVE30</li>
-                                    </ul>
-                                    <p class="description" th:text="${product.productDescription}"></p>
-                                    <div class="product-variations-wrapper">
-                                        <div class="product-variation">
-                                            <h6 class="title">Colors:</h6>
-                                            <div class="color-variant-wrapper">
-                                                <ul class="color-variant mt--0">
-                                                    <li th:class="${'color-extra-0' + (iter.index + 1) + (iter.first ? ' active' : '')}"
-                                                        th:each="pv,iter : ${product.productVariations}">
-                                                    <span><span class="color"
-                                                                th:style="${'background: ' + pv.color.colorName}"></span></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product-variation">
-                                            <h6 class="title">Size:</h6>
-                                            <ul class="range-variant">
-                                                <li th:each="pv : ${product.productVariations}"
-                                                    th:text="${pv.size.sizeName}"></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="product-action-wrapper d-flex-center">
-                                        <div class="pro-qty">
-                                            <label>
-                                                <input type="text" value="1">
-                                            </label>
-                                        </div>
-                                        <ul class="product-action d-flex-center mb--0">
-                                            <li class="add-to-cart">
-                                                <a href="cart-detail.html"
-                                                   class="axil-btn btn-bg-primary">Add to Cart
-                                                </a>
-                                            </li>
-                                            <li class="wishlist">
-                                                <a href="wishlist.html"
-                                                   class="axil-btn wishlist-btn"><i class="far fa-heart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="base :: footer"></div>
 
 <!-- JS
 ============================================ -->

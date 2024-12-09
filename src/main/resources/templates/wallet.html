@@ -2,7 +2,7 @@
 <html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title th:text="${pageTitle} ?: 'My Orders'"></title>
+    <title th:text="${pageTitle} ?: 'Ví của tôi'">Ví của tôi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Including CSS Files from base.html -->
@@ -28,42 +28,76 @@
                         </aside>
                     </div>
                     <!-- Dashboard Content -->
-                    <div th:if="${errorMessage}" class="error-message">
-                        <p th:text="${errorMessage}"></p>
-                    </div>
                     <div class="col-xl-9 col-md-8">
                         <div class="tab-content">
                             <!-- Wallet Tab -->
                             <div id="nav-wallet" class="tab-pane fade show active" role="tabpanel">
                                 <div class="wallet-section axil-dashboard-order">
                                     <h3><i class="fas fa-wallet"></i> Ví của tôi</h3>
+
+                                    <!-- Display Wallet Balance -->
                                     <div class="axil-wallet row">
                                         <div class="col-md-6">
                                             <p style="margin: 0px">Số dư hiện tại:
                                             <h4 style="margin: 0px" id="wallet-balance"
-                                                th:text="${balance ?: 0}"></h4>
+                                                th:text="${balance ?: '₫0'}">₫0</h4>
                                         </div>
                                         <div class="col-md-6"
                                              style="text-align: right; color: #007b01; font-size: 40px">
                                             <i class="flaticon-cashback"></i>
                                         </div>
-                                        </p>
                                     </div>
                                     <br>
-                                    <a type="submit" class="axil-btn"
-                                       style="background: blue; color: white" id="withdraw"><i
-                                            class="fas fa-arrow-alt-circle-up"></i> Rút tiền</a>
-                                    <a type="submit" class="axil-btn"
+<!--                                    <a type="button" class="axil-btn"-->
+<!--                                       style="background: blue; color: white" id="withdraw"><i-->
+<!--                                            class="fas fa-arrow-alt-circle-up"></i> Rút tiền</a>-->
+                                    <a type="button" class="axil-btn"
                                        style="background: green; color: white" id="deposit"><i
                                             class="fas fa-arrow-alt-circle-down"></i> Nạp tiền</a>
                                     <!-- Transaction History -->
                                     <br><br>
-                                    <div th:if="${wallets == null or wallets.size() == 0}">
-                                        <h4 th:text="${message ?: 'Không có lịch sử giao dịch để hiển thị.'}"></h4>
+
+                                    <!-- Filter Section for Transactions -->
+                                    <div class="filter-section mb-4">
+                                        <form th:action="@{/wallet}" method="get">
+                                            <div class="row align-items-end">
+                                                <!-- Start Date Filter -->
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="startDate" class="form-label">Từ ngày:</label>
+                                                    <input type="date" id="startDate" name="startDate" class="form-control"
+                                                           th:value="${startDate}">
+                                                </div>
+
+                                                <!-- End Date Filter -->
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="endDate" class="form-label">Đến ngày:</label>
+                                                    <input type="date" id="endDate" name="endDate" class="form-control"
+                                                           th:value="${endDate}">
+                                                </div>
+
+                                                <!-- Submit Button -->
+                                                <div class="col-md-2 mb-3">
+                                                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                                </div>
+
+                                                <!-- Reset Filters Button -->
+                                                <div class="col-md-2 mb-3">
+                                                    <a th:href="@{/wallet}" class="btn btn-secondary w-100">Đặt lại</a>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
+                                    <!-- Display Message When No Transactions Found -->
+                                    <div class="text-center" th:if="${wallets == null or wallets.size() == 0}">
+                                        <p th:text="${message ?: 'Không có lịch sử giao dịch để hiển thị.'}">Không có
+                                            lịch sử giao dịch để hiển thị.</p>
+                                        <a th:href="@{/product-list}" class="btn btn-primary">Mua ngay</a>
+                                    </div>
+
+                                    <!-- Transactions Table -->
                                     <div th:if="${wallets != null and wallets.size() > 0}">
                                         <h4>Lịch sử giao dịch</h4>
-                                        <table class="table">
+                                        <table class="table table-bordered">
                                             <thead>
                                             <tr>
                                                 <th scope="col">Ngày</th>
@@ -75,69 +109,109 @@
                                             </thead>
                                             <tbody id="transaction-history">
                                             <tr th:each="transaction : ${wallets}">
-                                                <td th:text="${transaction.transactionDate}"></td>
-                                                <td th:text="${transaction.transactionType}"></td>
-                                                <td th:text="${transaction.amount}"></td>
-                                                <td th:text="${transaction.transactionParty}"></td>
-                                                <td th:text="${transaction.description}"></td>
+                                                <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy HH:mm')}">
+                                                    01/01/2024 12:00
+                                                </td>
+                                                <td th:text="${transaction.transactionType}">Pending</td>
+                                                <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">
+                                                    ₫150,000
+                                                </td>
+                                                <td th:text="${transaction.transactionParty}">Đã nhận từ người mua</td>
+                                                <td th:text="${transaction.description}">Description here</td>
                                             </tr>
                                             </tbody>
                                         </table>
+
+                                        <!-- Pagination Controls -->
+                                        <div class="pagination-section" th:if="${totalPages > 0}">
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination justify-content-center">
+                                                    <!-- Previous Page -->
+                                                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                        <a class="page-link"
+                                                           th:href="@{/wallet(page=${currentPage - 1}, size=${size}, startDate=${startDate}, endDate=${endDate})}"
+                                                           aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- Page Numbers -->
+                                                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                                                        th:classappend="${pageNum == currentPage} ? 'active'">
+                                                        <a class="page-link"
+                                                           th:href="@{/wallet(page=${pageNum}, size=${size}, startDate=${startDate}, endDate=${endDate})}"
+                                                           th:text="${pageNum + 1}">1</a>
+                                                    </li>
+
+                                                    <!-- Next Page -->
+                                                    <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                                                        <a class="page-link"
+                                                           th:href="@{/wallet(page=${currentPage + 1}, size=${size}, startDate=${startDate}, endDate=${endDate})}"
+                                                           aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+
+                                            <!-- Pagination Info -->
+                                            <div class="text-center mt-2">
+                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span><br/>
+                                                <span>Tổng giao dịch: [[${totalItems}]]</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div> <!-- End of tab-content -->
+                            </div> <!-- End of tab-content -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Modal Rút Tiền -->
-    <div id="withdrawModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Rút Tiền</h2>
-            <form id="withdrawForm">
-                <label for="bank-name">Tên Ngân Hàng:</label>
-                <input type="text" id="bank-name" name="bank-name" required><br><br>
-                <label for="account-number">Số Tài Khoản:</label>
-                <input type="text" id="account-number" name="account-number" required><br><br>
-                <label for="amount">Số Tiền Rút:</label>
-                <input type="number" id="amount" name="amount" required><br><br>
-                <button type="submit">Xác nhận</button>
-            </form>
-        </div>
-    </div>
+        <!-- Modal Rút Tiền -->
+<!--        <div id="withdrawModal" class="modal" style="display:none;">-->
+<!--            <div class="modal-content">-->
+<!--                <span class="close">&times;</span>-->
+<!--                <h2>Rút Tiền</h2>-->
+<!--                <form id="withdrawForm">-->
+<!--                    <label for="bank-name">Tên Ngân Hàng:</label>-->
+<!--                    <input type="text" id="bank-name" name="bank-name" class="form-control" required><br><br>-->
+<!--                    <label for="account-number">Số Tài Khoản:</label>-->
+<!--                    <input type="text" id="account-number" name="account-number" class="form-control" required><br><br>-->
+<!--                    <label for="amount">Số Tiền Rút:</label>-->
+<!--                    <input type="number" id="amount" name="amount" class="form-control" required step="10000"><br><br>-->
+<!--                    <button type="submit" class="btn btn-primary">Xác nhận</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
 
-    <!-- Modal Nạp Tiền -->
-    <div id="depositModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Nạp Tiền</h2>
-            <form method="GET" action="/vnpay-recharge">
-                <label for="recharge-amount">Số Tiền Nạp:</label>
-                <input type="number" id="recharge-amount" name="recharge-amount" required step="10000"><br><br>
-                <button type="submit">Xác nhận</button>
-            </form>
-
+        <!-- Modal Nạp Tiền -->
+        <div id="depositModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Nạp Tiền</h2>
+                <form method="GET" action="/vnpay-recharge">
+                    <label for="recharge-amount">Số Tiền Nạp:</label>
+                    <input type="number" id="recharge-amount" name="recharge-amount" class="form-control" required step="10000"><br><br>
+                    <button type="submit" class="btn btn-success">Xác nhận</button>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Thành Công!</h2>
-            <p>Giao dịch đã được thực hiện thành công.</p>
+        <!-- Success Modal -->
+        <div id="successModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Thành Công!</h2>
+                <p>Giao dịch đã được thực hiện thành công.</p>
+            </div>
         </div>
-    </div>
 </main>
 
 <!-- Include Footer Fragment -->
 <div th:replace="base :: footer"></div>
 
-<!-- JS
-============================================ -->
+<!-- JS Files -->
 <script th:src="@{/js/vendor/modernizr.min.js}"></script>
 <script th:src="@{/js/vendor/jquery.js}"></script>
 <script th:src="@{/js/vendor/popper.min.js}"></script>
@@ -156,33 +230,42 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
 <script>
-    const userId = "${userId}";
-
-    // Mở modal rút tiền
-    document.getElementById("withdraw").onclick = function () {
-        document.getElementById("withdrawModal").style.display = "block";
-    };
-
-    // Mở modal nạp tiền
-    document.getElementById("deposit").onclick = function () {
-        document.getElementById("depositModal").style.display = "block";
-    };
-
-    // Đóng modal
-    document.querySelectorAll(".close").forEach(btn => {
-        btn.onclick = function () {
-            document.getElementById("withdrawModal").style.display = "none";
-            document.getElementById("depositModal").style.display = "none";
-        }
+    // const userId = [[${userId}]]; // Use [[${userId}]] without quotes for numeric value
+    document.getElementById('deposit').addEventListener('click', function() {
+        var depositModal = document.getElementById('depositModal');
+        depositModal.style.display = 'block';
     });
 
-    // Gửi yêu cầu rút tiền
+    // Đóng modal khi click nút đóng
+    document.querySelector('#depositModal .close').addEventListener('click', function() {
+        var depositModal = document.getElementById('depositModal');
+        depositModal.style.display = 'none';
+    });
+
+    // Close modals when clicking outside of them
+    window.onclick = function (event) {
+        const modals = document.querySelectorAll(".modal");
+        modals.forEach(modal => {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+    };
+
+    // Handle withdraw form submission
     document.getElementById("withdrawForm").onsubmit = function (event) {
         event.preventDefault();
         const amount = document.getElementById("amount").value;
         const bankName = document.getElementById("bank-name").value;
         const accountNumber = document.getElementById("account-number").value;
 
+        // Basic validation
+        if (amount <= 0) {
+            alert("Số tiền rút phải lớn hơn 0.");
+            return;
+        }
+
+        // Send POST request to withdraw endpoint
         fetch("/wallet/withdraw", {
             method: "POST",
             headers: {
@@ -199,9 +282,14 @@
             .then(message => {
                 alert(message);
                 document.getElementById("withdrawModal").style.display = "none";
+                // Optionally, display success modal
+                document.getElementById("successModal").style.display = "block";
                 location.reload();
             })
-            .catch(error => console.error("Error:", error));
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Có lỗi xảy ra. Vui lòng thử lại sau.");
+            });
     };
 </script>
 </body>

@@ -3,6 +3,12 @@ package com.ecommerce.g58.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
+
 @Setter
 @Getter
 public class OrderManagerDTO {
@@ -14,7 +20,7 @@ public class OrderManagerDTO {
     private String latestStatus;
     private String reason;
     private String previous_status;
-
+    private LocalDate orderDate;
     public OrderManagerDTO() {
     }
 
@@ -28,4 +34,16 @@ public class OrderManagerDTO {
         this.reason = reason;
         this.previous_status = previous_status;
     }
+    private String formattedOrderDate;
+    public String getFormattedOrderDate() {
+        if (orderDate != null) {
+            return orderDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        }
+        return "No Date";
+    }
+
+    public String getPriceFormated() {
+        return formatCurrency(BigDecimal.valueOf(totalPrice));
+    }
+
 }

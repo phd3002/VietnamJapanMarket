@@ -39,9 +39,6 @@ public class ProductServiceImp implements ProductService {
     private WishlistRepository wishlistRepository;
 
     @Autowired
-    private UserActivityRepository userActivityRepository;
-
-    @Autowired
     private OrderDetailRepository orderDetailRepository;
 
     @Autowired
@@ -161,11 +158,11 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public ProductDetailDTO getProductDetailByProductIdAndColorId(Integer productId, Integer colorId) {
-        ProductDetailDTO productDetail = productRepository.findProductDetailByProductIdAndColorId(productId, colorId);
+    public List<ProductDetailDTO> getProductDetailByProductIdAndColorId(Integer productId, Integer colorId) {
+        List<ProductDetailDTO> productDetails = productRepository.findProductDetailsByProductIdAndColorId(productId, colorId);
 
-        if (productDetail != null) {
-            return productDetail;
+        if (!productDetails.isEmpty()) {
+            return productDetails;
         } else {
             throw new EntityNotFoundException("Product not found for ID: " + productId + " and Color ID: " + colorId);
         }
@@ -224,7 +221,6 @@ public class ProductServiceImp implements ProductService {
         // Xóa productId khỏi các bảng liên quan nếu tồn tại
         cartItemRepository.deleteByProductId(product);
         wishlistRepository.deleteByProduct(product);
-        userActivityRepository.deleteByProductId(product);
         orderDetailRepository.deleteByProductId(product);
 
         // Xóa sản phẩm

@@ -152,26 +152,33 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Transactional
     @Override
     public void rateOrder(Long orderId, String userEmail, String rateText, Integer rateStar) {
+        // Fetch all the order details for the given order
         List<OrderDetailDTO> orderDetails = getOrderDetails(orderId);
-        if (orderDetails.isEmpty()) throw new RuntimeException();
+        if (orderDetails.isEmpty()) throw new RuntimeException("Order has no details");
 
+        // Fetch the user by email
         var user = userRepository.findByEmail(userEmail);
-        if (user == null) throw new RuntimeException();
+        if (user == null) throw new RuntimeException("User not found");
 
-        var orderDetail = orderDetails.get(0);
-        var productId = orderDetail.getProductId();
-        var productVariants = productVariationRepository.findByProductIdProductId(productId.intValue());
+        // Loop through each product variant in the order details
+        for (OrderDetailDTO orderDetail : orderDetails) {
+            var productId = orderDetail.getProductId();
+            var productVariants = productVariationRepository.findByProductIdProductId(productId.intValue());
 
-        for (var pv : productVariants) {
-            var storeId = pv.getProductId().getStoreId();
-            var feedback = new Feedback();
-            feedback.setStoreId(storeId);
-            feedback.setUserId(user);
-            feedback.setRating(rateStar);
-            feedback.setComment(rateText);
-            feedback.setVariationId(pv);
-            feedback.setCreatedAt(LocalDateTime.now());
-            feedbackRepository.save(feedback);
+            for (var pv : productVariants) {
+                var storeId = pv.getProductId().getStoreId();
+
+                // Create and save feedback for each product variant
+                var feedback = new Feedback();
+                feedback.setStoreId(storeId);
+                feedback.setUserId(user);
+                feedback.setRating(rateStar);
+                feedback.setComment(rateText);
+                feedback.setVariationId(pv);  // Product variation ID for feedback
+                feedback.setCreatedAt(LocalDateTime.now());
+
+                feedbackRepository.save(feedback);  // Save feedback to the database
+            }
         }
     }
 
@@ -300,7 +307,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 sellerTransactions.setAmount(-invoice.getDeposit().longValue());
                 sellerTransactions.setFromWalletId(sellerWallet.get());
                 sellerTransactions.setTransactionType("Hoàn tiền");
-                sellerTransactions.setDescription("Hoàn " + invoice.getDeposit() + " do khách hủy đơn " + order.getOrderCode());
+                sellerTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " do khách hủy đơn " + order.getOrderCode());
                 sellerTransactions.setCreatedAt(LocalDateTime.now());
 
                 transactionRepository.save(sellerTransactions);
@@ -309,7 +316,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 userTransactions.setAmount(invoice.getDeposit().longValue());
                 userTransactions.setToWalletId(userWallet.get());
                 userTransactions.setTransactionType("Thanh toán hoàn tiền");
-                userTransactions.setDescription("Hoàn " + invoice.getDeposit() + "tiền từ đơn hàng  do bạn đã hủy đơn " + order.getOrderCode());
+                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + "tiền từ đơn hàng  do bạn đã hủy đơn " + order.getOrderCode());
                 userTransactions.setCreatedAt(LocalDateTime.now());
 
 

@@ -233,10 +233,10 @@ public class UserController {
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            System.out.println(userDetails.getAuthorities());
             // Redirect based on user role
             if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Logistic"))) {
-                return "redirect:/logistic/dashboard";
+                return "redirect:/logistic/order-manager";
             } else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Admin"))) {
                 return "redirect:/admin/dashboard";
             }else if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("Seller"))) {
@@ -322,7 +322,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("successMessage", "Đặt lại Mật Khẩu thành công.");
             return "redirect:/sign-in";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Đặt lại Mật Khẩu thất bại.");
             return "redirect:/reset-password?token=" + token;
         }
     }

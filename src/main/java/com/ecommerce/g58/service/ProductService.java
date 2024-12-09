@@ -37,7 +37,7 @@ public interface ProductService {
 
     List<ProductDTO> searchProducts(String query);
 
-    ProductDetailDTO getProductDetailByProductIdAndColorId(Integer productId, Integer colorId);
+    List<ProductDetailDTO> getProductDetailByProductIdAndColorId(Integer productId, Integer colorId);
 
     List<Color> getAvailableColors(Integer productId);
 
