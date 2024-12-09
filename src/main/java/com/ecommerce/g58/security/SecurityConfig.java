@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
@@ -24,12 +23,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-
     @Autowired
     public SecurityConfig(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
+
     @Bean
     public HttpFirewall allowUrlWithDoubleSlash() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
@@ -63,52 +62,86 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         auth.authenticationProvider(authenticationProvider());
     }
 
-
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
-        accessDeniedHandler.setErrorPage("/403");
-        return accessDeniedHandler;
+        AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
+        handler.setErrorPage("/error");
+        return handler;
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 // Public APIs
+                .antMatchers(
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "/webjars/**",
+                        "/static/**",
+                        "/public/**",
+                        "/resources/**",
+                        "/favicon.ico"
+                        , "/403"
+                ).permitAll()
                 .antMatchers("/api/search", "/api/shipping-address/**").permitAll()
                 // Public pages and resources
                 .antMatchers(
-                        "/", "/**", "/sign-up/confirm-code/**",
-                        "/address/**", "/cart-detail/**",
-                        "/coming-soon/**", "/confirm-code/**", "/footer/**",
-                        "/head/**", "/header/**",
-                        "/homepage/**", "/homepageOrg/**", "/homepageTest/**",
-                        "/my-account", "/my-shop/**", "/notification/**",
-                        "/order/**", "/order-detail/**", "/privacy-policy/**",
-                        "/product-detail/**", "/product-list/**",
-                        "/sign-in/**", "/sign-up/**", "/sign-up-seller/**",
-                        "/terms-of-service/**", "/view-store/**", "/wallet/**",
-                        "/wishlist/**", "/forgot-password/**", "/reset-password/**",
-                        "/add_to_cart", "/cart-items", "/product/**",
+                        "/",
+                        "/sign-up/confirm-code/**",
+                        "/address/**",
+                        "/cart-detail/**",
+                        "/coming-soon/**",
+                        "/confirm-code/**",
+                        "/footer/**",
+                        "/head/**",
+                        "/header/**",
+                        "/homepage/**",
+                        "/homepageOrg/**",
+                        "/homepageTest/**",
+                        "/my-account",
+                        "/my-shop/**",
+                        "/notification/**",
+                        "/order/**",
+                        "/order-detail/**",
+                        "/privacy-policy/**",
+                        "/product-detail/**",
+                        "/product-list/**",
+                        "/sign-in/**",
+                        "/sign-up/**",
+                        "/sign-up-seller/**",
+                        "/terms-of-service/**",
+                        "/view-store/**",
+                        "/wallet/**",
+                        "/wishlist/**",
+                        "/forgot-password/**",
+                        "/reset-password/**",
+                        "/add_to_cart",
+                        "/cart-items",
+                        "/product/**",
                         "/notification",
-                        "/store-info/**", "/store-save/**", "/addProductFull/**", "/addProductForm2/**",
-                        "/vn/**", "/submitOrder/**", "/now/**", "/vnpay-payment/**"
+                        "/store-info/**",
+                        "/store-save/**",
+                        "/addProductFull/**",
+                        "/addProductForm2/**",
+                        "/vn/**",
+                        "/submitOrder/**",
+                        "/now/**",
+                        "/vnpay-payment/**"
                 ).permitAll()
-                // Quyền cho ADMIN
-                .antMatchers("/admin/user-manager/**","admin/**")
-                .hasRole("Admin")
+                // **Admin URLs - Must be after public URLs**
+                .antMatchers("/admin/user-manager/**", "/admin/**").hasRole("Admin")
                 // Checkout page requires authentication
                 .antMatchers("/checkout").authenticated()
-
                 // Any other request must be authenticated
                 .anyRequest().authenticated()
                 .and()
-
                 // Session Management Configuration
                 .sessionManagement()
-                .invalidSessionUrl("/sign-in?session=invalid") // Redirect on invalid session
-                .sessionFixation().none() // Prevents creating a new session after login
+                .invalidSessionUrl("/sign-in?session=invalid")
+                .sessionFixation().none()
                 .and()
                 // Logout configuration
                 .logout()
@@ -128,6 +161,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user").password("{noop}password").roles("Customer");
+                .withUser("user").password("{noop}password").roles("Customer")
+                .and()
+                .withUser("admin").password("{noop}adminpassword").roles("Admin");
     }
 }

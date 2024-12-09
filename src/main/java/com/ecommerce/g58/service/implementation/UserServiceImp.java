@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +29,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImp implements UserService, UserDetailsService {
@@ -101,14 +103,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         userRepository.save(users);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Users user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRoleId().getRoleName())));
-    }
+
 
     // New method to check if the password matches
     public boolean checkPassword(String rawPassword, String encodedPassword) {
@@ -229,4 +224,27 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public void updateUser(Users user) {
         userRepository.save(user);
     }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Users user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        // Instead of using stream, just create a SimpleGrantedAuthority from the role name
+        Set<GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRoleId().getRoleName()));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                user.getStatus().equalsIgnoreCase("active"),
+                true,
+                true,
+                true,
+                authorities
+        );
+    }
+
 }
