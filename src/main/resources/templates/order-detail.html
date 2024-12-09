@@ -116,7 +116,7 @@
     </span>
                                     </h4>
                                     <div class="order-progress"
-                                         th:if="${shippingStatus} != 'Cancelled'">
+                                         th:if="${shippingStatus} != 'Cancelled' and != 'Returned'">
                                         <div th:classappend="${pendingTime != null or confirmedTime != null or previousStatus == 'Pending'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-calendar"></i>
