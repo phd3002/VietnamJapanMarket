@@ -2,7 +2,7 @@
 <html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title th:text="${pageTitle} ?: '404'"></title>
+    <title th:text="${pageTitle} ?: '403'"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Including CSS Files from base.html -->
@@ -13,7 +13,8 @@
 
 <!-- Include Header Fragment -->
 <div th:replace="base :: header"></div>
-<!-- End Header -->
+
+<a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
 
 <section class="error-page onepage-screen-area">
     <div class="container">
@@ -21,21 +22,22 @@
             <div class="col-lg-6">
                 <div class="content" data-sal="slide-up" data-sal-duration="800" data-sal-delay="400">
                     <span class="title-highlighter highlighter-secondary"> <i class="fal fa-exclamation-circle"></i> Ồ! Có gì đó sai sai.</span>
-                    <h1 class="title">Không tìm thấy trang</h1>
-                    <p>Có vẻ như chúng tôi không tìm thấy những gì bạn tìm kiếm. Trang bạn đang tìm kiếm không tồn tại,
-                        không khả dụng do tải không đúng cách.</p>
+                    <h1 class="title">Không thể truy cập.</h1>
+                    <p>Có vẻ như trang bạn muốn vào không được cung cấp quyền hạn hoặc không khả dụng do tải không đúng
+                        cách.</p>
                     <a href="/homepage" class="axil-btn btn-bg-secondary right-icon">Quay lại trang chủ <i
                             class="fal fa-long-arrow-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="thumbnail" data-sal="zoom-in" data-sal-duration="800" data-sal-delay="400">
-                    <img th:src="@{/static/images/others/404.png}" alt="404">
+                    <img th:src="@{/static/images/others/403.png}" alt="404">
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 
 <div th:replace="base :: footer"></div>
 
