@@ -8,7 +8,7 @@ public class ErrorController {
 
     @RequestMapping("/403")
     public String accessDenied() {
-        return "403";
+        return "/error/403";
     }
 
 
