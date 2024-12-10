@@ -84,7 +84,7 @@ function updateSearchResults(results) {
         resultItem.innerHTML = `
         <div class="axil-product-list">
             <div class="thumbnail">
-                <a href="product-detail/${result.productId}">
+                <a href="/product-detail/${result.productId}">
                     <img src="${result.thumbnail}" alt="Product Image" class="product-thumbnail">
                 </a>
             </div>

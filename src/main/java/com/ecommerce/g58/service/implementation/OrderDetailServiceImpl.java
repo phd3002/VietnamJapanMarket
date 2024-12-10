@@ -163,8 +163,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         // Loop through each product variant in the order details
         for (OrderDetailDTO orderDetail : orderDetails) {
-            var productId = orderDetail.getProductId();
-            var productVariants = productVariationRepository.findByProductIdProductId(productId.intValue());
+            var variationId = orderDetail.getVariationId();
+            var productVariants = productVariationRepository.findByVariationId(variationId.intValue());
 
             for (var pv : productVariants) {
                 var storeId = pv.getProductId().getStoreId();

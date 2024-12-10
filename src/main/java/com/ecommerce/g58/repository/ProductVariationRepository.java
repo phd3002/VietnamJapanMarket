@@ -20,6 +20,7 @@ public interface ProductVariationRepository extends JpaRepository<ProductVariati
     List<ProductVariation> findAll(); // Fetch all variations
 
     List<ProductVariation> findByProductIdProductId(Integer productId); // Fetch variations by productId
+    List<ProductVariation> findByVariationId(Integer productId); // Fetch variations by productId
 
     //    ProductVariation findById();
     // Truy vấn để lấy màu sắc của sản phẩm

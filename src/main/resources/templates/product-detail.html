@@ -26,7 +26,20 @@
             padding: 5px !important;
             border-radius: 50% !important;
         }
+        .product-large-thumbnail-2 .thumbnail img {
+            width: 500px; /* Ensures the image takes the full width of its container */
+            height: 600px; /* Set a fixed height for uniformity */
+            object-fit: cover; /* Ensures the image fits nicely within the set dimensions */
+        }
 
+        /* Styling for small thumbnails */
+        .small-thumb-wrapper .small-thumb-img img {
+            width: 100px; /* Fixed width for small thumbnails */
+            height: 60px; /* Fixed height for small thumbnails */
+            object-fit: cover; /* Keeps the aspect ratio while cropping the overflow */
+            border-radius: 50%; /* Optional: adds rounded corners */
+            margin: 5px; /* Adds spacing between thumbnails */
+        }
     </style>
 </head>
 
@@ -84,6 +97,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="col-lg-6 mb--40">

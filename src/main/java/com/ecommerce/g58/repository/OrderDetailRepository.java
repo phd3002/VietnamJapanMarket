@@ -47,7 +47,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    status_times.delivered_time AS delivered_time,\n" +
             "    status_times.completed_time AS completed_time,\n" +
             "    status_times.cancelled_time AS cancelled_time,\n" +
-            "    status_times.returned_time AS returned_time\n" +
+            "    status_times.returned_time AS returned_time, \n" +
             "    pv.variation_id\n" +
             "FROM orders o\n" +
             "LEFT JOIN order_details od ON o.order_id = od.order_id\n" +
