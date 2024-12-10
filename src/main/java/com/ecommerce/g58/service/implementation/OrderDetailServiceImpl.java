@@ -144,6 +144,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 Timestamp returnedTimestamp = (Timestamp) result[30];
                 dto.setReturnedTime(returnedTimestamp.toLocalDateTime());
             }
+            dto.setVariationId(((Integer) result[31]).longValue());
             orderDetails.add(dto);
         }
         return orderDetails;

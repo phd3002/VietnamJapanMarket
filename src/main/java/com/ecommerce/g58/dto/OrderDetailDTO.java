@@ -42,6 +42,7 @@ public class OrderDetailDTO {
     private LocalDateTime completedTime;
     private LocalDateTime cancelledTime;
     private LocalDateTime returnedTime;
+    private Long variationId;
     public String getPriceFormated() {
         return formatCurrency(BigDecimal.valueOf(productTotalPrice));
     }

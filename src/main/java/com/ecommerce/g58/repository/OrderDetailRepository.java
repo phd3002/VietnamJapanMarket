@@ -48,6 +48,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    status_times.completed_time AS completed_time,\n" +
             "    status_times.cancelled_time AS cancelled_time,\n" +
             "    status_times.returned_time AS returned_time\n" +
+            "    pv.variation_id\n" +
             "FROM orders o\n" +
             "LEFT JOIN order_details od ON o.order_id = od.order_id\n" +
             "LEFT JOIN products p ON od.product_id = p.product_id\n" +
@@ -90,7 +91,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    GROUP BY order_id\n" +
             ") status_times ON o.order_id = status_times.order_id\n" +
             "WHERE o.order_id = :orderId\n" +
-            "GROUP BY o.order_id, p.product_id, p.store_id, p.product_name, pi.thumbnail, c.category_name, s.size_name, clr.color_name, od.price, od.quantity, st.store_name, st.picture_url, inv.total_amount, inv.shipping_fee, pay.payment_method, pay.payment_status, o.shipping_address, latest_status.status, latest_status.previous_status, o.order_code, status_times.pending_time, status_times.confirmed_time, status_times.processing_time, status_times.dispatched_time, status_times.shipping_time, status_times.failed_time, status_times.delivered_time, status_times.completed_time, status_times.cancelled_time, status_times.returned_time",
+            "GROUP BY o.order_id, p.product_id, p.store_id, p.product_name, pi.thumbnail, c.category_name, s.size_name, clr.color_name, od.price, od.quantity, st.store_name, st.picture_url, inv.total_amount, inv.shipping_fee, pay.payment_method, pay.payment_status, o.shipping_address, latest_status.status, latest_status.previous_status, o.order_code, status_times.pending_time, status_times.confirmed_time, status_times.processing_time, status_times.dispatched_time, status_times.shipping_time, status_times.failed_time, status_times.delivered_time, status_times.completed_time, status_times.cancelled_time, status_times.returned_time, pv.variation_id",
             nativeQuery = true)
     List<Object[]> getOrderDetails(@Param("orderId") Long orderId);
 
