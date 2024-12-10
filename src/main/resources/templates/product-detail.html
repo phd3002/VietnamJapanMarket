@@ -9,6 +9,25 @@
 
     <!-- Including CSS Files from base.html -->
     <th:block th:replace="~{base :: head}"></th:block>
+
+    <style>
+        /* Styling for selected size */
+        .size-option.selected {
+            border: 2px solid #ff497c; /* Highlight border for selected size */
+            background-color: #fce4ec; /* Light pink background for selected size */
+            color: #d81b60; /* Text color for selected size */
+            font-weight: bold;
+        }
+
+        /* Styling for selected color */
+        .color-variant-wrapper ul.color-variant li.selected a {
+            border: 2px solid #4caf50 !important; /* Green border for selected color */
+            background-color: #e8f5e9 !important; /* Light green background for selected color */
+            padding: 5px !important;
+            border-radius: 50% !important;
+        }
+
+    </style>
 </head>
 
 <body class="sticky-header">
@@ -94,11 +113,14 @@
                                         <h6 class="title">Màu sắc: </h6>
                                         <div class="color-variant-wrapper">
                                             <ul class="color-variant">
-                                                <li class="color-extra-01" th:each="color : ${availableColors}">
+                                                <li th:each="color : ${availableColors} "
+                                                    th:classappend="${color.colorId == colorId} ? 'color-extra-01 selected' : ''"
+                                                     >
                                                     <a th:href="@{'/product-detail/' + ${productDetail.productId} + '?colorId=' + ${color.colorId}}">
                                                         <span th:text="${color.colorName}"></span>
                                                     </a>
                                                 </li>
+
                                             </ul>
                                         </div>
                                     </div>
@@ -106,12 +128,14 @@
                                     <div class="product-variation product-size-variation">
                                         <h6 class="title">Loại: </h6>
                                         <ul class="range-variant">
-                                            <li th:each="size : ${availableSizes}"
-                                                th:data-size-name="${size}"
-                                                th:text="${size}"
-                                                th:classappend="${size == selectedSize} ? 'selected' : ''"
-                                                class="size-option"></li>
+                                            <li th:each="size : ${listProductDetails}"
+                                                th:data-size-name="${size.getSize()}"
+                                                th:data-variation-id="${size.getVariationId()}"
+                                            th:text="${size.getSize()}"
+                                            th:classappend="${size.getSize() == selectedSize} ? 'selected' : ''"
+                                            class="size-option"></li>
                                         </ul>
+
                                     </div>
                                     <!-- Add to Cart Form -->
                                     <div th:if="${message}" class="alert alert-success" role="alert">
@@ -127,18 +151,17 @@
                                     <!-- Add to Cart Form -->
                                     <form th:action="@{/add_to_cart}" method="post" style="margin-right: 10px;">
                                         <input type="hidden" name="productId" th:value="${productDetail.productId}">
-                                        <input type="hidden" name="variationId" th:value="${productDetail.variationId}">
+                                        <input type="hidden" name="variationId" id="variationIdInput" th:value="${productDetail.variationId}">
                                         <input type="hidden" name="productName" th:value="${productDetail.productName}">
                                         <input type="hidden" name="imageId" th:value="${productDetail.thumbnail}">
                                         <input type="hidden" name="selectedSize" id="selectedSizeInput" value="">
                                         <input type="hidden" name="quantity" value="1">
                                         <input type="hidden" name="price" th:value="${productDetail.price}">
-
-                                        <!-- Set width to 100% for both buttons -->
-                                        <button type="submit" id="addToCartButton" class="btn btn-primary"
-                                                style="width: 155px; height: 60px" disabled>Thêm vào giỏ hàng
+                                        <button type="submit" id="addToCartButton" class="btn btn-primary" style="width: 155px; height: 60px" disabled>
+                                            Thêm vào giỏ hàng
                                         </button>
                                     </form>
+
 
                                     <!-- Add to Wishlist Form -->
                                     <form th:action="@{/add_to_wishlist}" method="post">
@@ -157,6 +180,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- Store Detail  -->
         <div class="axil-breadcrumb-area">
@@ -184,6 +208,7 @@
             </div>
         </div>
         <br>
+
         <!-- Description & Review  -->
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
@@ -286,20 +311,46 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const sizeOptions = document.querySelectorAll('.size-option');
-        const addToCartButton = document.getElementById('addToCartButton');
+        const variationIdInput = document.getElementById('variationIdInput');
         const selectedSizeInput = document.getElementById('selectedSizeInput');
+        const addToCartButton = document.getElementById('addToCartButton');
 
         sizeOptions.forEach(option => {
             option.addEventListener('click', function () {
+                // Remove 'selected' class from all size options
                 sizeOptions.forEach(s => s.classList.remove('selected'));
+                // Add 'selected' class to the clicked size option
                 this.classList.add('selected');
 
-                // Set the selected size name to the hidden input
+                // Update selectedSize and variationId based on the clicked size
                 const selectedSize = this.getAttribute('data-size-name');
-                selectedSizeInput.value = selectedSize; // Set the selected size
+                const selectedVariationId = this.getAttribute('data-variation-id');
+
+                selectedSizeInput.value = selectedSize; // Update selectedSize hidden field
+                variationIdInput.value = selectedVariationId; // Update variationId hidden field
 
                 // Enable Add to Cart button
                 addToCartButton.removeAttribute('disabled');
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const colorOptions = document.querySelectorAll('.color-variant li');
+
+        colorOptions.forEach(option => {
+            option.addEventListener('click', function () {
+                // Debug: Log the clicked element
+                console.log("Clicked color option:", this);
+
+                // Remove 'selected' class from all color options
+                colorOptions.forEach(c => c.classList.remove('selected'));
+
+                // Add 'selected' class to the clicked color option
+                this.classList.add('selected');
+
+                // Debug: Confirm the 'selected' class is added
+                console.log("Selected class added to:", this);
             });
         });
     });

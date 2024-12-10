@@ -79,5 +79,4 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.security.web.access: DEBUG
-    org.springframework.security.core: DEBUG
-    com.ecommerce.g58: DEBUG
+

@@ -61,7 +61,7 @@
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
                             <a th:href="@{/product-detail/{id}(id=${product.productId})}">
-                                <img class="spi" th:src="${product.productVariations[0].imageId.thumbnail}"
+                                <img th:src="${product.productVariations[0].imageId.thumbnail}"
                                      alt="Product Image">
                             </a>
                         </div>

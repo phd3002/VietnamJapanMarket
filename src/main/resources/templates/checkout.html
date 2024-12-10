@@ -17,7 +17,7 @@
         }
 
         .user-info {
-            flex: 0 0 40%; /* Take 40% of the container width */
+            flex: 0 0 30%; /* Take 40% of the container width */
             padding: 20px;
             box-sizing: border-box;
             background-color: #f9f9f9;
@@ -25,7 +25,7 @@
         }
 
         .order-summary {
-            flex: 0 0 60%; /* Take 60% of the container width */
+            flex: 0 0 70%; /* Take 60% of the container width */
             padding: 20px;
             box-sizing: border-box;
             background-color: #f9f9f9;
@@ -223,6 +223,7 @@
                             <table class="table summery-table">
                                 <thead>
                                 <tr>
+                                    <th scope="col">Hình ảnh</th>
                                     <th scope="col">Sản phẩm</th>
                                     <th scope="col">Đơn giá</th>
                                     <th scope="col">Số lượng</th>
@@ -233,9 +234,10 @@
                                 <tbody>
                                 <!-- Loop through the cartItems -->
                                 <tr th:each="item : ${cartItems}" class="order-product">
+                                    <td><img th:src="${item.variationId.imageId.thumbnail}" alt="Product Image"
+                                             height="100" width="100"/></td>
                                     <td>
-                                        <img th:src="${item.variationId.imageId.thumbnail}" alt="Product Image"
-                                             height="100" width="100"/>
+
                                         <span th:text="${item.productId.productName}"></span><br>
                                         <span>Loại:
                                             <span th:text="${item.variationId.color.colorName}"></span>,
