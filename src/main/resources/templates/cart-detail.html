@@ -70,7 +70,7 @@
                                 </td>
                                 <td class="product-title">
                                     <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}"
-                                       th:text="${item.productId.productName}">Product Name</a>
+                                       th:text="${item.productId.productName}+' ('+${item.variationId.getSize().sizeName }+ ' - '+${item.variationId.getColor().colorName } +') '">Product Name</a>
                                 </td>
                                 <td class="product-price" data-title="Price">
                                     <span th:text="${item.getPriceFormated()}">Price</span>

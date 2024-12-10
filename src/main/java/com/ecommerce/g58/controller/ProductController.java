@@ -65,11 +65,14 @@ public class ProductController {
             return "error";  // Handle product not found
         }
 
+
         // Fetch available sizes
         List<String> availableSizes = productService.getAvailableSizesByProductIdAndColorId(productId, colorId);
         List<Color> availableColors = productService.getAvailableColors(productId);
         // Pass the product details, available colors, and sizes to the front-end
         model.addAttribute("productDetail", productDetail);
+        model.addAttribute("listProductDetails", listProductDetails);
+        model.addAttribute("colorId", colorId);
         model.addAttribute("availableColors", availableColors);
         model.addAttribute("availableSizes", availableSizes);
         model.addAttribute("selectedSize", sizeId);  // Add selected size to the model

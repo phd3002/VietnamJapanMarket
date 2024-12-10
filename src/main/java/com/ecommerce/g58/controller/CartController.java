@@ -62,7 +62,8 @@ public class CartController {
             redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
             return "redirect:/sign-in";
         }
-
+        System.out.println(productId);
+        System.out.println(variationId);
         // Fetch user data
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
@@ -72,7 +73,7 @@ public class CartController {
         try {
             // Fetch product variation details (using the variationId)
             ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndVariationId(productId, variationId);
-//            System.out.println("Product detail Store: " + productDetail.getStoreId());
+            System.out.println("Product detail Store: " + productDetail);
 
             if (productDetail != null) {
                 List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
