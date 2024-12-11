@@ -83,6 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/static/**",
                         "/public/**",
                         "/resources/**",
+                        "/fonts/**",
                         "/favicon.ico"
                         , "/403", "/404"
                 ).permitAll()
@@ -129,7 +130,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/vn/**",
                         "/submitOrder/**",
                         "/now/**",
-                        "/vnpay-payment/**"
+                        "/vnpay-payment/**",
+                        "/products/**"
                 ).permitAll()
                 // **Seller URLs**
                 .antMatchers("/seller/**", "/store-info", "/store-save").hasRole("Seller")

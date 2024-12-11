@@ -71,32 +71,27 @@
                         <input type="hidden" name="userId" th:value="${user.userId}">
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên đăng nhập</label>
-                            <input class="form-control" type="text" name="username" th:value="${user.username}" required>
+                            <input class="form-control" type="text" name="username" th:value="${user.username}" readonly>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Họ</label>
-                            <input class="form-control" type="text" name="firstName" th:value="${user.firstName}" required>
+                            <input class="form-control" type="text" name="firstName" th:value="${user.firstName}" readonly>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên</label>
-                            <input class="form-control" type="text" name="lastName" th:value="${user.lastName}" required>
+                            <input class="form-control" type="text" name="lastName" th:value="${user.lastName}" readonly>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Email</label>
-                            <input class="form-control" type="email" name="email" th:value="${user.email}" required>
+                            <input class="form-control" type="email" name="email" th:value="${user.email}" readonly>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Số điện thoại</label>
-                            <input class="form-control" type="text" name="phoneNumber" th:value="${user.phoneNumber}" required>
+                            <input class="form-control" type="text" name="phoneNumber" th:value="${user.phoneNumber}" readonly>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="role-user" class="control-label">Vai trò</label>
-                            <select class="form-control" id="role-user" name="roleId" required>
-                                <option value="">-- Chọn vai trò --</option>
-                                <th:block th:each="role : ${roles}">
-                                    <option th:value="${role.roleId}" th:text="${role.roleName}" th:selected="${user.roleId.roleId} == ${role.roleId}"></option>
-                                </th:block>
-                            </select>
+                            <input class="form-control" type="text" id="role-user" th:value="${user.roleId.roleName}" readonly>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="status-user" class="control-label">Trạng thái</label>

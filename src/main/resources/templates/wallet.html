@@ -105,7 +105,6 @@
                                                 <th scope="col">Ngày</th>
                                                 <th scope="col">Loại giao dịch</th>
                                                 <th scope="col">Số tiền</th>
-                                                <th scope="col">Nguồn</th>
                                                 <th scope="col">Nội dung</th>
                                             </tr>
                                             </thead>
@@ -118,7 +117,6 @@
                                                 <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">
                                                     ₫150,000
                                                 </td>
-                                                <td th:text="${transaction.transactionParty}">Đã nhận từ người mua</td>
                                                 <td th:text="${transaction.description}">Description here</td>
                                             </tr>
                                             </tbody>
@@ -208,6 +206,7 @@
                 <p>Giao dịch đã được thực hiện thành công.</p>
             </div>
         </div>
+    </div>
 </main>
 
 <!-- Include Footer Fragment -->

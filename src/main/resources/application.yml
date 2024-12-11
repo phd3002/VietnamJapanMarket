@@ -11,9 +11,9 @@ spring:
       proxy-target-class: true
 
   datasource:
-    url: jdbc:mysql://localhost:3306/vietnam_japan_market
+    url: jdbc:mysql://localhost:3306/vietnam_japan_market2
     username: root
-    password: 12345
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false

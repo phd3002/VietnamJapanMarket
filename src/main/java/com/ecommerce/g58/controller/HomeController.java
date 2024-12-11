@@ -37,7 +37,7 @@ public class HomeController {
         }
 
         // Use getAllProducts() method from ProductService
-        List<Products> products = productService.getAllProducts();
+        List<Products> products = productService.get12RandomProducts();
         List<Categories> categories = categoriesService.getAllCategories();
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);

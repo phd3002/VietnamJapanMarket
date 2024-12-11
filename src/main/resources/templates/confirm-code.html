@@ -57,8 +57,10 @@
                             <!-- Hiển thị thông báo lỗi nếu có -->
                             <div th:if="${error}" class="error-message">
                                 <p th:text="${error}"></p>
+
+
                             </div>
-                            <br>>
+                            <br>
                             <label>Nhập mã OTP đã gửi qua email của bạn</label>
                             <!-- Sửa lại tên trường input từ "code" thành "otp" để khớp với backend -->
                             <input type="text" class="form-control" name="otp" id="otp" required>

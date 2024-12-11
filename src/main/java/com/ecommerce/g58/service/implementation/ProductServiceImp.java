@@ -269,6 +269,11 @@ public class ProductServiceImp implements ProductService {
         return productImageRepository.findTopByOrderByImageIdDesc();
     }
 
+    @Override
+    public List<Products> get12RandomProducts() {
+        return productRepository.find12RandomProducts();
+    }
+
 }
 
 

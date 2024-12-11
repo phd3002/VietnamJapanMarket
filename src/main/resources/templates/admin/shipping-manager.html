@@ -76,8 +76,8 @@
                         <thead>
                         <tr>
                             <th>Tên đơn vị vận chuyển</th>
-                            <th>Số điện thoại</th>
-                            <th>Địa chỉ</th>
+                            <th>Giá</th>
+<!--                            <th>Địa chỉ</th>-->
 <!--                            <th>Tổng số đơn hàng đã xử lý</th>-->
 <!--                            <th>Tổng số cửa hàng hợp tác</th>-->
                             <th>Chức năng</th>
@@ -86,8 +86,8 @@
                         <tbody>
                         <tr th:each="unit : ${shippingUnits}">
                             <td th:text="${unit.unitName}"></td>
-                            <td th:text="${unit.unitContact}"></td>
-                            <td th:text="${unit.unitAddress}"></td>
+                            <td th:text="${unit.unitPrice}"></td>
+<!--                            <td th:text="${unit.unitAddress}"></td>-->
 <!--                            <td th:text="${unit.totalProcessedOrders}"></td>-->
 <!--                            <td th:text="${unit.totalPartnerStores}"></td>-->
                             <td>

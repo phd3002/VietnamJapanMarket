@@ -212,13 +212,13 @@ public class UserController {
                               @RequestParam("password") String password,
                               Model model) {
         try {
-            if (!userService.isAccountActive(email)) {
-                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa.");
-                return "sign-in";
-            }
             UserDetails userDetails = userService.loadUserByUsername(email);
             if (userDetails == null) {
                 model.addAttribute("errorMessage", "Email chưa được đăng kí");
+                return "sign-in";
+            }
+            if (!userService.isAccountActive(email)) {
+                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa.");
                 return "sign-in";
             }
             // Check if the password matches

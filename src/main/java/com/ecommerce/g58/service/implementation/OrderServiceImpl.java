@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
         // Mapping logic remains the same
         return ordersPage.map(order -> {
             OrdersDTO dto = new OrdersDTO();
-            dto.setOrderId(order.getOrderId());
+            dto.setOrderCode(order.getOrderCode());
             dto.setOrderDate(order.getOrderDate());
             dto.setStatus(order.getShippingStatus()
                     .stream()

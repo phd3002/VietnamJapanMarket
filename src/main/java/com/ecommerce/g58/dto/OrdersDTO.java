@@ -16,6 +16,7 @@ public class OrdersDTO {
     private Integer totalQuantity;
     private Long totalPrice;
     private String formattedPrice; // Formatted price
+    private String orderCode;
 
     // Add a method to format the price as VND
     public void setFormattedPrice(Long price) {
