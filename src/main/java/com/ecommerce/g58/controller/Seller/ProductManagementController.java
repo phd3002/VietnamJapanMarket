@@ -340,7 +340,7 @@ public class ProductManagementController {
         productService.addProductVariation(productVariation);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm biến thể sản phẩm thành công!");
         System.out.println("Product variation added successfully");
-        return "redirect:/seller-products/" + product.get().getStoreId().getStoreId();
+        return "redirect:/seller-products";
     }
 
     @PostMapping("/update-stock")

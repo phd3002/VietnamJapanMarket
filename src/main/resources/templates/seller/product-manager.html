@@ -18,7 +18,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-
+    <style>
+        .variation-size-list, .variation-stock-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+        .variation-size-list li, .variation-stock-list li {
+            display: flex;
+            align-items: center;
+            height: 40px; /* Đảm bảo chiều cao cố định */
+            list-style: none;
+        }
+        .variation-stock-list li {
+            display: flex;
+            justify-content: flex-end; /* Đẩy nội dung sát lề phải */
+            align-items: center;
+            height: 40px; /* Đảm bảo chiều cao cố định */
+            list-style: none;
+        }
+    </style>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -100,21 +121,19 @@
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                         <tr>
-                            <th width="10"><input type="checkbox" id="all"></th>
-                            <th>Mã sản phẩm</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Ảnh</th>
-                            <th>Kích thước x Màu sắc</th>
-                            <th>Số lượng</th>
-                            <th>Giá tiền</th>
-                            <th>Danh mục</th>
-                            <th>Ngày tạo</th>
-                            <th>Chức năng</th>
+                            <th scope="col">Mã sản phẩm</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Kích thước x Màu sắc</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Giá tiền</th>
+                            <th scope="col">Danh mục</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Chức năng</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="product : ${products}">
-                            <td width="10"><input type="checkbox" name="check1" value="1"></td>
                             <td th:text="${product.productCode}"></td>
                             <td th:text="${product.productName}"></td>
                             <td>
@@ -123,14 +142,14 @@
                                      alt="Product Image" width="150px">
                             </td>
                             <td>
-                                <ul>
+                                <ul class="variation-size-list">
                                     <li th:each="variation : ${product.productVariations}">
                                         <span th:text="${variation.size?.sizeName} + ' x ' + ${variation.color?.colorName}"></span>
                                     </li>
                                 </ul>
                             </td>
                             <td>
-                                <ul>
+                                <ul class="variation-stock-list">
                                     <li th:each="variation : ${product.productVariations}"
                                         class="d-flex align-items-center">
                                         <span th:text="${variation.stock}"></span>
