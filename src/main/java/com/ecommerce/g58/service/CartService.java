@@ -29,7 +29,7 @@ public interface CartService {
 
     int getCartItemCount(Integer userId); // lay so luong mon hang trong gio hang
 
-    void subtractItemQuantitiesFromStock(Integer userId); // tru so luong mon hang trong kho
+    void subtractItemQuantitiesFromStock(Integer userId); // tru so luong mon hang trong zo
 
     void restoreItemQuantitiesToStock(Integer userId); // phuc hoi so luong mon hang trong kho
 

@@ -152,6 +152,8 @@ public class CartServiceImp implements CartService {
                 throw new IllegalArgumentException("Not enough stock available for product: " + variation.getVariationId());
             }
             // Trừ số lượng hàng
+            System.out.println("Stock before: " + variation.getStock());
+            System.out.println("Quantity to subtract: " + item.getQuantity());
             variation.setStock(variation.getStock() - item.getQuantity());
             // Lưu thay đổi
             productVariationRepository.save(variation);

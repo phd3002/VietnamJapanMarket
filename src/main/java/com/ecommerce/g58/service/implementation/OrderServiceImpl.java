@@ -367,13 +367,19 @@ public class OrderServiceImpl implements OrderService {
                 orderDetailsList.add(orderDetail);
 
                 // Update inventory
-                ProductVariation variation = productVariationRepository.findById(cartItem.getVariationId().getVariationId()).orElse(null);
-                if (variation != null) {
-                    variation.setStock(variation.getStock() - cartItem.getQuantity() + 2);
-                    productVariationRepository.save(variation);
-                }
+
+//                ProductVariation variation = productVariationRepository.findById(cartItem.getVariationId().getVariationId()).orElse(null);
+//                if (variation != null) {
+//                    variation.setStock(variation.getStock() - cartItem.getQuantity());
+//                    System.out.println("Stock Before: " + variation.getStock());
+//                    System.out.println("Cart Item Quantity: " + cartItem.getQuantity());
+//                    System.out.println("Stock After: " + (variation.getStock() - cartItem.getQuantity()));
+//                    productVariationRepository.save(variation);
+//                }
             }
         }
+        System.out.println(user.getUserId());
+        cartService.subtractItemQuantitiesFromStock(user.getUserId());
 
         ShippingStatus initialShippingStatus = ShippingStatus.builder()
                 .orderId(order)

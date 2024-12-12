@@ -313,8 +313,9 @@ public class CheckoutController {
         }
         // Trừ số lượng sản phẩm và bắt đầu quá trình checkout
 
-        cartService.subtractItemQuantitiesFromStock(userId);
+
         if (paymentMethod == PaymentMethod.WALLET) {
+            cartService.subtractItemQuantitiesFromStock(userId);
             long walletBalance = walletService.getUserWalletBalance(userId);
             logger.info("Wallet balance retrieved for user ID {}: {}", userId, walletBalance);
 

@@ -73,7 +73,7 @@ public class CartController {
         try {
             // Fetch product variation details (using the variationId)
             ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndVariationId(productId, variationId);
-            System.out.println("Product detail Store: " + productDetail);
+//            System.out.println("Product detail Store: " + productDetail);
 
             if (productDetail != null) {
                 List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
