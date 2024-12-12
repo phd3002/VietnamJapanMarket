@@ -113,7 +113,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Page<Products> findAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+        return productRepository.findAllByOrderByRandom(pageable);
     }
 
     public List<Products> getLatest5Products() {

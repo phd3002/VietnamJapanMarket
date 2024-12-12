@@ -21,8 +21,11 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
 
     Products findTopByOrderByProductIdDesc();
 
-    @Query(value = "SELECT * FROM Products ORDER BY RAND() LIMIT 12", nativeQuery = true)
+    @Query(value = "SELECT * FROM products ORDER BY RAND() LIMIT 12", nativeQuery = true)
     List<Products> find12RandomProducts();
+
+    @Query(value = "SELECT * FROM products ORDER BY RAND()", nativeQuery = true)
+    Page<Products> findAllByOrderByRandom(Pageable pageable);
 
     List<Products> findAll();
 
