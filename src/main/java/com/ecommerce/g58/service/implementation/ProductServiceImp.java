@@ -178,7 +178,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Page<Products> getProductsByStoreId(Pageable pageable) {
+    public List<Products> getProductsByStoreId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // Ensure the user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -187,7 +187,7 @@ public class ProductServiceImp implements ProductService {
 //        System.out.println(authentication.getName());
         Users owner = userRepository.findByEmail(authentication.getName());
         Optional<Stores> storeOwner = storeRepository.findByOwnerId(owner);
-        return productRepository.findByStoreId(storeOwner.get(), pageable);
+        return productRepository.findByStoreId(storeOwner.get());
     }
 
     public List<ProductDetailDTO> getProductDetailsByStoreId(Stores storeId) {

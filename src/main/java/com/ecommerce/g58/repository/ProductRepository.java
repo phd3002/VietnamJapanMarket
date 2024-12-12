@@ -29,7 +29,8 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
 
     List<Products> findAll();
 
-    Page<Products> findByStoreId(Stores storeId, Pageable pageable);
+    List<Products> findByStoreId(Stores storeId);
+
 
     @Query("SELECT new com.ecommerce.g58.dto.ProductDetailDTO(p.productId, p.productName, p.price, p.categoryId.categoryId, p.storeId.storeId, v.size.sizeName, v.color.colorName, v.stock, v.imageId.imageId) " +
             "FROM Products p LEFT JOIN ProductVariation v ON p.productId = v.productId.productId " +

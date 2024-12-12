@@ -43,7 +43,7 @@ public interface ProductService {
 
     List<String> getAvailableSizesByProductIdAndColorId(Integer productId, Integer colorId);
 
-    Page<Products> getProductsByStoreId( Pageable pageable);
+    List<Products> getProductsByStoreId();
 
     void saveProduct(Products product);
 
