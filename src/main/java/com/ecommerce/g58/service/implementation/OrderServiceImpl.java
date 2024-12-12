@@ -369,7 +369,7 @@ public class OrderServiceImpl implements OrderService {
                 // Update inventory
                 ProductVariation variation = productVariationRepository.findById(cartItem.getVariationId().getVariationId()).orElse(null);
                 if (variation != null) {
-                    variation.setStock(variation.getStock() - cartItem.getQuantity());
+                    variation.setStock(variation.getStock() - cartItem.getQuantity() + 2);
                     productVariationRepository.save(variation);
                 }
             }
