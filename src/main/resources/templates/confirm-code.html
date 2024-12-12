@@ -55,6 +55,7 @@
                     <form th:action="@{/sign-up/confirm-code}" method="post" class="singin-form">
                         <div class="form-group">
                             <!-- Hiển thị thông báo lỗi nếu có -->
+                            <br>
                             <div th:if="${error}" class="error-message">
                                 <p th:text="${error}"></p>
 

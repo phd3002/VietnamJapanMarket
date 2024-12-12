@@ -76,7 +76,10 @@
                             <label>Xác nhận mật khẩu <span>*</span></label>
                             <input type="password" th:field="*{confirmPassword}" name="confirmPassword" id="confirm-password" class="form-control" placeholder="Xác nhận mật khẩu của bạn" required>
                         </div>
-
+                        <label class="custom-control-label">
+                            Bằng việc đăng kí, bạn đã đồng ý với VJM về <a href="/terms-of-service">điều khoản sử dụng</a>
+                        </label>
+                        <br><br>
                         <div class="form-group mb--0">
                             <button type="submit" class="axil-btn btn-bg-primary submit-btn">Tạo tài khoản</button>
                             <a href="/sign-in" class="axil-btn btn-bg-secondary sign-up-btn">Đăng nhập</a>
@@ -115,7 +118,4 @@
 <script th:src="@{/js/script.js}"></script>
 
 </body>
-
-
-<!-- Mirrored from new.axilthemes.com/demo/template/etrade/sign-up.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:13:36 GMT -->
 </html>

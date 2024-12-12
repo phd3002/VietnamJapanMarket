@@ -21,12 +21,16 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
 
     Products findTopByOrderByProductIdDesc();
 
-    @Query(value = "SELECT * FROM Products ORDER BY RAND() LIMIT 12", nativeQuery = true)
+    @Query(value = "SELECT * FROM products ORDER BY RAND() LIMIT 12", nativeQuery = true)
     List<Products> find12RandomProducts();
+
+    @Query(value = "SELECT * FROM products ORDER BY RAND()", nativeQuery = true)
+    Page<Products> findAllByOrderByRandom(Pageable pageable);
 
     List<Products> findAll();
 
-    Page<Products> findByStoreId(Stores storeId, Pageable pageable);
+    List<Products> findByStoreId(Stores storeId);
+
 
     @Query("SELECT new com.ecommerce.g58.dto.ProductDetailDTO(p.productId, p.productName, p.price, p.categoryId.categoryId, p.storeId.storeId, v.size.sizeName, v.color.colorName, v.stock, v.imageId.imageId) " +
             "FROM Products p LEFT JOIN ProductVariation v ON p.productId = v.productId.productId " +
@@ -107,11 +111,11 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
     List<Object[]> findProductDetailsNative();
 
     @Query(value = "SELECT DISTINCT p.* " +
-            "FROM Products p " +
+            "FROM products p " +
             "JOIN product_variation pv ON p.product_id = pv.product_id " +
             "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) AND pv.stock > 0",
             countQuery = "SELECT COUNT(DISTINCT p.product_id) " +
-                    "FROM Products p " +
+                    "FROM products p " +
                     "JOIN product_variation pv ON p.product_id = pv.product_id " +
                     "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) AND pv.stock > 0",
             nativeQuery = true)

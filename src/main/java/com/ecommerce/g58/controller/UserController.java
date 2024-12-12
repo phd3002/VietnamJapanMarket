@@ -80,7 +80,7 @@ public class UserController {
             }
 
             if (userService.isUsernameExist(users.getUsername())) {
-                model.addAttribute("errorMessage", "Tên đăng nhập đã được sử dụng.");
+                model.addAttribute("errorMessage", "Tên người dùng đã được sử dụng.");
                 return "sign-up";
             }
 

@@ -78,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
         // Mapping logic remains the same
         return ordersPage.map(order -> {
             OrdersDTO dto = new OrdersDTO();
+            dto.setOrderId(order.getOrderId());
             dto.setOrderCode(order.getOrderCode());
             dto.setOrderDate(order.getOrderDate());
             dto.setStatus(order.getShippingStatus()
@@ -252,7 +253,7 @@ public class OrderServiceImpl implements OrderService {
 
                     Transactions logisticTransactions2 = new Transactions();
                     logisticTransactions2.setCreatedAt(LocalDateTime.now());
-                    logisticTransactions2.setFromWalletId(sellWallet.get());
+                    logisticTransactions2.setFromWalletId(logisticWallet.get());
                     logisticTransactions2.setAmount(invoice.getRemainingBalance().abs().longValue());
                     logisticTransactions2.setTransactionType("Trả tiền hàng");
                     logisticTransactions2.setDescription("Trả " + invoice.getRemainingBalance() + " cho seller của đơn hàng  " + order.getOrderCode());

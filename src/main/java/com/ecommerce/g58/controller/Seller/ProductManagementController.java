@@ -87,10 +87,10 @@ public class ProductManagementController {
         Users owner = userRepository.findByEmail(authentication.getName());
         Optional<Stores> storeOwner = storeRepository.findByOwnerId(owner);
         Pageable pageable = PageRequest.of(page, 4);
-        Page<Products> productsPage = productService.getProductsByStoreId(pageable);
-        model.addAttribute("products", productsPage.getContent());
+        List<Products> productsPage = productService.getProductsByStoreId();
+        model.addAttribute("products", productsPage);
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", productsPage.getTotalPages());
+        model.addAttribute("totalPages", productsPage);
         model.addAttribute("storeId", storeOwner.get().getStoreId());
         return "seller/product-manager";
     }
@@ -340,7 +340,7 @@ public class ProductManagementController {
         productService.addProductVariation(productVariation);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm biến thể sản phẩm thành công!");
         System.out.println("Product variation added successfully");
-        return "redirect:/seller-products/" + product.get().getStoreId().getStoreId();
+        return "redirect:/seller-products";
     }
 
     @PostMapping("/update-stock")
