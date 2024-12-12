@@ -408,20 +408,20 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .orElseThrow(() -> new IllegalArgumentException("Logistic wallet not found"));
 
         // trừ tiền ship lượt về cho shipper
-        updateWalletBalance(
-                sellerWallet,
-                invoice.getShippingFee().negate(),
-                "Trả tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
-                String.valueOf(TransactionType.SHIPPING_FEE)
-        );
-        // nhận tiền ship lượt về
-        updateWalletBalance(
-                logisticWallet,
-                invoice.getShippingFee(),
-                "Nhận tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
-                String.valueOf(TransactionType.SHIPPING_FEE)
-
-        );
+//        updateWalletBalance(
+//                sellerWallet,
+//                invoice.getShippingFee().negate(),
+//                "Trả tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
+//                String.valueOf(TransactionType.SHIPPING_FEE)
+//        );
+//        // nhận tiền ship lượt về
+//        updateWalletBalance(
+//                logisticWallet,
+//                invoice.getShippingFee(),
+//                "Nhận tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
+//                String.valueOf(TransactionType.SHIPPING_FEE)
+//
+//        );
     }
 
     private void handleDamagedRefund(Orders order, OrderDetails detail, Invoice invoice) {

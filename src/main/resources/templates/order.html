@@ -97,7 +97,7 @@
                                                 <td th:text="${order.orderCode}">#12345</td>
                                                 <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
                                                 <td th:text="${order.status == 'Pending' ? 'Chờ xử lý' : order.status == 'Confirmed' ? 'Xác nhận' : order.status == 'Processing' ? 'Đang đóng gói' : order.status == 'Dispatched' ? 'Đã giao cho vận chuyển' : order.status == 'Shipping' ? 'Đang vận chuyển' : order.status == 'Delivered' ? 'Đã giao' : order.status == 'Completed' ? 'Hoàn tất' : order.status == 'Failed' ? 'Thất bại' : order.status == 'Returned' ? 'Hoàn trả' : order.status == 'Cancelled' ? 'Đã hủy' : order.status}">Pending</td>
-                                                <td th:text="${order.totalQuantity}">3</td>
+                                                <td th:text="${order.totalQuantity} ">3</td>
                                                 <td th:text="${order.getFormattedPrice()}">₫150,000</td>
                                                 <td>
                                                     <a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"

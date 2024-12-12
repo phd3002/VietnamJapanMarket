@@ -110,11 +110,11 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
     List<Object[]> findProductDetailsNative();
 
     @Query(value = "SELECT DISTINCT p.* " +
-            "FROM Products p " +
+            "FROM products p " +
             "JOIN product_variation pv ON p.product_id = pv.product_id " +
             "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) AND pv.stock > 0",
             countQuery = "SELECT COUNT(DISTINCT p.product_id) " +
-                    "FROM Products p " +
+                    "FROM products p " +
                     "JOIN product_variation pv ON p.product_id = pv.product_id " +
                     "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) AND pv.stock > 0",
             nativeQuery = true)
