@@ -152,7 +152,7 @@
                                 <ul class="variation-stock-list">
                                     <li th:each="variation : ${product.productVariations}"
                                         class="d-flex align-items-center">
-                                        <span th:text="${variation.stock}"></span>
+                                        <span th:text="${variation.stock <= 0 ? 0 : variation.stock}"></span>
                                         <!-- Pen Icon Button -->
                                         <button type="button" class="btn btn-link btn-sm edit-stock-btn"
                                                 data-toggle="modal"
