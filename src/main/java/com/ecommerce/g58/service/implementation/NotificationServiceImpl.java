@@ -6,6 +6,8 @@ import com.ecommerce.g58.repository.NotificationRepository;
 import com.ecommerce.g58.service.NotificationService;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,17 +26,17 @@ public class NotificationServiceImpl implements NotificationService {
     UserService userService;
 
     @Override
-    public List<Notification> getNotifications() {
+    public Page<Notification> getNotifications(Pageable pageable) {
         String currentUsername = getCurrentUsername();
         if ("anonymousUser".equals(currentUsername)) {
-            return List.of(); // Return empty list for anonymous users
+            return Page.empty(); // Return empty list for anonymous users
         }
 
         Users currentUser = userService.findByEmail(currentUsername);
         if (currentUser == null) {
-            return List.of();
+            return Page.empty();
         }
-        return notificationRepository.findTop3ByUserIdOrderByCreatedDesc(currentUser.getUserId());
+        return notificationRepository.findTop3ByUserIdOrderByCreatedDesc(currentUser.getUserId(), pageable);
     }
 
     @Override
@@ -43,12 +45,11 @@ public class NotificationServiceImpl implements NotificationService {
         if ("anonymousUser".equals(currentUsername)) {
             return List.of(); // Return empty list for anonymous users
         }
-
         Users currentUser = userService.findByEmail(currentUsername);
         if (currentUser == null) {
             return List.of();
         }
-        return notificationRepository.findTop3ByUserIdOrderByCreatedDesc(currentUser.getUserId());
+        return notificationRepository.findTop3ByUserIdOrderByCreatedDescending(currentUser.getUserId());
     }
 
     @Override

@@ -84,7 +84,7 @@
                                                         <li class="page-item"
                                                             th:classappend="${currentPage == 0} ? 'disabled'">
                                                             <a class="page-link"
-                                                               th:href="@{/orders(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}"
+                                                               th:href="@{/notification(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}"
                                                                th:if="${currentPage > 0}">
                                                                 Trước
                                                             </a>
@@ -95,7 +95,7 @@
                                                             th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
                                                             th:classappend="${pageNum == currentPage} ? 'active'">
                                                             <a class="page-link"
-                                                               th:href="@{/orders(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}"
+                                                               th:href="@{/notification(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}"
                                                                th:text="${pageNum + 1}">
                                                             </a>
                                                         </li>
@@ -126,7 +126,7 @@
                                             <div class="text-center mt-3">
                                                 <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span>
                                                 <br/>
-                                                <span>Tổng đơn: [[${totalItems}]]</span>
+<!--                                                <span>Tổng đơn: [[${totalItems}]]</span>-->
                                             </div>
                                         </div>
                                     </div>
