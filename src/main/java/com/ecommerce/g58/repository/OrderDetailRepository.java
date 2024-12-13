@@ -32,7 +32,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    st.picture_url, \n" +
             "    inv.total_amount, \n" +
             "    inv.shipping_fee, \n" +
-            "    pay.payment_method, \n" +
+            "    o.payment_method, \n" +
             "    pay.payment_status,\n" +
             "    o.shipping_address, \n" +
             "    latest_status.status AS shipping_status,\n" +

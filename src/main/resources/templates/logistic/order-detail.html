@@ -144,8 +144,10 @@
                                             <td class="text-end" th:text="${shippingFee}"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="text-lg-right"><b>Phương thức thanh toán:</b></td>
-                                            <td class="text-end"><b th:text="${paymentMethod == 1 ? 'Thanh toán bằng VNPay' : 'Thanh toán bằng ví điện tử'}"></b></td>                                        </tr>
+                                            <td colspan="4" class="text-lg-right"><b>Phương thức thanh toán: </b></td>
+                                            <td class="text-end">
+                                                <b th:text="${paymentMethod == '1' ? 'Thanh toán bằng VNPay' : (paymentMethod == '0' ? 'Thanh toán bằng ví điện tử' : '')}"></b>
+                                            </td>
                                         <tr>
                                             <td colspan="4" class="text-lg-right"><b>Tổng cộng tiền thanh toán (áp dụng
                                                 mã giảm giá):</b></td>
