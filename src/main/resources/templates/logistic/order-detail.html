@@ -107,7 +107,18 @@
                                 <div class="pull-right col-4">
                                     <address>
                                         <div>Trạng thái hiện tại:
-                                            &nbsp;<b class="text-danger text-uppercase" th:text="${orderStatus}"></b>
+                                            &nbsp;<b id="status-order" class="text-danger text-uppercase"
+                                                     th:text="${orderStatus == 'Pending' ? 'Chờ xử lý' :
+                 (orderStatus == 'Confirmed' ? 'Xác nhận' :
+                 (orderStatus == 'Processing' ? 'Đang đóng gói' :
+                 (orderStatus == 'Dispatched' ? 'Đã giao cho vận chuyển' :
+                 (orderStatus == 'Shipping' ? 'Đang vận chuyển' :
+                 (orderStatus == 'Delivered' ? 'Đã giao' :
+                 (orderStatus == 'Completed' ? 'Hoàn tất' :
+                 (orderStatus == 'Failed' ? 'Thất bại' :
+                 (orderStatus == 'Returned' ? 'Hoàn trả' :
+                 (orderStatus == 'Cancelled' ? 'Đã hủy' : orderStatus)))))))))}">
+                                            </b>
                                         </div>
                                         <div>Ngày cập nhật gần nhất:
                                             <b class="text-secondary" th:text="${updateTime}"></b>

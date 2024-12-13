@@ -33,30 +33,30 @@ public class ProfileService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng với ID = " + userId + "!"));
 
         // Kiểm tra thông tin đầu vào
-        if (firstName == null || firstName.isEmpty() || firstName.length() > 50) {
-            throw new RuntimeException("Họ không được để trống và không được vượt quá 50 ký tự.");
-        }
-        if (lastName == null || lastName.isEmpty() || lastName.length() > 50) {
-            throw new RuntimeException("Tên không được để trống và không được vượt quá 50 ký tự.");
-        }
-        if (email == null || email.isEmpty() || email.length() > 100) {
-            throw new RuntimeException("Email không được để trống và không được vượt quá 100 ký tự.");
-        }
-        if (phoneNumber == null || phoneNumber.isEmpty() || phoneNumber.length() > 10) {
-            throw new RuntimeException("Số điện thoại không được để trống và không được vượt quá 10 ký tự.");
-        }
+//        if (firstName == null || firstName.isEmpty() || firstName.length() > 50) {
+//            throw new RuntimeException("Họ không được để trống và không được vượt quá 50 ký tự.");
+//        }
+//        if (lastName == null || lastName.isEmpty() || lastName.length() > 50) {
+//            throw new RuntimeException("Tên không được để trống và không được vượt quá 50 ký tự.");
+//        }
+//        if (email == null || email.isEmpty() || email.length() > 100) {
+//            throw new RuntimeException("Email không được để trống và không được vượt quá 100 ký tự.");
+//        }
+//        if (phoneNumber == null || phoneNumber.isEmpty() || phoneNumber.length() > 10) {
+//            throw new RuntimeException("Số điện thoại không được để trống và không được vượt quá 10 ký tự.");
+//        }
 
-        if (!password.isEmpty()) {
+
             if (!passwordEncoder.matches(password, user.getPassword())) {
                 throw new RuntimeException("Mật khẩu không đúng.");
             }
 
-            if (newPassword.length() < 4) {
-                throw new RuntimeException("Mật khẩu mới phải có ít nhất 4 ký tự.");
+            if (newPassword.length() < 6) {
+                throw new RuntimeException("Mật khẩu mới phải có ít nhất 6 ký tự.");
             }
 
             user.setPassword(passwordEncoder.encode(newPassword));
-        }
+
 
         user.setEmail(email);
         user.setFirstName(firstName);

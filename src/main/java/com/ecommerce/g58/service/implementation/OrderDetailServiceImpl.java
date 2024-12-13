@@ -385,7 +385,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         notification.setTitle("Hoàn tiền: " + invoice.getDeposit());
         notification.setContent("Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận");
 
-        notification.setUrl("http://localhost:8080/wallet");
+        notification.setUrl("/wallet");
         notification.setUserId(order.getUserId());
 
         notificationService.updateNotification(notification);
@@ -399,7 +399,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         Notification sellerNotification1 = new Notification();
         sellerNotification1.setTitle("Hoàn tiền: " + invoice.getDeposit());
         sellerNotification1.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
-        sellerNotification1.setUrl("http://localhost:8080/wallet");
+        sellerNotification1.setUrl("/wallet");
         sellerNotification1.setUserId(sellerWallet.getUserId());
 
         notificationService.updateNotification(sellerNotification1);
@@ -445,7 +445,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         Notification notification = new Notification();
         notification.setTitle("Hoàn tiền: " + invoice.getDeposit());
         notification.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
-        notification.setUrl("http://localhost:8080/wallet");
+        notification.setUrl("/wallet");
         notification.setUserId(sellerWallet.getUserId());
 
         notificationService.updateNotification(notification);
@@ -462,7 +462,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         Notification userNotification = new Notification();
         userNotification.setTitle("Hoàn tiền: " + invoice.getDeposit());
         userNotification.setContent("Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận");
-        userNotification.setUrl("http://localhost:8080/wallet");
+        userNotification.setUrl("/wallet");
         userNotification.setUserId(order.getUserId());
 
         notificationService.updateNotification(userNotification);
@@ -485,7 +485,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         Notification sellerNotification1 = new Notification();
         sellerNotification1.setTitle("Hoàn tiền: " + invoice.getDeposit());
         sellerNotification1.setContent("Nhận tiền bồi thường cho đơn hàng " + order.getOrderCode() + " do ship làm hỏng");
-        sellerNotification1.setUrl("http://localhost:8080/wallet");
+        sellerNotification1.setUrl("/wallet");
         sellerNotification1.setUserId(order.getUserId());
 
         notificationService.updateNotification(sellerNotification1);

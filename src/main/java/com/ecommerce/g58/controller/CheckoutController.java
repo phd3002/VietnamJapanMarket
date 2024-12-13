@@ -321,12 +321,16 @@ public class CheckoutController {
 
             // Kiểm tra nếu số dư ví không đủ
             if (walletBalance < totalWithShipping) {
+                long taxAmount = (long) (totalPrice * tax); // Tax applied to the base total
                 model.addAttribute("errorMessage", "Bạn không đủ số dư để thực hiện giao dịch.");
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
                 model.addAttribute("totalPrice", totalPrice);
                 model.addAttribute("shippingFee", shippingFee);
+                model.addAttribute("shippingUnits", shippingUnits);
+                model.addAttribute("tax", taxAmount);
+                cartService.restoreItemQuantitiesToStock(userId);
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
 

@@ -114,31 +114,44 @@ document.getElementById('saveChangesBtn').addEventListener('click', function (ev
     const confirmPassword = document.querySelector('input[name="confirmPassword"]').value
 
     if (!firstName) {
-        alert('First Name must be at least 3 characters.')
+        alert('Họ không được để trống và không được vượt quá 50 ký tự.')
         return;
     }
 
     if (!lastName) {
-        alert('Last Name must be at least 3 characters.')
+        alert('Tên không được để trống và không được vượt quá 50 ký tự.')
         return;
     }
 
-    if (!phoneNumber) {
-        alert('Invalid phone number.')
+    if (!phoneNumber || phoneNumber.length > 10 || phoneNumber.length < 10) {
+        alert('Số điện thoại không được để trống và phải là 10 số.');
+        return;
+    }
+
+
+
+    if (!password) {
+        alert('Mật khẩu cũ không đúng.')
         return;
     }
 
     if (newPassword && confirmPassword && !password) {
-        alert('Please enter your old password.')
+        alert('Mật khẩu cũ không đúng.')
         return;
     }
 
     if (newPassword !== confirmPassword) {
-        alert('Confirm password not match!')
+        alert('Mật khẩu và mật khẩu xác nhận không khớp.')
         return
     }
 
-    fetch('http://localhost:8080/my-account/post?' + new URLSearchParams({
+    if (newPassword !== confirmPassword !== password) {
+        alert('Mật khẩu cũ không đúng.')
+        return
+    }
+
+
+    fetch('/my-account/post?' + new URLSearchParams({
             firstName,
             lastName,
             email,
@@ -149,8 +162,8 @@ document.getElementById('saveChangesBtn').addEventListener('click', function (ev
     ).then(res => {
         if (res.status === 200) {
             Swal.fire({
-                title: "Success!",
-                text: "Profile updated.",
+                title: "Thành Công!",
+                text: "Cập nhật thành công.",
                 icon: "success"
             }).then(() =>{
                 location.reload();
@@ -162,6 +175,7 @@ document.getElementById('saveChangesBtn').addEventListener('click', function (ev
                 })
         }
     })
+
 });
 
 document.getElementById('confirmYesBtn').addEventListener('click', function () {

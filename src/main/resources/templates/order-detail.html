@@ -103,16 +103,15 @@
                                     <h4 style="text-align: center">Trạng thái:
                                         <span id="status-order"
                                               th:text="${shippingStatus == 'Pending' ? 'Chờ xử lý' :
-                    shippingStatus == 'Confirmed' ? 'Xác nhận' :
-                    shippingStatus == 'Processing' ? 'Đang đóng gói' :
-                    shippingStatus == 'Dispatched' ? 'Đã giao cho vận chuyển' :
-                    shippingStatus == 'Shipping' ? 'Đang vận chuyển' :
-                    shippingStatus == 'Delivered' ? 'Đã giao' :
-                    shippingStatus == 'Completed' ? 'Hoàn tất' :
-                    shippingStatus == 'Failed' ? 'Thất bại' :
-                    shippingStatus == 'Returned' ? 'Hoàn trả' :
-                    shippingStatus == 'Cancelled' ? 'Đã hủy' :
-                    shippingStatus}">
+                    (shippingStatus == 'Confirmed' ? 'Xác nhận' :
+                    (shippingStatus == 'Processing' ? 'Đang đóng gói' :
+                    (shippingStatus == 'Dispatched' ? 'Đã giao cho vận chuyển' :
+                    (shippingStatus == 'Shipping' ? 'Đang vận chuyển' :
+                    (shippingStatus == 'Delivered' ? 'Đã giao' :
+                    (shippingStatus == 'Completed' ? 'Hoàn tất' :
+                    (shippingStatus == 'Failed' ? 'Thất bại' :
+                    (shippingStatus == 'Returned' ? 'Hoàn trả' :
+                    (shippingStatus == 'Cancelled' ? 'Đã hủy' : shippingStatus)))))))))}">
     </span>
                                     </h4>
                                     <div class="order-progress"
@@ -454,18 +453,18 @@
 
         const orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id")
 
-        fetch(`http://localhost:8080/order-detail/${orderId}/rating?rateText=${feedbackText}&rateStar=${rating}`, {
+        fetch(`/order-detail/${orderId}/rating?rateText=${feedbackText}&rateStar=${rating}`, {
             method: "GET",
         }).then(async (res) => {
             if (res.status === 200) {
-                const res = await fetch(`http://localhost:8080/update-order-status/${orderId}?` + new URLSearchParams({
+                const res = await fetch(`/update-order-status/${orderId}?` + new URLSearchParams({
                     status: 'Completed',
                 }).toString())
 
                 if (res.status === 200) {
                     Swal.fire({
-                        title: "Success!",
-                        text: "Rate order successfully.",
+                        title: "Thành công!",
+                        text: "Đánh giá đơn hàng thành công.",
                         icon: "success",
                         showConfirmButton: false,
                         showCancelButton: false,
@@ -528,7 +527,7 @@
     async function switchToDeliver() {
         const orderId = document.querySelector(".main-wrapper[order-id]").getAttribute("order-id")
 
-        const res = await fetch(`http://localhost:8080/update-order-status/${orderId}?` + new URLSearchParams({
+        const res = await fetch(`/update-order-status/${orderId}?` + new URLSearchParams({
             status: 'Delivered',
         }).toString())
 
@@ -566,7 +565,7 @@
             cancelButtonColor: "#d33",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8080/update-order-status/${orderId}?` + new URLSearchParams({
+                const res = await fetch(`/update-order-status/${orderId}?` + new URLSearchParams({
                     status: 'Canceled',
                 }).toString())
                 if (res.ok) {
