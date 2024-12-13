@@ -58,6 +58,7 @@ aws:
   accessKey: AKIAU6VTTYKZOJMREN7U
   secretKey: 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
 server:
+  address: 0.0.0.0
   servlet:
     session:
       cookie:
