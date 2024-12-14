@@ -12,13 +12,12 @@
     <!-- or -->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 
-    <!-- Font-icon css-->
+    <!-- Font-icon seller-->
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -79,8 +78,8 @@
                             <th>Tính năng</th>
                         </tr>
                         </thead>
-                        <tbody th:each="user : ${users}">
-                        <tr>
+                        <tbody>
+                        <tr th:each="user : ${users}">
                             <td th:text="'ID-' + ${user.userId}"></td>
                             <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
                             <td th:text="${user.email}"></td>
@@ -130,7 +129,6 @@
 <script th:src="@{/admin/js/plugins/jquery.dataTables.min.js}" type="text/javascript"></script>
 <script th:src="@{/admin/js/plugins/dataTables.bootstrap.min.js}" type="text/javascript"></script>
 <script type="text/javascript">$('#sampleTable').DataTable();</script>
-
 <script>
     //Thời Gian
     function time() {
@@ -183,7 +181,8 @@
             win.print();
         }
     }
-
+</script>
+<script>
     //Modal
     $("#show-emp").on("click", function () {
         $("#ModalUP").modal({backdrop: false, keyboard: false})
