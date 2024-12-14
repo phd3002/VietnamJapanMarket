@@ -1,6 +1,12 @@
 # Sử dụng image Java base
 FROM eclipse-temurin:17-jdk-alpine
 
+# Cài đặt múi giờ bằng cách thêm tzdata
+ENV TZ=Asia/Ho_Chi_Minh
+RUN apk --no-cache add tzdata \
+    && ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+
 # Đặt thư mục làm việc trong container
 WORKDIR /app
 
