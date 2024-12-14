@@ -10,6 +10,7 @@ import com.ecommerce.g58.repository.StoreRepository;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,6 +29,7 @@ public class StoreServiceImp implements StoreService {
 
     @Autowired
     private RoleRepository roleRepository;
+
 
     @Override
     @Transactional

@@ -116,8 +116,8 @@ public class SellerController {
 
         // Update user role to Seller
         storeService.updateUserRoleToSeller(store.getOwnerId());
-
-        return "redirect:/seller/dashboard";
+        redirectAttributes.addFlashAttribute("successMessage", "Vui lòng đăng nhập lại để truy cập vào cửa hàng của bạn");
+        return "redirect:/logout";
     }
 
     @GetMapping("/seller/dashboard")
