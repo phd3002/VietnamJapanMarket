@@ -53,10 +53,10 @@ spring:
             enable: true
 aws:
   bucket:
-    name: vietnamjapanmarket
-  region: ap-southeast-2
-  accessKey: AKIAU6VTTYKZOJMREN7U
-  secretKey: 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
+    name: vietnamjapanmarketbucket
+  region: ap-southeast-1
+  accessKey: AKIAU6VTTYKZLHQZFO5J
+  secretKey: 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
 server:
   address: 0.0.0.0
   servlet:
