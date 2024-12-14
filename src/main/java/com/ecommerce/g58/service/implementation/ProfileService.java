@@ -47,13 +47,13 @@ public class ProfileService {
 //        }
 
 
-            if (!passwordEncoder.matches(password, user.getPassword())) {
-                throw new RuntimeException("Mật khẩu không đúng.");
-            }
-
-            if (newPassword.length() < 6) {
-                throw new RuntimeException("Mật khẩu mới phải có ít nhất 6 ký tự.");
-            }
+//            if (!passwordEncoder.matches(password, user.getPassword())) {
+//                throw new RuntimeException("Mật khẩu không đúng.");
+//            }
+//
+//            if (newPassword.length() < 6) {
+//                throw new RuntimeException("Mật khẩu mới phải có ít nhất 6 ký tự.");
+//            }
 
             user.setPassword(passwordEncoder.encode(newPassword));
 

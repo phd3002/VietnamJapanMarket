@@ -135,9 +135,13 @@ document.getElementById('saveChangesBtn').addEventListener('click', function (ev
         return;
     }
 
-    if (newPassword && confirmPassword && !password) {
-        alert('Mật khẩu cũ không đúng.')
-        return;
+    // if (newPassword && confirmPassword && !password) {
+    //     alert('Mật khẩu cũ không đúng.')
+    //     return;
+    // }
+    if(newPassword.length < 6){
+        alert('Mật khẩu mới phải có ít nhất 6 ký tự.')
+        return
     }
 
     if (newPassword !== confirmPassword) {
@@ -145,10 +149,10 @@ document.getElementById('saveChangesBtn').addEventListener('click', function (ev
         return
     }
 
-    if (newPassword !== confirmPassword !== password) {
-        alert('Mật khẩu cũ không đúng.')
-        return
-    }
+    // if (newPassword !== confirmPassword !== password) {
+    //     alert('Mật khẩu cũ không đúng.')
+    //     return
+    // }
 
 
     fetch('/my-account/post?' + new URLSearchParams({
