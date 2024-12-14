@@ -137,7 +137,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 // **Seller URLs**
                 .antMatchers("/seller/**", "/store-info", "/store-save", "/seller-products/**", "/edit-product/**",
                         "/update-product/**", "/addProductForm2/**", "/addProductFull", "/delete-product/**",
-                        "addProductVariationForm/**", "/addProductVariation", "/update-stock", "/sign-up-seller/**").hasRole("Seller")
+                        "addProductVariationForm/**", "/addProductVariation", "/update-stock").hasRole("Seller")
                 // **Admin URLs - Must be after public URLs**
                 .antMatchers("/admin/user-manager/**", "/admin/**", "/list-shipping-unit", "/add-shipping-unit",
                         "/delete-shipping-unit/**", "/update-user").hasRole("Admin")
