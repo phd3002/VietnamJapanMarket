@@ -165,7 +165,7 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "    JOIN orders o ON od.order_id = o.order_id\n" +
             "    JOIN shipping_status ss ON o.order_id = ss.order_id\n" +
             "    WHERE s.user_id = :userId\n" +
-            "    AND ss.status = 'returned' AND ss.status = 'cancelled'\n" +
+            "    AND (ss.status = 'returned' OR ss.status = 'cancelled')\n" +
             "    AND (\n" +
             "        (:startDate IS NULL AND :endDate IS NULL\n" +
             "         AND o.order_date >= DATE_FORMAT(CURRENT_DATE, '%Y-%m-01')\n" +
