@@ -131,8 +131,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                         "/submitOrder/**",
                         "/now/**",
                         "/vnpay-payment/**",
-                        "/products/**", "/terms-of-service","/add_to_wishlist/**",
-                        "/sign-up-seller/**"
+                        "/products/**", "/terms-of-service","/add_to_wishlist/**"
                 ).permitAll()
                 // **Seller URLs**
                 .antMatchers("/seller/**", "/store-info", "/store-save", "/seller-products/**", "/edit-product/**",
