@@ -18,6 +18,7 @@ public class ProductDetailDTO {
     private Float weight;
     private Integer categoryId;
     private Integer storeId;
+    private String storeMail;
 
     // ProductVariation table fields
     private Integer variationId;
@@ -37,7 +38,7 @@ public class ProductDetailDTO {
     public ProductDetailDTO() {}
 
     public ProductDetailDTO(Integer productId, String productName, String productDescription, Integer price, Float weight,
-                            Integer variationId, String sizeName, String colorName, Integer stock, String thumbnail, Integer storeId) {
+                            Integer variationId, String sizeName, String colorName, Integer stock, String thumbnail, Integer storeId, String storeMail) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
@@ -49,6 +50,7 @@ public class ProductDetailDTO {
         this.stock = stock;
         this.thumbnail = thumbnail;
         this.storeId = storeId;
+        this.storeMail = storeMail;
     }
 
 

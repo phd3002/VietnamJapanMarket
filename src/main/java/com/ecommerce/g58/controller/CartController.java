@@ -62,8 +62,8 @@ public class CartController {
             redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
             return "redirect:/sign-in";
         }
-        System.out.println(productId);
-        System.out.println(variationId);
+//        System.out.println(productId);
+//        System.out.println(variationId);
         // Fetch user data
         String email = authentication.getName();
         Users user = userService.findByEmail(email);
@@ -74,6 +74,14 @@ public class CartController {
             // Fetch product variation details (using the variationId)
             ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndVariationId(productId, variationId);
 //            System.out.println("Product detail Store: " + productDetail);
+
+            if (email.equals(productDetail.getStoreMail())) {
+//                System.out.println(email);
+//                System.out.println(productDetail.getStoreMail());
+                redirectAttributes.addFlashAttribute("error", "Bạn không thể thêm sản phẩm của bạn vào giỏ hàng");
+                String referer = request.getHeader("Referer");
+                return "redirect:" + referer;  // Redirects to the same page
+            }
 
             if (productDetail != null) {
                 List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
@@ -91,6 +99,8 @@ public class CartController {
                         String referer = request.getHeader("Referer");
                         return "redirect:" + referer;  // Redirects to the same page
                     }
+
+
                 }
 
                 // Add the product to the cart
