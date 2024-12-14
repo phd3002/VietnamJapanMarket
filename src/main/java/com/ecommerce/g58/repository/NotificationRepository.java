@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findAllByUserId_UserIdOrderByCreatedDesc(int id);
     @Query(value = "SELECT * FROM notification n WHERE n.user_id = :userId ORDER BY n.created DESC", nativeQuery = true)
-    Page<Notification> findTop3ByUserIdOrderByCreatedDesc(@Param("userId") int userId, Pageable pageable);
+    List<Notification> findTop3ByUserIdOrderByCreatedDesc(@Param("userId") int userId);
 
     @Query(value = "SELECT * FROM notification n WHERE n.user_id = :userId ORDER BY n.created DESC LIMIT 3", nativeQuery = true)
     List<Notification> findTop3ByUserIdOrderByCreatedDescending(@Param("userId") int userId);

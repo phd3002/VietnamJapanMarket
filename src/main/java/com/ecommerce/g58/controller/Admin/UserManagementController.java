@@ -30,14 +30,13 @@ public class UserManagementController {
     }
 
     @GetMapping("/admin/user-manager")
-    public String getAllUsers(@RequestParam(defaultValue = "0") int page, Model model) {
-        Pageable pageable = PageRequest.of(page, 6);
-        Page<Users> usersPage = userService.getAllUsers(pageable);
+    public String getAllUsers(Model model) {
+
+        List<Users> usersPage = userService.getAllUsers();
         List<Roles> roles = roleService.getAllRoles();
-        model.addAttribute("users", usersPage.getContent());
+        model.addAttribute("users", usersPage);
         model.addAttribute("roles", roles);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", usersPage.getTotalPages());
+//        model.addAttribute("totalPages", usersPage.getTotalPages());
         return "admin/user-manager";
     }
 

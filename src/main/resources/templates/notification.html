@@ -67,68 +67,68 @@
                                             </tbody>
                                         </table>
                                         <!-- Phân trang -->
-                                        <div class="pagination-section" th:if="${totalPages > 0}">
-                                            <div class="d-flex justify-content-center">
-                                                <nav>
-                                                    <ul class="pagination">
-                                                        <!-- First -->
-                                                        <li class="page-item"
-                                                            th:classappend="${currentPage == 0} ? 'disabled'">
-                                                            <a class="page-link"
-                                                               th:href="@{/orders(page=0, size=10, status=${status != null && status != '' ? status : ''})}">
-                                                                Đầu
-                                                            </a>
-                                                        </li>
+<!--                                        <div class="pagination-section" th:if="${totalPages > 0}">-->
+<!--                                            <div class="d-flex justify-content-center">-->
+<!--                                                <nav>-->
+<!--                                                    <ul class="pagination">-->
+<!--                                                        &lt;!&ndash; First &ndash;&gt;-->
+<!--                                                        <li class="page-item"-->
+<!--                                                            th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                                                            <a class="page-link"-->
+<!--                                                               th:href="@{/orders(page=0, size=10, status=${status != null && status != '' ? status : ''})}">-->
+<!--                                                                Đầu-->
+<!--                                                            </a>-->
+<!--                                                        </li>-->
 
-                                                        <!-- Previous -->
-                                                        <li class="page-item"
-                                                            th:classappend="${currentPage == 0} ? 'disabled'">
-                                                            <a class="page-link"
-                                                               th:href="@{/notification(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}"
-                                                               th:if="${currentPage > 0}">
-                                                                Trước
-                                                            </a>
-                                                        </li>
+<!--                                                        &lt;!&ndash; Previous &ndash;&gt;-->
+<!--                                                        <li class="page-item"-->
+<!--                                                            th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                                                            <a class="page-link"-->
+<!--                                                               th:href="@{/notification(page=${currentPage - 1}, size=10, status=${status != null && status != '' ? status : ''})}"-->
+<!--                                                               th:if="${currentPage > 0}">-->
+<!--                                                                Trước-->
+<!--                                                            </a>-->
+<!--                                                        </li>-->
 
-                                                        <!-- Page Numbers -->
-                                                        <li class="page-item"
-                                                            th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
-                                                            th:classappend="${pageNum == currentPage} ? 'active'">
-                                                            <a class="page-link"
-                                                               th:href="@{/notification(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}"
-                                                               th:text="${pageNum + 1}">
-                                                            </a>
-                                                        </li>
+<!--                                                        &lt;!&ndash; Page Numbers &ndash;&gt;-->
+<!--                                                        <li class="page-item"-->
+<!--                                                            th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"-->
+<!--                                                            th:classappend="${pageNum == currentPage} ? 'active'">-->
+<!--                                                            <a class="page-link"-->
+<!--                                                               th:href="@{/notification(page=${pageNum}, size=10, status=${status != null && status != '' ? status : ''})}"-->
+<!--                                                               th:text="${pageNum + 1}">-->
+<!--                                                            </a>-->
+<!--                                                        </li>-->
 
-                                                        <!-- Next -->
-                                                        <li class="page-item"
-                                                            th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                                            <a class="page-link"
-                                                               th:href="@{/orders(page=${currentPage + 1}, size=10, status=${status != null && status != '' ? status : ''})}"
-                                                               th:if="${currentPage < totalPages - 1}">
-                                                                Sau
-                                                            </a>
-                                                        </li>
+<!--                                                        &lt;!&ndash; Next &ndash;&gt;-->
+<!--                                                        <li class="page-item"-->
+<!--                                                            th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                                                            <a class="page-link"-->
+<!--                                                               th:href="@{/orders(page=${currentPage + 1}, size=10, status=${status != null && status != '' ? status : ''})}"-->
+<!--                                                               th:if="${currentPage < totalPages - 1}">-->
+<!--                                                                Sau-->
+<!--                                                            </a>-->
+<!--                                                        </li>-->
 
-                                                        <!-- Last -->
-                                                        <li class="page-item"
-                                                            th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                                            <a class="page-link"
-                                                               th:href="@{/orders(page=${totalPages - 1}, size=10, status=${status != null && status != '' ? status : ''})}">
-                                                                Cuối
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </nav>
-                                            </div>
+<!--                                                        &lt;!&ndash; Last &ndash;&gt;-->
+<!--                                                        <li class="page-item"-->
+<!--                                                            th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                                                            <a class="page-link"-->
+<!--                                                               th:href="@{/orders(page=${totalPages - 1}, size=10, status=${status != null && status != '' ? status : ''})}">-->
+<!--                                                                Cuối-->
+<!--                                                            </a>-->
+<!--                                                        </li>-->
+<!--                                                    </ul>-->
+<!--                                                </nav>-->
+<!--                                            </div>-->
 
-                                            <!-- Pagination Info -->
-                                            <div class="text-center mt-3">
-                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span>
-                                                <br/>
-<!--                                                <span>Tổng đơn: [[${totalItems}]]</span>-->
-                                            </div>
-                                        </div>
+<!--                                            &lt;!&ndash; Pagination Info &ndash;&gt;-->
+<!--                                            <div class="text-center mt-3">-->
+<!--                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span>-->
+<!--                                                <br/>-->
+<!--&lt;!&ndash;                                                <span>Tổng đơn: [[${totalItems}]]</span>&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                        </div>-->
                                     </div>
                                     <!-- Message when no orders -->
                                     <div th:if="${message}" class="text-center">

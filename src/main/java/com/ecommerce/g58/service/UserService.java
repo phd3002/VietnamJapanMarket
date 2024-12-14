@@ -40,7 +40,7 @@ public interface UserService extends UserDetailsService {
     //change pass
     void updatePassword(Users user, String newPassword);
 
-    Page<Users> getAllUsers(Pageable pageable);;
+    List<Users> getAllUsers();;
 
     List<Users> getAllSellers();
 

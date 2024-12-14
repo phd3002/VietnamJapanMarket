@@ -26,17 +26,17 @@ public class NotificationServiceImpl implements NotificationService {
     UserService userService;
 
     @Override
-    public Page<Notification> getNotifications(Pageable pageable) {
+    public List<Notification> getNotifications() {
         String currentUsername = getCurrentUsername();
         if ("anonymousUser".equals(currentUsername)) {
-            return Page.empty(); // Return empty list for anonymous users
+            return List.of(); // Return empty list for anonymous users
         }
 
         Users currentUser = userService.findByEmail(currentUsername);
         if (currentUser == null) {
-            return Page.empty();
+            return List.of();
         }
-        return notificationRepository.findTop3ByUserIdOrderByCreatedDesc(currentUser.getUserId(), pageable);
+        return notificationRepository.findTop3ByUserIdOrderByCreatedDesc(currentUser.getUserId());
     }
 
     @Override

@@ -180,8 +180,8 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public Page<Users> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public List<Users> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override

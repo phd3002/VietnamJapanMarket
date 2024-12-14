@@ -35,10 +35,10 @@ public class NotificationController {
         }
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Notification> notifications = notificationService.getNotifications(pageable); // Fetch all notifications
-        model.addAttribute("notifications", notifications.getContent());
+        List<Notification> notifications = notificationService.getNotifications(); // Fetch all notifications
+        model.addAttribute("notifications", notifications);
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", notifications.getTotalPages());
+//        model.addAttribute("totalPages", notifications.getTotalPages());
         return "notification"; // Corresponds to notification.html
     }
 
