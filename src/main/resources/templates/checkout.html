@@ -115,8 +115,9 @@
         <div class="container">
             <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
             </div>
-            <div id="insufficient-balance-alert" th:if="${errorMessage}" class="alert alert-danger">
-                <p th:text="${errorMessage}"></p>
+            <div id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}" class="alert alert-danger">
+                <p th:text="${errorMessage1 != null ? errorMessage1 : errorMessage}"></p>
+                <a th:if="${errorMessage1 != null}" href="/wallet"><u>Nạp ngay</u></a>
             </div>
             <form action="/checkout" method="post">
                 <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">
