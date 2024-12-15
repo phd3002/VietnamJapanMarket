@@ -116,8 +116,8 @@
             <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
             </div>
             <div id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}" class="alert alert-danger">
-                <p th:text="${errorMessage1 != null ? errorMessage1 : errorMessage}"></p>
-                <a th:if="${errorMessage1 != null}" href="/wallet"><u>Nạp ngay</u></a>
+                <p th:text="${errorMessage}"></p>
+                <p th:if="${errorMessage1!=null}">Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào ví hoặc chọn phương thức thanh toán khác. <a th:if="${errorMessage1 != null}" href="/wallet"><u>Nạp ngay</u></a></p>
             </div>
             <form action="/checkout" method="post">
                 <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">

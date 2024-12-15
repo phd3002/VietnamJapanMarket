@@ -93,7 +93,7 @@ public class WalletController {
 
         // Add a message if no transactions are found
         if (walletPage.isEmpty()) {
-            model.addAttribute("message", "Không có giao dịch nào phù hợp với bộ lọc của bạn.");
+            model.addAttribute("message", "Không có giao dịch.");
         }
 
         return "wallet"; // Thymeleaf template name
