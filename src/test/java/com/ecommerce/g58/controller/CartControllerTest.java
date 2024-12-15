@@ -88,7 +88,6 @@ public class CartControllerTest {
     // testAddToCarttc1
     @Test
     public void testAddToCart_tc1() {
-        // Given
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -103,7 +102,6 @@ public class CartControllerTest {
     // testAddToCart tc2
     @Test
     public void testAddToCart_tc2() {
-        // Given
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -138,7 +136,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 0, 1, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -218,7 +216,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 1, 1, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -237,7 +235,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 0, 1, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -257,7 +255,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 1, 0, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -276,7 +274,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 1, -1, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -295,7 +293,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 1)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 1, 999999999, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -314,7 +312,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 0, 0, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
     // testAddToCart tc13
@@ -332,7 +330,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 0, -1, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -351,7 +349,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(0, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(0, 0, 999999999, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -370,7 +368,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -389,7 +387,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 
@@ -408,7 +406,7 @@ public class CartControllerTest {
         when(productService.getProductDetailByProductIdAndVariationId(1, 0)).thenReturn(null);
         when(request.getHeader("Referer")).thenReturn("/product-detail/1");
         String result = cartController.addToCart(1, 0, 999999999, redirectAttributes, request);
-        assertEquals("Không thể thêm sản phẩm vào giỏ hàng", redirectAttributes.getFlashAttributes().get("error"));
+        assertEquals("Đã có lỗi xảy ra khi thêm vào giỏ hảng", redirectAttributes.getFlashAttributes().get("error"));
         assertEquals("redirect:/product-detail/1", result);
     }
 

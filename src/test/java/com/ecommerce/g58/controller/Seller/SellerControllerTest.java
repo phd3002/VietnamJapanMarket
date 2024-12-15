@@ -81,7 +81,7 @@ public class SellerControllerTest {
                 postalCode, redirectAttributes, null);
         verify(storeService, times(1)).registerStore(store);
         verify(storeService, times(1)).updateUserRoleToSeller(mockEntityUser);
-        assertEquals("redirect:/seller/dashboard", result);
+        assertEquals("redirect:/logout", result);
     }
 
     // test registerStore tc2

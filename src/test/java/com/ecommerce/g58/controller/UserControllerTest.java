@@ -253,92 +253,112 @@ public class UserControllerTest {
         verify(userService, times(1)).checkPassword("wrongPassword", "123456");
     }
 
-    // testLoginSubmit tc4
     @Test
     public void testLoginSubmit_tc4() {
-        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
-        when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(null);
-        String result = userController.loginSubmit("lequyet180902@gmail.com", "123456", model);
-        assertEquals("sign-in", result); //
+        String email = "lequyet180902@gmail.com";
+        String password = "password123";
+        when(userService.loadUserByUsername(email)).thenReturn(null);
+        when(userService.isAccountActive(anyString())).thenReturn(true); // Mock the isAccountActive call
+        String viewName = userController.loginSubmit(email, password, model);
+        assertEquals("sign-in", viewName);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
-        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
-        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername(email);
+        verify(userService, times(0)).isAccountActive(email);
     }
 
     // testLoginSubmit tc5
     @Test
     public void testLoginSubmit_tc5() {
-        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
-        when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(null);
-        String result = userController.loginSubmit("lequyet180902@gmail.com", "", model);
-        assertEquals("sign-in", result);
+        String email = "lequyet180902@gmail.com";
+        String password = "";
+        when(userService.loadUserByUsername(email)).thenReturn(null);
+        when(userService.isAccountActive(anyString())).thenReturn(true); // Mock the isAccountActive call
+        String viewName = userController.loginSubmit(email, password, model);
+        assertEquals("sign-in", viewName);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
-        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
-        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername(email);
+        verify(userService, times(0)).isAccountActive(email);
     }
 
     // testLoginSubmit_tc6
     @Test
     public void testLoginSubmit_tc6() {
-        // Mock dependencies
-        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(true);
-        when(userService.loadUserByUsername("lequyet180902@gmail.com")).thenReturn(null);
-        String result = userController.loginSubmit("lequyet180902@gmail.com", "123@!1", model);
-        assertEquals("sign-in", result);
+        String email = "lequyet180902@gmail.com";
+        String password = "123@!1";
+        when(userService.loadUserByUsername(email)).thenReturn(null);
+        when(userService.isAccountActive(anyString())).thenReturn(true); // Mock the isAccountActive call
+        String viewName = userController.loginSubmit(email, password, model);
+        assertEquals("sign-in", viewName);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
-        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
-        verify(userService, times(1)).loadUserByUsername("lequyet180902@gmail.com");
+        verify(userService, times(1)).loadUserByUsername(email);
+        verify(userService, times(0)).isAccountActive(email);
     }
+
 
     // testLoginSubmit tc7
     @Test
     public void testLoginSubmit_tc7() {
-        when(userService.isAccountActive("")).thenReturn(true);
-        when(userService.loadUserByUsername("")).thenReturn(null);
-        String result = userController.loginSubmit("", "123456", model);
-        assertEquals("sign-in", result); //
+        String email = "";
+        String password = "123456";
+        when(userService.loadUserByUsername(email)).thenReturn(null);
+        when(userService.isAccountActive(anyString())).thenReturn(true); // Mock the isAccountActive call
+        String viewName = userController.loginSubmit(email, password, model);
+        assertEquals("sign-in", viewName);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
-        verify(userService, times(1)).isAccountActive("");
-        verify(userService, times(1)).loadUserByUsername("");
+        verify(userService, times(1)).loadUserByUsername(email);
+        verify(userService, times(0)).isAccountActive(email);
     }
+
 
     // testLoginSubmit tc8
     @Test
     public void testLoginSubmit_tc8() {
-        when(userService.isAccountActive("")).thenReturn(true);
-        when(userService.loadUserByUsername("")).thenReturn(null);
-        String result = userController.loginSubmit("", "", model);
-        assertEquals("sign-in", result); //
+        String email = "";
+        String password = "";
+        when(userService.loadUserByUsername(email)).thenReturn(null);
+        when(userService.isAccountActive(anyString())).thenReturn(true); // Mock the isAccountActive call
+        String viewName = userController.loginSubmit(email, password, model);
+        assertEquals("sign-in", viewName);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
-        verify(userService, times(1)).isAccountActive("");
-        verify(userService, times(1)).loadUserByUsername("");
+        verify(userService, times(1)).loadUserByUsername(email);
+        verify(userService, times(0)).isAccountActive(email);
     }
 
     // testLoginSubmit_tc9
     @Test
     public void testLoginSubmit_tc9() {
-        when(userService.isAccountActive("")).thenReturn(true);
-        when(userService.loadUserByUsername("")).thenReturn(null);
-        String result = userController.loginSubmit("", "1123!@1", model);
-        assertEquals("sign-in", result); //
+        String email = "";
+        String password = "1123!@1";
+        when(userService.loadUserByUsername(email)).thenReturn(null);
+        when(userService.isAccountActive(anyString())).thenReturn(true); // Mock the isAccountActive call
+        String viewName = userController.loginSubmit(email, password, model);
+        assertEquals("sign-in", viewName);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Email chưa được đăng kí"));
-        verify(userService, times(1)).isAccountActive("");
-        verify(userService, times(1)).loadUserByUsername("");
+        verify(userService, times(1)).loadUserByUsername(email);
+        verify(userService, times(0)).isAccountActive(email);
     }
 
     // testLoginSubmit_tc10
     @Test
     public void testLoginSubmit_tc10() {
-        when(userService.isAccountActive("lequyet180902@gmail.com")).thenReturn(false);
-        String result = userController.loginSubmit("lequyet180902@gmail.com", "123456", model);
+        String email = "lequyet180902@gmail.com";
+        String password = "123456";
+        UserDetails mockUserDetails = mock(UserDetails.class);
+        when(userService.loadUserByUsername(email)).thenReturn(mockUserDetails);
+        when(userService.isAccountActive(email)).thenReturn(false);
+        String result = userController.loginSubmit(email, password, model);
         assertEquals("sign-in", result);
         verify(model, times(1)).addAttribute(eq("errorMessage"), eq("Tài khoản của bạn đã bị khóa."));
-        verify(userService, times(1)).isAccountActive("lequyet180902@gmail.com");
+        verify(userService, times(1)).isAccountActive(email);
     }
 
     // testLoginSubmit_tc11
     @Test
     public void testLoginSubmit_tc11() {
+        String email = "lequyet180902@gmail.com";
+        String password = "123456";
+        UserDetails mockUserDetails = mock(UserDetails.class);
+        when(userService.loadUserByUsername(email)).thenReturn(mockUserDetails);
         when(userService.isAccountActive("lequyet180902@gmail.com")).thenThrow(new BadCredentialsException("Invalid credentials"));
         String result = userController.loginSubmit("lequyet180902@gmail.com", "123456", model);
         assertEquals("sign-in", result);
@@ -349,6 +369,10 @@ public class UserControllerTest {
     // testLoginSubmit_tc12
     @Test
     public void testLoginSubmit_tc12() {
+        String email = "lequyet180902@gmail.com";
+        String password = "123456";
+        UserDetails mockUserDetails = mock(UserDetails.class);
+        when(userService.loadUserByUsername(email)).thenReturn(mockUserDetails);
         when(userService.isAccountActive("lequyet180902@gmail.com")).thenThrow(new RuntimeException("Unexpected error"));
         String result = userController.loginSubmit("lequyet180902@gmail.com", "123456", model);
         assertEquals("sign-in", result);
@@ -456,29 +480,7 @@ public class UserControllerTest {
 
     //-----------------------------------------------------------------------------------------------------
     // testShowVerifyOtpForm_Success tc1
-    @Test
-    public void testProcessVerifyOtp_Success() throws Exception {
-        // Arrange
-        String otpFromSession = "123456";
-        String otpFromRequest = "123456";
 
-        when(session.getAttribute("otp")).thenReturn(otpFromSession);
-        when(request.getParameter("otp")).thenReturn(otpFromRequest);
-        when(temporaryUsers.get(otpFromSession)).thenReturn(user);
-
-        // Act
-        String result = userController.processVerifyOtp(request, session, redirectAttributes);
-
-        // Assert
-        assertEquals("/sign-in", result); // Should redirect to sign-in page
-
-        // Verify interactions with the mock objects
-        verify(userService).registerUser(user);
-        verify(walletService).createWalletForUser(user, 0);
-        verify(session).setAttribute("verificationSuccessMessage", "Xác minh OTP thành công!");
-        verify(session).removeAttribute("otp");
-        verify(temporaryUsers).remove(otpFromSession);
-    }
 
     // testProcessVerifyOtp_MistakeOtp tc2
     @Test

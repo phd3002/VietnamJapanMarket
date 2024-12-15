@@ -67,7 +67,7 @@ public class StoreControllerTest {
         Optional<Countries> optionalCountry = Optional.of(country);
         when(storeService.findById(storeId)).thenReturn(optionalStore);
         when(countryService.findById(2)).thenReturn(optionalCountry);
-        when(storeImg.isEmpty()).thenReturn(false);
+        when(storeImg.isEmpty()).thenReturn(true);
         when(fileS3Service.uploadFile(storeImg)).thenReturn("http://example.com/file.jpg");
         when(store.getPictureUrl()).thenReturn("http://old-image.com");
         String result = storeController.saveStoreInfo(

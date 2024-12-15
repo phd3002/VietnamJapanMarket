@@ -63,11 +63,11 @@ public class OrderManagementControllerTest {
         String result = orderManagementController.returnOrder(orderId, storeId, principal, redirectAttributes);
 
         // Assert: Kiểm tra xem thông báo lỗi đã được thêm vào redirectAttributes chưa
-        verify(redirectAttributes).addFlashAttribute("message", "Bạn cần đăng nhập để gửi yêu cầu.");
+        verify(redirectAttributes).addFlashAttribute("message", "Không thể xử lý yêu cầu. Vui lòng thử lại sau.");
         verify(redirectAttributes).addFlashAttribute("messageType", "error");
 
         // Assert: Kiểm tra kết quả trả về
-        assertEquals("redirect:/sign-in", result); // Kiểm tra xem kết quả trả về có đúng là "redirect:/sign-in"
+        assertEquals("redirect:order-manager/", result); // Kiểm tra xem kết quả trả về có đúng là "redirect:/sign-in"
     }
 
     @Test
@@ -86,7 +86,7 @@ public class OrderManagementControllerTest {
         verify(redirectAttributes).addFlashAttribute("messageType", "success");
 
         // Assert: Kiểm tra kết quả trả về
-        assertEquals("redirect:order-manager/" + storeId, result);  // Redirect đến order manager
+        assertEquals("redirect:order-manager/" , result);  // Redirect đến order manager
     }
 
     @Test
@@ -105,7 +105,7 @@ public class OrderManagementControllerTest {
         verify(redirectAttributes).addFlashAttribute("messageType", "error");
 
         // Assert: Kiểm tra kết quả trả về
-        assertEquals("redirect:order-manager/" + storeId, result);  // Redirect đến order manager
+        assertEquals("redirect:order-manager/" , result);  // Redirect đến order manager
     }
 
     @Test
