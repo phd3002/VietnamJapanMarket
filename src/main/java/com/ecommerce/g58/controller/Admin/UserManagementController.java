@@ -53,20 +53,10 @@ public class UserManagementController {
     }
 
     @PostMapping("/update-user")
-    public String updateUser(@RequestParam Integer userId, @RequestParam String status, @RequestParam Integer roleId, @RequestParam String username, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String phoneNumber, Model model) {
-        if (userId == null || roleId == null) {
-            throw new IllegalArgumentException("User ID and Role ID must not be null");
-        }
+    public String updateUser(@RequestParam Integer userId, @RequestParam String status, Model model) {
         Users user = userService.getUserById(userId);
-        Roles role = roleService.getRoleById(roleId);
-        if (user != null && role != null) {
-            user.setRoleId(role);
+        if (user != null) {
             user.setStatus(status);
-            user.setUsername(username);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            user.setPhoneNumber(phoneNumber);
             userService.updateUser(user);
             model.addAttribute("message", "User updated successfully");
         } else {
