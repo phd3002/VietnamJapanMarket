@@ -73,9 +73,19 @@ public class OrderController {
                 PageRequest.of(page, size)
         );
 
-        if (orderPage.isEmpty()) {
+        Page<OrdersDTO> orderAllPage = orderService.getOrdersByUserIdAndStatusAndDate(
+                user.getUserId(),
+                null,
+                startDateTime,
+                endDateTime,
+                PageRequest.of(page, size)
+        );
+
+        if (orderAllPage.isEmpty()) {
             model.addAttribute("message", "Không có đơn hàng nào. Hãy mua ngay!");
             model.addAttribute("productListLink", "/product-list");
+        }else if (orderPage.isEmpty()) {
+            model.addAttribute("message1", "Không có đơn hàng nào phù hợp với yêu cầu của bạn.");
         }
         model.addAttribute("orders", orderPage.getContent());
         model.addAttribute("currentPage", page);

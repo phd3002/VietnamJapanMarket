@@ -42,9 +42,14 @@ public class ProductServiceImp implements ProductService {
     private OrderDetailRepository orderDetailRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private StoreRepository storeRepository;
+    @Autowired
+    private FeedbackRepository feedbackRepository;
 
     public List<ProductDTO> getProductDetails() {
         List<Object[]> results = productRepository.findProductDetailsNative();
@@ -213,6 +218,7 @@ public class ProductServiceImp implements ProductService {
             productVariationRepository.delete(variation);
 
             // Xóa variationId khỏi các bảng liên quan
+            feedbackRepository.deleteByVariationId(variation);
             cartItemRepository.deleteByVariationId(variation);
             wishlistRepository.deleteByProductVariation(variation);
             orderDetailRepository.deleteByVariationId(variation);

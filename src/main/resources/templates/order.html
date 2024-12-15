@@ -47,6 +47,7 @@
                                                     <option value="" th:selected="${status == null || status == ''}">Tất cả</option>
                                                     <option value="Pending" th:selected="${status == 'Pending'}">Chờ xử lý</option>
                                                     <option value="Processing" th:selected="${status == 'Processing'}">Đang gói hàng</option>
+                                                    <option value="Dispatched" th:selected="${status == 'Dispatched'}">Đã giao cho vận chuyển</option>
                                                     <option value="Shipping" th:selected="${status == 'Shipping'}">Đang vận chuyển</option>
                                                     <option value="Completed" th:selected="${status == 'Completed'}">Hoàn thành</option>
                                                     <option value="Cancelled" th:selected="${status == 'Cancelled'}">Đã hủy</option>
@@ -93,7 +94,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="order : ${orders}">
+                                            <tr th:each="order : ${orders}" th:if="${order.totalQuantity > 0}">
                                                 <td th:text="${order.orderCode}">#12345</td>
                                                 <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
                                                 <td th:text="${order.status == 'Pending' ? 'Chờ xử lý' :
@@ -158,8 +159,9 @@
 
                                     <!-- Message When No Orders -->
                                     <div th:if="${orders == null or orders.size() == 0}" class="text-center">
-                                        <p th:text="${message ?: 'Không có đơn hàng nào.'}">Không có đơn hàng nào.</p>
-                                        <a th:href="@{/product-list}" class="btn btn-primary">Mua ngay</a>
+                                        <!-- Hiển thị message nếu có, nếu không thì hiển thị message1 -->
+                                        <p th:text="${message != null ? message : message1}"></p>
+                                        <a th:if="${message1 == null}" th:href="@{/product-list}" class="btn btn-primary">Mua ngay</a>
                                     </div>
                                 </div>
                             </div>
