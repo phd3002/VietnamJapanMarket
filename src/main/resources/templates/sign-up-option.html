@@ -1,0 +1,121 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from new.axilthemes.com/demo/template/etrade/sign-up.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:13:36 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Home Page</title>
+    <meta name="robots" content="noindex, follow"/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
+
+    <!-- CSS
+    ============================================ -->
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../static/css/vendor/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/vendor/font-awesome.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/vendor/flaticon/flaticon.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/vendor/slick.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/vendor/slick-theme.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/vendor/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/vendor/sal.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/vendor/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/vendor/base.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/style.min.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/style-2.css" type="text/css">
+
+</head>
+
+
+<body>
+<div class="axil-signin-area">
+    <div class="row">
+        <div class="col-xl-4 col-lg-6">
+            <div class="axil-signin-banner bg_image bg_image--10">
+                <a href="/homepage" class="site-logo"><img th:src="@{/images/logo/vj-market.png}" alt="logo"></a>
+                <br><br>
+                <h3 class="title">Chúng tôi cung cấp những sản phẩm tốt nhất</h3>
+            </div>
+        </div>
+        <div class="col-lg-6 offset-xl-2">
+            <div class="axil-signin-form-wrap">
+                <div class="axil-signin-form">
+                    <form id="roleSelectionForm" class="singin-form">
+                        <h4>Bạn muốn đăng ký với vai trò nào</h4>
+                        <div class="form-group">
+                            <a href="sign-up" class="axil-btn btn-bg-primary submit-btn">
+                                <i class="fa fa-shopping-bag"></i> Người mua hàng
+                            </a>
+                            <br><br>
+                            <a href="sign-up-seller" class="axil-btn btn-bg-secondary sign-up-btn">
+                                <i class="fa fa-store"></i> Người bán hàng
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS
+============================================ -->
+<!-- Modernizer JS -->
+<script src="../static/js/vendor/modernizr.min.js"></script>
+<!-- jQuery JS -->
+<script src="../static/js/vendor/jquery.js"></script>
+<!-- Bootstrap JS -->
+<script src="../static/js/vendor/popper.min.js"></script>
+<script src="../static/js/vendor/bootstrap.min.js"></script>
+<script src="../static/js/vendor/slick.min.js"></script>
+<script src="../static/js/vendor/js.cookie.js"></script>
+<!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
+<script src="../static/js/vendor/jquery-ui.min.js"></script>
+<script src="../static/js/vendor/jquery.ui.touch-punch.min.js"></script>
+<script src="../static/js/vendor/jquery.countdown.min.js"></script>
+<script src="../static/js/vendor/sal.js"></script>
+<script src="../static/js/vendor/jquery.magnific-popup.min.js"></script>
+<script src="../static/js/vendor/imagesloaded.pkgd.min.js"></script>
+<script src="../static/js/vendor/isotope.pkgd.min.js"></script>
+<script src="../static/js/vendor/counterup.js"></script>
+<script src="../static/js/vendor/waypoints.min.js"></script>
+
+<!-- Main JS -->
+<script src="../static/js/main.js"></script>
+<script src="../static/js/script.js"></script>
+<script>
+    function handleRoleSelection() {
+        // Lấy giá trị vai trò được chọn
+        const selectedRole = document.querySelector('input[name="userRole"]:checked');
+        const errorMessage = document.getElementById('errorMessage');
+
+        if (selectedRole) {
+            // Ẩn thông báo lỗi
+            errorMessage.style.display = 'none';
+
+            // Chuyển trang dựa trên vai trò được chọn
+            switch(selectedRole.value) {
+                case 'customer':
+                    window.location.href = 'customer-registration.html';
+                    break;
+                case 'seller':
+                    window.location.href = 'seller-registration.html';
+                    break;
+            }
+        } else {
+            // Hiển thị thông báo lỗi nếu chưa chọn vai trò
+            errorMessage.style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+
+
+<!-- Mirrored from new.axilthemes.com/demo/template/etrade/sign-up.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Sep 2024 10:13:36 GMT -->
+</html>
