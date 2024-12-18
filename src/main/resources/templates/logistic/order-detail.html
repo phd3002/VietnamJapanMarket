@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Danh sách đơn hàng</title>
+    <title>Danh sách đơn hàng | Kênh người bán</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -41,15 +41,17 @@
 <aside class="app-sidebar">
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
-        <br>
-        <h3>Trang vận chuyển</h3>
     </div>
     <hr>
     <ul class="app-menu">
-<!--        <li><a class="app-menu__item" href="/logistic/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span-->
-<!--                class="app-menu__label">Bảng điều khiển</span></a></li>-->
-        <li><a class="app-menu__item active" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
+        <!--        <li><a class="app-menu__item" href="/logistic/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span-->
+        <!--                class="app-menu__label">Bảng điều khiển</span></a></li>-->
+        <li><a class="app-menu__item active" href="/logistic/order-manager"><i
+                class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="wallet.html"><i
+                class='app-menu__icon bx bx-money'></i><span
+                class="app-menu__label">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
@@ -73,7 +75,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-body printableArea" id="sample">
-                        <h3><b>Hóa đơn</b> <span class="pull-right" name="id" th:text="'#' + ${trackingNumber}"></span></h3>
+                        <h3><b>Hóa đơn</b> <span class="pull-right" name="id" th:text="'#' + ${trackingNumber}"></span>
+                        </h3>
                         <hr/>
                         <div class="row">
                             <div class="col-md-12">
@@ -109,18 +112,7 @@
                                 <div class="pull-right col-4">
                                     <address>
                                         <div>Trạng thái hiện tại:
-                                            &nbsp;<b id="status-order" class="text-danger text-uppercase"
-                                                     th:text="${orderStatus == 'Pending' ? 'Chờ xử lý' :
-                 (orderStatus == 'Confirmed' ? 'Xác nhận' :
-                 (orderStatus == 'Processing' ? 'Đang đóng gói' :
-                 (orderStatus == 'Dispatched' ? 'Đã giao cho vận chuyển' :
-                 (orderStatus == 'Shipping' ? 'Đang vận chuyển' :
-                 (orderStatus == 'Delivered' ? 'Đã giao' :
-                 (orderStatus == 'Completed' ? 'Hoàn tất' :
-                 (orderStatus == 'Failed' ? 'Thất bại' :
-                 (orderStatus == 'Returned' ? 'Hoàn trả' :
-                 (orderStatus == 'Cancelled' ? 'Đã hủy' : orderStatus)))))))))}">
-                                            </b>
+                                            &nbsp;<b class="text-danger text-uppercase" th:text="${orderStatus}"></b>
                                         </div>
                                         <div>Ngày cập nhật gần nhất:
                                             <b class="text-secondary" th:text="${updateTime}"></b>
@@ -157,10 +149,11 @@
                                             <td class="text-end" th:text="${shippingFee}"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="text-lg-right"><b>Phương thức thanh toán: </b></td>
-                                            <td class="text-end">
-                                                <b th:text="${paymentMethod == '0' ? 'Thanh toán bằng VNPay' : (paymentMethod == '1' ? 'Thanh toán bằng ví điện tử' : '')}"></b>
+                                            <td colspan="4" class="text-lg-right"><b>Phương thức thanh toán:</b></td>
+                                            <td class="text-end"><b
+                                                    th:text="${paymentMethod == 1 ? 'Thanh toán bằng VNPay' : 'Thanh toán bằng ví điện tử'}"></b>
                                             </td>
+                                        </tr>
                                         <tr>
                                             <td colspan="4" class="text-lg-right"><b>Tổng cộng tiền thanh toán (áp dụng
                                                 mã giảm giá):</b></td>

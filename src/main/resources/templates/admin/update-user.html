@@ -41,8 +41,6 @@
 <aside class="app-sidebar">
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
-        <br>
-        <h3>Trang quản trị Admin</h3>
     </div>
     <hr>
     <ul class="app-menu">
@@ -50,9 +48,12 @@
                 class="app-menu__label">Bảng điều khiển</span></a></li>
         <li><a class="app-menu__item active" href="/admin/user-manager"><i class='app-menu__icon bx bx-id-card'></i>
             <span class="app-menu__label">Quản lý người dùng</span></a></li>
-<!--        <li><a class="app-menu__item" href="/list-shipping-unit"><i-->
-<!--                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>-->
-<!--        </li>-->
+        <li><a class="app-menu__item" href="/list-shipping-unit"><i
+                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>
+        </li>
+        <li><a class="app-menu__item" href="wallet.html"><i
+                class='app-menu__icon bx bx-money'></i><span
+                class="app-menu__label">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
@@ -73,27 +74,32 @@
                         <input type="hidden" name="userId" th:value="${user.userId}">
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên đăng nhập</label>
-                            <input class="form-control" type="text" name="username" th:value="${user.username}" readonly>
+                            <input class="form-control" type="text" name="username" th:value="${user.username}" required>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Họ</label>
-                            <input class="form-control" type="text" name="firstName" th:value="${user.firstName}" readonly>
+                            <input class="form-control" type="text" name="firstName" th:value="${user.firstName}" required>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Tên</label>
-                            <input class="form-control" type="text" name="lastName" th:value="${user.lastName}" readonly>
+                            <input class="form-control" type="text" name="lastName" th:value="${user.lastName}" required>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Email</label>
-                            <input class="form-control" type="email" name="email" th:value="${user.email}" readonly>
+                            <input class="form-control" type="email" name="email" th:value="${user.email}" required>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Số điện thoại</label>
-                            <input class="form-control" type="text" name="phoneNumber" th:value="${user.phoneNumber}" readonly>
+                            <input class="form-control" type="text" name="phoneNumber" th:value="${user.phoneNumber}" required>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="role-user" class="control-label">Vai trò</label>
-                            <input class="form-control" type="text" id="role-user" th:value="${user.roleId.roleName}" readonly>
+                            <select class="form-control" id="role-user" name="roleId" required>
+                                <option value="">-- Chọn vai trò --</option>
+                                <th:block th:each="role : ${roles}">
+                                    <option th:value="${role.roleId}" th:text="${role.roleName}" th:selected="${user.roleId.roleId} == ${role.roleId}"></option>
+                                </th:block>
+                            </select>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="status-user" class="control-label">Trạng thái</label>

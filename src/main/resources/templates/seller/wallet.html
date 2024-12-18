@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ví | Kênh người bán</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href="../../static/seller/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- or -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <!-- Font-icon css-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+</head>
+<body onload="time()" class="app sidebar-mini rtl">
+<!-- Navbar-->
+<header class="app-header">
+    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                    aria-label="Hide Sidebar"></a>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+        <!-- User Menu-->
+        <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        </li>
+    </ul>
+</header>
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar">
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/hay.jpg" width="50px"
+                                        alt="User Image">
+    </div>
+    <hr>
+    <ul class="app-menu">
+        <li><a class="app-menu__item" href="/store-info"><i
+                class='app-menu__icon bx bx-info-square'></i><span
+                class="app-menu__label">Thông tin cửa hàng</span></a></li>
+        <li><a class="app-menu__item" href="/seller/dashboard"><i
+                class='app-menu__icon bx bx-tachometer'></i><span
+                class="app-menu__label">Bảng điều khiển</span></a></li>
+        <li><a class="app-menu__item" href="/seller-products"><i
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                class="app-menu__label">Quản lý sản phẩm</span></a>
+        </li>
+        <li><a class="app-menu__item" href="/seller/order-manager"><i
+                class='app-menu__icon bx bx-task'></i><span
+                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="/seller/feedback-manager"><i
+                class='app-menu__icon bx bx-list-minus'></i><span
+                class="app-menu__label">Quản lý đánh giá</span></a>
+        </li>
+        <li><a class="app-menu__item active" href="wallet.html"><i
+                class='app-menu__icon bx bx-money'></i><span
+                class="app-menu__label">Ví</span></a></li>
+    </ul>
+</aside>
+<main class="app-content">
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item active"><a href="#"><b>Bảng thu nhập</b></a></li>
+        </ul>
+        <div id="clock"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="row element-button">
+                        <div class="col-sm-12"><h4>Số tiền trong ví:</h4>
+                            <label class="control-label"><h3>100.000.000đ</h3></label>
+                        </div>
+                    </div>
+                    <div class="row element-button">
+                        <div class="col-sm-12 d-flex justify-content-start align-items-center">
+                            <a class="btn btn-add btn-sm mr-3" id="rut" data-toggle="modal" data-target="#rut-ModalUP">
+                                <i class="fas fa-arrow-down text-danger"></i> Rút tiền
+                            </a>
+                            <a class="btn btn-add btn-sm" id="nap" data-toggle="modal" data-target="#nap-ModalUP">
+                                <i class="fas fa-arrow-up text-success"></i> Nạp tiền
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="text-align: right">
+                    <!-- Phần input date -->
+                    <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+                    <div class="form-group d-flex align-items-center gap-3 mb-3" style="margin-left: 10%">
+                        <label class="control-label">Từ ngày:</label>
+                        <input class="form-control" style="width: 150px; margin-left: 5px; margin-right: 5px;"
+                               type="date" id="startDate">
+
+                        <label class="control-label">Đến ngày:</label>
+                        <input class="form-control" style="width: 150px; margin-left: 5px; margin-right: 5px;"
+                               type="date" id="endDate">
+
+                            <button class="btn btn-primary" onclick="filterData()">
+                                <i class="fa fa-fw fa-lg fa-search"></i>Lọc dữ liệu
+                            </button>
+
+                    </div>
+                </div>
+                <table class="table table-hover table-bordered" id="sampleTable">
+                    <thead>
+                    <tr>
+                        <th>Hành động</th>
+                        <th>Số tiền giao dịch</th>
+                        <th>Số dư</th>
+                        <th>Nội dung</th>
+                        <th>Ngay giao dịch</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Chuyển tiền</td>
+                        <td>500.000 đ</td>
+                        <td>100.500.000 đ</td>
+                        <td>Chuyển tiền bán hàng tới shop ABC</td>
+                        <td>17/12/2024</td>
+                    </tr>
+                    <tr>
+                        <td>Nhận tiền</td>
+                        <td>500.000 đ</td>
+                        <td>100.500.000 đ</td>
+                        <td>Nhận phí duy trì từ shop ABC</td>
+                        <td>17/12/2024</td>
+                    </tr>
+                    <tr>
+                        <td>Chuyển tiền</td>
+                        <td>500.000 đ</td>
+                        <td>100.500.000 đ</td>
+                        <td>Tiền vận chuyển đơn hàng ANVAHHKAJKAH</td>
+                        <td>17/12/2024</td>
+                    </tr>
+                    <tr>
+                        <td>Nhận tiền</td>
+                        <td>500.000 đ</td>
+                        <td>100.500.000 đ</td>
+                        <td>Tiền mua hàng từ người dùng ALO123 cho đơn hàng ANVAHHKAJKAH</td>
+                        <td>17/12/2024</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="rut-ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group  col-md-12">
+                              <span class="thong-tin-thanh-toan">
+                                <h5>Rút tiền</h5>
+                              </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Nhập tên ngân hàng</label>
+                            <input class="form-control" type="text" id="bank-name" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Nhập số tài khoản</label>
+                            <input class="form-control" type="text" id="account-number" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Nhập số tiền muốn rút</label>
+                            <input class="form-control" type="number" id="withdrawal-amount" max="100000000"
+                                   min="100000" required>
+                        </div>
+                    </div>
+                    <BR>
+                    <button class="btn btn-save" type="submit" id="out-Button">Rút tiền</button>
+                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                    <BR>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="nap-ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group  col-md-12">
+                              <span class="thong-tin-thanh-toan">
+                                <h5>Nạp tiền</h5>
+                              </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Nhập số tiền muốn nạp</label>
+                            <input class="form-control" type="number" max="100000000" min="100000" required>
+                        </div>
+                    </div>
+                    <BR>
+                    <button class="btn btn-save" type="submit" id="in-Button">Nạp tiền</button>
+                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                    <BR>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal OTP -->
+    <div class="modal fade" id="otp-ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                        <span class="thong-tin-thanh-toan">
+                            <h5>Nhập mã OTP</h5>
+                        </span>
+                            <p>Mã OTP đã được gửi đến email của bạn</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Nhập mã OTP</label>
+                            <input class="form-control" type="text" id="otp-input" maxlength="6"
+                                   placeholder="Nhập 6 chữ số" required>
+                        </div>
+                    </div>
+                    <BR>
+                    <button class="btn btn-save" type="submit" id="confirm-otp-Button">Xác nhận</button>
+                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                    <BR>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- Essential javascripts for application to work-->
+<script src="../../static/seller/js/jquery-3.2.1.min.js"></script>
+<script src="../../static/seller/js/popper.min.js"></script>
+<script src="../../static/seller/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="../../static/seller/js/main.js"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script src="../../static/seller/js/plugins/pace.min.js"></script>
+<!-- Page specific javascripts-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<!-- Data table plugin-->
+<script type="text/javascript" src="../../static/seller/js/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../static/seller/js/plugins/dataTables.bootstrap.min.js"></script>
+<!-- jQuery trước -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Popper.js (Bootstrap 4+) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript">$('#sampleTable').DataTable();</script>
+<script>
+    function deleteRow(r) {
+        var i = r.parentNode.parentNode.rowIndex;
+        document.getElementById("myTable").deleteRow(i);
+    }
+
+    oTable = $('#sampleTable').dataTable();
+    $('#all').click(function (e) {
+        $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
+        e.stopImmediatePropagation();
+    });
+
+    function time() {
+        var today = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Chủ Nhật";
+        weekday[1] = "Thứ Hai";
+        weekday[2] = "Thứ Ba";
+        weekday[3] = "Thứ Tư";
+        weekday[4] = "Thứ Năm";
+        weekday[5] = "Thứ Sáu";
+        weekday[6] = "Thứ Bảy";
+        var day = weekday[today.getDay()];
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        nowTime = h + " giờ " + m + " phút " + s + " giây";
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+        tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+            '</span>';
+        document.getElementById("clock").innerHTML = tmp;
+        clocktime = setTimeout("time()", "1000", "Javascript");
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+    }
+
+    $("#show-emp").on("click", function () {
+        $("#ModalUP").modal({backdrop: false, keyboard: false})
+    });
+</script>
+<script>
+    // Đảm bảo DOM đã tải hoàn toàn trước khi gắn event listener
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to handle the "Rút tiền" button click event
+        const outButton = document.getElementById("out-Button");
+        if (outButton) {
+            outButton.addEventListener("click", function () {
+                // Lấy các giá trị từ form rút tiền
+                const bankName = document.getElementById('bank-name').value;
+                const accountNumber = document.getElementById('account-number').value;
+                const withdrawalAmount = document.getElementById('withdrawal-amount').value;
+
+                // Kiểm tra các trường bắt buộc
+                if (!bankName || !accountNumber || !withdrawalAmount) {
+                    swal("Lỗi", "Vui lòng điền đầy đủ thông tin!", "error");
+                    return;
+                }
+                console.log("Mở modal OTP...");
+                // Hiển thị modal OTP
+                $('#rut-ModalUP').modal('hide');
+                $('#otp-ModalUP').modal('show');
+            });
+        }
+
+        // Function to handle OTP confirmation
+        const confirmOtpButton = document.getElementById("confirm-otp-Button");
+        if (confirmOtpButton) {
+            confirmOtpButton.addEventListener("click", function () {
+                const otpInput = document.getElementById("otp-input");
+                const otp = otpInput.value;
+
+                // Kiểm tra OTP (ở đây bạn có thể thêm logic xác thực OTP với backend)
+                if (otp.length !== 6) {
+                    swal("Lỗi", "OTP phải là 6 chữ số!", "error");
+                    return;
+                }
+
+                // Nếu OTP hợp lệ, hiển thị xác nhận rút tiền
+                swal({
+                    title: "Xác nhận",
+                    text: "Bạn có chắc chắn rút tiền về tài khoản này?",
+                    buttons: ["Hủy bỏ", "Đồng ý"],
+                }).then((willSave) => {
+                    if (willSave) {
+                        // Sau khi xác nhận, hiển thị thông báo thành công
+                        swal("Thành công!", "Rút tiền thành công!", {
+                            icon: "success",
+                        }).then(() => {
+                            // Đóng cả hai modal
+                            $('#otp-ModalUP').modal('hide');
+                            $('#rut-ModalUP').modal('hide');
+
+                            // Làm mới trang hoặc cập nhật số dư
+                            window.location.reload();
+                        });
+                    }
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>
