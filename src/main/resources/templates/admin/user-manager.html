@@ -80,8 +80,8 @@
                             <th>Tính năng</th>
                         </tr>
                         </thead>
-                        <tbody th:each="user : ${users}">
-                        <tr>
+                        <tbody >
+                        <tr th:each="user : ${users}">
                             <td th:text="'ID-' + ${user.userId}"></td>
                             <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
                             <td th:text="${user.email}"></td>
@@ -96,19 +96,19 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div class="pagination">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item" th:if="${currentPage > 0}">
-                                <a class="page-link" th:href="@{/admin/user-manager(page=${currentPage - 1})}">Lùi</a>
-                            </li>
-                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
-                                <a class="page-link" th:href="@{/admin/user-manager(page=${i})}" th:text="${i + 1}"></a>
-                            </li>
-                            <li class="page-item" th:if="${currentPage < totalPages - 1}">
-                                <a class="page-link" th:href="@{/admin/user-manager(page=${currentPage + 1})}">Tiếp</a>
-                            </li>
-                        </ul>
-                    </div>
+<!--                    <div class="pagination">-->
+<!--                        <ul class="pagination justify-content-center">-->
+<!--                            <li class="page-item" th:if="${currentPage > 0}">-->
+<!--                                <a class="page-link" th:href="@{/admin/user-manager(page=${currentPage - 1})}">Lùi</a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">-->
+<!--                                <a class="page-link" th:href="@{/admin/user-manager(page=${i})}" th:text="${i + 1}"></a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item" th:if="${currentPage < totalPages - 1}">-->
+<!--                                <a class="page-link" th:href="@{/admin/user-manager(page=${currentPage + 1})}">Tiếp</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>

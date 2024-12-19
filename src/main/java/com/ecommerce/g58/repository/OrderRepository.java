@@ -299,7 +299,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "    CONCAT(u.first_name, ' ', u.last_name) AS customerName, \n" +
             "    GROUP_CONCAT(DISTINCT p.product_name SEPARATOR ', ') AS productNames, \n" +
             "    COALESCE(SUM(od.quantity), 0) AS totalProducts, \n" +
-            "    COALESCE(o.total_price, 0) + COALESCE(i.shipping_fee, 0) AS totalPrice, \n" +
+            "    COALESCE(o.total_price, 0) AS totalPrice, \n" +
             "    latest_status.status AS latestStatus, \n" +
             "    CAST(o.order_date AS DATE) AS orderDate \n" +
             "FROM \n" +

@@ -1,8 +1,7 @@
-package com.ecommerce.g58.controller;
+package com.ecommerce.g58.controller.Logistic;
 
 import com.ecommerce.g58.dto.WalletDTO;
 import com.ecommerce.g58.entity.Users;
-import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
 import com.ecommerce.g58.service.implementation.ProfileService;
 import com.ecommerce.g58.utils.FormatVND;
@@ -22,17 +21,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Controller
-@RequestMapping("/wallet")
-public class WalletController {
-
+@RequestMapping("/logistic/wallet")
+public class LogisticWalletController {
     private final WalletService walletService;
     private final ProfileService profileService;
 
     @Autowired
-    public WalletController(WalletService walletService, ProfileService profileService) {
+    public LogisticWalletController(WalletService walletService, ProfileService profileService) {
         this.walletService = walletService;
         this.profileService = profileService;
     }
@@ -94,6 +91,6 @@ public class WalletController {
             model.addAttribute("message", "Không có giao dịch.");
         }
 
-        return "wallet"; // Thymeleaf template name
+        return "logistic/wallet"; // Thymeleaf template name
     }
 }
