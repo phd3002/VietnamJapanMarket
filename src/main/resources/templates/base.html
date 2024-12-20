@@ -48,7 +48,25 @@
 
 <!-- Header Section -->
 <header class="header axil-header header-style-1" th:fragment="header">
-    <div class="axil-header-top"></div>
+    <div class="axil-header-top">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="header-top-dropdown">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span th:text="${#locale.language == 'ja' ? '日本語' : 'Tiếng Việt'}"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/change-language?lang=vi" th:text="#{lang.vi}">Tiếng Việt</a></li>
+                                <li><a class="dropdown-item" href="/change-language?lang=ja" th:text="#{lang.ja}">Tiếng Nhật</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="axil-mainmenu">
         <div class="container">
             <div class="header-navbar">
@@ -102,7 +120,7 @@
                                 <div class="notification-content-wrap">
                                     <!-- Header Section -->
                                     <div class="notification-header">
-                                        <p>Thông báo mới</p>
+                                        <p th:text="#{notification.new}">Thông báo mới</p>
                                     </div>
 
                                     <!-- Notification Items -->
@@ -128,7 +146,7 @@
 
                                     <!-- Footer Section -->
                                     <div class="notification-footer">
-                                        <a href="/notification">Xem thông báo</a>
+                                        <a href="/notification" th:text="#{notification.view}">Xem thông báo</a>
                                     </div>
                                 </div>
                             </div>
@@ -146,26 +164,30 @@
                             </a>
                             <div class="my-account-dropdown">
                                 <div th:if="${#authentication.name != 'anonymousUser'}">
-                                    <div><span>Chào mừng, <span th:text="${firstname}"></span></span></div>
+                                    <div><span th:text="#{welcome(${firstname})}"></span></div>
                                     <ul>
                                         <li>
-                                            <a href="/my-account">Tài khoản</a>
+                                            <a href="/my-account" th:text="#{my.account}">Tài khoản</a>
                                         </li>
                                         <li>
-                                            <a href="/orders">Đơn hàng</a>
+                                            <a href="/orders" th:text="#{orders}">Đơn hàng</a>
                                         </li>
                                         <li>
-                                            <a href="/logout">Đăng xuất</a>
+                                            <a href="/logout" th:text="#{logout}">Đăng xuất</a>
                                         </li>
                                     </ul>
                                 </div>
                                 <div th:if="${#authentication.name == 'anonymousUser'}">
-                                    <p style="font-size: smaller;">Hiện tại bạn chưa đăng nhập.</p>
+                                    <p style="font-size: smaller;" th:text="#{not.logged.in}">Hiện tại bạn chưa đăng
+                                        nhập.</p>
                                     <div class="login-btn">
-                                        <a href="/sign-in" class="axil-btn btn-bg-primary">Đăng nhập</a>
+                                        <a href="/sign-in" class="axil-btn btn-bg-primary" th:text="#{login}">Đăng
+                                            nhập</a>
                                     </div>
                                     <div class="reg-footer text-center">
-                                        Chưa có tài khoản? <a href="/sign-up" class="btn-link">ĐĂNG KÝ TẠI ĐÂY.</a>
+                                        <span th:text="#{register}">No account?</span>
+                                        <a href="/sign-up" class="btn-link" th:text="#{header.register}">REGISTER
+                                            HERE.</a>
                                     </div>
                                 </div>
                             </div>
@@ -187,13 +209,13 @@
         <div class="header-search-wrap">
             <div class="card-header">
                 <form onsubmit="return performSearch()">
-                    <input type="text" id="prod-search" placeholder="Tìm kiếm sản phẩm..." oninput="performSearch()"/>
+                    <input type="text" id="prod-search" th:placeholder="#{search.placeholder}" oninput="performSearch()"/>
                 </form>
             </div>
             <div class="card-body" id="search-results" style="display: none;">
                 <div class="search-result-header">
-                    <h6 class="title"><span id="result-count">0</span> Kết quả tìm thấy</h6>
-                    <a href="products" class="view-all">Xem tất cả</a>
+                    <h6 class="title"><span id="result-count">0</span> <span th:text="#{search.results}">Kết quả tìm thấy</span></h6>
+                    <a href="products" class="view-all" th:text="#{search.view.all}">Xem tất cả</a>
                 </div>
                 <div class="search-results">
                     <!-- Dynamic search result items should go here -->
@@ -221,8 +243,8 @@
                             <img th:src="@{/images/icons/service1.png}" alt="Service">
                         </div>
                         <div class="content">
-                            <h6 class="title">Giao hàng nhanh chóng và an toàn</h6>
-                            <p>Hãy kể về dịch vụ của bạn.</p>
+                            <h6 class="title" th:text="#{service.delivery.title}">Giao hàng nhanh chóng và an toàn</h6>
+                            <p th:text="#{service.delivery.desc}">Hãy kể về dịch vụ của bạn.</p>
                         </div>
                     </div>
                 </div>
@@ -232,8 +254,8 @@
                             <img th:src="@{/images/icons/service2.png}" alt="Service">
                         </div>
                         <div class="content">
-                            <h6 class="title">Đảm bảo hoàn tiền</h6>
-                            <p>Trong vòng 10 ngày.</p>
+                            <h6 class="title" th:text="#{service.refund.title}">Đảm bảo hoàn tiền</h6>
+                            <p th:text="#{service.refund.desc}">Trong vòng 10 ngày.</p>
                         </div>
                     </div>
                 </div>
@@ -243,8 +265,8 @@
                             <img th:src="@{/images/icons/service3.png}" alt="Service">
                         </div>
                         <div class="content">
-                            <h6 class="title">Chính sách trả hàng trong vòng 24 giờ</h6>
-                            <p>Không cần hỏi gì cả.</p>
+                            <h6 class="title" th:text="#{service.return.title}">Chính sách trả hàng trong vòng 24 giờ</h6>
+                            <p th:text="#{service.return.desc}">Không cần hỏi gì cả.</p>
                         </div>
                     </div>
                 </div>
@@ -254,8 +276,8 @@
                             <img th:src="@{/images/icons/service4.png}" alt="Service">
                         </div>
                         <div class="content">
-                            <h6 class="title">Hỗ trợ chất lượng chuyên nghiệp</h6>
-                            <p>Hỗ trợ trực tiếp 24/7.</p>
+                            <h6 class="title" th:text="#{service.support.title}">Hỗ trợ chất lượng chuyên nghiệp</h6>
+                            <p th:text="#{service.support.desc}">Hỗ trợ trực tiếp 24/7.</p>
                         </div>
                     </div>
                 </div>
@@ -267,14 +289,22 @@
             <div class="row">
                 <div class="col-lg-6 col-sm-6">
                     <div class="axil-footer-widget">
-                        <h5 class="widget-title">Support</h5>
+                        <h5 class="widget-title" th:text="#{footer.support}">Hỗ trợ</h5>
                         <div class="inner">
-                            <p>Đại học FPT, Khu Công Nghệ Cao Hòa Lạc, Km29 Đại lộ Thăng Long, Thạch Hoà, Thạch Thất, Hà
+                            <p th:text="#{footer.address}">Đại học FPT, Khu Công Nghệ Cao Hòa Lạc, Km29 Đại lộ Thăng Long, Thạch Hoà, Thạch Thất, Hà
                                 Nội 13100</p>
                             <ul class="support-list-item">
-                                <li><a href="hungdphe170721@fpt.edu.vn"><i class="fal fa-envelope-open"></i>
-                                    hungdphe170721@fpt.edu.vn</a></li>
-                                <li><a href="tel:(+94)850-315-5862"><i class="fal fa-phone-alt"></i> (+84) 850-315-5862</a>
+                                <li>
+                                    <a href="mailto:hungdphe170721@fpt.edu.vn">
+                                        <i class="fal fa-envelope-open"></i>
+                                        <span th:text="#{footer.email}">Email</span>: hungdphe170721@fpt.edu.vn
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tel:(+84)850-315-5862">
+                                        <i class="fal fa-phone-alt"></i>
+                                        <span th:text="#{footer.phone}">Điện thoại</span>: (+84) 850-315-5862
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -282,14 +312,14 @@
                 </div>
                 <div class="col-lg-6 col-sm-6">
                     <div class="axil-footer-widget">
-                        <h5 class="widget-title">Tài khoản</h5>
+                        <h5 class="widget-title" th:text="#{footer.account}">Tài khoản</h5>
                         <div class="inner">
                             <ul>
-                                <li><a href="/my-account">Tài khoản của tôi</a></li>
-                                <li><a href="/sign-up">Đăng nhập / Đăng ký</a></li>
-                                <li><a href="/cart-items">Giỏ hàng</a></li>
-                                <li><a href="/wishlist">Danh sách yêu thích</a></li>
-                                <li><a href="/product-list">Danh sách sản phẩm</a></li>
+                                <li><a href="/my-account" th:text="#{footer.account.my}">Tài khoản của tôi</a></li>
+                                <li><a href="/sign-up" th:text="#{footer.account.login}">Đăng nhập / Đăng ký</a></li>
+                                <li><a href="/cart-items" th:text="#{footer.account.cart}">Giỏ hàng</a></li>
+                                <li><a href="/wishlist" th:text="#{footer.account.wishlist}">Danh sách yêu thích</a></li>
+                                <li><a href="/product-list" th:text="#{footer.account.products}">Danh sách sản phẩm</a></li>
                             </ul>
                         </div>
                     </div>
