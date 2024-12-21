@@ -22,14 +22,16 @@
     <div class="axil-categorie-area bg-color-white axil-section-gapcommon">
         <div class="container">
             <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-secondary"><i class="far fa-tags"></i> Danh mục</span>
-                <h2 class="title">Duyệt theo danh mục</h2>
+                <span class="title-highlighter highlighter-secondary"><i class="far fa-tags"></i> <span
+                        th:text="#{category.title}">Danh mục</span></span>
+                <h2 class="title" th:text="#{category.browse}">Duyệt theo danh mục</h2>
             </div>
             <ul class="categories-list">
                 <li th:each="category : ${categories}" class="category-item">
                     <div class="categrie-product-activation slick-layout-wrapper--15 axil-slick-arrow arrow-top-slide">
                         <div class="slick-single-layout">
-                            <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500">
+                            <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200"
+                                 data-sal-duration="500">
                                 <a th:href="@{/products(categoryId=${category.categoryId})}">
                                     <img class="img-fluid" th:src="@{${category.categoryImage}}" alt="Category Image">
                                     <h6 class="cat-title" th:text="${category.categoryName}"></h6>
@@ -47,8 +49,9 @@
     <div class="axil-product-area bg-color-white axil-section-gap">
         <div class="container">
             <div class="section-title-wrapper">
-                <span class="title-highlighter highlighter-primary"> <i class="far fa-shopping-basket"></i> Sản phẩm của chúng tôi</span>
-                <h2 class="title">Khám phá sản phẩm của chúng tôi</h2>
+                <span class="title-highlighter highlighter-primary"> <i class="far fa-shopping-basket"></i> <span
+                        th:text="#{product.title}">Sản phẩm của chúng tôi</span></span>
+                <h2 class="title" th:text="#{product.explore}">Khám phá sản phẩm của chúng tôi</h2>
             </div>
             <div class="row row--15">
                 <div th:each="product : ${products}" class="col-xl-3 col-lg-4 col-sm-6">
@@ -59,9 +62,9 @@
                                      th:src="${product.productVariations[0].imageId != null ? product.productVariations[0].imageId.thumbnail : '/images/default-thumbnail.png'}"
                                      alt="Product Image">
                             </a>
-<!--                            <div class="label-block label-right">-->
-<!--                                <div class="product-badget">20% OFF</div>-->
-<!--                            </div>-->
+                            <!--                            <div class="label-block label-right">-->
+                            <!--                                <div class="product-badget">20% OFF</div>-->
+                            <!--                            </div>-->
                         </div>
                         <div class="product-content">
                             <div class="inner">
@@ -79,7 +82,8 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 text-center mt--20 mt_sm--0">
-                    <a href="product-list" class="axil-btn btn-bg-lighter btn-load-more">Xem tất cả sản phẩm</a>
+                    <a href="product-list" class="axil-btn btn-bg-lighter btn-load-more" th:text="#{product.viewAll}">Xem
+                        tất cả sản phẩm</a>
                 </div>
             </div>
         </div>

@@ -5,20 +5,28 @@
                 <nav class="axil-dashboard-nav">
                     <div class="nav nav-tabs" role="tablist">
                         <a class="nav-item nav-link" href="/my-account"
-                           aria-selected="false"><i class="fas fa-user"></i>Chi tiết tài khoản</a>
+                           aria-selected="false"><i class="fas fa-user"></i>
+                            <span th:text="#{sidebar.account.details}">Chi tiết tài khoản</span></a>
                         <a class="nav-item nav-link" th:if="${hasStore}" href="/seller/dashboard" aria-selected="false">
-                            <i class="fas fa-store"></i>Cửa hàng của tôi
+                            <i class="fas fa-store"></i>
+                            <span th:text="#{sidebar.my.store}">Cửa hàng của tôi</span>
                         </a>
                         <a class="nav-item nav-link" th:unless="${hasStore}" aria-selected="false"
                            onclick="showSignupModal()">
-                            <i class="fas fa-store"></i>Cửa hàng của tôi
+                            <i class="fas fa-store"></i><span th:text="#{sidebar.my.store}">Cửa hàng của tôi</span>
                         </a>
                         <a class="nav-item nav-link" href="/orders"
-                           aria-selected="false"><i class="fas fa-shopping-basket"></i>Đơn hàng của tôi</a>
+                           aria-selected="false"><i class="fas fa-shopping-basket"></i>
+                            <span th:text="#{sidebar.my.orders}">Đơn hàng của tôi</span>
+                        </a>
                         <a class="nav-item nav-link" href="/wallet"
-                           aria-selected="false"><i class="fas fa-wallet"></i>Ví của tôi</a>
+                           aria-selected="false"><i class="fas fa-wallet"></i>
+                            <span th:text="#{sidebar.my.wallet}">Ví của tôi</span>
+                        </a>
                         <a class="nav-item nav-link" href="/notification"
-                           aria-selected="false"><i class="fas fa-bell"></i>Thông báo</a>
+                           aria-selected="false"><i class="fas fa-bell"></i>
+                            <span th:text="#{sidebar.notifications}">Thông báo</span>
+                        </a>
                     </div>
                 </nav>
             </aside>

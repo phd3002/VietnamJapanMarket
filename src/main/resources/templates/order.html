@@ -42,37 +42,56 @@
                                         <div class="row align-items-end">
                                             <!-- Status Filter -->
                                             <div class="col-md-4 mb-3">
-                                                <label for="statusFilter" class="form-label">Lọc theo trạng thái:</label>
+                                                <label for="statusFilter" class="form-label" th:text="#{filter.status}">Lọc
+                                                    theo trạng thái:</label>
                                                 <select id="statusFilter" name="status" class="form-control">
-                                                    <option value="" th:selected="${status == null || status == ''}">Tất cả</option>
-                                                    <option value="Pending" th:selected="${status == 'Pending'}">Chờ xử lý</option>
-                                                    <option value="Processing" th:selected="${status == 'Processing'}">Đang gói hàng</option>
-                                                    <option value="Dispatched" th:selected="${status == 'Dispatched'}">Đã giao cho vận chuyển</option>
-                                                    <option value="Shipping" th:selected="${status == 'Shipping'}">Đang vận chuyển</option>
-                                                    <option value="Completed" th:selected="${status == 'Completed'}">Hoàn thành</option>
-                                                    <option value="Cancelled" th:selected="${status == 'Cancelled'}">Đã hủy</option>
-                                                    <option value="Returned" th:selected="${status == 'Returned'}">Trả hàng/Hoàn tiền</option>
-                                                    <option value="Failed" th:selected="${status == 'Failed'}">Thất bại</option>
+                                                    <option value="" th:selected="${status == null || status == ''}"
+                                                            th:text="#{filter.status.all}">Tất cả
+                                                    </option>
+                                                    <option value="Pending" th:selected="${status == 'Pending'}"
+                                                            th:text="#{status.pending}">Chờ xử lý
+                                                    </option>
+                                                    <option value="Processing" th:selected="${status == 'Processing'}"
+                                                            th:text="#{status.processing}">Đang gói hàng
+                                                    </option>
+                                                    <option value="Dispatched" th:selected="${status == 'Dispatched'}"
+                                                            th:text="#{status.dispatched}">Đã giao cho vận chuyển
+                                                    </option>
+                                                    <option value="Shipping" th:selected="${status == 'Shipping'}"
+                                                            th:text="#{status.shipping}">Đang vận chuyển
+                                                    </option>
+                                                    <option value="Completed" th:selected="${status == 'Completed'}"
+                                                            th:text="#{status.completed}">Hoàn thành
+                                                    </option>
+                                                    <option value="Cancelled" th:selected="${status == 'Cancelled'}"
+                                                            th:text="#{status.cancelled}">Đã hủy
+                                                    </option>
+                                                    <option value="Returned" th:selected="${status == 'Returned'}"
+                                                            th:text="#{status.returned}">Trả hàng/Hoàn tiền
+                                                    </option>
+                                                    <option value="Failed" th:selected="${status == 'Failed'}"
+                                                            th:text="#{status.failed}">Thất bại
+                                                    </option>
                                                 </select>
                                             </div>
 
                                             <!-- Start Date Filter -->
                                             <div class="col-md-3 mb-3">
-                                                <label for="startDate" class="form-label">Từ ngày:</label>
+                                                <label for="startDate" class="form-label" th:text="#{order.from}">Từ ngày:</label>
                                                 <input type="date" id="startDate" name="startDate" class="form-control"
                                                        th:value="${startDate}">
                                             </div>
 
                                             <!-- End Date Filter -->
                                             <div class="col-md-3 mb-3">
-                                                <label for="endDate" class="form-label">Đến ngày:</label>
+                                                <label for="endDate" class="form-label" th:text="#{order.to}">Đến ngày:</label>
                                                 <input type="date" id="endDate" name="endDate" class="form-control"
                                                        th:value="${endDate}">
                                             </div>
 
                                             <!-- Submit Button -->
                                             <div class="col-md-2 mb-3">
-                                                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                                <button type="submit" class="btn btn-primary w-100" th:text="#{order.filter}">Lọc</button>
                                             </div>
                                         </div>
                                     </form>
@@ -85,33 +104,38 @@
                                         <table class="table table-bordered">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Đơn hàng</th>
-                                                <th scope="col">Ngày tạo đơn</th>
-                                                <th scope="col">Trạng thái</th>
-                                                <th scope="col">Số lượng</th>
-                                                <th scope="col">Tổng</th>
-                                                <th scope="col">Hành động</th>
+                                                <th scope="col" th:text="#{order.code}">Đơn hàng</th>
+                                                <th scope="col" th:text="#{order.date}">Ngày tạo đơn</th>
+                                                <th scope="col" th:text="#{order.status}">Trạng thái</th>
+                                                <th scope="col" th:text="#{order.quantity}">Số lượng</th>
+                                                <th scope="col" th:text="#{order.total}">Tổng</th>
+                                                <th scope="col" th:text="#{order.action}">Hành động</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr th:each="order : ${orders}" th:if="${order.totalQuantity > 0}">
                                                 <td th:text="${order.orderCode}">#12345</td>
-                                                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
-                                                <td th:text="${order.status == 'Pending' ? 'Chờ xử lý' :
-                 (order.status == 'Confirmed' ? 'Xác nhận' :
-                 (order.status == 'Processing' ? 'Đang đóng gói' :
-                 (order.status == 'Dispatched' ? 'Đã giao cho vận chuyển' :
-                 (order.status == 'Shipping' ? 'Đang vận chuyển' :
-                 (order.status == 'Delivered' ? 'Đã giao' :
-                 (order.status == 'Completed' ? 'Hoàn tất' :
-                 (order.status == 'Failed' ? 'Thất bại' :
-                 (order.status == 'Returned' ? 'Hoàn trả' :
-                 (order.status == 'Cancelled' ? 'Đã hủy' : order.status)))))))))}">Pending</td>
+                                                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">
+                                                    01/01/2024 12:00
+                                                </td>
+                                                <td th:switch="${order.status}">
+                                                    <span th:case="'Pending'" th:text="#{status.pending}">Chờ xử lý</span>
+                                                    <span th:case="'Confirmed'" th:text="#{status.confirmed}">Xác nhận</span>
+                                                    <span th:case="'Processing'" th:text="#{status.processing}">Đang đóng gói</span>
+                                                    <span th:case="'Dispatched'" th:text="#{status.dispatched}">Đã giao cho vận chuyển</span>
+                                                    <span th:case="'Shipping'" th:text="#{status.shipping}">Đang vận chuyển</span>
+                                                    <span th:case="'Delivered'" th:text="#{status.delivered}">Đã giao</span>
+                                                    <span th:case="'Completed'" th:text="#{status.completed}">Hoàn tất</span>
+                                                    <span th:case="'Failed'" th:text="#{status.failed}">Thất bại</span>
+                                                    <span th:case="'Returned'" th:text="#{status.returned}">Hoàn trả</span>
+                                                    <span th:case="'Cancelled'" th:text="#{status.cancelled}">Đã hủy</span>
+                                                    <span th:case="*">[[${order.status}]]</span>
+                                                </td>
                                                 <td th:text="${order.totalQuantity} ">3</td>
                                                 <td th:text="${order.getFormattedPrice()}">₫150,000</td>
                                                 <td>
                                                     <a th:href="@{/order-detail/{orderId}(orderId=${order.orderId})}"
-                                                       class="btn btn-sm btn-info">Xem</a>
+                                                       class="btn btn-sm btn-info" th:text="#{order.view}">Xem</a>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -122,7 +146,8 @@
                                             <nav aria-label="Page navigation">
                                                 <ul class="pagination justify-content-center">
                                                     <!-- Previous Page -->
-                                                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                                    <li class="page-item"
+                                                        th:classappend="${currentPage == 0} ? 'disabled'">
                                                         <a class="page-link"
                                                            th:href="@{/orders(page=${currentPage - 1}, size=${size}, status=${status}, startDate=${startDate}, endDate=${endDate})}"
                                                            aria-label="Previous">
@@ -131,7 +156,8 @@
                                                     </li>
 
                                                     <!-- Page Numbers -->
-                                                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                                                    <li class="page-item"
+                                                        th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
                                                         th:classappend="${pageNum == currentPage} ? 'active'">
                                                         <a class="page-link"
                                                            th:href="@{/orders(page=${pageNum}, size=${size}, status=${status}, startDate=${startDate}, endDate=${endDate})}"
@@ -139,7 +165,8 @@
                                                     </li>
 
                                                     <!-- Next Page -->
-                                                    <li class="page-item" th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                                                    <li class="page-item"
+                                                        th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
                                                         <a class="page-link"
                                                            th:href="@{/orders(page=${currentPage + 1}, size=${size}, status=${status}, startDate=${startDate}, endDate=${endDate})}"
                                                            aria-label="Next">
@@ -151,8 +178,8 @@
 
                                             <!-- Pagination Info -->
                                             <div class="text-center mt-2">
-                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span><br/>
-                                                <span>Tổng đơn: [[${totalItems}]]</span>
+                                                <span th:text="#{pagination.page} + ' ' + (${currentPage + 1}) + ' ' + #{pagination.of} + ' ' + (${totalPages})">Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span><br/>
+                                                <span th:text="#{pagination.totalOrders} + ': ' + (${totalItems})">Tổng đơn: [[${totalItems}]]</span>
                                             </div>
                                         </div>
                                     </div>
@@ -161,7 +188,8 @@
                                     <div th:if="${orders == null or orders.size() == 0}" class="text-center">
                                         <!-- Hiển thị message nếu có, nếu không thì hiển thị message1 -->
                                         <p th:text="${message != null ? message : message1}"></p>
-                                        <a th:if="${message1 == null}" th:href="@{/product-list}" class="btn btn-primary">Mua ngay</a>
+                                        <a th:if="${message1 == null}" th:href="@{/product-list}"
+                                           class="btn btn-primary" th:text="#{order.buyNow}">Mua ngay</a>
                                     </div>
                                 </div>
                             </div>

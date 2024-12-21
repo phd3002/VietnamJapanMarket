@@ -24,14 +24,14 @@
         <div class="container">
             <div class="axil-product-cart-wrap">
                 <div class="product-table-heading">
-                    <h4 class="title">Your Cart</h4>
+                    <h4 class="title" th:text="#{cart.title}">Your Cart</h4>
                 </div>
                 <div th:if="${error}" class="alert alert-danger" role="alert">
                     <span th:text="${error}"></span>
                 </div>
                 <!-- Display empty cart message -->
                 <div th:if="${isCartEmpty}" class="alert alert-warning" role="alert">
-                    <span>Giỏ hàng của bạn đang trống. <a href="/product-list">Mua ngay</a>. </span>
+                    <span th:text="#{cart.empty}">Giỏ hàng của bạn đang trống. </span><a href="/product-list" th:text="#{cart.shop.now}">Mua ngay</a>.
                 </div>
 
                 <!-- Cart Items Table -->
@@ -44,11 +44,11 @@
                             <thead>
                             <tr>
                                 <th scope="col"></th>
-                                <th scope="col">Sản phẩm</th>
-                                <th scope="col">Tên sản phẩm</th>
-                                <th scope="col">Giá</th>
-                                <th scope="col">Số lượng</th>
-                                <th scope="col">Tổng</th>
+                                <th scope="col" th:text="#{cart.product}">Sản phẩm</th>
+                                <th scope="col" th:text="#{cart.product.name}">Tên sản phẩm</th>
+                                <th scope="col" th:text="#{cart.price}">Giá</th>
+                                <th scope="col" th:text="#{cart.quantity}">Số lượng</th>
+                                <th scope="col" th:text="#{cart.total}">Tổng</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -82,7 +82,7 @@
                                         <input type="number" name="quantity" class="quantity-input"
                                                th:value="${item.quantity}" min="1" max="50">
                                         </div>
-                                        <button type="submit">Cập nhật</button>
+                                        <button type="submit" th:text="#{cart.update}">Cập nhật</button>
                                     </form>
                                 </td>
                                 <td class="product-subtotal" data-title="Subtotal">
@@ -96,7 +96,7 @@
                 <div class="cart-update-btn-area" style="display: flex; justify-content: flex-end; margin-right: 10%" th:if="${!isCartEmpty}">
                     <div class="update-btn">
                         <form id="checkoutForm" action="/checkout" method="get">
-                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4; color: white" th:disabled="${isCartEmpty}">
+                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4; color: white" th:disabled="${isCartEmpty}" th:text="#{cart.checkout}">
                                 Thanh toán
                             </button>
                             <input type="hidden" name="cartItemIds" id="cartItemIds">

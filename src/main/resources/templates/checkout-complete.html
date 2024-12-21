@@ -42,39 +42,40 @@
 <!-- Main Content Section -->
 <main class="main-wrapper">
     <div class="confirmation-container">
-        <h2>Cảm ơn vì bạn đã mua hàng!</h2>
-        <p>Đã tạo đơn thành công.</p>
-        <p>Mã đơn hàng là: <span th:text="${order.orderCode}"></span></p>
+        <h2 th:text="#{confirmation.thankyou}">Cảm ơn vì bạn đã mua hàng!</h2>
+        <p th:text="#{confirmation.successful}">Đã tạo đơn thành công.</p>
+        <span th:text="#{confirmation.orderCode}">Mã đơn hàng là: </span><span th:text="${order.orderCode}"></span>
 
         <div class="order-summary">
-            <h3>Thông tin đơn hàng</h3>
+            <h3 th:text="#{confirmation.orderDetails}">Thông tin đơn hàng</h3>
             <table>
                 <tr>
-                    <th>Tổng giá:</th>
-                    <td th:text="${paymentMethod == 'cod' ? 'Thanh toán khi nhận hàng' : order.getPriceFormated() + ' '}"></td>
+                    <th th:text="#{confirmation.totalPrice}">Tổng giá:</th>
+                    <td th:text="${order.getPriceFormated()}"></td>
                 </tr>
                 <tr>
-                    <th>Ngày tạo đơn:</th>
+                    <th th:text="#{confirmation.orderDate}">Ngày tạo đơn:</th>
                     <td th:text="${order.orderDate}"></td>
                 </tr>
                 <tr>
-                    <th>Trạng thái:</th>
-                    <td th:text="${order.shippingStatus[0].status == 'Pending' ? 'Chờ xử lý' :
-              order.shippingStatus[0].status == 'Confirmed' ? 'Xác nhận' :
-              order.shippingStatus[0].status == 'Processing' ? 'Đang đóng gói' :
-              order.shippingStatus[0].status == 'Dispatched' ? 'Đã giao cho vận chuyển' :
-              order.shippingStatus[0].status == 'Shipping' ? 'Đang vận chuyển' :
-              order.shippingStatus[0].status == 'Delivered' ? 'Đã giao' :
-              order.shippingStatus[0].status == 'Completed' ? 'Hoàn tất' :
-              order.shippingStatus[0].status == 'Failed' ? 'Thất bại' :
-              order.shippingStatus[0].status == 'Returned' ? 'Hoàn trả' :
-              order.shippingStatus[0].status == 'Cancelled' ? 'Đã hủy' :
-              order.shippingStatus[0].status}">
+                    <th th:text="#{confirmation.status}">Trạng thái:</th>
+                    <td th:switch="${order.shippingStatus[0].status}">
+                        <th:block th:case="'Pending'" th:text="#{confirmation.pending}">Pending</th:block>
+                        <th:block th:case="'Confirmed'" th:text="#{confirmation.confirmed}">Confirmed</th:block>
+                        <th:block th:case="'Processing'" th:text="#{confirmation.processing}">Processing</th:block>
+                        <th:block th:case="'Dispatched'" th:text="#{confirmation.dispatched}">Dispatched</th:block>
+                        <th:block th:case="'Shipping'" th:text="#{confirmation.shipping}">Shipping</th:block>
+                        <th:block th:case="'Delivered'" th:text="#{confirmation.delivered}">Delivered</th:block>
+                        <th:block th:case="'Completed'" th:text="#{confirmation.completed}">Completed</th:block>
+                        <th:block th:case="'Failed'" th:text="#{confirmation.failed}">Failed</th:block>
+                        <th:block th:case="'Returned'" th:text="#{confirmation.returned}">Returned</th:block>
+                        <th:block th:case="'Cancelled'" th:text="#{confirmation.cancelled}">Cancelled</th:block>
+                        <th:block th:case="*">[[${order.shippingStatus[0].status}]]</th:block>
                     </td>
                 </tr>
             </table>
         </div>
-        <a href="/orders" class="axil-btn btn-bg-primary">Xem đơn hàng</a>
+        <a href="/orders" class="axil-btn btn-bg-primary" th:text="#{confirmation.viewOrders}">Xem đơn hàng</a>
     </div>
 </main>
 

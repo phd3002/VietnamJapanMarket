@@ -117,7 +117,9 @@
             </div>
             <div id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}" class="alert alert-danger">
                 <p th:text="${errorMessage}"></p>
-                <p th:if="${errorMessage1!=null}">Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào ví hoặc chọn phương thức thanh toán khác. <a th:if="${errorMessage1 != null}" href="/wallet"><u>Nạp ngay</u></a></p>
+                <p th:if="${errorMessage1!=null}">Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào
+                    ví hoặc chọn phương thức thanh toán khác. <a th:if="${errorMessage1 != null}" href="/wallet"><u>Nạp
+                        ngay</u></a></p>
             </div>
             <form action="/checkout" method="post">
                 <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">
@@ -126,33 +128,36 @@
                 <div class="checkout-container">
                     <!-- User Information Section -->
                     <div class="user-info">
-                        <h4 class="title mb--40">Thông tin người mua</h4>
+                        <h4 class="title mb--40" th:text="#{checkout.buyer.info}">Thông tin người mua</h4>
                         <div class="form-group">
-                            <label>Họ tên <span>*</span></label>
+                            <label th:text="#{checkout.fullname}">Họ tên <span>*</span></label>
                             <input type="text" id="full-name">
                         </div>
                         <div class="form-group">
-                            <label>Số điện thoại <span>*</span></label>
+                            <label th:text="#{checkout.phone}">Số điện thoại <span>*</span></label>
                             <input type="text" name="phoneNumber" id="phone-number" required>
                         </div>
                         <div class="form-group">
-                            <label>Địa chỉ email <span>*</span></label>
+                            <label th:text="#{checkout.email}">Địa chỉ email <span>*</span></label>
                             <input type="text" id="email-address" required>
                         </div>
                         <div class="form-group">
-                            <label for="city">Tỉnh thành</label>
+                            <label for="city" th:text="#{checkout.city}">Tỉnh thành</label>
                             <select id="city" required>
-                                <option value="" selected>Chọn tỉnh thành</option>
+                                <option value="" selected th:text="#{checkout.select.city}">Chọn tỉnh thành</option>
                             </select>
-                            <label for="district">Tỉnh thành</label>
+                            <label for="district" th:text="#{checkout.district}">Tỉnh thành</label>
                             <select id="district" required>
-                                <option value="" selected>Vui lòng chọn tỉnh thành</option>
+                                <option value="" selected th:text="#{checkout.select.district}">Vui lòng chọn tỉnh
+                                    thành
+                                </option>
                             </select>
-                            <label for="ward">Tỉnh thành</label>
+                            <label for="ward" th:text="#{checkout.ward}">Tỉnh thành</label>
                             <select id="ward" required>
-                                <option value="" selected>Vui lòng chọn quận huyện</option>
+                                <option value="" selected th:text="#{checkout.select.ward}">Vui lòng chọn quận huyện
+                                </option>
                             </select>
-                            <label for="shipping-address">Địa chỉ chi tiết <span>*</span></label>
+                            <label for="shipping-address" th:text="#{checkout.address}">Địa chỉ chi tiết <span>*</span></label>
                             <input class="form-group" type="text" name="shippingAddress" id="shipping-address"
                                    required>
 
@@ -219,17 +224,17 @@
                     </script>
                     <!-- Order Summary Section -->
                     <div class="order-summary">
-                        <h5 class="title mb--20">Đơn hàng của bạn</h5>
+                        <h5 class="title mb--20" th:text="#{checkout.your.order}">Đơn hàng của bạn</h5>
                         <div class="summery-table-wrap">
                             <table class="table summery-table">
                                 <thead>
                                 <tr>
-                                    <th scope="col">Hình ảnh</th>
-                                    <th scope="col">Sản phẩm</th>
-                                    <th scope="col">Đơn giá</th>
-                                    <th scope="col">Số lượng</th>
-                                    <th scope="col">Khối lượng</th>
-                                    <th scope="col">Thành tiền</th>
+                                    <th scope="col" th:text="#{checkout.image}">Hình ảnh</th>
+                                    <th scope="col" th:text="#{checkout.product}">Sản phẩm</th>
+                                    <th scope="col" th:text="#{checkout.price}">Đơn giá</th>
+                                    <th scope="col" th:text="#{checkout.quantity}">Số lượng</th>
+                                    <th scope="col" th:text="#{checkout.weight}">Khối lượng</th>
+                                    <th scope="col" th:text="#{checkout.total}">Thành tiền</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -240,10 +245,9 @@
                                     <td>
 
                                         <span th:text="${item.productId.productName}"></span><br>
-                                        <span>Loại:
-                                            <span th:text="${item.variationId.color.colorName}"></span>,
-                                            <span th:text="${item.variationId.size.sizeName}"></span>
-                                        </span>
+                                        <span th:text="#{order.productType}+': '">Loại:</span>
+                                        <span th:text="${item.variationId.color.colorName}"></span>,
+                                        <span th:text="${item.variationId.size.sizeName}"></span>
                                     </td>
                                     <td th:text="${item.getPriceFormated()}"></td>
                                     <td th:text="${item.quantity}"></td>
@@ -255,7 +259,7 @@
                         </div>
                         <!-- Shipping Method Section -->
                         <div class="order-shipping-method">
-                            <h5 class="title mb--20">Phương thức vận chuyển</h5>
+                            <h5 class="title mb--20" th:text="#{checkout.shipping.method}">Phương thức vận chuyển</h5>
                             <div class="form-group">
                                 <select name="shippingUnitId" id="shipping-method">
                                     <option th:each="unit : ${shippingUnits}"
@@ -267,35 +271,36 @@
                             </div>
                         </div>
                         <div class="order-payment-method">
-                            <h5 class="title mb--20">Phương thức thanh toán</h5>
+                            <h5 class="title mb--20" th:text="#{checkout.payment.method}">Phương thức thanh toán</h5>
                             <div class="row">
                                 <div class="col-sm-12 d-flex justify-content-between">
                                     <div>
                                         <button id="wallet" class="payment-btn btn-common selected" data-method="WALLET"
-                                                type="button">Ví VJ-Market
+                                                type="button" th:text="#{checkout.wallet.method}">Ví VJ-Market
                                         </button>
                                         <button id="vnpay" class="payment-btn btn-common" data-method="VNPAY"
-                                                type="button">Thanh toán VNPay
+                                                type="button" th:text="#{checkout.online.method}">Thanh toán VNPay
                                         </button>
                                     </div>
                                     <div>
                                         <div class="payment-details" id="walletDetails">
-                                            <p>Số dư ví của bạn: <strong th:text="${walletBalance} + ''">0đ</strong>
-                                            </p>
+                                            <span th:text="#{checkout.wallet.balance}">Số dư ví của bạn: </span>
+                                            <strong th:text="${walletBalance} + ''" class="balance">0đ</strong>
                                         </div>
                                         <div class="payment-details" id="vnpayDetails" style="display:none;">
-                                            <p>Bạn đang chọn thanh toán qua VNPay.</p>
+                                            <p th:text="#{checkout.VNPay}">Bạn đang chọn thanh toán qua VNPay.</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- Payment type options -->
                             <div class="payment-type-options">
-                                <h6 class="title mb--10">Hình thức thanh toán</h6>
+                                <h6 class="title mb--10" th:text="#{checkout.method}">Hình thức thanh toán</h6>
                                 <button id="fullPayment" class="payment-type-btn selected" data-type="full"
-                                        type="button">Trả đủ
+                                        type="button" th:text="#{checkout.all}">Trả đủ
                                 </button>
-                                <button id="depositPayment" class="payment-type-btn" data-type="deposit" type="button">
+                                <button id="depositPayment" class="payment-type-btn" data-type="deposit" type="button"
+                                        th:text="#{checkout.deposit}">
                                     Đặt cọc 50%
                                 </button>
                             </div>
@@ -306,34 +311,39 @@
                             <br><br>
                             <div class="order-price">
                                 <div class="d-flex justify-content-between">
-                                    <h6 class="title mb-0">Tổng tiền hàng:</h6>
+                                    <h6 class="title mb-0" th:text="#{checkout.total.product.price}">Tổng tiền
+                                        hàng:</h6>
                                     <span id="total-product-price" th:text="${totalPrice} + ' VND'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h6 class="title mb-0" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Các đơn hàng có khối lượng dưới 1kg sẽ được làm tròn thành 1kg để tính phí vận chuyển.">
-                                        Tổng tiền phí vận chuyển<span class="font-weight-bold" style="color: red">(?)</span>:
+                                        title="Các đơn hàng có khối lượng dưới 1kg sẽ được làm tròn thành 1kg để tính phí vận chuyển."
+                                        th:text="#{checkout.total.shipping.price}">
+                                        Tổng tiền phí vận chuyển<span class="font-weight-bold"
+                                                                      style="color: red">(?)</span>:
                                     </h6>
                                     <span id="total-shipping-fee" th:text="${shippingFee} + ' VND'"></span>
                                 </div>
 
                                 <div class="d-flex justify-content-between">
-                                    <h6 class="title mb-0">Thuế (8%):</h6>
+                                    <h6 class="title mb-0" th:text="#{checkout.total.tax.price}">Thuế (8%):</h6>
                                     <span id="total-tax-fee" th:text="${tax} + ' VND'"></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <h5 class="title mb-0">Tổng thanh toán:</h5>
+                                    <h5 class="title mb-0" th:text="#{checkout.total.order.price}">Tổng thanh toán:</h5>
                                     <h6 id="total-order-price" style="color: #bb2d3b;"
                                         th:text="${totalWithShipping} + ' VND'"></h6>
                                 </div>
                                 <div class="order-weight" style="display: none">
-                                    <h6>Total Weight:</h6>
+                                    <h6 th:text="#{checkout.total.order.weight}">Total Weight:</h6>
                                     <span id="total-weight" th:text="${totalWeight} + ' kg'"></span>
                                 </div>
 
                             </div>
                         </div>
-                        <button type="submit" class="axil-btn btn-bg-primary checkout-btn">Thanh toán</button>
+                        <button type="submit" class="axil-btn btn-bg-primary checkout-btn" th:text="#{checkout.submit}">
+                            Thanh toán
+                        </button>
                     </div>
                 </div>
             </form>

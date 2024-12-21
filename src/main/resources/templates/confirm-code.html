@@ -45,7 +45,7 @@
     <div class="row">
         <div class="col-xl-4 col-lg-6">
             <div class="axil-signin-banner bg_image bg_image--10">
-                <h3 class="title">Chúng tôi cung cấp những sản phẩm tốt nhất</h3>
+                <h3 class="title" th:text="#{otp.page.title}">Chúng tôi cung cấp những sản phẩm tốt nhất</h3>
             </div>
         </div>
         <div class="col-lg-6 offset-xl-2">
@@ -62,12 +62,12 @@
 
                             </div>
                             <br>
-                            <label>Nhập mã OTP đã gửi qua email của bạn</label>
+                            <label th:text="#{otp.enter.label}">Nhập mã OTP đã gửi qua email của bạn</label>
                             <!-- Sửa lại tên trường input từ "code" thành "otp" để khớp với backend -->
                             <input type="text" class="form-control" name="otp" id="otp" required>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="axil-btn btn-bg-primary submit-btn">Xác nhận</button>
+                            <button type="submit" class="axil-btn btn-bg-primary submit-btn" th:text="#{otp.submit}">Xác nhận</button>
                         </div>
                     </form>
                 </div>
