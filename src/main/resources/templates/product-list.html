@@ -55,7 +55,7 @@
                             <!-- Previous Button -->
                             <li class="page-item" th:if="${currentPage != null && currentPage > 0}">
                                 <a class="page-link" th:href="@{/products(categoryId=${categoryId}, page=${currentPage - 1})}">
-                                    Trước
+                                    &laquo;
                                 </a>
                             </li>
 
@@ -70,7 +70,7 @@
                             <!-- Next Button -->
                             <li class="page-item" th:if="${currentPage != null && currentPage < totalPages - 1}">
                                 <a class="page-link" th:href="@{/products(categoryId=${categoryId}, page=${currentPage + 1})}">
-                                    Sau
+                                    &raquo;
                                 </a>
                             </li>
                         </ul>

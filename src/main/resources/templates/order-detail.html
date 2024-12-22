@@ -98,30 +98,42 @@
                                                 aria-label="Close"></button>
                                         <p th:text="${message}"></p>
                                     </div>
-                                    <h4 style="text-align: center">Mã: <span
-                                            id="order-id" th:text="${trackingNumber}"></span></h4>
-                                    <h4 style="text-align: center">Trạng thái:
-                                        <span id="status-order"
-                                              th:text="${shippingStatus == 'Pending' ? 'Chờ xử lý' :
-                    (shippingStatus == 'Confirmed' ? 'Xác nhận' :
-                    (shippingStatus == 'Processing' ? 'Đang đóng gói' :
-                    (shippingStatus == 'Dispatched' ? 'Đã giao cho vận chuyển' :
-                    (shippingStatus == 'Shipping' ? 'Đang vận chuyển' :
-                    (shippingStatus == 'Delivered' ? 'Đã giao' :
-                    (shippingStatus == 'Completed' ? 'Hoàn tất' :
-                    (shippingStatus == 'Failed' ? 'Thất bại' :
-                    (shippingStatus == 'Returned' ? 'Hoàn trả' :
-                    (shippingStatus == 'Cancelled' ? 'Đã hủy' : shippingStatus)))))))))}">
-    </span>
-                                    </h4>
+                                    <div class="order-header text-center">
+                                        <h4>
+                                            <span th:text="#{order.id} + ': '">Order ID: </span>
+                                            <span id="order-id" th:text="${trackingNumber}"></span>
+                                        </h4>
+                                        <h4>
+                                            <span th:text="#{order.status} + ': '">Status: </span>
+                                            <span id="status-order" th:switch="${shippingStatus}">
+                                                <th:block th:case="'Pending'" th:text="#{status.pending}"></th:block>
+                                                <th:block th:case="'Confirmed'"
+                                                          th:text="#{status.confirmed}"></th:block>
+                                                <th:block th:case="'Processing'"
+                                                          th:text="#{status.processing}"></th:block>
+                                                <th:block th:case="'Dispatched'"
+                                                          th:text="#{status.dispatched}"></th:block>
+                                                <th:block th:case="'Shipping'" th:text="#{status.shipping}"></th:block>
+                                                <th:block th:case="'Delivered'"
+                                                          th:text="#{status.delivered}"></th:block>
+                                                <th:block th:case="'Completed'"
+                                                          th:text="#{status.completed}"></th:block>
+                                                <th:block th:case="'Failed'" th:text="#{status.failed}"></th:block>
+                                                <th:block th:case="'Returned'" th:text="#{status.returned}"></th:block>
+                                                <th:block th:case="'Cancelled'"
+                                                          th:text="#{status.cancelled}"></th:block>
+                                                <th:block th:case="*">[[${shippingStatus}]]</th:block>
+                                            </span>
+                                        </h4>
+                                    </div>
                                     <div class="order-progress"
                                          th:if="${shippingStatus} != 'Cancelled' and ${shippingStatus} != 'Returned'">
                                         <div th:classappend="${pendingTime != null or confirmedTime != null or previousStatus == 'Pending'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-calendar"></i>
-                                            <p class="order-status">Đơn hàng</p>
+                                            <p class="order-status" th:text="#{order.order}">Đơn hàng</p>
                                             <small th:if="${shippingStatus == 'Pending'}"
-                                                   th:text="${confirmedTime == null} ? 'Chờ xác nhận' : 'Đơn hàng đã đặt'"></small><br>
+                                                   th:text="${confirmedTime == null} ? #{status.pending} : #{status.confirmed}"></small><br>
                                             <small id="order-placed-date"
                                                    th:text="${confirmedTime == null ? #temporals.format(pendingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(confirmedTime, 'HH:mm dd-MM-yyyy')}">
                                             </small>
@@ -129,36 +141,36 @@
                                         <div th:classappend="${processingTime != null or dispatchedTime != null or previousStatus == 'Processing'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-box"></i>
-                                            <p class="order-status">Xử lý</p>
+                                            <p class="order-status" th:text="#{order.process}">Xử lý</p>
                                             <small th:if="${processingTime != null}"
-                                                   th:text="${dispatchedTime == null} ? 'Đang gói hàng' : 'Đã giao cho vận chuyển'"></small><br>
+                                                   th:text="${dispatchedTime == null} ? #{status.processing} : #{status.dispatched}"></small><br>
                                             <small id="payment-confirmed-date"
                                                    th:text="${dispatchedTime == null ? #temporals.format(processingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(dispatchedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${shippingTime != null or failedTime != null or previousStatus == 'Shipping'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-truck"></i>
-                                            <p class="order-status">Vận chuyển</p>
+                                            <p class="order-status" th:text="#{order.ship}">Vận chuyển</p>
                                             <small th:if="${shippingTime != null}"
-                                                   th:text="${failedTime == null} ? 'Đang giao hàng' : 'Giao hàng thất bại'"></small><br>
+                                                   th:text="${failedTime == null} ? #{status.shipping} : #{status.failed}"></small><br>
                                             <small id="shipped-date"
                                                    th:text="${failedTime == null ? #temporals.format(shippingTime, 'HH:mm dd-MM-yyyy') : #temporals.format(failedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${deliveredTime != null or previousStatus == 'Delivered'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-quality"></i>
-                                            <p class="order-status">Đã giao</p>
+                                            <p class="order-status" th:text="#{order.deliver}">Đã giao</p>
                                             <small th:if="${deliveredTime != null}"
-                                                   th:text="'Đã giao hàng'"></small><br>
+                                                   th:text="#{status.delivered}"></small><br>
                                             <small id="delivered-date"
                                                    th:text="${#temporals.format(deliveredTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
                                         <div th:classappend="${completedTime != null or previousStatus == 'Completed'} ? 'active' : ''"
                                              class="order-progress-step">
                                             <i class="flaticon-star"></i>
-                                            <p class="order-status">Hoàn tất</p>
+                                            <p class="order-status" th:text="#{order.complete}">Hoàn tất</p>
                                             <small th:if="${completedTime != null}"
-                                                   th:text="'Đơn hàng đã hoàn thành'"></small><br>
+                                                   th:text="#{status.completed}"></small><br>
                                             <small id="completed-date" th:if="${completedTime != null}"
                                                    th:text="${#temporals.format(completedTime, 'HH:mm dd-MM-yyyy')}"></small>
                                         </div>
@@ -166,41 +178,31 @@
                                     <div class="row">
                                         <div class="col-5">
                                             <div class="order-info">
-                                                <p class="text-left" th:text="'Địa chỉ: ' + ${shippingAddress}"></p>
+                                                <p class="text-left"
+                                                   th:text="#{order.address} + ': ' + ${shippingAddress}"></p>
                                                 <!-- Align text to the left -->
                                             </div>
                                         </div>
                                         <div class="col-7">
                                             <div class="order-actions text-right"
                                                  style="display: flex; justify-content: end;">
-                                                <!--                                                <input th:if="${shippingStatus == 'Pending' || shippingStatus == 'Processing'}" type="submit"-->
-                                                <!--                                                       id="cancel-order-pending"-->
-                                                <!--                                                       class="axil-btn btn-bg-secondary btn-sm"-->
-                                                <!--                                                       onclick="pendingCancelOrder()"-->
-                                                <!--                                                       value="Huỷ đơn hàng">-->
-                                                <!-- Khi hang da giao muon danh gia(khi da nhan duoc hang va xac nhan) -->
                                                 <input th:if="${shippingStatus == 'Delivered'}" type="submit"
                                                        id="rate-product"
                                                        class="axil-btn btn-bg-secondary btn-sm"
-                                                       value="Đánh giá đơn hàng">
+                                                       th:value="#{order.rateOrder}">
                                                 <!-- Huy don hang(chi hien thi khi chua nhan hang) -->
                                                 <input type="submit" th:if="${shippingStatus == 'Pending'}"
                                                        id="cancel-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        style="background-color: red; border: none; margin-left: 10px;"
-                                                       value="Hủy đơn hàng">
+                                                       th:value="#{order.cancelOrder}">
                                                 <!-- yeu cau hoan tra tien(khi da nhan hang) -->
                                                 <input th:if="${shippingStatus == 'Delivered'}" type="submit"
                                                        id="refund-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        onclick="requestReturn()"
                                                        style="background-color: red; color: white; border: solid var(--color-danger) 2px; margin-left: 10px;"
-                                                       value="Yêu cầu trả hàng">
-                                                <!-- chuyen sang Delivered khi dang shipping -->
-                                                <!--                                                <input th:if="${shippingStatus == 'Shipping'}" type="submit" id="switch-to-delivered" onclick="switchToDeliver()"-->
-                                                <!--                                                       class="axil-btn btn-bg-secondary btn-sm"-->
-                                                <!--                                                       style="background-color: green; color: white; border: none; margin-left: 10px;"-->
-                                                <!--                                                       value="Delivered">-->
+                                                       th:value="#{order.requestReturn}">
                                             </div>
                                         </div>
                                     </div>
@@ -221,7 +223,8 @@
                                                     </div>
                                                     <div class="info-row">
                                                         <a th:href="@{/view-store/{storeId}(storeId=${storeId})}"><i
-                                                                class="flaticon-shop hover-flip-item"> Xem cửa hàng</i></a>
+                                                                class="flaticon-shop hover-flip-item"
+                                                                th:text="#{order.viewStore}"> Xem cửa hàng</i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -236,49 +239,49 @@
                                                     <div class="product-info">
                                                         <h2 class="product-name" th:text="${detail.productName}"></h2>
                                                         <p class="product-brand"
-                                                           th:text="'Phân loại hàng: '+ ${detail.categoryName}"></p>
+                                                           th:text="#{order.productCategory} + ': '+ ${detail.categoryName}"></p>
                                                         <p class="product-category"
-                                                           th:text="'Loại: '+ ${detail.sizeAndColor}"></p>
+                                                           th:text="#{order.productType}+ ': '+ ${detail.sizeAndColor}"></p>
                                                         <p class="product-category"
-                                                           th:text="'Số lượng: '+ ${detail.quantity}"></p>
-                                                        <!--                                                <span class="product-policies">15 Days Returns | 15 Days Free Returns</span>-->
+                                                           th:text="#{order.quantity} + ': '+ ${detail.quantity}"></p>
                                                     </div>
                                                 </div>
                                                 <div class="product-right">
                                                 <span class="product-price"
                                                       th:text="${detail.productTotalPrice}"></span>
                                                     <span class="shop-rating"
-                                                          th:text="${detail.avgRating != null ? detail.avgRating + ' ★' : 'Chưa có đánh giá'}"></span>
+                                                          th:text="${detail.avgRating != null ? detail.avgRating + ' ★' : #messages.msg('order.havenotFeedback')}">
+                                                    </span>
                                                 </div>
                                             </div>
                                         </a>
                                     </div>
                                     <div class="summary">
                                         <div class="summary-row">
-                                            <span class="summary-label">Phí sản phẩm</span>
+                                            <span class="summary-label" th:text="#{order.productFee}">Phí sản phẩm</span>
                                             <span class="summary-value"
                                                   th:text="${totalAmount}"></span>
                                         </div>
                                         <div class="summary-row">
-                                            <span class="summary-label">Phí vận chuyển</span>
+                                            <span class="summary-label" th:text="#{order.shippingFee}">Phí vận chuyển</span>
                                             <span class="summary-value"
                                                   th:text="${shippingFee}"></span>
                                         </div>
                                         <div class="summary-row">
-                                            <span class="summary-label">Tax(8%)</span>
+                                            <span class="summary-label" th:text="#{order.tax}">Tax(8%)</span>
                                             <span class="summary-value" th:text="${tax}"> </span>
                                         </div>
 
                                         <div class="summary-row">
-                                            <span class="summary-label total">Tổng chi phí</span>
+                                            <span class="summary-label total" th:text="#{order.totalCost}">Tổng chi phí</span>
                                             <span th:text="${finalTotal}">0</span>
                                         </div>
                                         <div class="summary-row">
-                                            <span class="summary-label total">Đã Thanh toán</span>
+                                            <span class="summary-label total" th:text="#{order.paid}">Đã Thanh toán</span>
                                             <span th:text="${deposit}">0</span>
                                         </div>
                                         <div class="summary-row">
-                                            <span class="summary-label total">Còn lại</span>
+                                            <span class="summary-label total" th:text="#{order.remaining}">Còn lại</span>
                                             <span th:text="${remaining_balance}">0</span>
                                         </div>
                                     </div>
@@ -294,9 +297,9 @@
     <div id="confirmDeliveryModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Bạn đã nhận được hàng?</h2>
+            <h2 th:text="#{order.confirm}">Bạn đã nhận được hàng?</h2>
             <form>
-                <button type="submit">Xác nhận</button>
+                <button type="submit" th:text="#{order.submit}">Xác nhận</button>
             </form>
         </div>
     </div>
@@ -306,11 +309,11 @@
             <div class="close"
                  style="display: flex; justify-content: end; position: relative; top: -10px; right: -10px"><i
                     class="close fa fa-times" id="close-model-btn"></i></div>
-            <h2>Đánh giá của bạn</h2>
+            <h2 th:text="#{order.yourFeedback}">Đánh giá của bạn</h2>
             <form id="rateForm">
-                <label for="feedback-text">Nhập đánh giá của bạn:</label>
+                <label for="feedback-text" th:text="#{order.enterFeedback}">Nhập đánh giá của bạn:</label>
                 <input type="text" id="feedback-text" name="feedback-text" style="padding: 0 14px"><br><br>
-                <label for="rating">Đánh giá:</label>
+                <label for="rating" th:text="#{order.feedback}">Đánh giá:</label>
                 <select id="rating" class="form-select">
                     <option value="5">★★★★★</option>
                     <option value="4">★★★★☆</option>
@@ -318,7 +321,7 @@
                     <option value="2">★★☆☆☆</option>
                     <option value="1">★☆☆☆☆</option>
                 </select>
-                <button type="submit" class="mt-5" style="padding: 14px 0">Xác nhận</button>
+                <button type="submit" class="mt-5" style="padding: 14px 0" th:text="#{order.submit}">Xác nhận</button>
             </form>
         </div>
     </div>
@@ -326,12 +329,12 @@
     <div id="pendingConfirmationModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close" onclick="closeAllModals()">&times;</span>
-            <h2>Xác nhận thông tin</h2>
+            <h2 th:text="#{order.confirmInfo}">Xác nhận thông tin</h2>
             <form action="/order-detail/cancel" method="POST">
                 <input type="hidden" id="cancel-order-id" name="orderId" value="">
-                <label for="reason-name">Lý do mà bạn gửi yêu cầu:</label>
+                <label for="reason-name" th:text="#{order.reason}">Lý do mà bạn gửi yêu cầu:</label>
                 <input type="text" id="reason-name" name="reason" required><br><br>
-                <button type="submit">Gửi</button>
+                <button type="submit" th:text="#{order.send}">Gửi</button>
             </form>
         </div>
     </div>
@@ -344,18 +347,18 @@
     <div id="refundModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Xác nhận thông tin</h2>
+            <h2 th:text="#{order.confirmInfo}">Xác nhận thông tin</h2>
             <form action="/order-detail/return" method="POST">
                 <input type="hidden" id="refund-order-id" name="orderId" value="">
-                <label for="reason">Lý do mà bạn gửi yêu cầu:</label>
+                <label for="reason" th:text="#{order.reason}">Lý do mà bạn gửi yêu cầu:</label>
                 <select id="reason" name="reason" required>
-                    <option value="" disabled selected>Chọn lý do</option>
-                    <option value="not_as_described">Hàng không như mô tả</option>
-                    <option value="damaged">Hàng bị vỡ</option>
+                    <option value="" disabled selected th:text="#{order.chooseReason}">Chọn lý do</option>
+                    <option value="not_as_described" th:text="#{order.notAsDescribed}">Hàng không như mô tả</option>
+                    <option value="damaged" th:text="#{order.damaged}">Hàng bị vỡ</option>
                 </select><br><br>
                 <input type="hidden" name="status" value="Returned"><br><br>
 
-                <button type="submit">Gửi</button>
+                <button type="submit" th:text="#{order.send}">Gửi</button>
             </form>
         </div>
     </div>
@@ -364,15 +367,15 @@
     <div id="successModal-rating" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Đánh Giá Thành Công!</h2>
+            <h2 th:text="#{order.successRating}">Đánh Giá Thành Công!</h2>
         </div>
     </div>
     <!-- Success pending Modal -->
     <div id="successModal-pending" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Thành Công!</h2>
-            <p>Yêu cầu của bạn đã được gửi tới người bán.</p>
+            <h2 th:text="#{order.successPending}">Thành Công!</h2>
+            <p th:text="#{order.pendingRequest}">Yêu cầu của bạn đã được gửi tới người bán.</p>
         </div>
     </div>
 </main>

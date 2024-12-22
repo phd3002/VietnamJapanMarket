@@ -117,14 +117,14 @@
                                     </div>
                                     <div class="review-link">
                                         <span th:text="${avgText}"></span> (<span
-                                            th:text="${feedbacks.size()}"></span> đánh giá của khách hàng)
+                                            th:text="${feedbacks.size()} +' ' +#{product.customer.reviews}"></span> )
                                     </div>
                                 </div>
                                 <!-- Product variations -->
                                 <div class="product-variations-wrapper">
                                     <!-- Colors Section -->
                                     <div class="product-variation">
-                                        <h6 class="title">Màu sắc: </h6>
+                                        <h6 class="title" th:text="#{product.color}+' '">Màu sắc: </h6>
                                         <div class="color-variant-wrapper">
                                             <ul class="color-variant">
                                                 <li th:each="color : ${availableColors} "
@@ -140,7 +140,7 @@
                                     </div>
                                     <!-- Sizes Section -->
                                     <div class="product-variation product-size-variation">
-                                        <h6 class="title">Loại: </h6>
+                                        <h6 class="title" th:text="#{product.type}+' '">Loại: </h6>
                                         <ul class="range-variant">
                                             <li th:each="size : ${listProductDetails}"
                                                 th:data-size-name="${size.getSize()}"
@@ -171,7 +171,7 @@
                                         <input type="hidden" name="selectedSize" id="selectedSizeInput" value="">
                                         <input type="hidden" name="quantity" value="1">
                                         <input type="hidden" name="price" th:value="${productDetail.price}">
-                                        <button type="submit" id="addToCartButton" class="btn btn-primary" style="width: 155px; height: 60px" disabled>
+                                        <button type="submit" id="addToCartButton" class="btn btn-primary" style="width: 155px; height: 60px" disabled th:text="#{product.add.to.cart}">
                                             Thêm vào giỏ hàng
                                         </button>
                                     </form>
@@ -184,7 +184,7 @@
 
                                         <!-- Set same width for this button as well -->
                                         <button type="submit" class="btn btn-primary"
-                                                style="width: 155px; height: 60px; background-color: #ff497c; border: none">
+                                                style="width: 155px; height: 60px; background-color: #ff497c; border: none" th:text="#{product.add.to.wishlist}">
                                             Thêm vào danh sách mong muốn
                                         </button>
                                     </form>
@@ -214,7 +214,7 @@
                             </div>
                             <div class="info-row">
                                 <a th:href="@{/view-store/{id}(id=${product.storeId.storeId})}"><i
-                                        class="flaticon-shop hover-flip-item"> Xem Cửa hàng</i></a>
+                                        class="flaticon-shop hover-flip-item" th:text="#{order.viewStore}"> Xem Cửa hàng</i></a>
                             </div>
                         </div>
                     </div>
@@ -227,15 +227,15 @@
         <div class="woocommerce-tabs wc-tabs-wrapper bg-vista-white">
             <div class="container">
                 <div class="product-desc-wrapper mb--30 mb_sm--10">
-                    <h4 class="mb--60 desc-heading">Mô tả</h4>
+                    <h4 class="mb--60 desc-heading" th:text="#{product.description}">Mô tả</h4>
                     <p th:text="${productDetail.productDescription}"></p>
                 </div>
                 <div class="reviews-wrapper">
-                    <h4 class="mb--60">Đánh giá</h4>
+                    <h4 class="mb--60" th:text="#{product.reviews}">Đánh giá</h4>
                     <div class="row">
                         <div class="col-lg-12 mb--40">
                             <div class="axil-comment-area pro-desc-commnet-area">
-                                <h5 class="title" th:text="${feedbacks.size() + ' Đánh giá cho sản phẩm này'}"></h5>
+                                <h5 class="title" th:text="${feedbacks.size()} + ' ' +#{product.this.feedback}"></h5>
                                 <ul class="comment-list" th:each="feedback : ${feedbacks}">
                                     <li class="comment">
                                         <div class="comment-body">

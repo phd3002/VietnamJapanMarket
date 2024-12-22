@@ -23,16 +23,16 @@
     <div class="axil-wishlist-area axil-section-gap">
         <div class="container">
             <div class="product-table-heading">
-                <h4 class="title">Danh sách mong muốn của tôi</h4>
+                <h4 class="title" th:text="#{wishlist.title}">Danh sách mong muốn của tôi</h4>
             </div>
             <div class="table-responsive">
                 <table class="table axil-product-table axil-wishlist-table">
                     <thead>
                     <tr>
                         <th scope="col"></th>
-                        <th scope="col">Sản phẩm</th>
-                        <th scope="col">Tiêu đề sản phẩm</th>
-                        <th scope="col">Đơn giá</th>
+                        <th scope="col" th:text="#{wishlist.product}">Sản phẩm</th>
+                        <th scope="col" th:text="#{wishlist.product.name}">Tiêu đề sản phẩm</th>
+                        <th scope="col" th:text="#{wishlist.price}">Đơn giá</th>
                     </tr>
                     </thead>
                     <tbody>

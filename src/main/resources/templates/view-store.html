@@ -37,7 +37,8 @@
                 <div class="col-lg-6 col-md-8">
                     <div class="inner">
                         <ul class="axil-breadcrumb">
-                            <li class="axil-breadcrumb-item"><a href="/homepage">Home</a></li>
+                            <li class="axil-breadcrumb-item"><a href="/homepage" th:text="#{store.homepage}">Home</a>
+                            </li>
                         </ul>
                         <h1 class="title" th:text="${store.storeName}"></h1>
                     </div>
@@ -110,14 +111,10 @@
 
                 <!-- Pagination Info -->
                 <div class="text-center mt--2">
-                    <span th:text="'Trang ' + (${currentPage + 1}) + ' trên ' + (${totalPages})">Trang 1 trên 10</span><br/>
-                    <span th:text="'Tổng sản phẩm: ' + (${totalItems})">Tổng sản phẩm: 120</span>
+                    <span th:text="#{pagination.page}+' ' + (${currentPage + 1}) + ' ' +#{pagination.of}+ ' ' +(${totalPages})">Trang 1 trên 10</span><br/>
+                    <span th:text="#{pagination.totalProducts}+': ' + (${totalItems})">Tổng sản phẩm: 120</span>
                 </div>
             </div>
-
-            <!--            <div class="text-center pt&#45;&#45;30">-->
-<!--                <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>-->
-<!--            </div>-->
         </div>
     </div>
 </main>

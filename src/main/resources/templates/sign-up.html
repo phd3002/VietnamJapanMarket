@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -37,7 +37,7 @@
             <div class="axil-signin-banner bg_image bg_image--10">
                 <a href="/homepage" class="site-logo"><img th:src="@{/images/logo/vj-market.png}" alt="logo"></a>
                 <br><br>
-                <h3 class="title">Chúng tôi cung cấp những sản phẩm tốt nhất</h3>
+                <h3 class="title" th:text="#{otp.page.title}">Chúng tôi cung cấp những sản phẩm tốt nhất</h3>
             </div>
         </div>
         <div class="col-lg-6 offset-xl-2">
@@ -47,7 +47,7 @@
                         <!-- CSRF Token -->
 <!--                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
                         <br><br><br><br><br><br><br><br><br><br><br>
-                        <p class="b2 mb--55">Nhập thông tin chi tiết của bạn bên dưới</p>
+                        <p class="b2 mb--55" th:text="#{signin.enter.details}">Nhập thông tin chi tiết của bạn bên dưới</p>
                         <!-- Hiển thị thông báo lỗi nếu có -->
                         <div th:if="${errorMessage}" class="error-message">
                             <p th:text="${errorMessage}"></p>

@@ -33,12 +33,12 @@
                             <!-- Wallet Tab -->
                             <div id="nav-wallet" class="tab-pane fade show active" role="tabpanel">
                                 <div class="wallet-section axil-dashboard-order">
-                                    <h3><i class="fas fa-wallet"></i> Ví của tôi</h3>
+                                    <h3><i class="fas fa-wallet"></i> <span th:text="#{wallet.mywallet}">Ví của tôi</span></h3>
 
                                     <!-- Display Wallet Balance -->
                                     <div class="axil-wallet row">
                                         <div class="col-md-6">
-                                            <p style="margin: 0px">Số dư hiện tại:
+                                            <p style="margin: 0px" th:text="#{wallet.balance}">Số dư hiện tại:
                                             <h4 style="margin: 0px" id="wallet-balance"
                                                 th:text="${balance ?: '₫0'}">₫0</h4>
                                         </div>
@@ -53,7 +53,7 @@
                                     <!--                                            class="fas fa-arrow-alt-circle-up"></i> Rút tiền</a>-->
                                     <a type="button" class="axil-btn"
                                        style="background: green; color: white" id="deposit"><i
-                                            class="fas fa-arrow-alt-circle-down"></i> Nạp tiền</a>
+                                            class="fas fa-arrow-alt-circle-down"></i> <span th:text="#{wallet.recharge}">Nạp tiền</span></a>
                                     <!-- Transaction History -->
                                     <br><br>
 
@@ -63,7 +63,7 @@
                                             <div class="row align-items-end">
                                                 <!-- Start Date Filter -->
                                                 <div class="col-md-4 mb-3">
-                                                    <label for="startDate" class="form-label">Từ ngày:</label>
+                                                    <label for="startDate" class="form-label" th:text="#{order.from}">Từ ngày:</label>
                                                     <input type="date" id="startDate" name="startDate"
                                                            class="form-control"
                                                            th:value="${startDate}">
@@ -71,42 +71,41 @@
 
                                                 <!-- End Date Filter -->
                                                 <div class="col-md-4 mb-3">
-                                                    <label for="endDate" class="form-label">Đến ngày:</label>
+                                                    <label for="endDate" class="form-label" th:text="#{order.to}">Đến ngày:</label>
                                                     <input type="date" id="endDate" name="endDate" class="form-control"
                                                            th:value="${endDate}">
                                                 </div>
 
                                                 <!-- Submit Button -->
                                                 <div class="col-md-2 mb-3">
-                                                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                                    <button type="submit" class="btn btn-primary w-100" th:text="#{order.filter}">Lọc</button>
                                                 </div>
 
                                                 <!-- Reset Filters Button -->
                                                 <div class="col-md-2 mb-3">
-                                                    <a th:href="@{/wallet}" class="btn btn-secondary w-100">Đặt lại</a>
+                                                    <a th:href="@{/wallet}" class="btn btn-secondary w-100" th:text="#{wallet.return}">Đặt lại</a>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                     <!-- Display Message When No Transactions Found -->
                                     <div class="text-center" th:if="${wallets == null or wallets.size() == 0}">
-                                        <p th:text="${message ?: 'Không có lịch sử giao dịch để hiển thị.'}">Không có
+                                        <p th:text="${message ?: #{wallet.notransaction}}">Không có
                                             lịch sử giao dịch để hiển thị.</p>
-                                        <a th:href="@{/product-list}" class="btn btn-primary">Mua ngay</a>
                                     </div>
 
                                     <!-- Transactions Table -->
                                     <div th:if="${wallets != null and wallets.size() > 0}">
-                                        <h4>Lịch sử giao dịch</h4>
+                                        <h4 th:text="#{wallet.transaction}">Lịch sử giao dịch</h4>
                                         <table class="table table-bordered">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Ngày</th>
-                                                <th scope="col">Loại giao dịch</th>
-                                                <th scope="col">Số tiền</th>
-                                                <th scope="col">Nguồn</th>
-                                                <th scope="col">Số dư</th>
-                                                <th scope="col">Nội dung</th>
+                                                <th scope="col" th:text="#{transaction.date}">Ngày</th>
+                                                <th scope="col" th:text="#{transaction.type}">Loại giao dịch</th>
+                                                <th scope="col" th:text="#{transaction.amount}">Số tiền</th>
+                                                <th scope="col" th:text="#{transaction.source}">Nguồn</th>
+                                                <th scope="col" th:text="#{transaction.balance}">Số dư</th>
+                                                <th scope="col" th:text="#{transaction.content}">Nội dung</th>
                                             </tr>
                                             </thead>
                                             <tbody id="transaction-history">
@@ -162,8 +161,8 @@
 
                                             <!-- Pagination Info -->
                                             <div class="text-center mt-2">
-                                                <span>Trang [[${currentPage + 1}]] trên [[${totalPages}]]</span><br/>
-                                                <span>Tổng giao dịch: [[${totalItems}]]</span>
+                                                <span th:text="#{pagination.page}+' ' + (${currentPage + 1}) + ' ' +#{pagination.of}+ ' ' +(${totalPages})">Trang 1 trên 10</span><br/>
+                                                <span th:text="#{pagination.totalTransactions}+': ' + (${totalItems})">Tổng sản phẩm: 120</span>
                                             </div>
                                         </div>
                                     </div>
