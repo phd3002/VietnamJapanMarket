@@ -31,7 +31,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/homepage"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/logout"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -42,81 +42,83 @@
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
         <br>
-        <h3>Trang quản lý bán hàng</h3>
+        <h3 th:text="#{sidebar.user.management}">Trang quản lý bán hàng</h3>
     </div>
     <hr>
     <ul class="app-menu">
         <li><a class="app-menu__item active" href="/store-info"><i
                 class='app-menu__icon bx bx-info-square'></i><span
-                class="app-menu__label">Thông tin cửa hàng</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.store.info}">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/dashboard"><i
                 class='app-menu__icon bx bx-tachometer'></i><span
-                class="app-menu__label">Bảng điều khiển</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.dashboard}">Bảng điều khiển</span></a></li>
         <li><a class="app-menu__item" href="/seller-products"><i
-                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                class="app-menu__label" th:text="#{sidebar.menu.product.manager}">Quản lý sản phẩm</span></a>
         </li>
         <li><a class="app-menu__item" href="/seller/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
-                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.order.manager}">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/feedback-manager"><i
-                class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
+                class='app-menu__icon bx bx-list-minus'></i><span
+                class="app-menu__label" th:text="#{sidebar.menu.feedback.manager}">Quản lý đánh giá</span></a>
         </li>
         <li><a class="app-menu__item" href="wallet.html"><i
                 class='app-menu__icon bx fa-box-usd'></i><span
-                class="app-menu__label">Ví</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item">Thông tin cửa hàng</li>
+            <li class="breadcrumb-item" th:text="#{store.info.title}">Thông tin cửa hàng</li>
         </ul>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="tile">
-                <h3 class="tile-title">Thông tin cửa hàng</h3>
+                <h3 class="tile-title" th:text="#{store.info.title}">Thông tin cửa hàng</h3>
                 <div class="tile-body">
                     <!-- Update the form to support file upload -->
                     <form class="row" th:action="@{/store-save}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="storeId" th:value="${store.storeId}">
                         <div class="form-group col-md-6">
-                            <label class="control-label">Tên cửa hàng</label>
+                            <label class="control-label" th:text="#{store.info.name}">Tên cửa hàng</label>
                             <input class="form-control" type="text" name="storeName" th:value="${store.storeName}">
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="control-label">Điện thoại</label>
+                            <label class="control-label" th:text="#{store.info.phone}">Điện thoại</label>
                             <input class="form-control" type="text" name="storePhone" th:value="${store.storePhone}">
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="control-label">Email</label>
+                            <label class="control-label" th:text="#{store.info.email}">Email</label>
                             <input class="form-control" type="text" name="storeMail" th:value="${store.storeMail}"
                                    readonly>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="control-label">Mã Bưu Điện</label>
+                            <label class="control-label" th:text="#{store.info.postalCode}">Mã Bưu Điện</label>
                             <input class="form-control" type="text" name="postalCode" th:value="${store.postalCode}">
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="control-label">Thành phố (Prefecture)</label>
+                            <label class="control-label" th:text="#{store.info.city}">Thành phố</label>
                             <select id="geoapi-prefectures" class="form-control" name="storeCity">
-                                <option value="">Chọn Thành phố</option>
+                                <option value="" th:text="#{store.info.select.city}">Chọn Thành phố</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="control-label">Quận/Huyện (City)</label>
+                            <label class="control-label" th:text="#{store.info.district}">Quận/Huyện</label>
                             <select id="geoapi-cities" class="form-control" name="storeDistrict">
-                                <option value="">Chọn Quận/Huyện</option>
+                                <option value="" th:text="#{store.info.select.district}">Chọn Quận/Huyện</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="control-label">Phường/Xã (Town)</label>
+                            <label class="control-label" th:text="#{store.info.town}">Phường/Xã</label>
                             <select id="geoapi-towns" class="form-control" name="storeTown">
-                                <option value="">Chọn Phường/Xã</option>
+                                <option value="" th:text="#{store.info.select.town}">Chọn Phường/Xã</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="control-label">Địa Chỉ</label>
+                            <label class="control-label" th:text="#{store.info.address}">Địa Chỉ</label>
                             <input class="form-control" type="text" name="storeAddress"
                                    th:value="${store.storeAddress != null ? (store.storeAddress.contains('-') ? store.storeAddress.split('-')[1] : store.storeAddress) : ''}">
 
@@ -133,7 +135,7 @@
                         <!--                            </select>-->
                         <!--                        </div>-->
                         <div class="form-group col-md-12">
-                            <label class="control-label">Ảnh cửa hàng</label>
+                            <label class="control-label" th:text="#{store.info.image}">Ảnh cửa hàng</label>
                             <div id="mainImageUpload">
                                 <input type="file" id="mainImage" name="storeImg" accept="image/*"
                                        onchange="readMainImage(this);">
@@ -143,13 +145,13 @@
                             </div>
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="control-label">Mô tả cửa hàng</label>
+                            <label class="control-label" th:text="#{store.info.description}">Mô tả cửa hàng</label>
                             <textarea class="form-control" name="storeDescription" id="mota"
                                       th:text="${store.storeDescription}"></textarea>
                             <script>CKEDITOR.replace('mota');</script>
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-save" type="submit">Lưu lại</button>
+                            <button class="btn btn-save" type="submit" th:text="#{store.info.button.save}">Lưu lại</button>
                             <div th:if="${message}" class="alert alert-success mt-2" role="alert">
                                 <span th:text="${message}"></span>
                             </div>

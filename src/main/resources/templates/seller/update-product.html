@@ -141,7 +141,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/homepage"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/logout"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -152,34 +152,36 @@
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
         <br>
-        <h3>Trang quản lý bán hàng</h3>
+        <h3 th:text="#{sidebar.user.management}">Trang quản lý bán hàng</h3>
     </div>
     <hr>
     <ul class="app-menu">
         <li><a class="app-menu__item" href="/store-info"><i
                 class='app-menu__icon bx bx-info-square'></i><span
-                class="app-menu__label">Thông tin cửa hàng</span></a></li>
-        <li><a class="app-menu__item active" href="/seller/dashboard"><i
+                class="app-menu__label" th:text="#{sidebar.menu.store.info}">Thông tin cửa hàng</span></a></li>
+        <li><a class="app-menu__item" href="/seller/dashboard"><i
                 class='app-menu__icon bx bx-tachometer'></i><span
-                class="app-menu__label">Bảng điều khiển</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.dashboard}">Bảng điều khiển</span></a></li>
         <li><a class="app-menu__item" href="/seller-products"><i
-                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                class="app-menu__label active" th:text="#{sidebar.menu.product.manager}">Quản lý sản phẩm</span></a>
         </li>
         <li><a class="app-menu__item" href="/seller/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
-                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.order.manager}">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/feedback-manager"><i
-                class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
+                class='app-menu__icon bx bx-list-minus'></i><span
+                class="app-menu__label" th:text="#{sidebar.menu.feedback.manager}">Quản lý đánh giá</span></a>
         </li>
         <li><a class="app-menu__item" href="wallet.html"><i
                 class='app-menu__icon bx fa-box-usd'></i><span
-                class="app-menu__label">Ví</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item">Danh sách sản phẩm</li>
+            <li class="breadcrumb-item" th:text="#{product.list.title}">Danh sách sản phẩm</li>
             <li class="breadcrumb-item">Cập nhật sản phẩm</li>
         </ul>
     </div>
@@ -192,26 +194,26 @@
                           th:action="@{/update-product/{productId}(productId=${product.productId})}"
                           th:object="${product}">
                         <div class="form-group col-md-3">
-                            <label class="control-label">Tên sản phẩm</label>
+                            <label class="control-label" th:text="#{product.name}">Tên sản phẩm</label>
                             <input class="form-control" type="text" name="productName" th:value="*{productName}">
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">Giá bán(VND)</label>
+                            <label class="control-label" th:text="#{add.product.price}">Giá bán(VND)</label>
                             <input class="form-control" type="number" name="price" th:value="*{price}">
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label">Khối lượng(gram)</label>
+                            <label class="control-label" th:text="#{add.product.weight}">Khối lượng(gram)</label>
                             <input class="form-control" type="number" name="weight" th:value="*{weight}">
                         </div>
                         <div class="form-group col-md-12">
-                            <label class="control-label">Mô tả sản phẩm</label>
+                            <label class="control-label" th:text="#{product.update.description}">Mô tả sản phẩm</label>
                             <textarea class="form-control" name="productDescription" th:text="*{productDescription}"
                                       id="mota"></textarea>
                             <script>CKEDITOR.replace('mota');</script>
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-save" type="submit">Cập nhật</button>
-                            <a class="btn btn-cancel" href="/seller-products">Hủy bỏ</a>
+                            <button class="btn btn-save" type="submit" th:text="#{product.update.button.submit}">Cập nhật</button>
+                            <a class="btn btn-cancel" href="/seller-products" th:text="#{product.update.button.cancel}">Hủy bỏ</a>
                         </div>
                         <div th:if="${error}" class="alert alert-danger mt-2" role="alert">
                             <span th:text="${error}"></span>

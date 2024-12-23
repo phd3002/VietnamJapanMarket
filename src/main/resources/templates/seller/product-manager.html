@@ -26,12 +26,14 @@
             padding: 0;
             margin: 0;
         }
+
         .variation-size-list li, .variation-stock-list li {
             display: flex;
             align-items: center;
             height: 40px; /* Đảm bảo chiều cao cố định */
             list-style: none;
         }
+
         .variation-stock-list li {
             display: flex;
             justify-content: flex-end; /* Đẩy nội dung sát lề phải */
@@ -52,7 +54,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/homepage"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/logout"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -63,34 +65,36 @@
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
         <br>
-        <h3>Trang quản lý bán hàng</h3>
+        <h3 th:text="#{sidebar.user.management}">Trang quản lý bán hàng</h3>
     </div>
     <hr>
     <ul class="app-menu">
         <li><a class="app-menu__item" href="/store-info"><i
                 class='app-menu__icon bx bx-info-square'></i><span
-                class="app-menu__label">Thông tin cửa hàng</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.store.info}">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/dashboard"><i
                 class='app-menu__icon bx bx-tachometer'></i><span
-                class="app-menu__label">Bảng điều khiển</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.dashboard}">Bảng điều khiển</span></a></li>
         <li><a class="app-menu__item active" href="/seller-products"><i
-                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                class="app-menu__label" th:text="#{sidebar.menu.product.manager}">Quản lý sản phẩm</span></a>
         </li>
         <li><a class="app-menu__item" href="/seller/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
-                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.order.manager}">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/feedback-manager"><i
-                class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
+                class='app-menu__icon bx bx-list-minus'></i><span
+                class="app-menu__label" th:text="#{sidebar.menu.feedback.manager}">Quản lý đánh giá</span></a>
         </li>
         <li><a class="app-menu__item" href="wallet.html"><i
                 class='app-menu__icon bx fa-box-usd'></i><span
-                class="app-menu__label">Ví</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="#"><b>Danh sách sản phẩm</b></a></li>
+            <li class="breadcrumb-item active"><b th:text="#{product.list.title}">Danh sách sản phẩm</b></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -101,7 +105,8 @@
                     <!-- Success and Error Messages -->
                     <!-- Success Message -->
                     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Thành công!</strong> <span th:text="${successMessage}"></span>
+                        <strong th:text="#{product.success}">Thành công!</strong> <span
+                            th:text="${successMessage}"></span>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -109,7 +114,7 @@
 
                     <!-- Error Message -->
                     <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Lỗi!</strong> <span th:text="${errorMessage}"></span>
+                        <strong th:text="#{product.error}">Lỗi!</strong> <span th:text="${errorMessage}"></span>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -119,22 +124,23 @@
                     <div class="row element-button">
                         <div class="col-sm-2">
                             <a class="btn btn-add btn-sm" th:href="@{'/addProductForm2/' + ${storeId}}" title="Thêm"><i
-                                    class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+                                    class="fas fa-plus"></i> <span
+                                    th:text="#{product.create.new}">Tạo mới sản phẩm</span></a>
                         </div>
                         <!-- Các button khác như Tải từ file, In, Sao chép, Xuất Excel, Xuất PDF, Xóa tất cả -->
                     </div>
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                         <tr>
-                            <th scope="col">Mã sản phẩm</th>
-                            <th scope="col">Tên sản phẩm</th>
-                            <th scope="col">Ảnh</th>
-                            <th scope="col">Loại x Màu sắc</th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Giá tiền</th>
-                            <th scope="col">Danh mục</th>
-                            <th scope="col">Ngày tạo</th>
-                            <th scope="col">Chức năng</th>
+                            <th scope="col" th:text="#{product.code}">Mã sản phẩm</th>
+                            <th scope="col" th:text="#{product.name}">Tên sản phẩm</th>
+                            <th scope="col" th:text="#{product.image}">Ảnh</th>
+                            <th scope="col" th:text="#{product.type.color}">Loại x Màu sắc</th>
+                            <th scope="col" th:text="#{product.quantity}">Số lượng</th>
+                            <th scope="col" th:text="#{product.price}">Giá tiền</th>
+                            <th scope="col" th:text="#{product.category}">Danh mục</th>
+                            <th scope="col" th:text="#{product.created.date}">Ngày tạo</th>
+                            <th scope="col" th:text="#{product.actions}">Chức năng</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -174,7 +180,8 @@
                             <td th:text="${product.createdAt != null ? #temporals.format(product.createdAt, 'yyyy-MM-dd') : 'N/A'}"></td>
                             <td>
                                 <a th:href="@{'/edit-product/' + ${product.productId}}">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i
+                                    <button class="btn btn-primary btn-sm edit" type="button"
+                                            th:title="#{product.edit}"><i
                                             class="fas fa-edit"></i></button>
                                 </a>
                                 <a th:href="@{'/delete-product/' + ${product.productId}}"
@@ -183,7 +190,8 @@
                                             class="fas fa-trash-alt"></i></button>
                                 </a>
                                 <a th:href="@{'/addProductVariationForm/' + ${product.productId}}">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Thêm biến thể"><i
+                                    <button class="btn btn-primary btn-sm edit" type="button"
+                                            th:title="#{product.add.variation}"><i
                                             class="fas fa-plus-square"></i></button>
                                 </a>
                             </td>
@@ -205,7 +213,8 @@
         <form id="updateStockForm" method="post" th:action="@{/update-stock}">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateStockModalLabel">Cập nhật số lượng</h5>
+                    <h5 class="modal-title" id="updateStockModalLabel" th:text="#{product.update.stock}">Cập nhật số
+                        lượng</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -216,19 +225,21 @@
 
                     <!-- Display current stock -->
                     <div class="form-group">
-                        <label for="currentStock">Số lượng hiện tại:</label>
+                        <label for="currentStock" th:text="#{product.stock.current}">Số lượng hiện tại:</label>
                         <input type="number" class="form-control" id="currentStock" name="currentStock" readonly>
                     </div>
 
                     <!-- Input for new stock -->
                     <div class="form-group">
-                        <label for="newStock">Số lượng mới:</label>
+                        <label for="newStock" th:text="#{product.stock.new}">Số lượng mới:</label>
                         <input type="number" class="form-control" id="newStock" name="newStock" required min="0">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
-                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            th:text="#{product.stock.cancel}">Hủy bỏ
+                    </button>
+                    <button type="submit" class="btn btn-primary" th:text="#{product.stock.submit}">Cập nhật</button>
                 </div>
             </div>
         </form>

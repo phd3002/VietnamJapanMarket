@@ -141,7 +141,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/homepage"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="/logout"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>
@@ -152,59 +152,61 @@
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
         <br>
-        <h3>Trang quản lý bán hàng</h3>
+        <h3 th:text="#{sidebar.user.management}">Trang quản lý bán hàng</h3>
     </div>
     <hr>
     <ul class="app-menu">
         <li><a class="app-menu__item" href="/store-info"><i
                 class='app-menu__icon bx bx-info-square'></i><span
-                class="app-menu__label">Thông tin cửa hàng</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.store.info}">Thông tin cửa hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/dashboard"><i
                 class='app-menu__icon bx bx-tachometer'></i><span
-                class="app-menu__label">Bảng điều khiển</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.dashboard}">Bảng điều khiển</span></a></li>
         <li><a class="app-menu__item active" href="/seller-products"><i
-                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                class="app-menu__label" th:text="#{sidebar.menu.product.manager}">Quản lý sản phẩm</span></a>
         </li>
         <li><a class="app-menu__item" href="/seller/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
-                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.order.manager}">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="/seller/feedback-manager"><i
-                class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
+                class='app-menu__icon bx bx-list-minus'></i><span
+                class="app-menu__label" th:text="#{sidebar.menu.feedback.manager}">Quản lý đánh giá</span></a>
         </li>
         <li><a class="app-menu__item" href="wallet.html"><i
                 class='app-menu__icon bx fa-box-usd'></i><span
-                class="app-menu__label">Ví</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item">Danh sách sản phẩm</li>
-            <li class="breadcrumb-item">Thêm sản phẩm</li>
+            <li class="breadcrumb-item" th:text="#{breadcrumb.product.list}">Danh sách sản phẩm</li>
+            <li class="breadcrumb-item" th:text="#{breadcrumb.product.add}">Thêm sản phẩm</li>
         </ul>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="tile">
-                <h3 class="tile-title">Tạo mới sản phẩm</h3>
+                <h3 class="tile-title" th:text="#{add.product.heading}">Tạo mới sản phẩm</h3>
                 <div class="tile-body">
                     <form class="row" th:action="@{/addProductFull}" method="post" enctype="multipart/form-data">
                         <div th:object="${product2}" class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Tên sản phẩm</label>
+                                <label class="control-label" th:text="#{add.product.name}">Tên sản phẩm</label>
                                 <input class="form-control" type="text" th:field="*{productName}" required>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Mã sản phẩm</label>
+                                <label class="control-label" th:text="#{add.product.code}">Mã sản phẩm</label>
                                 <input class="form-control" type="text" th:field="*{productCode}" required
                                        maxlength="10">
                             </div>
 
                             <div class="form-group">
-                                <label for="categories-product" class="control-label">Danh mục</label>
+                                <label for="categories-product" class="control-label" th:text="#{add.product.category}">Danh mục</label>
                                 <select class="form-control" id="categories-product" name="categoryId"
                                         th:field="*{categoryId}" required>
-                                    <option value="" disabled>-- Chọn danh mục --</option>
+                                    <option value="" disabled th:text="#{add.product.select.category}">-- Chọn danh mục --</option>
                                     <option th:each="category : ${categories}"
                                             th:value="${category.categoryId}"
                                             th:text="${category.categoryName}"
@@ -213,28 +215,28 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Giá bán(VND)</label>
+                                <label class="control-label" th:text="#{add.product.price}">Giá bán(VND)</label>
                                 <input class="form-control" type="number" th:field="*{price}" required>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Khối lượng(kg)</label>
+                                <label class="control-label" th:text="#{add.product.weight}">Khối lượng(kg)</label>
                                 <input class="form-control" type="number" step="0.01" th:field="*{weight}" required>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Mô tả sản phẩm</label>
+                                <label class="control-label" th:text="#{add.product.description}">Mô tả sản phẩm</label>
                                 <textarea class="form-control" th:field="*{productDescription}" required></textarea>
                             </div>
                         </div>
 
                         <div th:object="${productImage2}" class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Tên ảnh sản phẩm</label>
+                                <label class="control-label" th:text="#{add.product.image.name}">Tên ảnh sản phẩm</label>
                                 <input class="form-control" type="text" th:field="*{imageName}" name="imageName"
                                        required>
                             </div>
                             <div class="form-group">
                                 <!-- Thumbnail Image Upload -->
-                                <label class="control-label">Thumbnail</label>
+                                <label class="control-label" th:text="#{add.product.image.thumbnail}">Thumbnail</label>
                                 <input class="form-control" type="file" id="thumbnail" name="thumbnail" accept="image/*"
                                        onchange="previewImage(this, 'thumbnailPreview')" required/>
                                 <div id="thumbnailPreview" class="image-preview"></div>
@@ -242,7 +244,7 @@
 
                             <div class="form-group">
                                 <!-- 1st Image Upload -->
-                                <label class="control-label">1st Image</label>
+                                <label class="control-label" th:text="#{add.product.image.first}">1st Image</label>
                                 <input class="form-control" type="file" id="firstImage" name="firstImage"
                                        accept="image/*" onchange="previewImage(this, 'firstImagePreview')"/>
                                 <div id="firstImagePreview" class="image-preview"></div>
@@ -250,7 +252,7 @@
 
                             <div class="form-group">
                                 <!-- 2nd Image Upload -->
-                                <label class="control-label">2nd Image</label>
+                                <label class="control-label" th:text="#{add.product.image.second}">2nd Image</label>
                                 <input class="form-control" type="file" id="secondImage" name="secondImage"
                                        accept="image/*" onchange="previewImage(this, 'secondImagePreview')"/>
                                 <div id="secondImagePreview" class="image-preview"></div>
@@ -258,7 +260,7 @@
 
                             <div class="form-group">
                                 <!-- 3rd Image Upload -->
-                                <label class="control-label">3rd Image</label>
+                                <label class="control-label" th:text="#{add.product.image.third}">3rd Image</label>
                                 <input class="form-control" type="file" id="thirdImage" name="thirdImage"
                                        accept="image/*" onchange="previewImage(this, 'thirdImagePreview')"/>
                                 <div id="thirdImagePreview" class="image-preview"></div>
@@ -267,28 +269,28 @@
 
                         <div th:object="${productVariation2}" class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Màu sắc</label>
+                                <label class="control-label" th:text="#{add.product.color}">Màu sắc</label>
                                 <select class="form-control" th:field="*{color.colorId}" required>
-                                    <option value="" disabled selected>-- Chọn màu sắc --</option>
+                                    <option value="" disabled selected th:text="#{add.product.select.color}">-- Chọn màu sắc --</option>
                                     <option th:each="color : ${colors}" th:value="${color.colorId}"
                                             th:text="${color.colorName}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Loại</label>
+                                <label class="control-label" th:text="#{add.product.type}">Loại</label>
                                 <select class="form-control" th:field="*{size.sizeId}" required>
-                                    <option value="" disabled selected>-- Chọn kích thước --</option>
+                                    <option value="" disabled selected th:text="#{add.product.select.type}">-- Chọn kích thước --</option>
                                     <option th:each="size : ${sizes}" th:value="${size.sizeId}"
                                             th:text="${size.sizeName}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Số lượng</label>
+                                <label class="control-label" th:text="#{add.product.quantity}">Số lượng</label>
                                 <input class="form-control" type="number" th:field="*{stock}" max="1000" required>
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-save" type="submit">Tạo sản phẩm mới</button>
+                            <button class="btn btn-save" type="submit" th:text="#{add.product.submit}">Tạo sản phẩm mới</button>
                         </div>
                     </form>
                     <div th:if="${successMessage}" class="alert alert-success" role="alert">
