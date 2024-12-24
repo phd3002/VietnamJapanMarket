@@ -23,6 +23,23 @@
     <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
     <link rel="stylesheet" th:href="@{/css/style.min.css}">
     <link rel="stylesheet" th:href="@{/css/style-2.css}">
+    <style>
+        body {
+            overflow: auto !important;
+        }
+        input[type="checkbox"] {
+            scroll-behavior: smooth;
+            position: relative;
+            z-index: 1;
+        }
+        label[for="terms"] {
+            position: relative;
+            z-index: 2;
+        }
+        form {
+            scroll-behavior: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -101,13 +118,15 @@
                                 <input class="form-control" type="text" name="storeAddress">
                             </div>
                         </div>
-
-                        <br>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">Bằng việc đăng kí, bạn đã đồng ý với VJM về <a href="/terms-of-service">điều khoản sử dụng</a></label>
+                        </div>
+                        <br><br>
                         <div class="form-group mb--0">
                             <input type="submit" class="axil-btn" value="Sign Up">
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>

@@ -26,7 +26,23 @@
     <link rel="stylesheet" th:href="@{/css/vendor/base.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style-2.css}" type="text/css">
-
+    <style>
+        body {
+            overflow: auto !important;
+        }
+        input[type="checkbox"] {
+            scroll-behavior: smooth;
+            position: relative;
+            z-index: 1;
+        }
+        label[for="terms"] {
+            position: relative;
+            z-index: 2;
+        }
+        form {
+            scroll-behavior: auto;
+        }
+    </style>
 </head>
 
 
@@ -77,9 +93,10 @@
                             <label>Xác nhận mật khẩu <span>*</span></label>
                             <input type="password" th:field="*{confirmPassword}" name="confirmPassword" id="confirm-password" class="form-control" placeholder="Xác nhận mật khẩu của bạn" required>
                         </div>
-                        <label class="custom-control-label">
-                            Bằng việc đăng kí, bạn đã đồng ý với VJM về <a href="/terms-of-service">điều khoản sử dụng</a>
-                        </label>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">Bằng việc đăng kí, bạn đã đồng ý với VJM về <a href="/terms-of-service">điều khoản sử dụng</a></label>
+                        </div>
                         <br><br>
                         <div class="form-group mb--0">
                             <button type="submit" class="axil-btn btn-bg-primary submit-btn">Tạo tài khoản</button>
