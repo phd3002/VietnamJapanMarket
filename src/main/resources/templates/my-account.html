@@ -6,9 +6,21 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title th:text="${pageTitle} ?: 'My Account'"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- Including CSS Files from base.html -->
     <th:block th:replace="~{base :: head}"></th:block>
+    <style>
+        .toggle-password {
+            right: 10px;
+            top: 35px;
+            cursor: pointer;
+        }
+
+        .toggle-password i {
+            color: #666;
+        }
+    </style>
 </head>
 
 <body class="sticky-header newsletter-popup-modal">
@@ -68,22 +80,29 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <h5 class="title">Thay đổi mật khẩu</h5>
-                                                    <div class="form-group">
+                                                    <div class="form-group position-relative">
                                                         <label>Mật khẩu</label>
                                                         <input name="password" type="password" class="form-control">
+                                                        <span class="toggle-password position-absolute" toggle="[name='password']">
+            <i class="fa fa-eye"></i>
+        </span>
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="form-group position-relative">
                                                         <label>Mật khẩu mới</label>
                                                         <input name="newPassword" type="password" class="form-control">
+                                                        <span class="toggle-password position-absolute" toggle="[name='newPassword']">
+            <i class="fa fa-eye"></i>
+        </span>
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="form-group position-relative">
                                                         <label>Xác nhận mật khẩu mới</label>
-                                                        <input name="confirmPassword" type="password"
-                                                               class="form-control">
+                                                        <input name="confirmPassword" type="password" class="form-control">
+                                                        <span class="toggle-password position-absolute" toggle="[name='confirmPassword']">
+            <i class="fa fa-eye"></i>
+        </span>
                                                     </div>
                                                     <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Lưu thay đổi"
-                                                               id="saveChangesBtn">
+                                                        <input type="submit" class="axil-btn" value="Lưu thay đổi" id="saveChangesBtn">
                                                     </div>
                                                 </div>
                                             </div>
