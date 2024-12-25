@@ -2,6 +2,7 @@ package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.entity.ShippingStatus;
 import com.ecommerce.g58.repository.ShippingStatusRepository;
+import com.ecommerce.g58.service.OrderService;
 import com.ecommerce.g58.service.ShippingStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,6 +26,8 @@ public class ShippingStatusServiceImp implements ShippingStatusService {
     @Autowired
     private ShippingStatusRepository shippingStatusRepository;
 
+    @Autowired
+    OrderService orderService;
 
 //        @Scheduled(cron = "*/10 * * * * ?") // run every 10s
     @Scheduled(cron = "0 0 0 * * ?") // Run at 12:00 AM every day
@@ -46,6 +49,8 @@ public class ShippingStatusServiceImp implements ShippingStatusService {
                 status.setStatus("Completed");
                 status.setUpdatedAt(LocalDateTime.now());
                 shippingStatusRepository.save(status);
+
+                orderService.updateOrderStatus(status.getOrderId(), "Complete");
             });
             logger.info("Successfully updated {} statuses.", statusesToUpdate.size());
         }

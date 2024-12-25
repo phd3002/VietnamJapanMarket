@@ -32,6 +32,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private UserService userService;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private NotificationService notificationService;
 
     @Autowired
@@ -180,63 +182,27 @@ public class OrderServiceImpl implements OrderService {
         OrderDetails details = orderDetailRepository.findByOrderId(orderId).get(0);
 
         Optional<Wallet> sellWallet = walletRepository.findByUserId(details.getProductId().getStoreId().getOwnerId());
-        Optional<Wallet> logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5);
 
         Invoice invoice = invoiceRepository.findInvoiceByOrderId(order);
 
+        Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
+        Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
+        Optional<Wallet> logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5);
+
         // Xử lý theo trạng thái đơn hàng
-        if (status.equalsIgnoreCase("Dispatched")) {
-            if (sellWallet.isPresent() && logisticWallet.isPresent()) {
-                // Trừ phí vận chuyển từ ví người bán
-                BigDecimal currentSellerWallet = new BigDecimal(sellWallet.get().getBalance());
-                BigDecimal newSellerAmount = currentSellerWallet.subtract(invoice.getShippingFee());
-                sellWallet.get().setBalance(newSellerAmount.longValue());
-                walletRepository.save(sellWallet.get());
-
-                // Thêm phí vận chuyển vào ví logistics
-                BigDecimal currentLogisticWallet = new BigDecimal(logisticWallet.get().getBalance());
-                BigDecimal newLogisticAmount = currentLogisticWallet.add(invoice.getShippingFee());
-                logisticWallet.get().setBalance(newLogisticAmount.longValue());
-                walletRepository.save(logisticWallet.get());
-
-                // Lưu giao dịch cho người bán
-                Transactions sellerTransactions = new Transactions();
-                sellerTransactions.setCreatedAt(LocalDateTime.now());
-                sellerTransactions.setFromWalletId(sellWallet.get());
-                sellerTransactions.setAmount(invoice.getShippingFee().negate().longValue());
-                sellerTransactions.setTransactionType("Thanh toán tiền ship");
-                sellerTransactions.setDescription("Thanh toán " + invoice.getShippingFee() + " tiền ship cho đơn hàng " + order.getOrderCode());
-                transactionRepository.save(sellerTransactions);
-
-                // Lưu giao dịch cho logistics
-                Transactions logisticTransactions = new Transactions();
-                logisticTransactions.setCreatedAt(LocalDateTime.now());
-                logisticTransactions.setToWalletId(logisticWallet.get());
-                logisticTransactions.setAmount(invoice.getShippingFee().longValue());
-                logisticTransactions.setTransactionType("Tiền ship");
-                logisticTransactions.setDescription("Nhận " + invoice.getShippingFee() + " từ đơn hàng " + order.getOrderCode());
-                transactionRepository.save(logisticTransactions);
-
-                // Tạo thông báo
-                createNotification(sellWallet.get().getUserId(), "Đơn hàng đã được gửi đi",
-                        "Đơn hàng " + order.getOrderCode() + " đã được gửi đi. Phí vận chuyển: " + invoice.getFormattedShippingFee(),
-                        "/order-detail/" + orderId);
-                shippingStatusRepository.updateOrderStatus(orderId, status);
-                System.out.println("Order status updated to " + status);
-            }
-        } else if (status.equalsIgnoreCase("Delivered")) {
-            if (sellWallet.isPresent() && logisticWallet.isPresent()) {
+        if (status.equalsIgnoreCase("Delivered")) {
+            if (sellWallet.isPresent() && adminWallet.isPresent()) {
                 if (invoice.getRemainingBalance().compareTo(BigDecimal.ZERO) != 0) {
-                    // Cập nhật ví người bán
-                    BigDecimal currentSellerWallet = new BigDecimal(sellWallet.get().getBalance());
-                    BigDecimal newSellerAmount = currentSellerWallet.add(invoice.getRemainingBalance());
+                    // Cập nhật ví admin
+                    BigDecimal currentAdminWallet = new BigDecimal(sellWallet.get().getBalance());
+                    BigDecimal newSellerAmount = currentAdminWallet.add(invoice.getRemainingBalance());
                     sellWallet.get().setBalance(newSellerAmount.longValue());
-                    walletRepository.save(sellWallet.get());
+                    walletRepository.save(adminWallet.get());
 
-                    // Lưu giao dịch
+                    // Lưu giao dịch cho admin
                     Transactions sellerTransactions = new Transactions();
                     sellerTransactions.setCreatedAt(LocalDateTime.now());
-                    sellerTransactions.setToWalletId(sellWallet.get());
+                    sellerTransactions.setToWalletId(adminWallet.get());
                     sellerTransactions.setAmount(invoice.getRemainingBalance().abs().longValue());
                     sellerTransactions.setTransactionType("Thanh toán đơn hàng");
                     sellerTransactions.setDescription("Nhận " + invoice.getRemainingBalance() + " từ đơn hàng " + order.getOrderCode() + " giao thành công");
@@ -251,13 +217,6 @@ public class OrderServiceImpl implements OrderService {
                     logisticTransactions.setDescription("Nhận " + invoice.getRemainingBalance() + " từ khách hàng ");
                     transactionRepository.save(logisticTransactions);
 
-                    Transactions logisticTransactions2 = new Transactions();
-                    logisticTransactions2.setCreatedAt(LocalDateTime.now());
-                    logisticTransactions2.setFromWalletId(logisticWallet.get());
-                    logisticTransactions2.setAmount(invoice.getRemainingBalance().abs().longValue());
-                    logisticTransactions2.setTransactionType("Trả tiền hàng");
-                    logisticTransactions2.setDescription("Trả " + invoice.getRemainingBalance() + " cho seller của đơn hàng  " + order.getOrderCode());
-                    transactionRepository.save(logisticTransactions2);
 
                     // Tạo thông báo
                     createNotification(sellWallet.get().getUserId(), "Đơn hàng giao thành công",
@@ -292,11 +251,15 @@ public class OrderServiceImpl implements OrderService {
                 // Hoàn tiền
                 BigDecimal returnPrice = BigDecimal.valueOf(invoice.getDeposit().longValue());
                 updateWalletBalance(userWallet, returnPrice,
-                        "Đã hoàn " + invoice.getDeposit() + " vì đơn hàng " + order.getOrderCode() + " giao không thành công",
+                        "Đã hoàn " + (invoice.getDeposit().subtract(invoice.getShippingFee())) + " vì đơn hàng " + order.getOrderCode() + " giao không thành công",
                         String.valueOf(TransactionType.REFUND));
-                updateWalletBalance(sellerWallet, invoice.getDeposit().negate(),
+                updateWalletBalance(adminWallet.get(), invoice.getDeposit().negate(),
                         "Hoàn trả " + invoice.getDeposit() + " cho khách vì đơn hàng " + order.getOrderCode() + " không giao được",
                         String.valueOf(TransactionType.REFUND));
+
+                updateWalletBalance(adminWallet.get(), invoice.getDeposit().negate(),
+                        "Nhận " + invoice.getShippingFee() + " cho đơn hàng " + order.getOrderCode(),
+                        String.valueOf(TransactionType.SHIPPING_FEE));
 
                 // Tạo thông báo
                 createNotification(order.getUserId(), "Đơn hàng thất bại",
@@ -306,6 +269,64 @@ public class OrderServiceImpl implements OrderService {
                 createNotification(sellerWallet.getUserId(), "Đơn hàng thất bại",
                         "Đơn hàng " + order.getOrderCode() + " giao thất bại. Đã hoàn tiền: " + invoice.getFormatedDeposit(),
                         "/order-detail/" + orderId);
+            }
+        } else if (status.equalsIgnoreCase("Complete")) {
+            if (sellWallet.isPresent() && adminWallet.isPresent()) {
+                if (invoice.getRemainingBalance().compareTo(BigDecimal.ZERO) != 0) {
+                    // Cập nhật ví admin
+                    BigDecimal currentAdminWallet = new BigDecimal(sellWallet.get().getBalance());
+                    BigDecimal newAdminAmount = currentAdminWallet.subtract(invoice.getTotalAmount());
+                    adminWallet.get().setBalance(newAdminAmount.longValue());
+                    walletRepository.save(adminWallet.get());
+
+                    // Lưu giao dịch cho admin
+                    Transactions adminTransaction = new Transactions();
+                    adminTransaction.setCreatedAt(LocalDateTime.now());
+                    adminTransaction.setToWalletId(adminWallet.get());
+                    adminTransaction.setAmount(invoice.getRemainingBalance().negate().longValue());
+                    adminTransaction.setTransactionType("Thanh toán đơn hàng");
+                    adminTransaction.setDescription("Trả " + invoice.getRemainingBalance() + " cho người bán từ đơn hàng " + order.getOrderCode() + " giao thành công");
+                    transactionRepository.save(adminTransaction);
+
+// Cậ               cập nhật ví seller
+                    BigDecimal currentSellerAmount = new BigDecimal(sellWallet.get().getBalance());
+                    BigDecimal newSellerAmount = currentSellerAmount.add(invoice.getTotalAmount());
+                    sellWallet.get().setBalance(newSellerAmount.longValue());
+                    walletRepository.save(sellWallet.get());
+
+                    // Lưu giao dịch cho admin
+                    Transactions sellerTransaction = new Transactions();
+                    sellerTransaction.setCreatedAt(LocalDateTime.now());
+                    sellerTransaction.setToWalletId(adminWallet.get());
+                    sellerTransaction.setAmount(invoice.getRemainingBalance().negate().longValue());
+                    sellerTransaction.setTransactionType("Nhận tiền hàng");
+                    sellerTransaction.setDescription("Nhận " + invoice.getRemainingBalance() + "  từ đơn hàng " + order.getOrderCode() + " giao thành công");
+                    transactionRepository.save(sellerTransaction);
+
+                    Transactions logisticTransactions = new Transactions();
+                    logisticTransactions.setCreatedAt(LocalDateTime.now());
+                    logisticTransactions.setToWalletId(logisticWallet.get());
+                    logisticTransactions.setAmount(invoice.getRemainingBalance().abs().longValue());
+                    logisticTransactions.setTransactionType("Nhận tiền hàng");
+                    logisticTransactions.setDescription("Nhận " + invoice.getRemainingBalance() + " từ khách hàng ");
+                    transactionRepository.save(logisticTransactions);
+
+                    Transactions logisticTransactions2 = new Transactions();
+                    logisticTransactions2.setCreatedAt(LocalDateTime.now());
+                    logisticTransactions2.setFromWalletId(logisticWallet.get());
+                    logisticTransactions2.setAmount(invoice.getRemainingBalance().abs().longValue());
+                    logisticTransactions2.setTransactionType("Trả tiền hàng");
+                    logisticTransactions2.setDescription("Trả " + invoice.getRemainingBalance() + " cho seller của đơn hàng  " + order.getOrderCode());
+                    transactionRepository.save(logisticTransactions2);
+
+                    // Tạo thông báo
+                    createNotification(sellWallet.get().getUserId(), "Đơn hàng giao thành công",
+                            "Đơn hàng " + order.getOrderCode() + " đã giao thành công. Số tiền nhận: " + invoice.getFormatedRemainingBalance(),
+                            "/order-detail/" + orderId);
+                    createNotification(order.getUserId(), "Đơn hàng giao thành công",
+                            "Đơn hàng " + order.getOrderCode() + " của bạn đã được giao thành công.",
+                            "/order-detail/" + orderId);
+                }
             }
         } else {
             shippingStatusRepository.updateOrderStatus(orderId, status);

@@ -1,6 +1,7 @@
 package com.ecommerce.g58.service;
 
 import com.ecommerce.g58.dto.WalletDTO;
+import com.ecommerce.g58.entity.Orders;
 import com.ecommerce.g58.entity.Users;
 import org.springframework.data.domain.Page;
 
@@ -24,4 +25,5 @@ public interface WalletService {
     void createWalletForUser(Users userId, long initialBalance);
 
     void recharge(Integer amount);
+    void addToWalletForAdmin(double amount, String paymentType, Orders orders);
 }

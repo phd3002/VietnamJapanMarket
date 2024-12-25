@@ -344,19 +344,8 @@ public class CheckoutController {
             walletService.deductFromWallet(userId, totalWithShipping, paymentType);
             logger.info("Đã trừ số dư ví cho người dùng ID {}. Số tiền trừ: {}. Loại thanh toán: {}", userId, totalWithShipping, paymentType);
             logger.info(formattedShippingAddress + "s");
-            // Lấy thực thể Stores từ sản phẩm trong giỏ hàng
-            Stores store = cartItems.get(0).getProductId().getStoreId();
 
-            // Lấy storeId từ đối tượng Stores và tìm cửa hàng trong database
-            Integer storeId = store.getStoreId();
-            Optional<Stores> optionalStore = storeService.findById(storeId);
 
-            // Cộng số tiền thanh toán vào ví của cửa hàng
-            if (optionalStore.isPresent()) {
-                Stores foundStore = optionalStore.get();
-                walletService.addToWallet(foundStore.getOwnerId().getUserId(), totalWithShipping, paymentType);
-                logger.info("Đã cộng {} vào ví của chủ cửa hàng có ID {}. Loại thanh toán: {}", totalWithShipping, storeId, paymentType);
-            }
             // Xác nhận và lưu đơn hàng
             order.setUserId(user);
             order.setShippingAddress(formattedShippingAddress);
@@ -368,6 +357,9 @@ public class CheckoutController {
             order.setOrderCode(RandomOrderCodeGenerator.generateOrderCode());
             orderRepository.save(order);
             logger.info("Order saved in database with ID: {}", order.getOrderId());
+
+            walletService.addToWalletForAdmin(totalWithShipping, paymentType, order);
+            logger.info("Đã cộng {} vào ví ADMIN. Loại thanh toán: {}", totalWithShipping, paymentType);
 
             // Tạo trạng thái giao hàng mới cho đơn hàng (mặc định là pending)
             ShippingStatus initialShippingStatus = ShippingStatus.builder()

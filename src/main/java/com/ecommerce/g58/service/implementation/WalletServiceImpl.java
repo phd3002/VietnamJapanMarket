@@ -1,6 +1,7 @@
 package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.dto.WalletDTO;
+import com.ecommerce.g58.entity.Orders;
 import com.ecommerce.g58.entity.Transactions;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.entity.Wallet;
@@ -131,6 +132,39 @@ public class WalletServiceImpl implements WalletService {
         transactionRepository.save(transaction);
     }
 
+    @Override
+    public void addToWalletForAdmin(double amount, String paymentType, Orders orders) {
+        // Retrieve user entity
+        Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
+
+
+
+        // Retrieve user's wallet entity
+        Optional<Wallet> optionalWallet = walletRepository.findByUserId(adminUser);
+        if (optionalWallet.isEmpty()) {
+            throw new IllegalArgumentException("Không tìm thấy ví của người dùng");
+        }
+        Wallet wallet = optionalWallet.get();
+
+        // Add balance and save updated wallet
+        Long currentBalance = wallet.getBalance();
+        Long amountToAdd = (long) amount;
+        Long newBalance = currentBalance + amountToAdd;
+        wallet.setBalance(newBalance);
+        walletRepository.save(wallet);
+
+        // Record transaction
+        Transactions transaction = new Transactions();
+        transaction.setToWalletId(wallet);
+        transaction.setAmount(amountToAdd);
+        transaction.setTransactionType("Cộng tiền");
+        transaction.setDescription(paymentType.equals("deposit") ? "Người mua đặt cọc 50% khi mua hàng cho order "+ orders.getOrderCode() : "Người mua thanh toán đầy đủ khi mua hàng cho order : "+ orders.getOrderCode());
+        transaction.setPaymentType(paymentType); // Set payment type
+        transaction.setCreatedAt(LocalDateTime.now());
+
+        transactionRepository.save(transaction);
+    }
+
 //    @Override
 //    public void addToWalletForLogistics(Long amount, int orderId) {
 //        Orders order = orderRepository.findOrdersByOrderId(orderId);
@@ -229,22 +263,23 @@ public class WalletServiceImpl implements WalletService {
             String paymentType = (result.length > 6 && result[6] != null) ? (String) result[6] : null;
 
             // Set description based on transaction type and paymentType
-            if ("deposit".equalsIgnoreCase(paymentType)) {
-                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
-                    dto.setDescription("Người mua đặt cọc 50% khi mua hàng");
-                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
-                    dto.setDescription("Đặt cọc 50% khi mua hàng");
-                }
-            } else if ("full".equalsIgnoreCase(paymentType)) {
-                // For full payment transactions
-                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
-                    dto.setDescription("Người mua thanh toán đầy đủ khi mua hàng");
-                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
-                    dto.setDescription("Thanh toán đầy đủ khi mua hàng");
-                }
-            } else {
+//            if ("deposit".equalsIgnoreCase(paymentType)) {
+//                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
+//                    dto.setDescription("Người mua đặt cọc 50% khi mua hàng");
+//                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
+//                    dto.setDescription("Đặt cọc 50% khi mua hàng");
+//                }
+//            } else if ("full".equalsIgnoreCase(paymentType)) {
+//                // For full payment transactions
+//                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
+//                    dto.setDescription("Người mua thanh toán đầy đủ khi mua hàng");
+//                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
+//                    dto.setDescription("Thanh toán đầy đủ khi mua hàng");
+//                }
+//            }
+//            else {
                 dto.setDescription((String) result[3]); // Default description for other types
-            }
+//            }
 
             // Set transactionParty based on transaction type
             if ("Trừ tiền".equals(transactionType)) {
