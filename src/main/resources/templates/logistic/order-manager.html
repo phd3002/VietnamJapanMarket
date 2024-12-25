@@ -278,7 +278,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 class="modal-title">Xác nhận thay đổi trạng thái</h2>
-            <p th:text="${#messages.format('modal.confirm.text', 'Đã giao hàng thành công')}">Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này thành "Đã giao hàng thành công"? </p>
+            <p th:text="#{modal.confirm.text}">Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này thành "Đã giao hàng thành công"? </p>
             <p><span style="color: red;" th:text="#{modal.confirm.warning}">Hành động này không thể hoàn tác!</span></p>
             <div class="modal-buttons">
                 <button id="confirmBtn" class="btn btn-success" th:text="#{modal.confirm.accept}">Đồng ý</button>
