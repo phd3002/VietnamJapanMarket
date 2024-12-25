@@ -32,11 +32,11 @@
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <div class="content" data-sal="slide-up" data-sal-duration="800" data-sal-delay="400">
-                    <span class="title-highlighter highlighter-secondary"> Ồ! Có thứ gì đó sai sai.</span>
-                    <h1 class="title">Không tìm thấy trang</h1>
-                    <p>Có vẻ như chúng tôi không tìm thấy những gì bạn tìm kiếm. Trang bạn đang tìm kiếm không tồn tại,
+                    <span class="title-highlighter highlighter-secondary" th:text="#{error.page.title}"> Ồ! Có thứ gì đó sai sai.</span>
+                    <h1 class="title" th:text="#{error.page.header}">Không tìm thấy trang</h1>
+                    <p th:text="#{error.page.description}">Có vẻ như chúng tôi không tìm thấy những gì bạn tìm kiếm. Trang bạn đang tìm kiếm không tồn tại,
                         không khả dụng do tải không đúng cách.</p>
-                    <a href="/homepage" class="axil-btn btn-bg-secondary right-icon">Quay lại trang chủ </a>
+                    <a href="/homepage" class="axil-btn btn-bg-secondary right-icon" th:text="#{error.page.button}">Quay lại trang chủ </a>
                 </div>
             </div>
             <div class="col-lg-6">

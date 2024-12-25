@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Danh sách đơn hàng | Kênh người bán</title>
+    <title>Danh sách đơn hàng</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -41,27 +41,32 @@
 <aside class="app-sidebar">
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
+        <br>
+        <h3 th:text="#{sidebar.logistic.management.page}">Trang vận chuyển</h3>
     </div>
     <hr>
     <ul class="app-menu">
-        <!--        <li><a class="app-menu__item" href="/logistic/dashboard"><i class='app-menu__icon bx bx-tachometer'></i><span-->
-        <!--                class="app-menu__label">Bảng điều khiển</span></a></li>-->
         <li><a class="app-menu__item active" href="/logistic/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
-                class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item" href="wallet.html"><i
+                class="app-menu__label" th:text="#{sidebar.menu.order.manager}">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="/logistic/wallet"><i
                 class='app-menu__icon bx bx-money'></i><span
-                class="app-menu__label">Ví</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="#"><b>Chi tiết đơn hàng</b></a></li>
+            <li class="breadcrumb-item active"><b th:text="#{order.seller.details}">Chi tiết đơn hàng</b></li>
         </ul>
         <div class="col-sm-2">
-            <a class="btn btn-delete btn-sm print-file" type="button" title="In" onclick="myApp.printTable()"><i
-                    class="fas fa-print"></i> In hóa đơn</a>
+            <a class="btn btn-delete btn-sm print-file"
+               type="button"
+               th:title="#{button.print.title}"
+               th:text="#{button.print.invoice}"
+               onclick="myApp.printTable()">
+                <i class="fas fa-print"></i> <!-- Icon remains unchanged -->
+            </a>
         </div>
         <div id="clock"></div>
     </div>
@@ -75,46 +80,59 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-body printableArea" id="sample">
-                        <h3><b>Hóa đơn</b> <span class="pull-right" name="id" th:text="'#' + ${trackingNumber}"></span>
+                        <h3><b th:text="#{order.seller.invoice}">Hóa đơn</b> <span class="pull-right" name="id" th:text="'#' + ${trackingNumber}"></span>
                         </h3>
                         <hr/>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="pull-left col-4">
                                     <address>
-                                        <div>Đơn vị bán:
+                                        <div><b th:text="#{order.seller.seller}">Đơn vị bán:</b>
                                             &nbsp;<b class="text-danger text-uppercase" th:text="${storeName}"></b>
                                         </div>
-                                        <div>Địa chỉ:
+                                        <div><b th:text="#{order.seller.address}">Địa chỉ:</b>
                                             <b class="text-secondary" th:text="${storeAddress}"></b>
                                         </div>
-                                        <div>Số điện thoại:
+                                        <div><b th:text="#{order.seller.phone}">Số điện thoại:</b>
                                             <b class="text-secondary" th:text="${storePhone}"></b>
                                         </div>
                                     </address>
                                 </div>
                                 <div class="pull-right text-end">
                                     <address>
-                                        <div>Người mua:
+                                        <div><b th:text="#{order.seller.buyer}">Người mua:</b>
                                             &nbsp;<b class="text-danger text-uppercase" th:text="${customerName}"></b>
                                         </div>
-                                        <div>Địa chỉ:
+                                        <div><b th:text="#{order.seller.address}">Địa chỉ:</b>
                                             <b class="text-secondary" th:text="${customerAddress}"></b>
                                         </div>
-                                        <div>Số điện thoại:
+                                        <div><b th:text="#{order.seller.phone}">Số điện thoại:</b>
                                             <b class="text-secondary" th:text="${customerPhone}"></b>
                                         </div>
-                                        <div>Ngày đặt:
+                                        <div><b th:text="#{order.seller.orderDate}">Ngày đặt:</b>
                                             <b class="text-secondary" th:text="${orderDate}"></b>
                                         </div>
                                     </address>
                                 </div>
                                 <div class="pull-right col-4">
                                     <address>
-                                        <div>Trạng thái hiện tại:
-                                            &nbsp;<b class="text-danger text-uppercase" th:text="${orderStatus}"></b>
+                                        <div><b th:text="#{order.seller.currentStatus}">Trạng thái hiện tại:</b>
+                                            &nbsp;<b id="status-order" class="text-danger text-uppercase"
+                                                     th:switch="${orderStatus}">
+                                                <th:block th:case="'Pending'" th:text="#{order.seller.pending}"></th:block>
+                                                <th:block th:case="'Confirmed'" th:text="#{order.seller.confirmed}"></th:block>
+                                                <th:block th:case="'Processing'" th:text="#{order.seller.processing}"></th:block>
+                                                <th:block th:case="'Dispatched'" th:text="#{order.seller.dispatched}"></th:block>
+                                                <th:block th:case="'Shipping'" th:text="#{order.seller.shipping}"></th:block>
+                                                <th:block th:case="'Delivered'" th:text="#{order.seller.delivered}"></th:block>
+                                                <th:block th:case="'Completed'" th:text="#{order.seller.completed}"></th:block>
+                                                <th:block th:case="'Failed'" th:text="#{order.seller.failed}"></th:block>
+                                                <th:block th:case="'Returned'" th:text="#{order.seller.returned}"></th:block>
+                                                <th:block th:case="'Cancelled'" th:text="#{order.seller.cancelled}"></th:block>
+                                                <th:block th:case="*">[[${orderStatus}]]</th:block>
+                                            </b>
                                         </div>
-                                        <div>Ngày cập nhật gần nhất:
+                                        <div><b th:text="#{order.seller.lastUpdateTime}">Ngày cập nhật gần nhất:</b>
                                             <b class="text-secondary" th:text="${updateTime}"></b>
                                         </div>
                                     </address>
@@ -125,11 +143,11 @@
                                     <table class="table table-hover">
                                         <thead>
                                         <tr>
-                                            <th class="text-end">Tên sản phẩm</th>
-                                            <th class="text-end">Màu sắc x Kích thước</th>
-                                            <th class="text-end">Số lượng</th>
-                                            <th class="text-end">Đơn giá</th>
-                                            <th class="text-end">Thành tiền</th>
+                                            <th class="text-end" scope="col" th:text="#{order.seller.productName}">Tên sản phẩm</th>
+                                            <th class="text-end" scope="col" th:text="#{order.seller.productVariation}">Màu sắc x Kích thước</th>
+                                            <th class="text-end" scope="col" th:text="#{order.seller.quantity}">Số lượng</th>
+                                            <th class="text-end" scope="col" th:text="#{order.seller.unitPrice}">Đơn giá</th>
+                                            <th class="text-end" scope="col" th:text="#{order.seller.totalPrice}">Thành tiền</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -137,25 +155,28 @@
                                             <td class="text-end" th:text="${order.productName}"></td>
                                             <td class="text-end" th:text="${order.productType}"></td>
                                             <td class="text-end" th:text="${order.quantity}"></td>
-                                            <td class="text-end" th:text="${order.getFormattedProductPrice()}"></td>
-                                            <td class="text-end" th:text="${order.getFormattedTotalPrice()}"></td>
+                                            <td class="text-end" th:text="${order.productPrice}"></td>
+                                            <td class="text-end" th:text="${order.totalPrice}"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="text-lg-right">Cộng tiền thuế GTGT:</td>
+                                            <td colspan="4" class="text-lg-right" th:text="#{order.seller.tax}">Cộng tiền thuế GTGT:</td>
                                             <td class="text-end" th:text="${tax} +''"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="text-lg-right">Phí vận chuyển:</td>
+                                            <td colspan="4" class="text-lg-right" th:text="#{order.seller.shippingFee}">Phí vận chuyển:</td>
                                             <td class="text-end" th:text="${shippingFee}"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="text-lg-right"><b>Phương thức thanh toán:</b></td>
-                                            <td class="text-end"><b
-                                                    th:text="${paymentMethod == 1 ? 'Thanh toán bằng VNPay' : 'Thanh toán bằng ví điện tử'}"></b>
+                                            <td colspan="4" class="text-lg-right" th:text="#{order.seller.paymentMethod}"></td>
+                                            <td class="text-end">
+                                                <b th:switch="${paymentMethod}">
+                                                    <th:block th:case="'0'" th:text="#{order.seller.vnpay}"></th:block>
+                                                    <th:block th:case="'1'" th:text="#{order.seller.wallet}"></th:block>
+                                                </b>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="4" class="text-lg-right"><b>Tổng cộng tiền thanh toán (áp dụng
+                                            <td colspan="4" class="text-lg-right"><b th:text="#{order.seller.totalWithDiscount}">Tổng cộng tiền thanh toán (áp dụng
                                                 mã giảm giá):</b></td>
                                             <td class="text-end"><b th:text="${totalAmount}"></b></td>
                                         </tr>
@@ -178,5 +199,16 @@
 <script th:src="@{/logistic/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top-->
 <script th:src="@{/logistic/js/plugins/pace.min.js}"></script>
+<script>
+    var myApp = new function () {
+        this.printTable = function () {
+            var tab = document.getElementById('sampleTable');
+            var win = window.open('', '', 'height=700,width=700');
+            win.document.write(tab.outerHTML);
+            win.document.close();
+            win.print();
+        }
+    }
+</script>
 </body>
 </html>

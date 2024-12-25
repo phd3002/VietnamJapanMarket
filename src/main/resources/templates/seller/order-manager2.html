@@ -63,7 +63,7 @@
                 class='app-menu__icon bx bx-list-minus'></i><span
                 class="app-menu__label" th:text="#{sidebar.menu.feedback.manager}">Quản lý đánh giá</span></a>
         </li>
-        <li><a class="app-menu__item" href="wallet.html"><i
+        <li><a class="app-menu__item" href="/seller/wallet"><i
                 class='app-menu__icon bx fa-box-usd'></i><span
                 class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
@@ -228,14 +228,17 @@
                                             disabled th:text="#{status.pending}">Chờ xử lý
                                     </option>
                                     <option value="Confirmed" th:selected="${order.latestStatus == 'Confirmed'}"
-                                            th:disabled="${order.latestStatus != 'Pending'}" th:text="#{status.confirmed}">Xác nhận
+                                            th:disabled="${order.latestStatus != 'Pending'}"
+                                            th:text="#{status.confirmed}">Xác nhận
                                     </option>
                                     <option value="Processing" th:selected="${order.latestStatus == 'Processing'}"
-                                            th:disabled="${order.latestStatus != 'Pending' && order.latestStatus != 'Confirmed'}" th:text="#{status.processing}">
+                                            th:disabled="${order.latestStatus != 'Pending' && order.latestStatus != 'Confirmed'}"
+                                            th:text="#{status.processing}">
                                         Đang xử đóng gói
                                     </option>
                                     <option value="Dispatched" th:selected="${order.latestStatus == 'Dispatched'}"
-                                            th:disabled="${order.latestStatus != 'Pending' && order.latestStatus != 'Confirmed' && order.latestStatus != 'Processing'} " th:text="#{status.dispatched}">
+                                            th:disabled="${order.latestStatus != 'Pending' && order.latestStatus != 'Confirmed' && order.latestStatus != 'Processing'} "
+                                            th:text="#{status.dispatched}">
                                         Đã giao cho vận chuyển
                                     </option>
                                     <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'}"
@@ -247,7 +250,8 @@
                                     <option value="Completed" th:selected="${order.latestStatus == 'Completed'}"
                                             disabled th:text="#{status.completed}">Hoàn tất
                                     </option>
-                                    <option value="Failed" th:selected="${order.latestStatus == 'Failed'}" disabled th:text="#{status.failed}">
+                                    <option value="Failed" th:selected="${order.latestStatus == 'Failed'}" disabled
+                                            th:text="#{status.failed}">
                                         Giao hàng thất bại
                                     </option>
                                     <option value="Returned" th:selected="${order.latestStatus == 'Returned'}"
@@ -270,7 +274,8 @@
                             <!--                                <p>Previous Status: <span th:text="${order.previous_status}"></span></p>-->
                             <!--                            </div>-->
                             <a th:href="@{/seller/order-detail/{orderId}(orderId=${order.orderId})}">
-                                <button class="btn btn-primary btn-sm edit" type="button" th:title="#{order.seller.viewDetail}">
+                                <button class="btn btn-primary btn-sm edit" type="button"
+                                        th:title="#{order.seller.viewDetail}">
                                     <i class="fa fa-eye"></i>
                                 </button>
                             </a>
@@ -301,11 +306,15 @@
     <div id="bulkConfirmModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeBulkConfirmModal()">&times;</span>
-            <h2 class="modal-title" th:text="#{order.seller.modal.confirmStatusChange}">Xác nhận thay đổi trạng thái</h2>
+            <h2 class="modal-title" th:text="#{order.seller.modal.confirmStatusChange}">Xác nhận thay đổi trạng
+                thái</h2>
             <p id="bulkConfirmMessage"></p>
             <div class="modal-buttons">
-                <button id="confirmBulkBtn" class="btn btn-success" th:text="#{order.seller.modal.agree}">Đồng ý</button>
-                <button class="btn btn-danger" onclick="closeBulkConfirmModal()" th:text="#{order.seller.modal.cancel}">Hủy bỏ</button>
+                <button id="confirmBulkBtn" class="btn btn-success" th:text="#{order.seller.modal.agree}">Đồng ý
+                </button>
+                <button class="btn btn-danger" onclick="closeBulkConfirmModal()" th:text="#{order.seller.modal.cancel}">
+                    Hủy bỏ
+                </button>
             </div>
         </div>
     </div>
@@ -314,12 +323,16 @@
     <div id="confirmModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2 class="modal-title" th:text="#{order.seller.modal.confirmStatusChange}">Xác nhận thay đổi trạng thái</h2>
-            <p th:text="#{order.seller.modal.confirmStatusChangeMessage}">Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này thành "Đã giao cho vận chuyển"? <br><span
-                    style="color: red;" th:text="#{order.seller.modal.confirmStatusNoti}">Hành động này không thể hoàn tác!</span></p>
+            <h2 class="modal-title" th:text="#{order.seller.modal.confirmStatusChange}">Xác nhận thay đổi trạng
+                thái</h2>
+            <p th:text="#{order.seller.modal.confirmStatusChangeMessage}">Bạn có chắc chắn muốn thay đổi trạng thái đơn
+                hàng này thành "Đã giao cho vận chuyển"? <br><span
+                        style="color: red;" th:text="#{order.seller.modal.confirmStatusNoti}">Hành động này không thể hoàn tác!</span>
+            </p>
             <div class="modal-buttons">
                 <button id="confirmBtn" class="btn btn-success" th:text="#{order.seller.modal.agree}">Đồng ý</button>
-                <button class="btn btn-danger" onclick="closeModal()" th:text="#{order.seller.modal.cancel}">Hủy bỏ</button>
+                <button class="btn btn-danger" onclick="closeModal()" th:text="#{order.seller.modal.cancel}">Hủy bỏ
+                </button>
             </div>
         </div>
     </div>
@@ -331,10 +344,15 @@
                 <strong th:text="#{order.seller.modal.reason}">Lý do trả hàng:</strong>
                 <span id="acceptOrderReason" style="color: red;"></span>
             </p>
-            <p th:text="#{order.seller.modal.acceptOrderMessageThisOrder}">Bạn có chắc chắn muốn chấp nhận đơn hàng này?</p>
+            <p th:text="#{order.seller.modal.acceptOrderMessageThisOrder}">Bạn có chắc chắn muốn chấp nhận đơn hàng
+                này?</p>
             <div class="modal-buttons">
-                <button id="confirmAcceptOrderBtn" class="btn btn-success" th:text="#{order.seller.modal.agree}">Đồng ý</button>
-                <button class="btn btn-danger" onclick="closeAcceptModal()" th:text="#{order.seller.modal.cancel}">Hủy bỏ</button>
+                <button id="confirmAcceptOrderBtn" class="btn btn-success" th:text="#{order.seller.modal.agree}">Đồng
+                    ý
+                </button>
+                <button class="btn btn-danger" onclick="closeAcceptModal()" th:text="#{order.seller.modal.cancel}">Hủy
+                    bỏ
+                </button>
             </div>
         </div>
     </div>
@@ -493,41 +511,63 @@
     }
 
 </script>
-<script>
+<script th:inline="javascript">
     // Function to open the bulk confirmation modal
     function openBulkConfirmModal(formId) {
         let newStatus;
         let message = "";
+
         if (formId === 'bulkFormPending') {
             newStatus = 'Confirmed';
-            message = 'Bạn có chắc chắn muốn thay đổi tất cả đơn hàng "Chờ xử lý" thành "Xác nhận"?';
+            message = /*[[#{bulk.modal.message.pending.to.confirmed}]]*/ 'Bạn có chắc chắn muốn thay đổi tất cả đơn hàng "Chờ xử lý" thành "Xác nhận"?';
         } else if (formId === 'bulkFormConfirmed') {
             newStatus = 'Processing';
-            message = 'Bạn có chắc chắn muốn thay đổi tất cả đơn hàng "Xác nhận" thành "Đang xử lý"?';
+            message = /*[[#{bulk.modal.message.confirmed.to.processing}]]*/ 'Bạn có chắc chắn muốn thay đổi tất cả đơn hàng "Xác nhận" thành "Đang xử lý"?';
         } else if (formId === 'bulkFormProcessing') {
             newStatus = 'Dispatched';
-            message = 'Bạn có chắc chắn muốn thay đổi tất cả đơn hàng "Đang xử lý" thành "Đã giao cho vận chuyển ?"?';
+            message = /*[[#{bulk.modal.message.processing.to.dispatched}]]*/ 'Bạn có chắc chắn muốn thay đổi tất cả đơn hàng "Đang xử lý" thành "Đã giao cho vận chuyển"?';
         }
-        document.getElementById('bulkConfirmMessage').innerHTML = message + '<br><span style="color: red;">Hành động này không thể hoàn tác!</span>';
-        document.getElementById('bulkConfirmModal').style.display = 'block';
+
+        const bulkConfirmMessage = document.getElementById('bulkConfirmMessage');
+        const bulkConfirmModal = document.getElementById('bulkConfirmModal');
+        const confirmBulkBtn = document.getElementById('confirmBulkBtn');
+
+        if (!bulkConfirmMessage || !bulkConfirmModal || !confirmBulkBtn) {
+            console.error('Bulk confirmation modal elements not found.');
+            return;
+        }
+
+        bulkConfirmMessage.innerHTML = message + '<br><span style="color: red;">' + /*[[#{bulk.modal.action.irreversible}]]*/ 'Hành động này không thể hoàn tác!' + '</span>';
+        bulkConfirmModal.style.display = 'block';
 
         // Store the form ID in the confirm button's data attribute
-        document.getElementById('confirmBulkBtn').setAttribute('data-form-id', formId);
+        confirmBulkBtn.setAttribute('data-form-id', formId);
     }
 
     // Function to close the bulk confirmation modal
     function closeBulkConfirmModal() {
-        document.getElementById('bulkConfirmModal').style.display = 'none';
+        const bulkConfirmModal = document.getElementById('bulkConfirmModal');
+        if (bulkConfirmModal) {
+            bulkConfirmModal.style.display = 'none';
+        }
     }
 
     // Handle the confirm button click in the bulk confirmation modal
     document.getElementById('confirmBulkBtn').addEventListener('click', function () {
         const formId = this.getAttribute('data-form-id');
         const form = document.getElementById(formId);
+
+        if (!form) {
+            console.error(`Form with ID '${formId}' not found.`);
+            closeBulkConfirmModal();
+            return;
+        }
+
         form.submit(); // Submit the corresponding form
         closeBulkConfirmModal();
     });
 </script>
+
 
 </body>
 

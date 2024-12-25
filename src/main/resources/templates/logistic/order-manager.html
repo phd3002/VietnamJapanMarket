@@ -42,25 +42,22 @@
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
         <br>
-        <h3>Trang vận chuyển</h3>
+        <h3 th:text="#{sidebar.logistic.management.page}">Trang vận chuyển</h3>
     </div>
     <hr>
     <ul class="app-menu">
-<!--        <li><a class="app-menu__item" href="/logistic/dashboard"><i-->
-<!--                class='app-menu__icon bx bx-tachometer'></i><span-->
-<!--                class="app-menu__label">Bảng điều khiển</span></a></li>-->
         <li><a class="app-menu__item active" href="/logistic/order-manager"><i
                 class='app-menu__icon bx bx-task'></i><span
-                class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item" href="wallet.html"><i
+                class="app-menu__label" th:text="#{sidebar.menu.order.manager}">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="/logistic/wallet"><i
                 class='app-menu__icon bx bx-money'></i><span
-                class="app-menu__label">Ví</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="#"><b>Danh sách đơn hàng</b></a></li>
+            <li class="breadcrumb-item active"><b th:text="#{order.seller.list}">Danh sách đơn hàng</b></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -75,50 +72,66 @@
                             <div class="form-row">
                                 <!-- Status Filter -->
                                 <div class="form-group col-md-3 col-sm-6">
-                                    <label for="statusFilter">Lọc theo trạng thái:</label>
+                                    <label for="statusFilter" th:text="#{order.seller.filterbyStatus}">Lọc theo trạng thái:</label>
                                     <select id="statusFilter" name="status" class="form-control"
                                             onchange="this.form.submit()">
-                                        <option value="" th:selected="${status == null || status == ''}" selected>Tất
+                                        <option value="" th:selected="${status == null || status == ''}" selected th:text="#{filter.status.all}">Tất
                                             cả
                                         </option>
-                                        <option value="Pending" th:selected="${status == 'Pending'}">Chờ xử lý</option>
-                                        <option value="Confirmed" th:selected="${status == 'Confirmed'}">Xác nhận
+                                        <option value="Pending" th:selected="${status == 'Pending'}"
+                                                th:text="#{status.pending}">Chờ xử lý
                                         </option>
-                                        <option value="Processing" th:selected="${status == 'Processing'}">Đang đóng
+                                        <option value="Confirmed" th:selected="${status == 'Confirmed'}"
+                                                th:text="#{status.confirmed}">Xác nhận
+                                        </option>
+                                        <option value="Processing" th:selected="${status == 'Processing'}"
+                                                th:text="#{status.processing}">Đang đóng
                                             gói
                                         </option>
-                                        <option value="Dispatched" th:selected="${status == 'Dispatched'}">Đã giao cho
+                                        <option value="Dispatched" th:selected="${status == 'Dispatched'}"
+                                                th:text="#{status.dispatched}">Đã giao cho
                                             vận chuyển
                                         </option>
-                                        <option value="Shipping" th:selected="${status == 'Shipping'}">Đang vận chuyển
+                                        <option value="Shipping" th:selected="${status == 'Shipping'}"
+                                                th:text="#{status.shipping}">Đang vận chuyển
                                         </option>
-                                        <option value="Delivered" th:selected="${status == 'Delivered'}">Đã giao
+                                        <option value="Delivered" th:selected="${status == 'Delivered'}"
+                                                th:text="#{status.delivered}">Đã giao
                                         </option>
-                                        <option value="Failed" th:selected="${status == 'Failed'}">Thất bại</option>
-                                        <option value="Returned" th:selected="${status == 'Returned'}">Hoàn trả</option>
-                                        <option value="Cancelled" th:selected="${status == 'Cancelled'}">Đã hủy</option>
+                                        <option value="Completed" th:selected="${status == 'Completed'}"
+                                                th:text="#{status.completed}">Hoàn tất
+                                        </option>
+                                        <option value="Failed" th:selected="${status == 'Failed'}"
+                                                th:text="#{status.failed}">Thất bại
+                                        </option>
+                                        <option value="Returned" th:selected="${status == 'Returned'}"
+                                                th:text="#{status.returned}">Hoàn trả
+                                        </option>
+                                        <option value="Cancelled" th:selected="${status == 'Cancelled'}"
+                                                th:text="#{status.cancelled}">Đã hủy
+                                        </option>
                                     </select>
                                 </div>
 
                                 <!-- Start Date -->
                                 <div class="form-group col-md-3 col-sm-6">
-                                    <label for="startDate">Từ ngày:</label>
+                                    <label for="startDate" th:text="#{order.from}">Từ ngày:</label>
                                     <input type="date" id="startDate" name="startDate" class="form-control"
                                            th:value="${startDate}">
                                 </div>
 
                                 <!-- End Date -->
                                 <div class="form-group col-md-3 col-sm-6">
-                                    <label for="endDate">Đến ngày:</label>
+                                    <label for="endDate" th:text="#{order.to}">Đến ngày:</label>
                                     <input type="date" id="endDate" name="endDate" class="form-control"
                                            th:value="${endDate}">
                                 </div>
 
                                 <!-- Buttons -->
                                 <div class="form-group col-md-3 col-sm-6 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary mr-2 mb-2">Lọc</button>
+                                    <button type="submit" class="btn btn-primary mr-2 mb-2" th:text="#{order.filter}">Lọc</button>
                                     <button type="button" class="btn btn-secondary mb-2"
-                                            onclick="window.location.href='/logistic/order-manager'">Xóa
+                                            onclick="window.location.href='/logistic/order-manager'" th:text="#{order.seller.resetFilter}">Xóa
                                     </button>
                                 </div>
                             </div>
@@ -134,7 +147,7 @@
                                 <input type="hidden" name="endDate" th:value="${endDate}"/>
                                 <input type="hidden" name="newStatus" value="Shipping"/>
                                 <button type="button" class="btn btn-warning"
-                                        onclick="openBulkConfirmModal('bulkFormDispatched')">
+                                        onclick="openBulkConfirmModal('bulkFormDispatched')" th:text="#{bulk.dispatched.to.shipping}">
                                     Chuyển tất cả "Đã giao cho vận chuyển" thành "Đang vận chuyển"
                                 </button>
                             </form>
@@ -147,7 +160,7 @@
                                 <input type="hidden" name="endDate" th:value="${endDate}"/>
                                 <input type="hidden" name="newStatus" value="Delivered"/>
                                 <button type="button" class="btn btn-success"
-                                        onclick="openBulkConfirmModal('bulkFormShipping')">
+                                        onclick="openBulkConfirmModal('bulkFormShipping')" th:text="#{bulk.shipping.to.delivered}">
                                     Chuyển tất cả "Đang vận chuyển" thành "Đã giao"
                                 </button>
                             </form>
@@ -162,14 +175,14 @@
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                         <tr>
-                            <th>ID Đơn hàng</th>
-                            <th>Khách hàng</th>
-                            <th>Đơn hàng</th>
-                            <th>Số lượng</th>
-                            <th>Tổng tiền</th>
-                            <th>Ngày tạo</th>
-                            <th>Tình trạng</th>
-                            <th>Tính năng</th>
+                            <th th:text="#{order.seller.orderId}">ID Đơn hàng</th>
+                            <th th:text="#{order.seller.customer}">Khách hàng</th>
+                            <th th:text="#{order.seller.products}">Đơn hàng</th>
+                            <th th:text="#{order.seller.quantity}">Số lượng</th>
+                            <th th:text="#{order.seller.totalPrice}">Tổng tiền</th>
+                            <th th:text="#{order.seller.orderDate}">Ngày tạo</th>
+                            <th th:text="#{order.seller.status}">Tình trạng</th>
+                            <th th:text="#{order.seller.actions}">Tính năng</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -186,40 +199,40 @@
                                     <select class="form-control status-dropdown" id="order-status" name="status"
                                             th:value="${order.latestStatus}" onchange="handleStatusChange(this)">
                                         <option value="Pending" th:selected="${order.latestStatus == 'Pending'}"
-                                                disabled>Chờ xử lý
+                                                disabled th:text="#{status.pending}">Chờ xử lý
                                         </option>
                                         <option value="Confirmed" th:selected="${order.latestStatus == 'Confirmed'}"
-                                                disabled>Xác nhận
+                                                disabled th:text="#{status.confirmed}">Xác nhận
                                         </option>
                                         <option value="Processing" th:selected="${order.latestStatus == 'Processing'}"
-                                                disabled>Đang xử đóng gói
+                                                disabled th:text="#{status.processing}">Đang xử đóng gói
                                         </option>
                                         <option value="Dispatched" th:selected="${order.latestStatus == 'Dispatched'}"
-                                                disabled>Đã giao cho vận chuyển
+                                                disabled th:text="#{status.dispatched}">Đã giao cho vận chuyển
                                         </option>
                                         <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'}"
                                                 th:disabled="${order.latestStatus != 'Dispatched' }"
-                                        >Đang vận chuyển
+                                                th:text="#{status.shipping}">Đang vận chuyển
                                         </option>
                                         <option value="Delivered" th:selected="${order.latestStatus == 'Delivered'}"
-                                                th:disabled="${order.latestStatus != 'Shipping' }">
+                                                th:disabled="${order.latestStatus != 'Shipping' }" th:text="#{status.delivered}">
                                             Đã giao
                                         </option>
                                         <option value="Completed" th:selected="${order.latestStatus == 'Completed'}"
-                                                disabled>Hoàn tất
+                                                disabled th:text="#{status.completed}">Hoàn tất
                                         </option>
                                         <option value="Failed" th:selected="${order.latestStatus == 'Failed'}"
-                                                th:disabled="${order.latestStatus != 'Shipping' }">Giao hàng thất bại
+                                                th:disabled="${order.latestStatus != 'Shipping' }" th:text="#{status.failed}">Giao hàng thất bại
                                         </option>
                                         <option value="Returned" th:selected="${order.latestStatus == 'Returned'}"
-                                                disabled>Hoàn trả
+                                                disabled th:text="#{status.returned}">Hoàn trả
                                         </option>
                                         <option value="Cancelled" th:selected="${order.latestStatus == 'Cancelled'}"
-                                                disabled>Đã hủy
+                                                disabled th:text="#{status.cancelled}">Đã hủy
                                         </option>
                                         <option th:if="${order.previous_status != null}" value="Canceled"
                                                 th:selected="${order.previous_status == 'Returned'}"
-                                                disabled>Đã hoàn trả
+                                                disabled th:text="#{order.seller.isReturn}">Đã hoàn trả
                                         </option>
                                     </select>
                                 </form>
@@ -231,11 +244,11 @@
                                     </button>
                                 </a>
                                 <button th:if="${order.previous_status == 'Failed'}" class="btn btn-danger btn-sm"
-                                        type="button" title="Giao hàng thất bại 2 lần">
+                                        type="button" th:title="#{order.failed.twice}">
                                     <i class="fa fa-warning"></i>
                                 </button>
                                 <button th:if="${order.previous_status == 'Fail'}" class="btn btn-warning btn-sm"
-                                        type="button" title="Giao hàng thất bại 1 lần">
+                                        type="button" th:title="#{order.failed.once}">
                                     <i class="fa fa-warning"></i>
                                 </button>
                             </td>
@@ -249,11 +262,15 @@
     <div id="bulkConfirmModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeBulkConfirmModal()">&times;</span>
-            <h2 class="modal-title">Xác nhận thay đổi trạng thái</h2>
+            <h2 class="modal-title" th:text="#{order.seller.modal.confirmStatusChange}">Xác nhận thay đổi trạng
+                thái</h2>
             <p id="bulkConfirmMessage"></p>
             <div class="modal-buttons">
-                <button id="confirmBulkBtn" class="btn btn-success">Đồng ý</button>
-                <button class="btn btn-danger" onclick="closeBulkConfirmModal()">Hủy bỏ</button>
+                <button id="confirmBulkBtn" class="btn btn-success" th:text="#{order.seller.modal.agree}">Đồng ý
+                </button>
+                <button class="btn btn-danger" onclick="closeBulkConfirmModal()" th:text="#{order.seller.modal.cancel}">
+                    Hủy bỏ
+                </button>
             </div>
         </div>
     </div>
@@ -261,12 +278,11 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 class="modal-title">Xác nhận thay đổi trạng thái</h2>
-            <p>Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này thành "Đã giao hàng thành công"? <br><span
-                    style="color: red;">Hành động này không thể hoàn tác!</span></p>
-
+            <p th:text="${#messages.format('modal.confirm.text', 'Đã giao hàng thành công')}">Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng này thành "Đã giao hàng thành công"? </p>
+            <p><span style="color: red;" th:text="#{modal.confirm.warning}">Hành động này không thể hoàn tác!</span></p>
             <div class="modal-buttons">
-                <button id="confirmBtn" class="btn btn-success">Đồng ý</button>
-                <button class="btn btn-danger" onclick="closeModal()">Hủy bỏ</button>
+                <button id="confirmBtn" class="btn btn-success" th:text="#{modal.confirm.accept}">Đồng ý</button>
+                <button class="btn btn-danger" onclick="closeModal()" th:text="#{modal.confirm.cancel}">Hủy bỏ</button>
             </div>
         </div>
     </div>
@@ -423,18 +439,18 @@
         this.form.submit();
     });
 </script>
-<script>
+<script th:inline="javascript">
     function openBulkConfirmModal(formId) {
         let newStatus;
         let message = "";
         if (formId === 'bulkFormDispatched') {
             newStatus = 'Shipping';
-            message = 'Bạn có chắc chắn muốn chuyển tất cả đơn hàng "Đã giao cho vận chuyển" thành "Đang vận chuyển"?';
+            message = /*[[#{bulk.confirm.dispatched.to.shipping}]]*/ 'Fallback message for dispatched to shipping';
         } else if (formId === 'bulkFormShipping') {
             newStatus = 'Delivered';
-            message = 'Bạn có chắc chắn muốn chuyển tất cả đơn hàng "Đang vận chuyển" thành "Đã giao"?';
+            message = /*[[#{bulk.confirm.shipping.to.delivered}]]*/ 'Fallback message for shipping to delivered';
         }
-        document.getElementById('bulkConfirmMessage').innerHTML = message + '<br><span style="color: red;">Hành động này không thể hoàn tác!</span>';
+        document.getElementById('bulkConfirmMessage').innerHTML = message + '<br><span style="color: red;">' + /*[[#{bulk.confirm.warning}]]*/ 'Fallback warning message' + '</span>';
         document.getElementById('bulkConfirmModal').style.display = 'block';
 
         // Store the form ID in the confirm button's data attribute

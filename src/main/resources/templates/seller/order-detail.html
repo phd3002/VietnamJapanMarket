@@ -64,7 +64,7 @@
                 class='app-menu__icon bx bx-list-minus'></i><span
                 class="app-menu__label" th:text="#{sidebar.menu.feedback.manager}">Quản lý đánh giá</span></a>
         </li>
-        <li><a class="app-menu__item" href="wallet.html"><i
+        <li><a class="app-menu__item" href="/seller/wallet"><i
                 class='app-menu__icon bx fa-box-usd'></i><span
                 class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
@@ -74,6 +74,15 @@
         <ul class="app-breadcrumb breadcrumb side">
             <li class="breadcrumb-item active"><b th:text="#{order.seller.details}">Chi tiết đơn hàng</b></li>
         </ul>
+        <div class="col-sm-2">
+            <a class="btn btn-delete btn-sm print-file"
+               type="button"
+               th:title="#{button.print.title}"
+               th:text="#{button.print.invoice}"
+               onclick="myApp.printTable()">
+                <i class="fas fa-print"></i> <!-- Icon remains unchanged -->
+            </a>
+        </div>
         <div id="clock"></div>
     </div>
     <div class="page-wrapper">
@@ -124,16 +133,18 @@
                                     <address>
                                         <div><b th:text="#{order.seller.currentStatus}">Trạng thái hiện tại:</b>
                                             &nbsp;<b id="status-order" class="text-danger text-uppercase"
-                                                     th:text="${orderStatus == 'Pending' ? #{order.seller.pending} :
-                (orderStatus == 'Confirmed' ? #{order.seller.confirmed} :
-                (orderStatus == 'Processing' ? #{order.seller.processing} :
-                (orderStatus == 'Dispatched' ? #{order.seller.dispatched} :
-                (orderStatus == 'Shipping' ? #{order.seller.shipping} :
-                (orderStatus == 'Delivered' ? #{order.seller.delivered} :
-                (orderStatus == 'Completed' ? #{order.seller.completed} :
-                (orderStatus == 'Failed' ? #{order.seller.failed} :
-                (orderStatus == 'Returned' ? #{order.seller.returned} :
-                (orderStatus == 'Cancelled' ? #{order.seller.cancelled} : orderStatus)))))))))}">
+                                                     th:switch="${orderStatus}">
+                                                <th:block th:case="'Pending'" th:text="#{order.seller.pending}"></th:block>
+                                                <th:block th:case="'Confirmed'" th:text="#{order.seller.confirmed}"></th:block>
+                                                <th:block th:case="'Processing'" th:text="#{order.seller.processing}"></th:block>
+                                                <th:block th:case="'Dispatched'" th:text="#{order.seller.dispatched}"></th:block>
+                                                <th:block th:case="'Shipping'" th:text="#{order.seller.shipping}"></th:block>
+                                                <th:block th:case="'Delivered'" th:text="#{order.seller.delivered}"></th:block>
+                                                <th:block th:case="'Completed'" th:text="#{order.seller.completed}"></th:block>
+                                                <th:block th:case="'Failed'" th:text="#{order.seller.failed}"></th:block>
+                                                <th:block th:case="'Returned'" th:text="#{order.seller.returned}"></th:block>
+                                                <th:block th:case="'Cancelled'" th:text="#{order.seller.cancelled}"></th:block>
+                                                <th:block th:case="*">[[${orderStatus}]]</th:block>
                                             </b>
                                         </div>
                                         <div><b th:text="#{order.seller.lastUpdateTime}">Ngày cập nhật gần nhất:</b>
@@ -173,7 +184,10 @@
                                         <tr>
                                             <td colspan="4" class="text-lg-right" th:text="#{order.seller.paymentMethod}"></td>
                                             <td class="text-end">
-                                                <b th:text="${paymentMethod == '0' ? #{order.seller.vnpay} : (paymentMethod == '1' ? #{order.seller.wallet} : '')}"></b>
+                                                <b th:switch="${paymentMethod}">
+                                                    <th:block th:case="'0'" th:text="#{order.seller.vnpay}"></th:block>
+                                                    <th:block th:case="'1'" th:text="#{order.seller.wallet}"></th:block>
+                                                </b>
                                             </td>
                                         </tr>
                                         <tr>
@@ -200,5 +214,16 @@
 <script th:src="@{/seller/js/main.js}"></script>
 <!-- The javascript plugin to display page loading on top-->
 <script th:src="@{/seller/js/plugins/pace.min.js}"></script>
+<script>
+    var myApp = new function () {
+        this.printTable = function () {
+            var tab = document.getElementById('sampleTable');
+            var win = window.open('', '', 'height=700,width=700');
+            win.document.write(tab.outerHTML);
+            win.document.close();
+            win.print();
+        }
+    }
+</script>
 </body>
 </html>

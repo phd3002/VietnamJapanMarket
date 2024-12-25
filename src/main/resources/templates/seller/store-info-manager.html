@@ -63,7 +63,7 @@
                 class='app-menu__icon bx bx-list-minus'></i><span
                 class="app-menu__label" th:text="#{sidebar.menu.feedback.manager}">Quản lý đánh giá</span></a>
         </li>
-        <li><a class="app-menu__item" href="wallet.html"><i
+        <li><a class="app-menu__item" href="/seller/wallet"><i
                 class='app-menu__icon bx fa-box-usd'></i><span
                 class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
@@ -225,22 +225,22 @@
         }
     }
 </script>
-<script>
+<script th:inline="javascript">
     // Function to handle the "Lưu lại" button click event
     document.getElementById("saveButton").addEventListener("click", function () {
-        // Display a confirmation popup similar to the delete confirmation
+        // Display a confirmation popup
         swal({
-            title: "Xác nhận",
-            text: "Bạn có chắc chắn thay đổi thông tin cửa hàng?",
-            buttons: ["Hủy bỏ", "Đồng ý"],
+            title: /*[[#{store.confirmation.title}]]*/,  // Example: "Xác nhận"
+            text: /*[[#{store.confirmation.text}]]*/,   // Example: "Bạn có chắc chắn thay đổi thông tin cửa hàng?"
+            buttons: [/*[[#{store.cancel.button}]]*/, /*[[#{store.confirm.button}]]*/], // Example: "Hủy bỏ", "Đồng ý"
         }).then((willSave) => {
             if (willSave) {
                 // After confirmation, display success message
-                swal("Thông tin cửa hàng đã được thay đổi thành công!", {
+                swal(/*[[#{store.success.message}]]*/, {  // Example: "Thông tin cửa hàng đã được thay đổi thành công!"
                     icon: "success",
                 }).then(() => {
-                    // After success message, redirect to another page (e.g., back to the order list)
-                    window.location.reload();  // Redirect to order management page
+                    // Redirect to another page after the success message
+                    window.location.href = '/store-info'; // Adjust the URL as needed
                 });
             }
         });
