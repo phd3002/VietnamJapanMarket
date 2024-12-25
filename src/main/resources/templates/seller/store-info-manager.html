@@ -226,27 +226,6 @@
     }
 </script>
 <script th:inline="javascript">
-    // Function to handle the "Lưu lại" button click event
-    document.getElementById("saveButton").addEventListener("click", function () {
-        // Display a confirmation popup
-        swal({
-            title: /*[[#{store.confirmation.title}]]*/,  // Example: "Xác nhận"
-            text: /*[[#{store.confirmation.text}]]*/,   // Example: "Bạn có chắc chắn thay đổi thông tin cửa hàng?"
-            buttons: [/*[[#{store.cancel.button}]]*/, /*[[#{store.confirm.button}]]*/], // Example: "Hủy bỏ", "Đồng ý"
-        }).then((willSave) => {
-            if (willSave) {
-                // After confirmation, display success message
-                swal(/*[[#{store.success.message}]]*/, {  // Example: "Thông tin cửa hàng đã được thay đổi thành công!"
-                    icon: "success",
-                }).then(() => {
-                    // Redirect to another page after the success message
-                    window.location.href = '/store-info'; // Adjust the URL as needed
-                });
-            }
-        });
-    });
-</script>
-<script th:inline="javascript">
     const selectedPrefecture = /*[[${store.city}]]*/ '';
     const selectedCity = /*[[${store.district}]]*/ '';
     const selectedTown = /*[[${store.storeAddress != null ? store.storeAddress.split('-')[0] : ''}]]*/ '';
