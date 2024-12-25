@@ -151,7 +151,8 @@
                             <script>CKEDITOR.replace('mota');</script>
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-save" type="submit" th:text="#{store.info.button.save}">Lưu lại</button>
+                            <button class="btn btn-save" type="submit" th:text="#{store.info.button.save}">Lưu lại
+                            </button>
                             <div th:if="${message}" class="alert alert-success mt-2" role="alert">
                                 <span th:text="${message}"></span>
                             </div>
@@ -238,12 +239,10 @@
     const geoapiUrl = "http://geoapi.heartrails.com/api/json?jsonp=?";
 
 
-
-
     // Initialize Prefectures
     function geoApiInitializePrefectures() {
         $("#geoapi-prefectures").html('<option value="">Chọn Thành phố</option>');
-        $.getJSON(geoapiUrl, { method: "getPrefectures" }, (json) => {
+        $.getJSON(geoapiUrl, {method: "getPrefectures"}, (json) => {
             const prefectures = json.response.prefecture;
             prefectures.forEach((prefecture) => {
                 const isSelected = prefecture === selectedPrefecture ? "selected" : "";
@@ -265,7 +264,7 @@
         $("#geoapi-towns").html('<option value="">Chọn Phường/Xã</option>');
 
         if (selectedPrefecture) {
-            $.getJSON(geoapiUrl, { method: "getCities", prefecture: selectedPrefecture }, (json) => {
+            $.getJSON(geoapiUrl, {method: "getCities", prefecture: selectedPrefecture}, (json) => {
                 const cities = json.response.location;
                 cities.forEach((city) => {
                     const isSelected = city.city === selectedCity ? "selected" : "";
@@ -287,7 +286,7 @@
         $("#geoapi-towns").html('<option value="">Chọn Phường/Xã</option>');
 
         if (selectedCity) {
-            $.getJSON(geoapiUrl, { method: "getTowns", city: selectedCity }, (json) => {
+            $.getJSON(geoapiUrl, {method: "getTowns", city: selectedCity}, (json) => {
                 const towns = json.response.location;
                 towns.forEach((town) => {
                     // Normalize and compare town names
