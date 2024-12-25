@@ -32,15 +32,15 @@
             </aside>
         </div>
     </div>
-    <script>
+    <script th:inline="javascript">
         function showSignupModal() {
             Swal.fire({
-                title: 'Bạn đang chưa có cửa hàng',
-                text: 'Bạn có muốn đăng ký làm người bán hàng?',
+                title: /*[[#{signup.modal.title}]]*/,
+                text: /*[[#{signup.modal.text}]]*/,
                 icon: "info",
                 showCancelButton: true,
-                confirmButtonText: 'Tôi muốn đăng kí làm người bán hàng',
-                cancelButtonText: 'Đóng',
+                confirmButtonText: /*[[#{signup.modal.confirm}]]*/,
+                cancelButtonText: /*[[#{signup.modal.cancel}]]*/,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33'
             }).then((result) => {
