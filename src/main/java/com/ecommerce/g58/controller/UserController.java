@@ -57,6 +57,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/sign-up-option")
+    public String showSignUpOption() {
+        return "sign-up-option";
+    }
+
     // Registration form page
     @GetMapping("/sign-up")
     public String showRegistrationForm(Model model) {

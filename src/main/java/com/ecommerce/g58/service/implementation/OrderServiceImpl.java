@@ -182,12 +182,15 @@ public class OrderServiceImpl implements OrderService {
         OrderDetails details = orderDetailRepository.findByOrderId(orderId).get(0);
 
         Optional<Wallet> sellWallet = walletRepository.findByUserId(details.getProductId().getStoreId().getOwnerId());
+        System.out.println("Sell Wallet: " + sellWallet);
 
         Invoice invoice = invoiceRepository.findInvoiceByOrderId(order);
 
         Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
         Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
+        System.out.println("Admin Wallet: " + adminWallet);
         Optional<Wallet> logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5);
+        System.out.println("Logistic Wallet: " + logisticWallet);
 
         // Xử lý theo trạng thái đơn hàng
         if (status.equalsIgnoreCase("Delivered")) {
@@ -270,9 +273,12 @@ public class OrderServiceImpl implements OrderService {
                         "Đơn hàng " + order.getOrderCode() + " giao thất bại. Đã hoàn tiền: " + invoice.getFormatedDeposit(),
                         "/order-detail/" + orderId);
             }
-        } else if (status.equalsIgnoreCase("Complete")) {
+        } else if (status.equalsIgnoreCase("Completed")) {
             if (sellWallet.isPresent() && adminWallet.isPresent()) {
+                System.out.println("Sell Wallet transaction completed: " + sellWallet);
+                System.out.println("Admin Wallet transaction completed: " + adminWallet);
                 if (invoice.getRemainingBalance().compareTo(BigDecimal.ZERO) != 0) {
+
                     // Cập nhật ví admin
                     BigDecimal currentAdminWallet = new BigDecimal(sellWallet.get().getBalance());
                     BigDecimal newAdminAmount = currentAdminWallet.subtract(invoice.getTotalAmount());
@@ -328,6 +334,8 @@ public class OrderServiceImpl implements OrderService {
                             "/order-detail/" + orderId);
                 }
             }
+            shippingStatusRepository.updateOrderStatus(orderId, status);
+            System.out.println("Order status updated to " + status);
         } else {
             shippingStatusRepository.updateOrderStatus(orderId, status);
         }

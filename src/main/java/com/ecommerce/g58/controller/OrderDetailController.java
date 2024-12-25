@@ -2,9 +2,12 @@ package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.dto.OrderDetailDTO;
 import com.ecommerce.g58.entity.Invoice;
+import com.ecommerce.g58.entity.Orders;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.repository.InvoiceRepository;
+import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.service.OrderDetailService;
+import com.ecommerce.g58.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,10 @@ public class OrderDetailController {
     private OrderDetailService orderDetailService;
     @Autowired
     private InvoiceRepository invoiceRepository;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @GetMapping("/order-detail/{orderId}")
     public String getOrderDetails(@PathVariable Long orderId, Model model) {
@@ -101,7 +108,12 @@ public class OrderDetailController {
     public void updateOrderStatus(@PathVariable Integer orderId,
                                   @RequestParam String status,
                                   @RequestParam(required = false) String reason) {
-        orderDetailService.updateStatus(orderId, status, reason);
+//        Orders order = orderRepository.findOrdersByOrderId(orderId);
+        System.out.println("Order ID: " + orderId);
+        orderService.updateOrderStatuss(orderId, status);
+        System.out.println("Order status updated to " + status);
+
+//        orderDetailService.updateStatus(orderId, status, reason);
     }
 
     @PostMapping("/order-detail/return")

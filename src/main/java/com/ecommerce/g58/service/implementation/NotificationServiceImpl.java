@@ -5,9 +5,12 @@ import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.repository.NotificationRepository;
 import com.ecommerce.g58.service.NotificationService;
 import com.ecommerce.g58.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -82,12 +85,24 @@ public class NotificationServiceImpl implements NotificationService {
             notificationRepository.save(notification);
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
+
+
     private String getCurrentUsername() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            return "anonymousUser";
+        }
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            String roles = userDetails.getAuthorities().toString();
+//            logger.info("User: {}, Roles: {}", username, roles);
+            return username;
         } else {
-            return principal.toString();
+            String principal = authentication.getPrincipal().toString();
+//            logger.info("User: {}, Roles: {}", principal, "N/A");
+            return principal;
         }
     }
 }

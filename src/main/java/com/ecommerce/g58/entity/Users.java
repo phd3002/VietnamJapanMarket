@@ -51,6 +51,18 @@ public class Users implements UserDetails {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "district")
+    private String district;
+
+    @Column(name = "ward")
+    private String ward;
+
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "status")
     private String status;
 
