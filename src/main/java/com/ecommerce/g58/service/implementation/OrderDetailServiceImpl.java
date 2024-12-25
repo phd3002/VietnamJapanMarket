@@ -281,14 +281,15 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 return false;
             }
             OrderDetails details = orderDetailRepository.findByOrderId((orderId)).get(0);
-            Optional<Wallet> sellerWallet = walletRepository.findByUserId(details.getProductId().getStoreId().getOwnerId());
+            Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
+            Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
             Optional<Wallet> userWallet = walletRepository.findByUserId(order.getUserId());
-            if (sellerWallet.isPresent() && userWallet.isPresent()) {
-                BigDecimal currentSellerBalance = new BigDecimal(sellerWallet.get().getBalance());
+            if (adminWallet.isPresent() && userWallet.isPresent()) {
+                BigDecimal currentSellerBalance = new BigDecimal(adminWallet.get().getBalance());
                 BigDecimal newSellerBalance = currentSellerBalance.subtract(invoice.getDeposit());
-                sellerWallet.get().setBalance(newSellerBalance.longValue());
+                adminWallet.get().setBalance(newSellerBalance.longValue());
 
-                walletRepository.save(sellerWallet.get());
+                walletRepository.save(adminWallet.get());
 
                 BigDecimal walletBalance = new BigDecimal(userWallet.get().getBalance());
                 BigDecimal totalAmount = walletBalance.add(invoice.getDeposit());
@@ -296,10 +297,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
                 walletRepository.save(userWallet.get());
 
-                // seller transaction
+                // admin transaction
                 Transactions sellerTransactions = new Transactions();
                 sellerTransactions.setAmount(-invoice.getDeposit().longValue());
-                sellerTransactions.setFromWalletId(sellerWallet.get());
+                sellerTransactions.setFromWalletId(adminWallet.get());
                 sellerTransactions.setTransactionType("Hoàn tiền");
                 sellerTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " do khách hủy đơn " + order.getOrderCode());
                 sellerTransactions.setCreatedAt(LocalDateTime.now());
@@ -334,7 +335,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             throw new SecurityException("User not authenticated");
         }
 
-        System.out.println(authentication.getName());
 
         // Fetch the order and validate ownership
         Orders order = orderRepository.findOrdersByOrderId(orderId);
@@ -368,12 +368,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         Wallet userWallet = walletRepository.findByUserId(order.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User wallet not found"));
 
+        Wallet sellerWallet = walletRepository.findByUserId(detail.getProductId().getStoreId().getOwnerId())
+                .orElseThrow(() -> new IllegalArgumentException("Seller wallet not found"));
         // Refund logic
         BigDecimal returnPrice = BigDecimal.valueOf(invoice.getDeposit().longValue());
         // Refund full product price to the user and deduct from seller's wallet
-        Wallet sellerWallet = walletRepository.findByUserId(detail.getProductId().getStoreId().getOwnerId())
-                .orElseThrow(() -> new IllegalArgumentException("Seller wallet not found"));
-
+        Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
+        Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
+        if (adminWallet.isEmpty()){
+            throw new IllegalArgumentException("Admin wallet not found");
+        }
         // Hoàn tiền đơn hàng + phí ship(lượt đi) cho user
         updateWalletBalance(
                 userWallet,
@@ -391,7 +395,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         notificationService.updateNotification(notification);
         // Trừ tiền ví seller ch0 đơn hàng + phí ship(lượt đi)
         updateWalletBalance(
-                sellerWallet,
+                adminWallet.get(),
                 invoice.getDeposit().negate(),
                 "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
                 String.valueOf(TransactionType.REFUND));
@@ -403,25 +407,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         sellerNotification1.setUserId(sellerWallet.getUserId());
 
         notificationService.updateNotification(sellerNotification1);
-        // Deduct shipping fee from seller's wallet and add to logistic
-        Wallet logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5)
-                .orElseThrow(() -> new IllegalArgumentException("Logistic wallet not found"));
 
-        // trừ tiền ship lượt về cho shipper
-//        updateWalletBalance(
-//                sellerWallet,
-//                invoice.getShippingFee().negate(),
-//                "Trả tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
-//                String.valueOf(TransactionType.SHIPPING_FEE)
-//        );
-//        // nhận tiền ship lượt về
-//        updateWalletBalance(
-//                logisticWallet,
-//                invoice.getShippingFee(),
-//                "Nhận tiền ship lượt về cho đơn hàng " + order.getOrderCode(),
-//                String.valueOf(TransactionType.SHIPPING_FEE)
-//
-//        );
     }
 
     private void handleDamagedRefund(Orders order, OrderDetails detail, Invoice invoice) {
@@ -436,9 +422,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .orElseThrow(() -> new IllegalArgumentException("Logistic wallet not found"));
 
         // Refund full product price to the user and deduct from seller's wallet
-
+        Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
+        Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
+        if (adminWallet.isEmpty()){
+            throw new IllegalArgumentException("Admin wallet not found");
+        }
         updateWalletBalance(
-                sellerWallet,
+                adminWallet.get(),
                 invoice.getDeposit().negate(),
                 "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
                 String.valueOf(TransactionType.REFUND));
@@ -456,7 +446,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 "Nhận " + invoice.getDeposit() + " do yêu cầu hoàn trả đơn hàng " + order.getOrderCode() + " đã được chấp nhận",
                 String.valueOf(TransactionType.REFUND)
 
-                // Logistic
 
         );
         Notification userNotification = new Notification();
