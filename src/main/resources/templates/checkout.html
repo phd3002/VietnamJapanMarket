@@ -131,34 +131,34 @@
                         <h4 class="title mb--40" th:text="#{checkout.buyer.info}">Thông tin người mua</h4>
                         <div class="form-group">
                             <label th:text="#{checkout.fullname}">Họ tên <span>*</span></label>
-                            <input type="text" id="full-name">
+                            <input th:value="${user.firstName} + ' ' + ${user.lastName}" type="text" id="full-name">
                         </div>
                         <div class="form-group">
                             <label th:text="#{checkout.phone}">Số điện thoại <span>*</span></label>
-                            <input type="text" name="phoneNumber" id="phone-number" required>
+                            <input th:value="${user.phoneNumber}" type="text" name="phoneNumber" id="phone-number" required>
                         </div>
                         <div class="form-group">
                             <label th:text="#{checkout.email}">Địa chỉ email <span>*</span></label>
-                            <input type="text" id="email-address" required>
+                            <input th:value="${user.email}" type="text" id="email-address" required>
                         </div>
                         <div class="form-group">
                             <label for="city" th:text="#{checkout.city}">Tỉnh thành</label>
-                            <select id="city" required>
+                            <select th:value="${user.city}" id="city" required>
                                 <option value="" selected th:text="#{checkout.select.city}">Chọn tỉnh thành</option>
                             </select>
                             <label for="district" th:text="#{checkout.district}">Tỉnh thành</label>
-                            <select id="district" required>
+                            <select th:value="${user.district}" id="district" required>
                                 <option value="" selected th:text="#{checkout.select.district}">Vui lòng chọn tỉnh
                                     thành
                                 </option>
                             </select>
                             <label for="ward" th:text="#{checkout.ward}">Tỉnh thành</label>
-                            <select id="ward" required>
+                            <select th:value="${user.ward}" id="ward" required>
                                 <option value="" selected th:text="#{checkout.select.ward}">Vui lòng chọn quận huyện
                                 </option>
                             </select>
                             <label for="shipping-address" th:text="#{checkout.address}">Địa chỉ chi tiết <span>*</span></label>
-                            <input class="form-group" type="text" name="shippingAddress" id="shipping-address"
+                            <input th:value="${user.address}" class="form-group" type="text" name="shippingAddress" id="shipping-address"
                                    required>
 
                             <input type="hidden" id="formatted-shipping-address" name="formattedShippingAddress">
