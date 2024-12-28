@@ -376,7 +376,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
         Users logisticUser = userRepository.findFirstByRoleId_RoleId(5);
         Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
-        Optional<Wallet> logisticWallet = walletRepository.findByUserId(adminUser);
+        Optional<Wallet> logisticWallet = walletRepository.findByUserId(logisticUser);
         if (adminWallet.isEmpty()){
             throw new IllegalArgumentException("Admin wallet not found");
         }
@@ -403,13 +403,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 String.valueOf(TransactionType.REFUND));
         updateWalletBalance(
                 sellerWallet,
-                invoice.getDeposit().negate(),
+                invoice.getShippingFee().negate(),
                 "Trả  " + invoice.getFormattedShippingFee() + " ship lượt về cho Logistic do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
                 String.valueOf(TransactionType.REFUND));
         updateWalletBalance(
                 logisticWallet.get(),
-                invoice.getDeposit().abs(),
-                "Nhận  " + invoice.getFormattedShippingFee() + " cho người bán do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                invoice.getShippingFee().abs(),
+                "Nhận  " + invoice.getFormattedShippingFee() + " ship lượt về từ người bán do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
                 String.valueOf(TransactionType.REFUND));
 
         //Thong bao cho user
@@ -442,11 +442,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         updateWalletBalance(
                 adminWallet.get(),
                 invoice.getDeposit().negate(),
-                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " bị hỏng!",
                 String.valueOf(TransactionType.REFUND));
         Notification notification = new Notification();
         notification.setTitle("Hoàn tiền: " + invoice.getDeposit());
-        notification.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
+        notification.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " bị hỏng!");
         notification.setUrl("/wallet");
         notification.setUserId(sellerWallet.getUserId());
         notificationService.updateNotification(notification);
