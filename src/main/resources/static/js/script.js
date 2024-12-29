@@ -101,86 +101,86 @@ function updateSearchResults(results) {
 }
 
 // Save changes button
-document.getElementById('saveChangesBtn').addEventListener('click', function (event) {
-    event.preventDefault(); // Prevent form submission
-//    document.getElementById('confirmationPopup').style.display = 'block'; // Show confirmation popup
-
-    const firstName = document.querySelector('input[name="firstName"]').value
-    const lastName = document.querySelector('input[name="lastName"]').value
-    const email = document.querySelector('input[name="email"]').value
-    const phoneNumber = document.querySelector('input[name="phoneNumber"]').value
-    const password = document.querySelector('input[name="password"]').value
-    const newPassword = document.querySelector('input[name="newPassword"]').value
-    const confirmPassword = document.querySelector('input[name="confirmPassword"]').value
-
-    if (!firstName) {
-        alert('Họ không được để trống và không được vượt quá 50 ký tự.')
-        return;
-    }
-
-    if (!lastName) {
-        alert('Tên không được để trống và không được vượt quá 50 ký tự.')
-        return;
-    }
-
-    if (!phoneNumber || phoneNumber.length > 10 || phoneNumber.length < 10) {
-        alert('Số điện thoại không được để trống và phải là 10 số.');
-        return;
-    }
-
-
-
-    if (!password) {
-        alert('Mật khẩu cũ không đúng.')
-        return;
-    }
-
-    // if (newPassword && confirmPassword && !password) {
-    //     alert('Mật khẩu cũ không đúng.')
-    //     return;
-    // }
-    if(newPassword.length < 6){
-        alert('Mật khẩu mới phải có ít nhất 6 ký tự.')
-        return
-    }
-
-    if (newPassword !== confirmPassword) {
-        alert('Mật khẩu và mật khẩu xác nhận không khớp.')
-        return
-    }
-
-    // if (newPassword !== confirmPassword !== password) {
-    //     alert('Mật khẩu cũ không đúng.')
-    //     return
-    // }
-
-
-    fetch('/my-account/post?' + new URLSearchParams({
-            firstName,
-            lastName,
-            email,
-            phoneNumber,
-            password,
-            newPassword
-        }).toString()
-    ).then(res => {
-        if (res.status === 200) {
-            Swal.fire({
-                title: "Thành Công!",
-                text: "Cập nhật thành công.",
-                icon: "success"
-            }).then(() =>{
-                location.reload();
-            })
-        } else {
-            res.json()
-                .then((json) => {
-                    alert('HH' + json.message)
-                })
-        }
-    })
-
-});
+// document.getElementById('saveChangesBtn').addEventListener('click', function (event) {
+//     event.preventDefault(); // Prevent form submission
+// //    document.getElementById('confirmationPopup').style.display = 'block'; // Show confirmation popup
+//
+//     const firstName = document.querySelector('input[name="firstName"]').value
+//     const lastName = document.querySelector('input[name="lastName"]').value
+//     const email = document.querySelector('input[name="email"]').value
+//     const phoneNumber = document.querySelector('input[name="phoneNumber"]').value
+//     const password = document.querySelector('input[name="password"]').value
+//     const newPassword = document.querySelector('input[name="newPassword"]').value
+//     const confirmPassword = document.querySelector('input[name="confirmPassword"]').value
+//
+//     if (!firstName) {
+//         alert('Họ không được để trống và không được vượt quá 50 ký tự.')
+//         return;
+//     }
+//
+//     if (!lastName) {
+//         alert('Tên không được để trống và không được vượt quá 50 ký tự.')
+//         return;
+//     }
+//
+//     if (!phoneNumber || phoneNumber.length > 10 || phoneNumber.length < 10) {
+//         alert('Số điện thoại không được để trống và phải là 10 số.');
+//         return;
+//     }
+//
+//
+//
+//     if (!password) {
+//         alert('Mật khẩu cũ không đúng.')
+//         return;
+//     }
+//
+//     // if (newPassword && confirmPassword && !password) {
+//     //     alert('Mật khẩu cũ không đúng.')
+//     //     return;
+//     // }
+//     if(newPassword.length < 6){
+//         alert('Mật khẩu mới phải có ít nhất 6 ký tự.')
+//         return
+//     }
+//
+//     if (newPassword !== confirmPassword) {
+//         alert('Mật khẩu và mật khẩu xác nhận không khớp.')
+//         return
+//     }
+//
+//     // if (newPassword !== confirmPassword !== password) {
+//     //     alert('Mật khẩu cũ không đúng.')
+//     //     return
+//     // }
+//
+//
+//     fetch('/my-account/post?' + new URLSearchParams({
+//             firstName,
+//             lastName,
+//             email,
+//             phoneNumber,
+//             password,
+//             newPassword
+//         }).toString()
+//     ).then(res => {
+//         if (res.status === 200) {
+//             Swal.fire({
+//                 title: "Thành Công!",
+//                 text: "Cập nhật thành công.",
+//                 icon: "success"
+//             }).then(() =>{
+//                 location.reload();
+//             })
+//         } else {
+//             res.json()
+//                 .then((json) => {
+//                     alert('HH' + json.message)
+//                 })
+//         }
+//     })
+//
+// });
 
 document.getElementById('confirmYesBtn').addEventListener('click', function () {
     // Hide the confirmation popup

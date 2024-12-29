@@ -2,6 +2,7 @@ package com.ecommerce.g58.service.implementation;
 
 import com.ecommerce.g58.entity.ResetToken;
 import com.ecommerce.g58.entity.Roles;
+import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.UserService;
@@ -245,6 +246,10 @@ public class UserServiceImp implements UserService, UserDetailsService {
                 true,
                 authorities
         );
+    }
+
+    public void saveUser(Users user) {
+        userRepository.save(user);
     }
 
 }

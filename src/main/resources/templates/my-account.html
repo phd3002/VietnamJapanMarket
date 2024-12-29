@@ -36,8 +36,7 @@
                             <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
                                 <div class="col-lg-9">
                                     <div class="axil-dashboard-account">
-                                        <form class="account-details-form"
-                                              id="uform">
+                                        <form class="account-details-form" id="uform" method="post" th:action="@{/update-account}" >
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
@@ -70,7 +69,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="city" th:text="#{checkout.city}">Tỉnh thành</label>
-                                                        <select id="city" required>
+                                                        <select name="city" id="city" required>
                                                             <option value="" selected th:text="#{checkout.select.city}">
                                                                 Chọn tỉnh thành
                                                             </option>
@@ -81,7 +80,7 @@
                                                     <div class="form-group">
                                                         <label for="district" th:text="#{checkout.district}">Tỉnh
                                                             thành</label>
-                                                        <select id="district" required>
+                                                        <select name="district" id="district" required>
                                                             <option value="" selected
                                                                     th:text="#{checkout.select.district}">
                                                                 Vui lòng chọn tỉnh
@@ -93,7 +92,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="ward" th:text="#{checkout.ward}">Tỉnh thành</label>
-                                                        <select id="ward" required>
+                                                        <select name="ward" id="ward" required>
                                                             <option value="" selected th:text="#{checkout.select.ward}">
                                                                 Vui
                                                                 lòng chọn quận huyện
@@ -103,10 +102,10 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="shipping-address" th:text="#{checkout.address}">Địa
+                                                        <label for="shipping-address"  th:text="#{checkout.address}">Địa
                                                             chỉ
                                                             chi tiết <span>*</span></label>
-                                                        <input class="form-group" type="text" name="shippingAddress"
+                                                        <input class="form-group" type="text" name="address" th:value="${user.address}"
                                                                id="shipping-address"
                                                                required>
                                                         <!--                            <input type="hidden" id="formatted-shipping-address" name="formattedShippingAddress">-->
@@ -114,11 +113,13 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Lưu thay đổi"
-                                                               id="saveChangesBtn">
+                                                        <button type="submit" class="axil-btn"
+                                                               id="saveChangesBtn"> Luu thay doi
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </form>
                                             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
                                                     referrerpolicy="no-referrer"></script>
                                             <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
@@ -175,7 +176,7 @@
 
                                                 }
                                             </script>
-                                        </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -211,5 +212,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<script th:inline="javascript">
+    const selectedPrefecture = /*[[${city}]]*/ '';
+    const selectedCity = /*[[${district}]]*/ '';
+    const selectedTown = /*[[${storeAddress != null ? store.storeAddress.split('-')[0] : ''}]]*/ '';
+
+    console.log('Selected Prefecture:', selectedPrefecture);
+    console.log('Selected City:', selectedCity);
+    console.log('Selected Town:', selectedTown);
+</script>
 </body>
 </html>

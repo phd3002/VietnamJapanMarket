@@ -55,4 +55,6 @@ public interface UserService extends UserDetailsService {
     long getTotalSellers();
 
     void updateUser(Users user);
+
+    void saveUser(Users user);
 }
