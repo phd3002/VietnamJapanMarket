@@ -26,7 +26,7 @@ public class AccountController {
     @GetMapping("/my-account")
     public String myAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null || userDetails.getUsername() == null) {
-            return "/sign-in"; // Use redirect to avoid returning a relative path
+            return "redirect:/sign-in"; // Use redirect to avoid returning a relative path
         }
         String email = userDetails.getUsername();
         Users user = profileService.getUserByEmail(email);
@@ -46,25 +46,25 @@ public class AccountController {
                                 Model model,
                                 @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null || userDetails.getUsername() == null) {
-            return "/sign-in";
+            return "redirect:/sign-in";
         }
 
         // Validate input parameters
         if (firstName == null || firstName.isEmpty() || firstName.length() > 100) {
             model.addAttribute("error", "First name cannot be empty and must not exceed 100 characters.");
-            return "my-account";
+            return "redirect:my-account";
         }
         if (lastName == null || lastName.isEmpty() || lastName.length() > 100) {
             model.addAttribute("error", "Last name cannot be empty and must not exceed 100 characters.");
-            return "my-account";
+            return "redirect:my-account";
         }
         if (phoneNumber == null || phoneNumber.isEmpty() || phoneNumber.length() > 20 || !phoneNumber.matches("^[0-9]*$") || phoneNumber.length() < 10) {
             model.addAttribute("error", "Phone number cannot be empty, must be between 10 and 20 characters, and must contain only digits.");
-            return "my-account";
+            return "redirect:my-account";
         }
         if (address == null || address.isEmpty() || address.length() > 255 || address.contains("-")) {
             model.addAttribute("error", "Address cannot be empty, must not exceed 255 characters, and must not contain hyphens.");
-            return "my-account";
+            return "redirect:my-account";
         }
 
         // Update user details
@@ -82,7 +82,7 @@ public class AccountController {
         }
         userService.saveUser(user);
         model.addAttribute("message", "Cập nhật thông tin thành công!");
-        return "my-account";
+        return "redirect:my-account";
     }
 
     @GetMapping("/my-account/post")

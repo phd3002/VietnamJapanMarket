@@ -36,7 +36,8 @@
                             <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
                                 <div class="col-lg-9">
                                     <div class="axil-dashboard-account">
-                                        <form class="account-details-form" id="uform" method="post" th:action="@{/update-account}" >
+                                        <form class="account-details-form" id="uform" method="post"
+                                              th:action="@{/update-account}">
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
@@ -102,10 +103,11 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="shipping-address"  th:text="#{checkout.address}">Địa
+                                                        <label for="shipping-address" th:text="#{checkout.address}">Địa
                                                             chỉ
                                                             chi tiết <span>*</span></label>
-                                                        <input class="form-group" type="text" name="address" th:value="${user.address}"
+                                                        <input class="form-group" type="text" name="address"
+                                                               th:value="${user.address}"
                                                                id="shipping-address"
                                                                required>
                                                         <!--                            <input type="hidden" id="formatted-shipping-address" name="formattedShippingAddress">-->
@@ -113,70 +115,95 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group mb--0">
-                                                        <button type="submit" class="axil-btn"
-                                                               id="saveChangesBtn"> Luu thay doi
+                                                        <button type="submit" class="axil-btn btn btn-primary"
+                                                                id="saveChangesBtn"> Lưu thay đổi
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
-                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-                                                    referrerpolicy="no-referrer"></script>
-                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-                                            <script>
-                                                const host = "https://provinces.open-api.vn/api/";
-                                                var callAPI = (api) => {
-                                                    return axios.get(api)
-                                                        .then((response) => {
-                                                            renderData(response.data, "city");
-                                                        });
-                                                }
-                                                callAPI('https://provinces.open-api.vn/api/?depth=1');
-                                                var callApiDistrict = (api) => {
-                                                    return axios.get(api)
-                                                        .then((response) => {
-                                                            renderData(response.data.districts, "district");
-                                                        });
-                                                }
-                                                var callApiWard = (api) => {
-                                                    return axios.get(api)
-                                                        .then((response) => {
-                                                            renderData(response.data.wards, "ward");
-                                                        });
-                                                }
+                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+                                                referrerpolicy="no-referrer"></script>
+                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+                                        <script th:inline="javascript">
+                                            const host = "https://provinces.open-api.vn/api/";
 
-                                                var renderData = (array, select) => {
-                                                    let row = ' <option disable value="">Chọn</option>';
-                                                    array.forEach(element => {
-                                                        row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`
-                                                    });
-                                                    document.querySelector("#" + select).innerHTML = row
-                                                }
+                                            // Giá trị mặc định từ Thymeleaf
+                                            let selectedCity = /*[[${user.city}]]*/ '';
+                                            let selectedDistrict = /*[[${user.district}]]*/ '';
+                                            let selectedWard = /*[[${user.ward}]]*/ '';
 
-                                                $("#city").change(() => {
-                                                    callApiDistrict(host + "p/" + $("#city").find(':selected').data('id') + "?depth=2");
-                                                    printResult();
-                                                });
-                                                $("#district").change(() => {
-                                                    callApiWard(host + "d/" + $("#district").find(':selected').data('id') + "?depth=2");
-                                                    printResult();
-                                                });
-                                                $("#ward").change(() => {
-                                                    printResult();
-                                                })
+                                            // Gọi API để lấy dữ liệu các tỉnh thành
+                                            const callAPI = (api) => {
+                                                return axios.get(api).then((response) => {
+                                                    renderData(response.data, "city");
+                                                    // Nếu đã có giá trị tỉnh được chọn trước, đặt giá trị mặc định
+                                                    if (selectedCity) {
+                                                        $("#city option").filter(function () {
+                                                            return $(this).val() === selectedCity;
+                                                        }).prop("selected", true);
 
-                                                var printResult = () => {
-                                                    if ($("#district").find(':selected').data('id') != "" && $("#city").find(':selected').data('id') != "" &&
-                                                        $("#ward").find(':selected').data('id') != "") {
-                                                        let result = $("#city option:selected").text() +
-                                                            " | " + $("#district option:selected").text() + " | " +
-                                                            $("#ward option:selected").text();
-                                                        $("#result").text(result)
+                                                        // Lấy dữ liệu quận huyện theo tỉnh đã chọn
+                                                        const cityId = $("#city option:selected").data('id');
+                                                        callApiDistrict(`${host}p/${cityId}?depth=2`);
                                                     }
+                                                });
+                                            };
 
-                                                }
-                                            </script>
+                                            // Gọi API để lấy danh sách quận/huyện dựa trên mã tỉnh
+                                            const callApiDistrict = (api) => {
+                                                return axios.get(api).then((response) => {
+                                                    renderData(response.data.districts, "district");
+                                                    // Nếu đã có giá trị huyện được chọn trước, đặt giá trị mặc định
+                                                    if (selectedDistrict) {
+                                                        $("#district option").filter(function () {
+                                                            return $(this).val() === selectedDistrict;
+                                                        }).prop("selected", true);
 
+                                                        // Lấy dữ liệu xã/phường theo huyện đã chọn
+                                                        const districtId = $("#district option:selected").data('id');
+                                                        callApiWard(`${host}d/${districtId}?depth=2`);
+                                                    }
+                                                });
+                                            };
+
+                                            // Gọi API để lấy danh sách xã/phường dựa trên mã huyện
+                                            const callApiWard = (api) => {
+                                                return axios.get(api).then((response) => {
+                                                    renderData(response.data.wards, "ward");
+                                                    // Nếu đã có giá trị xã được chọn trước, đặt giá trị mặc định
+                                                    if (selectedWard) {
+                                                        $("#ward option").filter(function () {
+                                                            return $(this).val() === selectedWard;
+                                                        }).prop("selected", true);
+                                                    }
+                                                });
+                                            };
+
+                                            // Render dữ liệu vào thẻ select
+                                            const renderData = (array, select) => {
+                                                let row = '<option value="" disabled selected>Chọn</option>';
+                                                array.forEach(element => {
+                                                    row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`;
+                                                });
+                                                document.querySelector(`#${select}`).innerHTML = row;
+                                            };
+
+                                            // Sự kiện thay đổi trên dropdown tỉnh/thành phố
+                                            $("#city").change(() => {
+                                                const cityId = $("#city option:selected").data('id');
+                                                callApiDistrict(`${host}p/${cityId}?depth=2`);
+                                            });
+
+                                            // Sự kiện thay đổi trên dropdown quận/huyện
+                                            $("#district").change(() => {
+                                                const districtId = $("#district option:selected").data('id');
+                                                callApiWard(`${host}d/${districtId}?depth=2`);
+                                            });
+
+                                            // Khởi tạo dropdown tỉnh/thành phố
+                                            callAPI(`${host}?depth=1`);
+                                        </script>
                                     </div>
                                 </div>
                             </div>
