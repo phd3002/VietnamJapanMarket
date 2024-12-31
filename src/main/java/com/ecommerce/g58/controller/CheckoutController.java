@@ -339,6 +339,7 @@ public class CheckoutController {
                 model.addAttribute("shippingFee", shippingFee);
                 model.addAttribute("shippingUnits", shippingUnits);
                 model.addAttribute("tax", taxAmount);
+                model.addAttribute("user", user);
                 cartService.restoreItemQuantitiesToStock(userId);
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
