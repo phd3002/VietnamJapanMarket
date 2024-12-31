@@ -299,7 +299,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
                 // admin transaction
                 Transactions sellerTransactions = new Transactions();
-                sellerTransactions.setAmount(-invoice.getDeposit().longValue());
+                sellerTransactions.setAmount(invoice.getDeposit().negate().longValue());
                 sellerTransactions.setFromWalletId(adminWallet.get());
                 sellerTransactions.setTransactionType("Hoàn tiền");
                 sellerTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " do khách hủy đơn " + order.getOrderCode());
@@ -374,7 +374,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         BigDecimal returnPrice = BigDecimal.valueOf(invoice.getDeposit().longValue());
         // Refund full product price to the user and deduct from seller's wallet
         Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
+        Users logisticUser = userRepository.findFirstByRoleId_RoleId(5);
         Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
+        Optional<Wallet> logisticWallet = walletRepository.findByUserId(logisticUser);
         if (adminWallet.isEmpty()){
             throw new IllegalArgumentException("Admin wallet not found");
         }
@@ -397,16 +399,26 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         updateWalletBalance(
                 adminWallet.get(),
                 invoice.getDeposit().negate(),
-                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                "Hoàn trả  " + invoice.getFormatedDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                String.valueOf(TransactionType.REFUND));
+        updateWalletBalance(
+                sellerWallet,
+                invoice.getShippingFee().negate(),
+                "Trả  " + invoice.getFormattedShippingFee() + " ship lượt về cho Logistic do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                String.valueOf(TransactionType.REFUND));
+        updateWalletBalance(
+                logisticWallet.get(),
+                invoice.getShippingFee().abs(),
+                "Nhận  " + invoice.getFormattedShippingFee() + " ship lượt về từ người bán do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
                 String.valueOf(TransactionType.REFUND));
 
-        Notification sellerNotification1 = new Notification();
-        sellerNotification1.setTitle("Hoàn tiền: " + invoice.getDeposit());
-        sellerNotification1.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
-        sellerNotification1.setUrl("/wallet");
-        sellerNotification1.setUserId(sellerWallet.getUserId());
-
-        notificationService.updateNotification(sellerNotification1);
+        //Thong bao cho user
+//        Notification sellerNotification1 = new Notification();
+//        sellerNotification1.setTitle("Nhận tiền: " + invoice.getDeposit());
+//        sellerNotification1.setContent("Nhận  " + invoice.getDeposit() + " do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
+//        sellerNotification1.setUrl("/wallet");
+//        sellerNotification1.setUserId(userWallet.getUserId());
+//        notificationService.updateNotification(sellerNotification1);
 
     }
 
@@ -430,14 +442,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         updateWalletBalance(
                 adminWallet.get(),
                 invoice.getDeposit().negate(),
-                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                "Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " bị hỏng!",
                 String.valueOf(TransactionType.REFUND));
         Notification notification = new Notification();
         notification.setTitle("Hoàn tiền: " + invoice.getDeposit());
-        notification.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
+        notification.setContent("Hoàn trả  " + invoice.getDeposit() + " cho khách do đơn hàng " + order.getOrderCode() + " bị hỏng!");
         notification.setUrl("/wallet");
         notification.setUserId(sellerWallet.getUserId());
-
         notificationService.updateNotification(notification);
 
         updateWalletBalance(
@@ -456,11 +467,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         notificationService.updateNotification(userNotification);
         // Logistic đền cho seller tiền hàng (không bao gồm ship) - coi như seller mất tiền ship 1 lần
-        BigDecimal returnPrice = BigDecimal.valueOf((invoice.getDeposit().longValue())).subtract(BigDecimal.valueOf(invoice.getShippingFee().longValue()));
+        BigDecimal returnPrice = BigDecimal.valueOf((invoice.getDeposit().longValue()));
         updateWalletBalance(
                 logisticWallet,
                 returnPrice.negate(),
-                "Bồi thường do làm hỏng  đơn hàng " + order.getOrderCode(),
+                "Bồi thường do làm hỏng đơn hàng " + order.getOrderCode(),
                 String.valueOf(TransactionType.REFUND)
 
         );

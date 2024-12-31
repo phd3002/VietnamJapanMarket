@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -10,17 +10,6 @@
 
     <!-- Including CSS Files from base.html -->
     <th:block th:replace="~{base :: head}"></th:block>
-    <style>
-        .toggle-password {
-            right: 10px;
-            top: 35px;
-            cursor: pointer;
-        }
-
-        .toggle-password i {
-            color: #666;
-        }
-    </style>
 </head>
 
 <body class="sticky-header newsletter-popup-modal">
@@ -47,8 +36,8 @@
                             <div class="tab-pane fade show active" id="nav-account" role="tabpanel">
                                 <div class="col-lg-9">
                                     <div class="axil-dashboard-account">
-                                        <form class="account-details-form"
-                                              id="uform">
+                                        <form class="account-details-form" id="uform" method="post"
+                                              th:action="@{/update-account}">
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
@@ -79,34 +68,142 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
-                                                    <h5 class="title">Thay đổi mật khẩu</h5>
-                                                    <div class="form-group position-relative">
-                                                        <label>Mật khẩu</label>
-                                                        <input name="password" type="password" class="form-control">
-                                                        <span class="toggle-password position-absolute" toggle="[name='password']">
-                                                            <i class="fa fa-eye"></i>
-                                                        </span>
+                                                    <div class="form-group">
+                                                        <label for="city" th:text="#{checkout.city}">Tỉnh thành</label>
+                                                        <select name="city" id="city" required>
+                                                            <option value="" selected th:text="#{checkout.select.city}">
+                                                                Chọn tỉnh thành
+                                                            </option>
+                                                        </select>
                                                     </div>
-                                                    <div class="form-group position-relative">
-                                                        <label>Mật khẩu mới</label>
-                                                        <input name="newPassword" type="password" class="form-control">
-                                                        <span class="toggle-password position-absolute" toggle="[name='newPassword']">
-                                                            <i class="fa fa-eye"></i>
-                                                        </span>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="district" th:text="#{checkout.district}">Tỉnh
+                                                            thành</label>
+                                                        <select name="district" id="district" required>
+                                                            <option value="" selected
+                                                                    th:text="#{checkout.select.district}">
+                                                                Vui lòng chọn tỉnh
+                                                                thành
+                                                            </option>
+                                                        </select>
                                                     </div>
-                                                    <div class="form-group position-relative">
-                                                        <label>Xác nhận mật khẩu mới</label>
-                                                        <input name="confirmPassword" type="password" class="form-control">
-                                                        <span class="toggle-password position-absolute" toggle="[name='confirmPassword']">
-                                                            <i class="fa fa-eye"></i>
-                                                        </span>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="ward" th:text="#{checkout.ward}">Tỉnh thành</label>
+                                                        <select name="ward" id="ward" required>
+                                                            <option value="" selected th:text="#{checkout.select.ward}">
+                                                                Vui
+                                                                lòng chọn quận huyện
+                                                            </option>
+                                                        </select>
                                                     </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="shipping-address" th:text="#{checkout.address}">Địa
+                                                            chỉ
+                                                            chi tiết <span>*</span></label>
+                                                        <input class="form-group" type="text" name="address"
+                                                               th:value="${user.address}"
+                                                               id="shipping-address"
+                                                               required>
+                                                        <!--                            <input type="hidden" id="formatted-shipping-address" name="formattedShippingAddress">-->
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
                                                     <div class="form-group mb--0">
-                                                        <input type="submit" class="axil-btn" value="Lưu thay đổi" id="saveChangesBtn">
+                                                        <button type="submit" class="axil-btn btn btn-primary"
+                                                                id="saveChangesBtn"> Lưu thay đổi
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
+                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+                                                referrerpolicy="no-referrer"></script>
+                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+                                        <script th:inline="javascript">
+                                            const host = "https://provinces.open-api.vn/api/";
+
+                                            // Giá trị mặc định từ Thymeleaf
+                                            let selectedCity = /*[[${user.city}]]*/ '';
+                                            let selectedDistrict = /*[[${user.district}]]*/ '';
+                                            let selectedWard = /*[[${user.ward}]]*/ '';
+
+                                            // Gọi API để lấy dữ liệu các tỉnh thành
+                                            const callAPI = (api) => {
+                                                return axios.get(api).then((response) => {
+                                                    renderData(response.data, "city");
+                                                    // Nếu đã có giá trị tỉnh được chọn trước, đặt giá trị mặc định
+                                                    if (selectedCity) {
+                                                        $("#city option").filter(function () {
+                                                            return $(this).val() === selectedCity;
+                                                        }).prop("selected", true);
+
+                                                        // Lấy dữ liệu quận huyện theo tỉnh đã chọn
+                                                        const cityId = $("#city option:selected").data('id');
+                                                        callApiDistrict(`${host}p/${cityId}?depth=2`);
+                                                    }
+                                                });
+                                            };
+
+                                            // Gọi API để lấy danh sách quận/huyện dựa trên mã tỉnh
+                                            const callApiDistrict = (api) => {
+                                                return axios.get(api).then((response) => {
+                                                    renderData(response.data.districts, "district");
+                                                    // Nếu đã có giá trị huyện được chọn trước, đặt giá trị mặc định
+                                                    if (selectedDistrict) {
+                                                        $("#district option").filter(function () {
+                                                            return $(this).val() === selectedDistrict;
+                                                        }).prop("selected", true);
+
+                                                        // Lấy dữ liệu xã/phường theo huyện đã chọn
+                                                        const districtId = $("#district option:selected").data('id');
+                                                        callApiWard(`${host}d/${districtId}?depth=2`);
+                                                    }
+                                                });
+                                            };
+
+                                            // Gọi API để lấy danh sách xã/phường dựa trên mã huyện
+                                            const callApiWard = (api) => {
+                                                return axios.get(api).then((response) => {
+                                                    renderData(response.data.wards, "ward");
+                                                    // Nếu đã có giá trị xã được chọn trước, đặt giá trị mặc định
+                                                    if (selectedWard) {
+                                                        $("#ward option").filter(function () {
+                                                            return $(this).val() === selectedWard;
+                                                        }).prop("selected", true);
+                                                    }
+                                                });
+                                            };
+
+                                            // Render dữ liệu vào thẻ select
+                                            const renderData = (array, select) => {
+                                                let row = '<option value="" disabled selected>Chọn</option>';
+                                                array.forEach(element => {
+                                                    row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`;
+                                                });
+                                                document.querySelector(`#${select}`).innerHTML = row;
+                                            };
+
+                                            // Sự kiện thay đổi trên dropdown tỉnh/thành phố
+                                            $("#city").change(() => {
+                                                const cityId = $("#city option:selected").data('id');
+                                                callApiDistrict(`${host}p/${cityId}?depth=2`);
+                                            });
+
+                                            // Sự kiện thay đổi trên dropdown quận/huyện
+                                            $("#district").change(() => {
+                                                const districtId = $("#district option:selected").data('id');
+                                                callApiWard(`${host}d/${districtId}?depth=2`);
+                                            });
+
+                                            // Khởi tạo dropdown tỉnh/thành phố
+                                            callAPI(`${host}?depth=1`);
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -142,5 +239,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<script th:inline="javascript">
+    const selectedPrefecture = /*[[${city}]]*/ '';
+    const selectedCity = /*[[${district}]]*/ '';
+    const selectedTown = /*[[${storeAddress != null ? store.storeAddress.split('-')[0] : ''}]]*/ '';
+
+    console.log('Selected Prefecture:', selectedPrefecture);
+    console.log('Selected City:', selectedCity);
+    console.log('Selected Town:', selectedTown);
+</script>
 </body>
 </html>

@@ -100,6 +100,39 @@
             background-color: #616eff;
             color: #ffffff;
         }
+
+        .payment-select {
+            width: 75%;
+            padding: 10px;
+            border: 1px solid #616eff;
+            border-radius: 5px;
+            color: #616eff;
+            font-weight: bold;
+            background-color: white;
+            margin-bottom: 3px;
+        }
+
+        .payment-select:focus {
+            outline: none;
+            border-color: #616eff;
+        }
+
+        .payment-type-select {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #616eff;
+            border-radius: 5px;
+            color: #616eff;
+            font-weight: bold;
+            background-color: white;
+            margin-bottom: 3px;
+        }
+
+        .payment-type-select:focus {
+            outline: none;
+            border-color: #616eff;
+        }
+    </style>
     </style>
 </head>
 
@@ -113,15 +146,15 @@
     <!-- Start Checkout Area  -->
     <div class="axil-checkout-area axil-section-gap">
         <div class="container">
-            <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
-            </div>
-            <div id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}" class="alert alert-danger">
-                <p th:text="${errorMessage}"></p>
-                <p th:if="${errorMessage1!=null}">Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào
-                    ví hoặc chọn phương thức thanh toán khác. <a th:if="${errorMessage1 != null}" href="/wallet"><u>Nạp
-                        ngay</u></a></p>
-            </div>
             <form action="/checkout" method="post">
+                <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
+                </div>
+                <div id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}" class="alert alert-danger">
+                    <p th:text="${errorMessage}"></p>
+                    <p th:if="${errorMessage1!=null}">Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào
+                        ví hoặc chọn phương thức thanh toán khác. <a th:if="${errorMessage1 != null}" href="/wallet"><u>Nạp
+                            ngay</u></a></p>
+                </div>
                 <input type="hidden" name="cartItemIdsString" th:value="${cartItemIds}">
                 <input type="hidden" name="totalOrderPrice" th:value="${totalOrderPrice}">
                 <!--                <input type="hidden" id="store-country" th:value="${store.country.countryId}">-->
@@ -131,34 +164,36 @@
                         <h4 class="title mb--40" th:text="#{checkout.buyer.info}">Thông tin người mua</h4>
                         <div class="form-group">
                             <label th:text="#{checkout.fullname}">Họ tên <span>*</span></label>
-                            <input type="text" id="full-name">
+                            <input th:value="${user.firstName} + ' ' + ${user.lastName}" type="text" id="full-name">
                         </div>
                         <div class="form-group">
                             <label th:text="#{checkout.phone}">Số điện thoại <span>*</span></label>
-                            <input type="text" name="phoneNumber" id="phone-number" required>
+                            <input th:value="${user.phoneNumber}" type="text" name="phoneNumber" id="phone-number"
+                                   required>
                         </div>
                         <div class="form-group">
                             <label th:text="#{checkout.email}">Địa chỉ email <span>*</span></label>
-                            <input type="text" id="email-address" required>
+                            <input th:value="${user.email}" type="text" id="email-address" required>
                         </div>
                         <div class="form-group">
                             <label for="city" th:text="#{checkout.city}">Tỉnh thành</label>
-                            <select id="city" required>
+                            <select th:value="${user.city}" id="city" required>
                                 <option value="" selected th:text="#{checkout.select.city}">Chọn tỉnh thành</option>
                             </select>
                             <label for="district" th:text="#{checkout.district}">Tỉnh thành</label>
-                            <select id="district" required>
+                            <select th:value="${user.district}" id="district" required>
                                 <option value="" selected th:text="#{checkout.select.district}">Vui lòng chọn tỉnh
                                     thành
                                 </option>
                             </select>
                             <label for="ward" th:text="#{checkout.ward}">Tỉnh thành</label>
-                            <select id="ward" required>
+                            <select th:value="${user.ward}" id="ward" required>
                                 <option value="" selected th:text="#{checkout.select.ward}">Vui lòng chọn quận huyện
                                 </option>
                             </select>
                             <label for="shipping-address" th:text="#{checkout.address}">Địa chỉ chi tiết <span>*</span></label>
-                            <input class="form-group" type="text" name="shippingAddress" id="shipping-address"
+                            <input th:value="${user.address}" class="form-group" type="text" name="shippingAddress"
+                                   id="shipping-address"
                                    required>
 
                             <input type="hidden" id="formatted-shipping-address" name="formattedShippingAddress">
@@ -169,58 +204,84 @@
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
                             referrerpolicy="no-referrer"></script>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-                    <script>
+                    <script th:inline="javascript">
                         const host = "https://provinces.open-api.vn/api/";
-                        var callAPI = (api) => {
-                            return axios.get(api)
-                                .then((response) => {
-                                    renderData(response.data, "city");
-                                });
-                        }
-                        callAPI('https://provinces.open-api.vn/api/?depth=1');
-                        var callApiDistrict = (api) => {
-                            return axios.get(api)
-                                .then((response) => {
-                                    renderData(response.data.districts, "district");
-                                });
-                        }
-                        var callApiWard = (api) => {
-                            return axios.get(api)
-                                .then((response) => {
-                                    renderData(response.data.wards, "ward");
-                                });
-                        }
 
-                        var renderData = (array, select) => {
-                            let row = ' <option disable value="">Chọn</option>';
-                            array.forEach(element => {
-                                row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`
+                        // Giá trị mặc định từ Thymeleaf
+                        let selectedCity = /*[[${user.city}]]*/ '';
+                        let selectedDistrict = /*[[${user.district}]]*/ '';
+                        let selectedWard = /*[[${user.ward}]]*/ '';
+
+                        // Gọi API để lấy dữ liệu các tỉnh thành
+                        const callAPI = (api) => {
+                            return axios.get(api).then((response) => {
+                                renderData(response.data, "city");
+                                // Nếu đã có giá trị tỉnh được chọn trước, đặt giá trị mặc định
+                                if (selectedCity) {
+                                    $("#city option").filter(function () {
+                                        return $(this).val() === selectedCity;
+                                    }).prop("selected", true);
+
+                                    // Lấy dữ liệu quận huyện theo tỉnh đã chọn
+                                    const cityId = $("#city option:selected").data('id');
+                                    callApiDistrict(`${host}p/${cityId}?depth=2`);
+                                }
                             });
-                            document.querySelector("#" + select).innerHTML = row
-                        }
+                        };
 
+                        // Gọi API để lấy danh sách quận/huyện dựa trên mã tỉnh
+                        const callApiDistrict = (api) => {
+                            return axios.get(api).then((response) => {
+                                renderData(response.data.districts, "district");
+                                // Nếu đã có giá trị huyện được chọn trước, đặt giá trị mặc định
+                                if (selectedDistrict) {
+                                    $("#district option").filter(function () {
+                                        return $(this).val() === selectedDistrict;
+                                    }).prop("selected", true);
+
+                                    // Lấy dữ liệu xã/phường theo huyện đã chọn
+                                    const districtId = $("#district option:selected").data('id');
+                                    callApiWard(`${host}d/${districtId}?depth=2`);
+                                }
+                            });
+                        };
+
+                        // Gọi API để lấy danh sách xã/phường dựa trên mã huyện
+                        const callApiWard = (api) => {
+                            return axios.get(api).then((response) => {
+                                renderData(response.data.wards, "ward");
+                                // Nếu đã có giá trị xã được chọn trước, đặt giá trị mặc định
+                                if (selectedWard) {
+                                    $("#ward option").filter(function () {
+                                        return $(this).val() === selectedWard;
+                                    }).prop("selected", true);
+                                }
+                            });
+                        };
+
+                        // Render dữ liệu vào thẻ select
+                        const renderData = (array, select) => {
+                            let row = '<option value="" disabled selected>Chọn</option>';
+                            array.forEach(element => {
+                                row += `<option data-id="${element.code}" value="${element.name}">${element.name}</option>`;
+                            });
+                            document.querySelector(`#${select}`).innerHTML = row;
+                        };
+
+                        // Sự kiện thay đổi trên dropdown tỉnh/thành phố
                         $("#city").change(() => {
-                            callApiDistrict(host + "p/" + $("#city").find(':selected').data('id') + "?depth=2");
-                            printResult();
+                            const cityId = $("#city option:selected").data('id');
+                            callApiDistrict(`${host}p/${cityId}?depth=2`);
                         });
+
+                        // Sự kiện thay đổi trên dropdown quận/huyện
                         $("#district").change(() => {
-                            callApiWard(host + "d/" + $("#district").find(':selected').data('id') + "?depth=2");
-                            printResult();
+                            const districtId = $("#district option:selected").data('id');
+                            callApiWard(`${host}d/${districtId}?depth=2`);
                         });
-                        $("#ward").change(() => {
-                            printResult();
-                        })
 
-                        var printResult = () => {
-                            if ($("#district").find(':selected').data('id') != "" && $("#city").find(':selected').data('id') != "" &&
-                                $("#ward").find(':selected').data('id') != "") {
-                                let result = $("#city option:selected").text() +
-                                    " | " + $("#district option:selected").text() + " | " +
-                                    $("#ward option:selected").text();
-                                $("#result").text(result)
-                            }
-
-                        }
+                        // Khởi tạo dropdown tỉnh/thành phố
+                        callAPI(`${host}?depth=1`);
                     </script>
                     <!-- Order Summary Section -->
                     <div class="order-summary">
@@ -274,13 +335,13 @@
                             <h5 class="title mb--20" th:text="#{checkout.payment.method}">Phương thức thanh toán</h5>
                             <div class="row">
                                 <div class="col-sm-12 d-flex justify-content-between">
-                                    <div>
-                                        <button id="wallet" class="payment-btn btn-common selected" data-method="WALLET"
-                                                type="button" th:text="#{checkout.wallet.method}">Ví VJ-Market
-                                        </button>
-                                        <button id="vnpay" class="payment-btn btn-common" data-method="VNPAY"
-                                                type="button" th:text="#{checkout.online.method}">Thanh toán VNPay
-                                        </button>
+                                    <div class="col-sm-8">
+                                        <select id="paymentMethodSelect" class="payment-select">
+                                            <option value="WALLET" th:text="#{checkout.wallet.method}">Ví VJ-Market
+                                            </option>
+                                            <option value="VNPAY" th:text="#{checkout.online.method}">Thanh toán VNPay
+                                            </option>
+                                        </select>
                                     </div>
                                     <div>
                                         <div class="payment-details" id="walletDetails">
@@ -295,14 +356,11 @@
                             </div>
                             <!-- Payment type options -->
                             <div class="payment-type-options">
-                                <h6 class="title mb--10" th:text="#{checkout.method}">Hình thức thanh toán</h6>
-                                <button id="fullPayment" class="payment-type-btn selected" data-type="full"
-                                        type="button" th:text="#{checkout.all}">Trả đủ
-                                </button>
-                                <button id="depositPayment" class="payment-type-btn" data-type="deposit" type="button"
-                                        th:text="#{checkout.deposit}">
-                                    Đặt cọc 50%
-                                </button>
+                                <h5 class="title mb--20" th:text="#{checkout.method}">Hình thức thanh toán</h5>
+                                <select id="paymentTypeSelect" class="payment-type-select">
+                                    <option value="full" th:text="#{checkout.all}">Trả đủ</option>
+                                    <option value="deposit" th:text="#{checkout.deposit}">Đặt cọc 50%</option>
+                                </select>
                             </div>
                             <!-- Hidden input to hold selected payment method -->
                             <input type="hidden" id="paymentMethod" name="paymentMethod" value="WALLET">

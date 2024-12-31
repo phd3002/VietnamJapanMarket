@@ -4,12 +4,15 @@ import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.PaymentMethod;
 import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.*;
+import com.ecommerce.g58.service.implementation.ProfileService;
 import com.ecommerce.g58.service.implementation.VNPayService;
 import com.ecommerce.g58.utils.FormatVND;
 import com.ecommerce.g58.utils.RandomOrderCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -76,10 +79,16 @@ public class CheckoutController {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private ProfileService profileService;
+
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal, HttpSession session,
+                                   @AuthenticationPrincipal UserDetails userDetails,
                                    @RequestParam("cartItemIds") List<Integer> cartItemIds,
                                    @RequestParam(value = "shippingUnitId", required = false) Integer shippingUnitId) {
+
+
         // Lấy thời gian bắt đầu session
         LocalDateTime sessionStartTime = (LocalDateTime) session.getAttribute("sessionStartTime");
 
@@ -180,7 +189,7 @@ public class CheckoutController {
         logger.info("Tax amount calculated: {}", taxAmount);
         logger.info("Total with shipping and tax: {}", totalWithShipping);
 
-
+        model.addAttribute("user", user);
         model.addAttribute("tax", taxAmount);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalPrice);
@@ -330,6 +339,7 @@ public class CheckoutController {
                 model.addAttribute("shippingFee", shippingFee);
                 model.addAttribute("shippingUnits", shippingUnits);
                 model.addAttribute("tax", taxAmount);
+                model.addAttribute("user", user);
                 cartService.restoreItemQuantitiesToStock(userId);
                 return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
             }
