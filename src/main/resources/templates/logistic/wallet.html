@@ -35,14 +35,16 @@
 <aside class="app-sidebar">
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" th:src="@{/images/logo/vj-market.png}"
                                         alt="User Image">
+        <br>
+        <h3 th:text="#{sidebar.logistic.management.page}">Trang vận chuyển</h3>
     </div>
     <hr>
     <ul class="app-menu">
         <li><a class="app-menu__item" href="/logistic/order-manager"><i class='app-menu__icon bx bx-task'></i><span
-                class="app-menu__label">Quản lý đơn hàng</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.order.manager}">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item active" href="/logistic/wallet"><i
                 class='app-menu__icon bx bx-money'></i><span
-                class="app-menu__label">Ví</span></a></li>
+                class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
     </ul>
 </aside>
 <main class="app-content">
@@ -106,32 +108,36 @@
                     <tbody>
                     <tr th:each="transaction : ${wallets}">
                         <td th:text="${transaction.transactionType}">Chuyển tiền</td>
-                        <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">500.000 đ</td>
-                        <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">100.500.000 đ</td>
+                        <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">500.000 đ
+                        </td>
+                        <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">
+                            100.500.000 đ
+                        </td>
                         <td th:text="${transaction.description}">Chuyển tiền bán hàng tới shop ABC</td>
-                        <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy HH:mm')}">17/12/2024</td>
+                        <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy HH:mm')}">17/12/2024
+                        </td>
                     </tr>
-<!--                    <tr>-->
-<!--                        <td>Nhận tiền</td>-->
-<!--                        <td>500.000 đ</td>-->
-<!--                        <td>100.500.000 đ</td>-->
-<!--                        <td>Nhận phí duy trì từ shop ABC</td>-->
-<!--                        <td>17/12/2024</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>Chuyển tiền</td>-->
-<!--                        <td>500.000 đ</td>-->
-<!--                        <td>100.500.000 đ</td>-->
-<!--                        <td>Tiền vận chuyển đơn hàng ANVAHHKAJKAH</td>-->
-<!--                        <td>17/12/2024</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>Nhận tiền</td>-->
-<!--                        <td>500.000 đ</td>-->
-<!--                        <td>100.500.000 đ</td>-->
-<!--                        <td>Tiền mua hàng từ người dùng ALO123 cho đơn hàng ANVAHHKAJKAH</td>-->
-<!--                        <td>17/12/2024</td>-->
-<!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td>Nhận tiền</td>-->
+                    <!--                        <td>500.000 đ</td>-->
+                    <!--                        <td>100.500.000 đ</td>-->
+                    <!--                        <td>Nhận phí duy trì từ shop ABC</td>-->
+                    <!--                        <td>17/12/2024</td>-->
+                    <!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td>Chuyển tiền</td>-->
+                    <!--                        <td>500.000 đ</td>-->
+                    <!--                        <td>100.500.000 đ</td>-->
+                    <!--                        <td>Tiền vận chuyển đơn hàng ANVAHHKAJKAH</td>-->
+                    <!--                        <td>17/12/2024</td>-->
+                    <!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td>Nhận tiền</td>-->
+                    <!--                        <td>500.000 đ</td>-->
+                    <!--                        <td>100.500.000 đ</td>-->
+                    <!--                        <td>Tiền mua hàng từ người dùng ALO123 cho đơn hàng ANVAHHKAJKAH</td>-->
+                    <!--                        <td>17/12/2024</td>-->
+                    <!--                    </tr>-->
                     </tbody>
                 </table>
             </div>

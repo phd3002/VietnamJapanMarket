@@ -57,9 +57,10 @@
         <li><a class="app-menu__item" href="feedback-manager.html"><i
                 class='app-menu__icon bx bx-list-minus'></i><span class="app-menu__label">Quản lý đánh giá</span></a>
         </li>
-        <li><a class="app-menu__item" href="wallet.html"><i
-                class='app-menu__icon bx fa-box-usd'></i><span
-                class="app-menu__label">Ví</span></a></li>
+        <li><a class="app-menu__item" href="/seller/wallet"><i
+                class='app-menu__icon bx bx-money'></i><span
+                class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a>
+        </li>
     </ul>
 </aside>
 <main class="app-content">
@@ -107,7 +108,8 @@
                                 </select>
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu</button>
+                                <button class="btn btn-primary btn-sm btn-save" type="submit" title="Chỉnh sửa">Lưu
+                                </button>
                                 <a th:href="@{/seller/order-detail/{orderId}(orderId=${order.orderId})}">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Chi tiết"><i
                                             class="fa fa-eye"></i></button>
@@ -124,37 +126,37 @@
     <!--
   MODAL
 -->
-<!--    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"-->
-<!--         data-keyboard="false">-->
-<!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-body">-->
-<!--                    <div class="row">-->
-<!--                        <div class="form-group  col-md-12">-->
-<!--                              <span class="thong-tin-thanh-toan">-->
-<!--                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>-->
-<!--                              </span>-->
-<!--                        </div>-->
-<!--                        <div class="form-group col-md-12">-->
-<!--                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>-->
-<!--                            <select class="form-control" id="exampleSelect1">-->
-<!--                                <option>Chờ xác nhận</option>-->
-<!--                                <option>Đang đóng gói</option>-->
-<!--                                <option>Chờ lấy hàng</option>-->
-<!--                                <option>Đã giao cho đơn vị vận chuyển</option>-->
-<!--                            </select>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <BR>-->
-<!--                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>-->
-<!--                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>-->
-<!--                    <BR>-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"-->
+    <!--         data-keyboard="false">-->
+    <!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
+    <!--            <div class="modal-content">-->
+    <!--                <div class="modal-body">-->
+    <!--                    <div class="row">-->
+    <!--                        <div class="form-group  col-md-12">-->
+    <!--                              <span class="thong-tin-thanh-toan">-->
+    <!--                                <h5>Chỉnh sửa trạng thái đơn hàng</h5>-->
+    <!--                              </span>-->
+    <!--                        </div>-->
+    <!--                        <div class="form-group col-md-12">-->
+    <!--                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>-->
+    <!--                            <select class="form-control" id="exampleSelect1">-->
+    <!--                                <option>Chờ xác nhận</option>-->
+    <!--                                <option>Đang đóng gói</option>-->
+    <!--                                <option>Chờ lấy hàng</option>-->
+    <!--                                <option>Đã giao cho đơn vị vận chuyển</option>-->
+    <!--                            </select>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                    <BR>-->
+    <!--                    <button class="btn btn-save" type="button" id="saveStatus">Lưu lại</button>-->
+    <!--                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>-->
+    <!--                    <BR>-->
+    <!--                </div>-->
+    <!--                <div class="modal-footer">-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <!--
     MODAL
     -->
