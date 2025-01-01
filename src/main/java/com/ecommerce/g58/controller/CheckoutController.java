@@ -82,6 +82,9 @@ public class CheckoutController {
     @Autowired
     private ProfileService profileService;
 
+    @Autowired
+    EmailService emailService;
+
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal, HttpSession session,
                                    @AuthenticationPrincipal UserDetails userDetails,
@@ -215,7 +218,13 @@ public class CheckoutController {
         long walletBalance = walletService.getUserWalletBalance(user.getUserId());
         model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
         logger.info("Wallet balance retrieved for user ID {}: {}", user.getUserId(), walletBalance);
-
+        LocalDateTime otpStartTime = (LocalDateTime) session.getAttribute("walletOtpStartTime");
+        if (otpStartTime != null) {
+            // Truyền xuống client (convert thành String để JS parse)
+            model.addAttribute("otpStartTime", otpStartTime.toString());
+        } else {
+            model.addAttribute("otpStartTime", null);
+        }
         return "checkout";
     }
 
@@ -223,6 +232,7 @@ public class CheckoutController {
     public String proceedToCheckout(HttpSession session, Principal principal, @ModelAttribute Orders order, Model model,
                                     @RequestParam("formattedShippingAddress") String formattedShippingAddress,
                                     @RequestParam("cartItemIdsString") String cartItemIdsString,
+                                    @RequestParam("walletOtpCode") String walletOtpCode,
                                     @RequestParam(value = "shippingUnitId") Integer shippingUnitId,
                                     @RequestParam(value = "paymentMethod", defaultValue = "WALLET") PaymentMethod paymentMethod,
                                     @RequestParam(value = "paymentType", defaultValue = "full") String paymentType,
@@ -237,7 +247,7 @@ public class CheckoutController {
             logger.warn("User not authenticated. Redirecting to sign-in.");
             return "redirect:/sign-in";
         }
-
+        String encodedCartItemIds = URLEncoder.encode(cartItemIdsString.replaceAll("\\[|\\]", ""), StandardCharsets.UTF_8);
         String username = principal.getName();
         Users user = userService.findByEmail(username);
         if (user == null) {
@@ -309,7 +319,7 @@ public class CheckoutController {
             int availableStock = variation.getStock(); // Stock is now validated at the variation level
 
             if (cartQuantity > availableStock) {
-                String encodedCartItemIds = URLEncoder.encode(cartItemIdsString.replaceAll("\\[|\\]", ""), StandardCharsets.UTF_8);
+
 
                 logger.warn("Insufficient stock for product variation ID {}. Cart quantity: {}, Available stock: {}",
                         variation.getVariationId(), cartQuantity, availableStock);
@@ -331,7 +341,7 @@ public class CheckoutController {
             // Kiểm tra nếu số dư ví không đủ
             if (walletBalance < totalWithShipping) {
                 long taxAmount = (long) (totalPrice * tax); // Tax applied to the base total
-                model.addAttribute("errorMessage1", "Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào ví hoặc chọn phương thức thanh toán khác.");
+                redirectAttributes.addFlashAttribute("errorMessage1", "Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào ví hoặc chọn phương thức thanh toán khác.");
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
@@ -341,9 +351,60 @@ public class CheckoutController {
                 model.addAttribute("tax", taxAmount);
                 model.addAttribute("user", user);
                 cartService.restoreItemQuantitiesToStock(userId);
-                return "checkout"; // Quay lại trang checkout nếu số dư ví không đủ
+                return "redirect:/checkout?cartItemIds=" + encodedCartItemIds;
             }
+            String sessionOtp = (String) session.getAttribute("walletOtpCode");
+            LocalDateTime otpStartTime = (LocalDateTime) session.getAttribute("walletOtpStartTime");
 
+            // Nếu chưa từng gửi OTP
+            if (sessionOtp == null || otpStartTime == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng bấm 'Nhận mã' trước khi thanh toán!");
+                long taxAmount = (long) (totalPrice * tax); // Tax applied to the base total
+                model.addAttribute("errorMessage1", "Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào ví hoặc chọn phương thức thanh toán khác.");
+                model.addAttribute("totalWithShipping", totalWithShipping);
+                model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
+                model.addAttribute("cartItems", cartItems);
+                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("shippingFee", shippingFee);
+                model.addAttribute("shippingUnits", shippingUnits);
+                model.addAttribute("tax", taxAmount);
+                model.addAttribute("user", user);
+                return "redirect:/checkout?cartItemIds=" + encodedCartItemIds;
+            }
+            // Kiểm tra đã quá 2 phút chưa
+            Duration duration = Duration.between(otpStartTime, LocalDateTime.now());
+            if (duration.toMinutes() >= 2) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận đã hết hiệu lực. Vui lòng nhấn 'Nhận mã' lại.");
+                // Xoá OTP cũ
+                session.removeAttribute("walletOtpCode");
+                session.removeAttribute("walletOtpStartTime");
+                long taxAmount = (long) (totalPrice * tax); // Tax applied to the base total
+                model.addAttribute("errorMessage1", "Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào ví hoặc chọn phương thức thanh toán khác.");
+                model.addAttribute("totalWithShipping", totalWithShipping);
+                model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
+                model.addAttribute("cartItems", cartItems);
+                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("shippingFee", shippingFee);
+                model.addAttribute("shippingUnits", shippingUnits);
+                model.addAttribute("tax", taxAmount);
+                model.addAttribute("user", user);
+                return "redirect:/checkout?cartItemIds=" + encodedCartItemIds;
+            }
+            // So khớp OTP
+            if (!sessionOtp.equals(walletOtpCode)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không chính xác!");
+                long taxAmount = (long) (totalPrice * tax); // Tax applied to the base total
+                model.addAttribute("errorMessage1", "Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào ví hoặc chọn phương thức thanh toán khác.");
+                model.addAttribute("totalWithShipping", totalWithShipping);
+                model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
+                model.addAttribute("cartItems", cartItems);
+                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("shippingFee", shippingFee);
+                model.addAttribute("shippingUnits", shippingUnits);
+                model.addAttribute("tax", taxAmount);
+                model.addAttribute("user", user);
+                return "redirect:/checkout?cartItemIds=" + encodedCartItemIds;
+            }
 
             // **Check product stock before proceeding**
 
@@ -534,4 +595,50 @@ public class CheckoutController {
         // tra ve ket qua
         return response;
     }
+    @PostMapping("/send-wallet-otp")
+    @ResponseBody
+    public Map<String, Object> sendWalletOtp(Principal principal, HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            if (principal == null) {
+                response.put("success", false);
+                response.put("message", "Bạn chưa đăng nhập!");
+                return response;
+            }
+
+            // Lấy user từ email đang đăng nhập
+            String userEmail = principal.getName();
+            Users user = userService.findByEmail(userEmail);
+            if (user == null) {
+                response.put("success", false);
+                response.put("message", "Không tìm thấy người dùng!");
+                return response;
+            }
+
+            // Sinh mã OTP (random 6 chữ số)
+            String otpCode = String.valueOf((int)((Math.random() * 900000) + 100000));
+
+            // Lưu vào session
+            session.setAttribute("walletOtpCode", otpCode);
+            session.setAttribute("walletOtpStartTime", LocalDateTime.now()); // để check hết hạn
+
+            // Gửi email
+            String subject = "Mã xác nhận thanh toán qua ví";
+            String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                    + "<p>Mã xác nhận (OTP) của bạn là: <b>" + otpCode + "</b></p>"
+                    + "<p>Mã này có hiệu lực trong 2 phút. Không chia sẻ với ai.</p>";
+
+            emailService.sendEmail(userEmail, subject, body);
+
+            response.put("success", true);
+            response.put("message", "Mã OTP đã được gửi đến email của bạn!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", "Lỗi khi gửi mã OTP!");
+        }
+        return response;
+    }
+
+
 }
