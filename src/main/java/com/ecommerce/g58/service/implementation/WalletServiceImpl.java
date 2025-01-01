@@ -9,6 +9,7 @@ import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.repository.TransactionRepository;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.repository.WalletRepository;
+import com.ecommerce.g58.service.EmailService;
 import com.ecommerce.g58.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,6 +44,8 @@ public class WalletServiceImpl implements WalletService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     public WalletServiceImpl(WalletRepository walletRepository) {
@@ -95,6 +98,7 @@ public class WalletServiceImpl implements WalletService {
         transaction.setCreatedAt(LocalDateTime.now());
 
         transactionRepository.save(transaction);
+        emailService.sendTransactionMailAsync(user, transaction, amountToDeduct);
     }
 
     @Override

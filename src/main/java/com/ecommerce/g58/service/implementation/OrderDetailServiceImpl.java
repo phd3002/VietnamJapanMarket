@@ -8,6 +8,7 @@ import com.ecommerce.g58.enums.Reason;
 import com.ecommerce.g58.enums.TransactionType;
 import com.ecommerce.g58.repository.*;
 import com.ecommerce.g58.service.CartService;
+import com.ecommerce.g58.service.EmailService;
 import com.ecommerce.g58.service.NotificationService;
 import com.ecommerce.g58.entity.Feedback;
 import com.ecommerce.g58.repository.*;
@@ -51,6 +52,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     InvoiceRepository invoiceRepository;
     @Autowired
     TransactionRepository transactionRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @Autowired
     public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository, FeedbackRepository feedbackRepository, ProductVariationRepository productVariationRepository, UserRepository userRepository,
@@ -316,7 +320,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
 
                 transactionRepository.save(userTransactions);
-
+                emailService.sendTransactionMailAsync(userWallet.get().getUserId(), userTransactions, invoice.getDeposit().longValue());
                 cartService.restoreItemQuantitiesToStock(order.getUserId().getUserId(), orderId);
             }
             return true;
@@ -509,5 +513,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         transaction.setIsRefund("YES");
         transaction.setCreatedAt(LocalDateTime.now());
         transactionRepository.save(transaction);
+
+        emailService.sendTransactionMailAsync(wallet.getUserId(), transaction, amount.longValue());
     }
 }

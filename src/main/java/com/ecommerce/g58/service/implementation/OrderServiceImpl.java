@@ -51,6 +51,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
@@ -342,6 +344,7 @@ public class OrderServiceImpl implements OrderService {
                     sellerTransaction2.setTransactionType("Nhận tiền hàng");
                     sellerTransaction2.setDescription("Nhận " + invoice.getTotalAmount().add(invoice.getTax()) + " từ đơn hàng  " + order.getOrderCode() + " giao thành công");
                     transactionRepository.save(sellerTransaction2);
+                    emailService.sendTransactionMailAsync(sellWallet.get().getUserId(), sellerTransaction2, invoice.getTotalAmount().add(invoice.getTax()).abs().longValue());
 
                     BigDecimal currentLogisticAmount = new BigDecimal(logisticWallet.get().getBalance());
                     BigDecimal newLogisticAmount = currentLogisticAmount.add(invoice.getShippingFee());
@@ -404,6 +407,7 @@ public class OrderServiceImpl implements OrderService {
                     sellerTransaction2.setTransactionType("Nhận tiền hàng");
                     sellerTransaction2.setDescription("Nhận " + invoice.getTotalAmount().add(invoice.getTax()) + " từ đơn hàng  " + order.getOrderCode() + " giao thành công");
                     transactionRepository.save(sellerTransaction2);
+                    emailService.sendTransactionMailAsync(sellWallet.get().getUserId(), sellerTransaction2, invoice.getTotalAmount().add(invoice.getTax()).abs().longValue());
 
                     BigDecimal currentLogisticAmount = new BigDecimal(logisticWallet.get().getBalance());
                     BigDecimal newLogisticAmount = currentLogisticAmount.add(invoice.getShippingFee());
@@ -470,6 +474,7 @@ public class OrderServiceImpl implements OrderService {
         transaction.setIsRefund("YES");
         transaction.setCreatedAt(LocalDateTime.now());
         transactionRepository.save(transaction);
+        emailService.sendTransactionMailAsync(wallet.getUserId(), transaction, amount.longValue());
     }
 
     @Transactional

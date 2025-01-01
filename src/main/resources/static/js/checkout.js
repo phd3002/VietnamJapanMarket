@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const vnpayDetails = document.getElementById('vnpayDetails');
     const paymentMethodInput = document.getElementById('paymentMethod');
     const paymentTypeInput = document.getElementById('paymentType');
+    const walletOtpSection = document.getElementById('walletOtpSection');
+    const requestOtpBtn = document.getElementById('requestOtpBtn');
+    const countdownDisplay = document.getElementById('countdownDisplay');
+    let isCountingDown = false;
+    const serverOtpStartTimeInput = document.getElementById('serverOtpStartTime');
 
     // Handle payment method change
     paymentMethodSelect.addEventListener('change', function() {
@@ -20,9 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedMethod === 'WALLET') {
             walletDetails.style.display = 'block';
             vnpayDetails.style.display = 'none';
+            walletOtpSection.style.display = 'block';
         } else {
             walletDetails.style.display = 'none';
             vnpayDetails.style.display = 'block';
+            walletOtpSection.style.display = 'none';
         }
 
         // Update total amount when payment method changes
@@ -85,5 +92,78 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialize total amount on page load
+    if (serverOtpStartTimeInput && serverOtpStartTimeInput.value) {
+        const serverTimeStr = serverOtpStartTimeInput.value;
+        const serverTime = new Date(serverTimeStr);
+        const now = new Date();
+        const elapsedSec = (now - serverTime) / 1000;
+
+        if (elapsedSec < 120) {
+            const remain = 120 - elapsedSec;
+            // Đổi text, màu, disable
+            requestOtpBtn.innerText = "Đã gửi mã";
+            requestOtpBtn.style.backgroundColor = "red";
+            requestOtpBtn.disabled = true;
+
+            // Bắt đầu countdown phần còn lại
+            startCountdown(Math.floor(remain));
+        }
+    }
+    if (requestOtpBtn) {
+        requestOtpBtn.addEventListener('click', function() {
+            if (isCountingDown) return; // Đã countdown => bỏ qua
+
+            requestOtpBtn.disabled = true;
+
+            fetch('/send-wallet-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Đổi text + màu
+                        requestOtpBtn.innerText = "Đã gửi mã";
+                        requestOtpBtn.style.backgroundColor = "red";
+
+                        // Bắt đầu 2 phút
+                        startCountdown(120);
+
+                    } else {
+                        alert(data.message || "Không thể gửi mã. Vui lòng thử lại!");
+                        requestOtpBtn.disabled = false;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Lỗi khi gửi mã xác nhận!");
+                    requestOtpBtn.disabled = false;
+                });
+        });
+    }
+
+    // ---- COUNTDOWN 2 PHÚT ----
+    function startCountdown(seconds) {
+        isCountingDown = true;
+        let remaining = seconds;
+        countdownDisplay.textContent = "Vui lòng chờ " + remaining + "s...";
+
+        const intervalId = setInterval(() => {
+            remaining--;
+            countdownDisplay.textContent = "Vui lòng chờ " + remaining + "s...";
+
+            if (remaining <= 0) {
+                clearInterval(intervalId);
+
+                // Countdown xong => enable lại nút
+                requestOtpBtn.disabled = false;
+                requestOtpBtn.innerText = "Nhận mã";
+                requestOtpBtn.style.backgroundColor = "#616eff";
+                countdownDisplay.textContent = "";
+                isCountingDown = false;
+            }
+        }, 1000);
+    }
+    // Tính toán giá trị ban đầu khi load trang
     updateShippingAndTotal();
 });

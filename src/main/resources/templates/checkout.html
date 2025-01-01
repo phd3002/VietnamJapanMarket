@@ -149,9 +149,11 @@
             <form action="/checkout" method="post">
                 <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
                 </div>
-                <div id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}" class="alert alert-danger">
+                <div id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}"
+                     class="alert alert-danger">
                     <p th:text="${errorMessage}"></p>
-                    <p th:if="${errorMessage1!=null}">Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền vào
+                    <p th:if="${errorMessage1!=null}">Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền
+                        vào
                         ví hoặc chọn phương thức thanh toán khác. <a th:if="${errorMessage1 != null}" href="/wallet"><u>Nạp
                             ngay</u></a></p>
                 </div>
@@ -197,7 +199,7 @@
                                    required>
 
                             <input type="hidden" id="formatted-shipping-address" name="formattedShippingAddress">
-
+                            <input type="hidden" id="serverOtpStartTime" th:value="${otpStartTime}"/>
                         </div>
 
                     </div>
@@ -347,6 +349,31 @@
                                         <div class="payment-details" id="walletDetails">
                                             <span th:text="#{checkout.wallet.balance}">Số dư ví của bạn: </span>
                                             <strong th:text="${walletBalance} + ''" class="balance">0đ</strong>
+
+                                            <!-- Thêm form OTP: ẩn mặc định, chỉ hiển thị khi chọn WALLET -->
+                                            <div id="walletOtpSection" style="margin-top: 10px;">
+                                                <label for="walletOtpCode">Nhập mã xác nhận:</label>
+                                                <input
+                                                        type="text"
+                                                        id="walletOtpCode"
+                                                        name="walletOtpCode"
+                                                        placeholder="Nhập mã OTP"
+                                                        style="width: 140px; margin-right: 5px;"
+                                                />
+
+                                                <!-- Nút Nhận mã -->
+                                                <button
+                                                        type="button"
+                                                        id="requestOtpBtn"
+                                                        style="background-color: #616eff; color: white; border: none; padding: 5px 10px; border-radius: 5px;"
+                                                >
+                                                    Nhận mã
+                                                </button>
+
+                                                <!-- Khu vực hiển thị countdown -->
+                                                <span id="countdownDisplay" style="margin-left: 10px; color: red; font-weight: bold;"></span>
+                                            </div>
+
                                         </div>
                                         <div class="payment-details" id="vnpayDetails" style="display:none;">
                                             <p th:text="#{checkout.VNPay}">Bạn đang chọn thanh toán qua VNPay.</p>
