@@ -118,7 +118,7 @@
                                                     ₫150,000
                                                 </td>
                                                 <td th:text="${transaction.transactionParty}">Đã nhận từ người mua</td>
-                                                <td>150,000</td>
+                                                <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">150,000</td>
                                                 <td th:text="${transaction.description}">Description here</td>
                                             </tr>
                                             </tbody>

@@ -51,19 +51,19 @@ public class AccountController {
 
         // Validate input parameters
         if (firstName == null || firstName.isEmpty() || firstName.length() > 100) {
-            model.addAttribute("error", "First name cannot be empty and must not exceed 100 characters.");
+            redirectAttributes.addFlashAttribute("error", "Họ không được để trống và không được quá 100 ký tự.");
             return "redirect:my-account";
         }
         if (lastName == null || lastName.isEmpty() || lastName.length() > 100) {
-            model.addAttribute("error", "Last name cannot be empty and must not exceed 100 characters.");
+            redirectAttributes.addFlashAttribute("error", "Tên không được để trống và không được quá 100 ký tự.");
             return "redirect:my-account";
         }
         if (phoneNumber == null || phoneNumber.isEmpty() || phoneNumber.length() > 20 || !phoneNumber.matches("^[0-9]*$") || phoneNumber.length() < 10) {
-            model.addAttribute("error", "Phone number cannot be empty, must be between 10 and 20 characters, and must contain only digits.");
+            redirectAttributes.addFlashAttribute("error", "Số điện thoại không được để trống, không được vượt quá 20 ký tự, và phải chứa ít nhất 10 chữ số.");
             return "redirect:my-account";
         }
         if (address == null || address.isEmpty() || address.length() > 255 || address.contains("-")) {
-            model.addAttribute("error", "Address cannot be empty, must not exceed 255 characters, and must not contain hyphens.");
+            redirectAttributes.addFlashAttribute("error", "Địa chỉ không được để trống, không được vượt quá 255 ký tự, và không chứa ký tự đặc biệt.");
             return "redirect:my-account";
         }
 
@@ -78,10 +78,10 @@ public class AccountController {
             user.setCity(city);
             user.setDistrict(district);
             user.setWard(ward);
-            user.setAddress(detailAddress);
+            user.setAddress(address);
         }
         userService.saveUser(user);
-        model.addAttribute("message", "Cập nhật thông tin thành công!");
+        redirectAttributes.addFlashAttribute("message", "Cập nhật thông tin thành công!");
         return "redirect:my-account";
     }
 

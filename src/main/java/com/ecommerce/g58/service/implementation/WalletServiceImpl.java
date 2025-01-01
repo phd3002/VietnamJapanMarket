@@ -158,7 +158,7 @@ public class WalletServiceImpl implements WalletService {
         transaction.setToWalletId(wallet);
         transaction.setAmount(amountToAdd);
         transaction.setTransactionType("Cộng tiền");
-        transaction.setDescription(paymentType.equals("deposit") ? "Người mua đặt cọc 50% khi mua hàng cho order "+ orders.getOrderCode() : "Người mua thanh toán đầy đủ khi mua hàng cho order : "+ orders.getOrderCode());
+        transaction.setDescription(paymentType.equals("deposit") ? "Người mua đặt cọc 50% khi mua hàng cho đơn hàng "+ orders.getOrderCode() : "Người mua thanh toán đầy đủ khi mua hàng cho order : "+ orders.getOrderCode());
         transaction.setPaymentType(paymentType); // Set payment type
         transaction.setCreatedAt(LocalDateTime.now());
 
@@ -260,7 +260,7 @@ public class WalletServiceImpl implements WalletService {
             }
 
             // Safely retrieve paymentType (checking if it exists)
-            String paymentType = (result.length > 6 && result[6] != null) ? (String) result[6] : null;
+            String paymentType = (result.length > 7 && result[7] != null) ? (String) result[7] : null;
 
             // Set description based on transaction type and paymentType
 //            if ("deposit".equalsIgnoreCase(paymentType)) {
@@ -278,7 +278,12 @@ public class WalletServiceImpl implements WalletService {
 //                }
 //            }
 //            else {
-                dto.setDescription((String) result[3]); // Default description for other types
+            if (result[3] instanceof BigInteger) {
+                dto.setPreviousBalance(new BigDecimal((BigInteger) result[3]));
+            } else if (result[3] instanceof BigDecimal) {
+                dto.setPreviousBalance((BigDecimal) result[3]);
+            }
+                dto.setDescription((String) result[4]); // Default description for other types
 //            }
 
             // Set transactionParty based on transaction type
@@ -291,10 +296,10 @@ public class WalletServiceImpl implements WalletService {
             }
 
             // Set wallet balance
-            if (result[5] instanceof BigInteger) {
-                dto.setWalletBalance(new BigDecimal((BigInteger) result[5]));
-            } else if (result[5] instanceof BigDecimal) {
-                dto.setWalletBalance((BigDecimal) result[5]);
+            if (result[6] instanceof BigInteger) {
+                dto.setWalletBalance(new BigDecimal((BigInteger) result[6]));
+            } else if (result[6] instanceof BigDecimal) {
+                dto.setWalletBalance((BigDecimal) result[6]);
             }
 
             return dto;

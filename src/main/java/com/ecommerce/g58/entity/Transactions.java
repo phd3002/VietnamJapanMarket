@@ -30,6 +30,9 @@ public class Transactions {
     @Column(name = "amount", nullable = false)
     private long amount;
 
+    @Column(name = "previous_balance")
+    private long previousBalance;
+
     @Column(name = "transaction_type")
     private String transactionType;
 

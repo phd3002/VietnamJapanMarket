@@ -23,6 +23,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
             "        WHEN w1.user_id = :userId THEN -t.amount\n" +
             "        WHEN w2.user_id = :userId THEN +t.amount\n" +
             "    END as amountChange,\n" +
+            "    t.previous_balance,\n" +
             "    t.description,\n" +
             "    CASE \n" +
             "        WHEN w1.user_id = :userId THEN CONCAT('Đã gửi cho ', COALESCE(receiver.username, 'Unknown'))\n" +

@@ -122,7 +122,7 @@
                         <td th:text="${transaction.transactionType}">Chuyển tiền</td>
                         <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">500.000 đ
                         </td>
-                        <td>100.500.000 đ</td>
+                        <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">100.500.000 đ</td>
                         <td th:text="${transaction.description}">Chuyển tiền bán hàng tới shop ABC</td>
                         <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy HH:mm')}">17/12/2024
                         </td>
