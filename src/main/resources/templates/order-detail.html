@@ -191,7 +191,7 @@
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        th:value="#{order.rateOrder}">
                                                 <!-- Huy don hang(chi hien thi khi chua nhan hang) -->
-                                                <input type="submit" th:if="${shippingStatus == 'Pending'}"
+                                                <input type="submit" th:if="${shippingStatus == 'Pending' || shippingStatus == 'Confirmed' || shippingStatus == 'Processing'}"
                                                        id="cancel-order"
                                                        class="axil-btn btn-bg-secondary btn-sm"
                                                        style="background-color: red; border: none; margin-left: 10px;"

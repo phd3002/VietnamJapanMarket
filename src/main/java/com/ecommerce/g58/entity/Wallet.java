@@ -8,6 +8,8 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static com.ecommerce.g58.utils.FormatVND.formatCurrency;
+
 @Entity
 @Data
 @Builder
@@ -30,4 +32,8 @@ public class Wallet {
 
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated = LocalDateTime.now();
+
+    public String getBalanceFormated() {
+        return formatCurrency(BigDecimal.valueOf(balance));
+    }
 }

@@ -3,6 +3,7 @@ package com.ecommerce.g58.service.implementation;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.EmailService;
+import com.ecommerce.g58.utils.FormatVND;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.ecommerce.g58.entity.Transactions;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.math.BigDecimal;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -51,7 +53,8 @@ public class EmailServiceImpl implements EmailService {
                 String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
                         + "<p>Giao dịch của bạn vừa được thực hiện: "
                         + "<br><b>" + transaction.getTransactionType() + "</b> "
-                        + " số tiền: " + Math.abs(amount) + " VND"
+                        + " số tiền: " + FormatVND.formatCurrency(BigDecimal.valueOf(Math.abs(amount)))
+                        + "<br>Số dư: " + user.getWallets().get(0).getBalanceFormated()
                         + "<br>Loại thanh toán: " + transaction.getTransactionType()
                         + "<br>Thời gian: " + transaction.getCreatedAt()
                         + "<br>Nội dung: " + transaction.getDescription()

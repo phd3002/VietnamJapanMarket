@@ -304,8 +304,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 // admin transaction
                 Transactions sellerTransactions = new Transactions();
                 sellerTransactions.setAmount(invoice.getDeposit().negate().longValue());
+                sellerTransactions.setPreviousBalance(newSellerBalance.longValue());
                 sellerTransactions.setFromWalletId(adminWallet.get());
-                sellerTransactions.setTransactionType("Hoàn tiền");
+                sellerTransactions.setTransactionType("Thanh toán hoàn tiền");
                 sellerTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " do khách hủy đơn " + order.getOrderCode());
                 sellerTransactions.setCreatedAt(LocalDateTime.now());
 
@@ -313,9 +314,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
                 Transactions userTransactions = new Transactions();
                 userTransactions.setAmount(invoice.getDeposit().longValue());
+                userTransactions.setPreviousBalance(totalAmount.longValue());
                 userTransactions.setToWalletId(userWallet.get());
-                userTransactions.setTransactionType("Thanh toán hoàn tiền");
-                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + "tiền từ đơn hàng  do bạn đã hủy đơn " + order.getOrderCode());
+                userTransactions.setTransactionType("Hoàn tiền");
+                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " tiền từ đơn hàng do bạn đã hủy đơn " + order.getOrderCode());
                 userTransactions.setCreatedAt(LocalDateTime.now());
 
 
@@ -470,8 +472,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         userNotification.setUserId(order.getUserId());
 
         notificationService.updateNotification(userNotification);
-        // Logistic đền cho seller tiền hàng (không bao gồm ship) - coi như seller mất tiền ship 1 lần
-        BigDecimal returnPrice = BigDecimal.valueOf((invoice.getDeposit().longValue()));
+        // Logistic đền cho seller tiền hàng + thuế - seller không được nhận tiền ship
+        BigDecimal returnPrice = BigDecimal.valueOf((invoice.getTotalAmount().add(invoice.getTax()).longValue()));
         updateWalletBalance(
                 logisticWallet,
                 returnPrice.negate(),
@@ -508,6 +510,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         transaction.setFromWalletId(amount.signum() < 0 ? wallet : null);
         transaction.setToWalletId(amount.signum() > 0 ? wallet : null);
         transaction.setAmount(amount.abs().longValue());
+        transaction.setPreviousBalance(updatedBalance.longValue());
         transaction.setTransactionType(transactionType);
         transaction.setDescription(description);
         transaction.setIsRefund("YES");

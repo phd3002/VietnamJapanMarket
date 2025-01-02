@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @Getter
@@ -68,6 +69,9 @@ public class Users implements UserDetails {
 
     @Transient // This ensures the field is not persisted to the database
     private String confirmPassword;
+
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    private List<Wallet> wallets;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -13,6 +13,8 @@ public interface WalletService {
 
     Page<WalletDTO> getTransactionsForUserId(Integer userId, LocalDateTime startDate, LocalDateTime endDate, int page, int size);
 
+    List<WalletDTO> getTransactionsForDataTable(Integer userId, LocalDateTime startDate, LocalDateTime endDate);
+
     // lay ra so du cua user
     long getUserWalletBalance(Integer userId);
 
@@ -25,5 +27,6 @@ public interface WalletService {
     void createWalletForUser(Users userId, long initialBalance);
 
     void recharge(Integer amount);
+
     void addToWalletForAdmin(double amount, String paymentType, Orders orders);
 }

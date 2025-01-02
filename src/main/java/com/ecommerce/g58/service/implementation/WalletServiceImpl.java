@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.ecommerce.g58.utils.FormatVND;
 import org.slf4j.Logger;
@@ -92,6 +93,7 @@ public class WalletServiceImpl implements WalletService {
         Transactions transaction = new Transactions();
         transaction.setFromWalletId(wallet);
         transaction.setAmount(-amountToDeduct);
+        transaction.setPreviousBalance(newBalance);
         transaction.setTransactionType("Trừ tiền");
         transaction.setDescription(paymentType.equals("deposit") ? "Đặt cọc 50% khi mua hàng" : "Thanh toán đầy đủ khi mua hàng");
         transaction.setPaymentType(paymentType); // Set payment type
@@ -161,8 +163,9 @@ public class WalletServiceImpl implements WalletService {
         Transactions transaction = new Transactions();
         transaction.setToWalletId(wallet);
         transaction.setAmount(amountToAdd);
+        transaction.setPreviousBalance(newBalance);
         transaction.setTransactionType("Cộng tiền");
-        transaction.setDescription(paymentType.equals("deposit") ? "Người mua đặt cọc 50% khi mua hàng cho đơn hàng "+ orders.getOrderCode() : "Người mua thanh toán đầy đủ khi mua hàng cho order : "+ orders.getOrderCode());
+        transaction.setDescription(paymentType.equals("deposit") ? "Người mua đặt cọc 50% khi mua hàng cho đơn hàng "+ orders.getOrderCode() : "Người mua thanh toán đầy đủ khi mua hàng cho đơn hàng : "+ orders.getOrderCode());
         transaction.setPaymentType(paymentType); // Set payment type
         transaction.setCreatedAt(LocalDateTime.now());
 
@@ -262,33 +265,13 @@ public class WalletServiceImpl implements WalletService {
             } else if (result[2] instanceof BigDecimal) {
                 dto.setAmount((BigDecimal) result[2]);
             }
-
-            // Safely retrieve paymentType (checking if it exists)
-            String paymentType = (result.length > 7 && result[7] != null) ? (String) result[7] : null;
-
-            // Set description based on transaction type and paymentType
-//            if ("deposit".equalsIgnoreCase(paymentType)) {
-//                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
-//                    dto.setDescription("Người mua đặt cọc 50% khi mua hàng");
-//                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
-//                    dto.setDescription("Đặt cọc 50% khi mua hàng");
-//                }
-//            } else if ("full".equalsIgnoreCase(paymentType)) {
-//                // For full payment transactions
-//                if ("ADD".equalsIgnoreCase(transactionType.trim()) || "Cộng tiền".equals(transactionType.trim())) {
-//                    dto.setDescription("Người mua thanh toán đầy đủ khi mua hàng");
-//                } else if ("DEDUCT".equalsIgnoreCase(transactionType.trim()) || "Trừ tiền".equals(transactionType.trim())) {
-//                    dto.setDescription("Thanh toán đầy đủ khi mua hàng");
-//                }
-//            }
-//            else {
             if (result[3] instanceof BigInteger) {
                 dto.setPreviousBalance(new BigDecimal((BigInteger) result[3]));
             } else if (result[3] instanceof BigDecimal) {
                 dto.setPreviousBalance((BigDecimal) result[3]);
             }
                 dto.setDescription((String) result[4]); // Default description for other types
-//            }
+
 
             // Set transactionParty based on transaction type
             if ("Trừ tiền".equals(transactionType)) {
@@ -296,7 +279,7 @@ public class WalletServiceImpl implements WalletService {
             } else if ("Cộng tiền".equals(transactionType)) {
                 dto.setTransactionParty("Đã nhận từ người mua");
             } else {
-                dto.setTransactionParty("Unknown"); // Fallback, if needed
+                dto.setTransactionParty(" "); // Fallback, if needed
             }
 
             // Set wallet balance
@@ -310,5 +293,62 @@ public class WalletServiceImpl implements WalletService {
         });
 
         return walletPage;
+    }
+
+    @Override
+    public List<WalletDTO> getTransactionsForDataTable(Integer userId, LocalDateTime startDate, LocalDateTime endDate) {
+
+        // Fetch transactions with filtering for date range
+        List<Object[]> results = walletRepository.findTransactionsForDataTable(userId, startDate, endDate);
+
+        // Map the results to WalletDTO
+        List<WalletDTO> walletList = results.stream().map(result -> {
+            WalletDTO dto = new WalletDTO();
+
+            // Set transaction date
+            Timestamp transactionDateTimestamp = (Timestamp) result[0];
+            dto.setTransactionDate(transactionDateTimestamp.toLocalDateTime());
+
+            // Set transaction type
+            String transactionType = (String) result[1];
+            dto.setTransactionType(transactionType);
+
+            // Set amount
+            if (result[2] instanceof BigInteger) {
+                dto.setAmount(new BigDecimal((BigInteger) result[2]));
+            } else if (result[2] instanceof BigDecimal) {
+                dto.setAmount((BigDecimal) result[2]);
+            }
+
+            // Set previous balance
+            if (result[3] instanceof BigInteger) {
+                dto.setPreviousBalance(new BigDecimal((BigInteger) result[3]));
+            } else if (result[3] instanceof BigDecimal) {
+                dto.setPreviousBalance((BigDecimal) result[3]);
+            }
+
+            // Set description
+            dto.setDescription((String) result[4]);
+
+            // Set transactionParty based on transaction type
+            if ("Trừ tiền".equals(transactionType)) {
+                dto.setTransactionParty("Đã gửi cho shop");
+            } else if ("Cộng tiền".equals(transactionType)) {
+                dto.setTransactionParty("Đã nhận từ người mua");
+            } else {
+                dto.setTransactionParty(""); // Fallback, if needed
+            }
+
+            // Set wallet balance
+            if (result[6] instanceof BigInteger) {
+                dto.setWalletBalance(new BigDecimal((BigInteger) result[6]));
+            } else if (result[6] instanceof BigDecimal) {
+                dto.setWalletBalance((BigDecimal) result[6]);
+            }
+
+            return dto;
+        }).collect(Collectors.toList()); // Use Collectors.toList() for Java 8 compatibility
+
+        return walletList;
     }
 }

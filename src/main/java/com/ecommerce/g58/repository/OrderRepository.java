@@ -158,9 +158,12 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "WHERE \n" +
             "    s.store_id = :storeId \n" +
             "GROUP BY \n" +
-            "    o.order_id, u.first_name, u.last_name, o.total_price, o.order_date \n", // Added o.order_date to GROUP BY
+            "    o.order_id, u.first_name, u.last_name, o.total_price, o.order_date \n" + // Ensure GROUP BY matches SELECT
+            "ORDER BY \n" +
+            "    o.order_id DESC",
             nativeQuery = true)
     List<Object[]> findOrdersByStoreId(@Param("storeId") Integer storeId);
+
 
     @Query(value = "SELECT \n" +
             "    o.order_id AS orderId, \n" +
@@ -199,7 +202,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "LEFT JOIN \n" +
             "    shipping_status ss ON ss.order_id = o.order_id \n" +
             "GROUP BY \n" +
-            "    o.order_id, u.first_name, u.last_name, o.total_price",
+            "    o.order_id, u.first_name, u.last_name, o.total_price \n"+
+            "ORDER BY \n" +
+                    "    o.order_id DESC",
             nativeQuery = true)
     List<Object[]> findOrders();
 
@@ -245,7 +250,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "     ORDER BY ss.updated_at DESC \n" +
             "     LIMIT 1) = :status \n" +
             "GROUP BY \n" +
-            "    o.order_id, u.first_name, u.last_name, o.total_price",
+            "    o.order_id, u.first_name, u.last_name, o.total_price \n" +
+            "ORDER BY \n" +
+            "    o.order_id DESC",
             nativeQuery = true)
     List<Object[]> findOrdersByStatus(@Param("status") String status);
 
@@ -288,7 +295,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "    AND (:startDate IS NULL OR o.order_date >= :startDate) \n" +
             "    AND (:endDate IS NULL OR o.order_date <= :endDate) \n" +
             "GROUP BY \n" +
-            "    o.order_id, u.first_name, u.last_name, o.total_price",
+            "    o.order_id, u.first_name, u.last_name, o.total_price \n" +
+            "ORDER BY \n" +
+            "    o.order_id DESC",
             nativeQuery = true)
     List<Object[]> findOrdersByFilters(@Param("status") String status,
                                        @Param("startDate") LocalDate startDate,
@@ -326,7 +335,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "AND (:startDate IS NULL OR o.order_date >= :startDate) \n" +
             "AND (:endDate IS NULL OR o.order_date <= :endDate) \n" +
             "GROUP BY \n" +
-            "    o.order_id, u.first_name, u.last_name, o.order_date, latest_status.status, o.total_price, i.shipping_fee",
+            "    o.order_id, u.first_name, u.last_name, o.order_date, latest_status.status, o.total_price, i.shipping_fee \n" +
+            "ORDER BY \n" +
+            "    o.order_id DESC",
             countQuery = "SELECT COUNT(DISTINCT o.order_id) " +
                     "FROM orders o " +
                     "JOIN order_details od ON o.order_id = od.order_id " +

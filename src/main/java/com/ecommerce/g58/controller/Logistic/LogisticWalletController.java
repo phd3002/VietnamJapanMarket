@@ -42,7 +42,7 @@ public class LogisticWalletController {
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "10") int size) {
 
         // Check if user is authenticated
         if (userDetails == null || userDetails.getUsername() == null) {

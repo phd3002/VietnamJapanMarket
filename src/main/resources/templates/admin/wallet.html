@@ -44,9 +44,9 @@
                 class="app-menu__label" th:text="#{sidebar.menu.dashboard}">Bảng điều khiển</span></a></li>
         <li><a class="app-menu__item" href="/admin/user-manager"><i class='app-menu__icon bx bx-id-card'></i>
             <span class="app-menu__label" th:text="#{sideber.menu.user.management}">Quản lý người dùng</span></a></li>
-<!--        <li><a class="app-menu__item active" href="/list-shipping-unit"><i-->
-<!--                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>-->
-<!--        </li>-->
+        <!--        <li><a class="app-menu__item active" href="/list-shipping-unit"><i-->
+        <!--                class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý vận chuyển</span></a>-->
+        <!--        </li>-->
         <li><a class="app-menu__item active" href="/admin/wallet"><i
                 class='app-menu__icon bx bx-money'></i><span
                 class="app-menu__label" th:text="#{sidebar.menu.wallet}">Ví</span></a></li>
@@ -65,7 +65,7 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-12"><h4>Số tiền trong ví:</h4>
-                            <label class="control-label"><h3 th:text="${balance}" >100.000.000đ</h3></label>
+                            <label class="control-label"><h3 th:text="${balance}">100.000.000đ</h3></label>
                         </div>
                     </div>
                     <div class="row element-button">
@@ -114,34 +114,77 @@
                     <tbody>
                     <tr th:each="transaction : ${wallets}">
                         <td th:text="${transaction.transactionType}">Chuyển tiền</td>
-                        <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">500.000 đ</td>
-                        <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">100.500.000 đ</td>
+                        <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">500.000 đ
+                        </td>
+                        <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">
+                            100.500.000 đ
+                        </td>
                         <td th:text="${transaction.description}">Chuyển tiền bán hàng tới shop ABC</td>
-                        <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy HH:mm')}">17/12/2024</td>
+                        <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy HH:mm')}">17/12/2024
+                        </td>
                     </tr>
-<!--                    <tr>-->
-<!--                        <td>Nhận tiền</td>-->
-<!--                        <td>500.000 đ</td>-->
-<!--                        <td>100.500.000 đ</td>-->
-<!--                        <td>Nhận phí duy trì từ shop ABC</td>-->
-<!--                        <td>17/12/2024</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>Chuyển tiền</td>-->
-<!--                        <td>500.000 đ</td>-->
-<!--                        <td>100.500.000 đ</td>-->
-<!--                        <td>Tiền vận chuyển đơn hàng ANVAHHKAJKAH</td>-->
-<!--                        <td>17/12/2024</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>Nhận tiền</td>-->
-<!--                        <td>500.000 đ</td>-->
-<!--                        <td>100.500.000 đ</td>-->
-<!--                        <td>Tiền mua hàng từ người dùng ALO123 cho đơn hàng ANVAHHKAJKAH</td>-->
-<!--                        <td>17/12/2024</td>-->
-<!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td>Nhận tiền</td>-->
+                    <!--                        <td>500.000 đ</td>-->
+                    <!--                        <td>100.500.000 đ</td>-->
+                    <!--                        <td>Nhận phí duy trì từ shop ABC</td>-->
+                    <!--                        <td>17/12/2024</td>-->
+                    <!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td>Chuyển tiền</td>-->
+                    <!--                        <td>500.000 đ</td>-->
+                    <!--                        <td>100.500.000 đ</td>-->
+                    <!--                        <td>Tiền vận chuyển đơn hàng ANVAHHKAJKAH</td>-->
+                    <!--                        <td>17/12/2024</td>-->
+                    <!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td>Nhận tiền</td>-->
+                    <!--                        <td>500.000 đ</td>-->
+                    <!--                        <td>100.500.000 đ</td>-->
+                    <!--                        <td>Tiền mua hàng từ người dùng ALO123 cho đơn hàng ANVAHHKAJKAH</td>-->
+                    <!--                        <td>17/12/2024</td>-->
+                    <!--                    </tr>-->
                     </tbody>
                 </table>
+                <div class="pagination-section" th:if="${totalPages > 0}">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <!-- Previous Page -->
+                            <li class="page-item"
+                                th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/wallet(page=${currentPage - 1}, size=${size}, startDate=${startDate}, endDate=${endDate})}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+
+                            <!-- Page Numbers -->
+                            <li class="page-item"
+                                th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:classappend="${pageNum == currentPage} ? 'active'">
+                                <a class="page-link"
+                                   th:href="@{/admin/wallet(page=${pageNum}, size=${size}, startDate=${startDate}, endDate=${endDate})}"
+                                   th:text="${pageNum + 1}">1</a>
+                            </li>
+
+                            <!-- Next Page -->
+                            <li class="page-item"
+                                th:classappend="${currentPage >= totalPages - 1} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/wallet(page=${currentPage + 1}, size=${size}, startDate=${startDate}, endDate=${endDate})}"
+                                   aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- Pagination Info -->
+                    <div class="text-center mt-2">
+                        <span th:text="#{pagination.page}+' ' + (${currentPage + 1}) + ' ' +#{pagination.of}+ ' ' +(${totalPages})">Trang 1 trên 10</span><br/>
+                        <span th:text="#{pagination.totalTransactions}+': ' + (${totalItems})">Tổng sản phẩm: 120</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

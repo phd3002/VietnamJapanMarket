@@ -103,7 +103,7 @@
                                                 <th scope="col" th:text="#{transaction.date}">Ngày</th>
                                                 <th scope="col" th:text="#{transaction.type}">Loại giao dịch</th>
                                                 <th scope="col" th:text="#{transaction.amount}">Số tiền</th>
-                                                <th scope="col" th:text="#{transaction.source}">Nguồn</th>
+<!--                                                <th scope="col" th:text="#{transaction.source}">Nguồn</th>-->
                                                 <th scope="col" th:text="#{transaction.balance}">Số dư</th>
                                                 <th scope="col" th:text="#{transaction.content}">Nội dung</th>
                                             </tr>
@@ -117,7 +117,7 @@
                                                 <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">
                                                     ₫150,000
                                                 </td>
-                                                <td th:text="${transaction.transactionParty}">Đã nhận từ người mua</td>
+<!--                                                <td th:text="${transaction.transactionParty}">Đã nhận từ người mua</td>-->
                                                 <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">150,000</td>
                                                 <td th:text="${transaction.description}">Description here</td>
                                             </tr>
