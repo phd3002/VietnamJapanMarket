@@ -182,31 +182,31 @@ function updateSearchResults(results) {
 //
 // });
 
-document.getElementById('confirmYesBtn').addEventListener('click', function () {
-    // Hide the confirmation popup
-    document.getElementById('confirmationPopup').style.display = 'none';
+// document.getElementById('confirmYesBtn').addEventListener('click', function () {
+//     // Hide the confirmation popup
+//     document.getElementById('confirmationPopup').style.display = 'none';
+//
+//     // Show the success popup
+//     document.getElementById('successPopup').style.display = 'block';
+// });
 
-    // Show the success popup
-    document.getElementById('successPopup').style.display = 'block';
-});
-
-document.getElementById('confirmCancelBtn').addEventListener('click', function () {
-    // Hide the confirmation popup
-    document.getElementById('confirmationPopup').style.display = 'none';
-});
-
-document.getElementById('successOkBtn').addEventListener('click', function () {
-    // Hide the success popup
-    document.getElementById('successPopup').style.display = 'none';
-
-    // Reload the page after successful confirmation
-    document.getElementById('uform').submit()
-});
-
-// Close popup if clicking outside the popup
-window.addEventListener('click', function (event) {
-    var confirmationPopup = document.getElementById('confirmationPopup');
-    if (event.target === confirmationPopup) {
-        confirmationPopup.style.display = 'none';
-    }
-});
+// document.getElementById('confirmCancelBtn').addEventListener('click', function () {
+//     // Hide the confirmation popup
+//     document.getElementById('confirmationPopup').style.display = 'none';
+// });
+//
+// document.getElementById('successOkBtn').addEventListener('click', function () {
+//     // Hide the success popup
+//     document.getElementById('successPopup').style.display = 'none';
+//
+//     // Reload the page after successful confirmation
+//     document.getElementById('uform').submit()
+// });
+//
+// // Close popup if clicking outside the popup
+// window.addEventListener('click', function (event) {
+//     var confirmationPopup = document.getElementById('confirmationPopup');
+//     if (event.target === confirmationPopup) {
+//         confirmationPopup.style.display = 'none';
+//     }
+// });
