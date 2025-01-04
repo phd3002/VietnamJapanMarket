@@ -195,7 +195,7 @@ public class CheckoutController {
         model.addAttribute("user", user);
         model.addAttribute("tax", taxAmount);
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("totalPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalPrice)));
         model.addAttribute("totalWithShipping", totalWithShipping);
         model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("cartItemIds", cartItemIds);
@@ -345,7 +345,7 @@ public class CheckoutController {
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
-                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("totalPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalPrice)));
                 model.addAttribute("shippingFee", shippingFee);
                 model.addAttribute("shippingUnits", shippingUnits);
                 model.addAttribute("tax", taxAmount);
@@ -364,7 +364,7 @@ public class CheckoutController {
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
-                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("totalPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalPrice)));
                 model.addAttribute("shippingFee", shippingFee);
                 model.addAttribute("shippingUnits", shippingUnits);
                 model.addAttribute("tax", taxAmount);
@@ -383,7 +383,7 @@ public class CheckoutController {
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
-                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("totalPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalPrice)));
                 model.addAttribute("shippingFee", shippingFee);
                 model.addAttribute("shippingUnits", shippingUnits);
                 model.addAttribute("tax", taxAmount);
@@ -398,7 +398,7 @@ public class CheckoutController {
                 model.addAttribute("totalWithShipping", totalWithShipping);
                 model.addAttribute("walletBalance", FormatVND.formatCurrency(BigDecimal.valueOf(walletBalance)));
                 model.addAttribute("cartItems", cartItems);
-                model.addAttribute("totalPrice", totalPrice);
+                model.addAttribute("totalPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalPrice)));
                 model.addAttribute("shippingFee", shippingFee);
                 model.addAttribute("shippingUnits", shippingUnits);
                 model.addAttribute("tax", taxAmount);
