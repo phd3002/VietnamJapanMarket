@@ -215,7 +215,7 @@
                                                 th:text="#{status.shipping}">Đang vận chuyển
                                         </option>
                                         <option value="Delivered" th:selected="${order.latestStatus == 'Delivered'}"
-                                                th:disabled="${order.latestStatus != 'Shipping' }" th:text="#{status.delivered}">
+                                                th:disabled="${order.latestStatus != 'Shipping'}" th:text="#{status.delivered}">
                                             Đã giao
                                         </option>
                                         <option value="Completed" th:selected="${order.latestStatus == 'Completed'}"
@@ -233,6 +233,10 @@
                                         <option th:if="${order.previous_status != null}" value="Canceled"
                                                 th:selected="${order.previous_status == 'Returned'}"
                                                 disabled th:text="#{order.seller.isReturn}">Đã hoàn trả
+                                        </option>
+                                        <option  value="Rejected"
+                                                th:selected="${order.latestStatus == 'Rejected'}"
+                                                disabled>Từ chối nhận đơn
                                         </option>
                                     </select>
                                 </form>

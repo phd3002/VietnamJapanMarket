@@ -238,11 +238,11 @@
                                         Đang xử đóng gói
                                     </option>
                                     <option value="Dispatched" th:selected="${order.latestStatus == 'Dispatched'}"
-                                            th:disabled="${order.latestStatus != 'Pending' && order.latestStatus != 'Confirmed' && order.latestStatus != 'Processing'} "
+                                            th:disabled="${order.latestStatus != 'Pending' && order.latestStatus != 'Confirmed' && order.latestStatus != 'Processing' } "
                                             th:text="#{status.dispatched}">
                                         Đã giao cho vận chuyển
                                     </option>
-                                    <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'}"
+                                    <option value="Shipping" th:selected="${order.latestStatus == 'Shipping'} "
                                             disabled th:text="#{status.shipping}">Đang vận chuyển
                                     </option>
                                     <option value="Delivered" th:selected="${order.latestStatus == 'Delivered'}"
@@ -264,6 +264,10 @@
                                     <option th:if="${order.previous_status != null}" value="Canceled"
                                             th:selected="${order.previous_status == 'Returned'}"
                                             disabled th:text="#{order.seller.isReturn}">Đã hoàn trả
+                                    </option>
+                                    <option  value="Rejected"
+                                            th:selected="${order.latestStatus == 'Rejected'}"
+                                            disabled>Từ chối nhận đơn
                                     </option>
                                 </select>
                             </form>
@@ -293,6 +297,20 @@
                                         th:data-order-reason="${order.reason != null ? order.reason : ''}"
                                         onclick="openAcceptModal(this)">
                                     <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                            <form th:if="${order.latestStatus == 'Pending'}"
+                                  th:attr="data-order-id=${order.orderId}" th:action="@{/seller/reject}"
+                                  method="post">
+                                <input type="hidden" name="storeId" th:value="${storeId}">
+                                <input type="hidden" name="orderId" th:value="${order.orderId}">
+                                <button
+                                        class="btn btn-danger btn-sm btn-save"
+                                        type="button"
+                                        th:title="#{order.seller.acceptOrder}"
+                                        th:data-order-id="${order.orderId}"
+                                        onclick="openRejectModal(this)">
+                                    <i class="fa fa-close" aria-hidden="true"></i>
                                 </button>
                             </form>
                         </td>
@@ -357,7 +375,22 @@
             </div>
         </div>
     </div>
-
+    <div id="rejectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRejectModal()">&times;</span>
+            <h2 class="modal-title">Xác nhận từ chối nhận đơn hàng</h2>
+            <p>Bạn có chắc chắn muốn từ chối đơn hàng
+                này?</p>
+            <div class="modal-buttons">
+                <button id="confirmRejectOrderBtn" class="btn btn-success" th:text="#{order.seller.modal.agree}">Đồng
+                    ý
+                </button>
+                <button class="btn btn-danger" onclick="closeRejectModal()" th:text="#{order.seller.modal.cancel}">Hủy
+                    bỏ
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Open the modal
@@ -426,10 +459,27 @@
             document.getElementById("acceptModal").style.display = "block";
         }
 
+        function openRejectModal(button) {
+            var orderId = button.getAttribute('data-order-id');
+
+
+            // Store the order ID for the confirm action
+            document.getElementById("confirmRejectOrderBtn").setAttribute("data-order-id", orderId);
+
+            // Show the modal
+            document.getElementById("rejectModal").style.display = "block";
+        }
+
 
         function closeAcceptModal() {
             // Hide the modal
             document.getElementById("acceptModal").style.display = "none";
+
+        }
+
+        function closeRejectModal() {
+            // Hide the modal
+            document.getElementById("rejectModal").style.display = "none";
 
         }
 
@@ -440,6 +490,13 @@
             // Submit the form or send an API request
             document.querySelector(`form[data-order-id="${orderId}"]`).submit();
         });
+        // Handle confirm reject button click
+        document.getElementById("confirmRejectOrderBtn").addEventListener("click", function () {
+            const orderId = this.getAttribute("data-order-id");
+            // Submit the form that matches this order ID
+            document.querySelector(`form[data-order-id="${orderId}"]`).submit();
+        });
+
 
     </script>
 </main>

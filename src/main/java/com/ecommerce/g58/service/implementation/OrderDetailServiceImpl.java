@@ -331,6 +331,62 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         }
 
     }
+    @Override
+    public boolean rejectOrder(Integer orderId, String status, String reason) {
+        boolean isChanged = changeStatus(orderId, status, reason);
+        if (isChanged) {
+            Orders order = orderRepository.findOrdersByOrderId(orderId);
+            Invoice invoice = invoiceRepository.findInvoiceByOrderId(order);
+            if (invoice == null) {
+                logger.error("Invoice not found");
+                return false;
+            }
+            Users adminUser = userRepository.findFirstByRoleId_RoleId(1);
+            Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
+            Optional<Wallet> userWallet = walletRepository.findByUserId(order.getUserId());
+            if (adminWallet.isPresent() && userWallet.isPresent()) {
+                BigDecimal currentSellerBalance = new BigDecimal(adminWallet.get().getBalance());
+                BigDecimal newSellerBalance = currentSellerBalance.subtract(invoice.getDeposit());
+                adminWallet.get().setBalance(newSellerBalance.longValue());
+
+                walletRepository.save(adminWallet.get());
+
+                BigDecimal walletBalance = new BigDecimal(userWallet.get().getBalance());
+                BigDecimal totalAmount = walletBalance.add(invoice.getDeposit());
+                userWallet.get().setBalance(totalAmount.longValue());
+
+                walletRepository.save(userWallet.get());
+
+                // admin transaction
+                Transactions sellerTransactions = new Transactions();
+                sellerTransactions.setAmount(invoice.getDeposit().negate().longValue());
+                sellerTransactions.setPreviousBalance(newSellerBalance.longValue());
+                sellerTransactions.setFromWalletId(adminWallet.get());
+                sellerTransactions.setTransactionType("Thanh toán hoàn tiền");
+                sellerTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " do người bán từ chối nhận đơn " + order.getOrderCode());
+                sellerTransactions.setCreatedAt(LocalDateTime.now());
+
+                transactionRepository.save(sellerTransactions);
+
+                Transactions userTransactions = new Transactions();
+                userTransactions.setAmount(invoice.getDeposit().longValue());
+                userTransactions.setPreviousBalance(totalAmount.longValue());
+                userTransactions.setToWalletId(userWallet.get());
+                userTransactions.setTransactionType("Hoàn tiền");
+                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " tiền từ đơn hàng do người bán từchooisi nhận đơn  " + order.getOrderCode());
+                userTransactions.setCreatedAt(LocalDateTime.now());
+
+
+                transactionRepository.save(userTransactions);
+                emailService.sendTransactionMailAsync(userWallet.get().getUserId(), userTransactions, invoice.getDeposit().longValue());
+                cartService.restoreItemQuantitiesToStock(order.getUserId().getUserId(), orderId);
+            }
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
     @Override
     public boolean refundOrder(Integer orderId) {

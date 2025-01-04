@@ -21,8 +21,20 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
 
     Products findTopByOrderByProductIdDesc();
 
-    @Query(value = "SELECT * FROM products ORDER BY RAND() LIMIT 12", nativeQuery = true)
-    List<Products> find12RandomProducts();
+    @Query(value =
+            "SELECT p.* " +
+                    "FROM products p " +
+                    "LEFT JOIN stores s ON p.store_id = s.store_id " +
+                    "JOIN users u ON s.user_id = u.user_id " +
+                    "LEFT JOIN order_details od ON p.product_id = od.product_id " +
+                    "WHERE u.status = 'active' " +
+                    "GROUP BY p.product_id " +
+                    "ORDER BY SUM(od.quantity) DESC " +
+                    "LIMIT 12",
+            nativeQuery = true)
+    List<Products> findTop12OrderedProductsFromActiveUsers();
+
+
 
     @Query(value = "SELECT * FROM products ORDER BY RAND()", nativeQuery = true)
     Page<Products> findAllByOrderByRandom(Pageable pageable);
@@ -122,5 +134,18 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
     Page<Products> findByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 
     Page<Products> findByStoreIdStoreId(Integer storeId, Pageable pageable);
+
+    @Query(value =
+            "SELECT p.* " +
+                    "FROM products p " +
+                    "LEFT JOIN feedback f ON p.product_id = f.product_id " +
+                    "JOIN stores s ON p.store_id = s.store_id " +
+                    "JOIN users u ON s.user_id = u.user_id " +
+                    "WHERE u.status = 'active' " +
+                    "GROUP BY p.product_id " +
+                    "ORDER BY AVG(f.rating) DESC " +
+                    "LIMIT 12",
+            nativeQuery = true)
+    List<Products> findTop12ProductsByHighestRatingFromActiveStores();
 
 }

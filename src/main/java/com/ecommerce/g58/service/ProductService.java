@@ -65,5 +65,6 @@ public interface ProductService {
 
     ProductImage getMaxImageId();
 
-    List<Products> get12RandomProducts();
+    List<Products> get12HighestOrderProducts();
+    List<Products> getTop12ProductsByHighestRatingFromActiveStores();
 }

@@ -11514,7 +11514,8 @@ body.open .closeMask {
 
 .pro-qty {
     width: 130px;
-    border-radius: 50px
+    max-width: fit-content;
+    border-radius: 50px,
 }
 
 .pro-qty input {

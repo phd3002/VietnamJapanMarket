@@ -129,6 +129,7 @@
                                                     <span th:case="'Failed'" th:text="#{status.failed}">Thất bại</span>
                                                     <span th:case="'Returned'" th:text="#{status.returned}">Hoàn trả</span>
                                                     <span th:case="'Cancelled'" th:text="#{status.cancelled}">Đã hủy</span>
+                                                    <span th:case="'Rejected'" th:text="#{status.cancelled}">Từ chối nhận đơn</span>
                                                     <span th:case="*">[[${order.status}]]</span>
                                                 </td>
                                                 <td th:text="${order.totalQuantity} ">3</td>

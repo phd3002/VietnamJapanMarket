@@ -37,9 +37,11 @@ public class HomeController {
         }
 
         // Use getAllProducts() method from ProductService
-        List<Products> products = productService.get12RandomProducts();
+        List<Products> products = productService.get12HighestOrderProducts();
+        List<Products> highestStarProduct = productService.getTop12ProductsByHighestRatingFromActiveStores();
         List<Categories> categories = categoriesService.getAllCategories();
         model.addAttribute("products", products);
+        model.addAttribute("highestStarProduct", highestStarProduct);
         model.addAttribute("categories", categories);
 
         return "homepage";

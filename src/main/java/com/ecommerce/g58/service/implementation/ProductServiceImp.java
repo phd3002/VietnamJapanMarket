@@ -81,6 +81,7 @@ public class ProductServiceImp implements ProductService {
     public Page<Products> getProductsByCategory(Long categoryId, Pageable pageable) {
         return productRepository.findByCategoryId(categoryId, pageable);
     }
+
     public Page<Products> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
@@ -276,8 +277,13 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<Products> get12RandomProducts() {
-        return productRepository.find12RandomProducts();
+    public List<Products> get12HighestOrderProducts() {
+        return productRepository.findTop12OrderedProductsFromActiveUsers();
+    }
+
+    @Override
+    public List<Products> getTop12ProductsByHighestRatingFromActiveStores() {
+        return productRepository.findTop12ProductsByHighestRatingFromActiveStores();
     }
 
 }

@@ -31,7 +31,9 @@
                 </div>
                 <!-- Display empty cart message -->
                 <div th:if="${isCartEmpty}" class="alert alert-warning" role="alert">
-                    <span th:text="#{cart.empty}">Giỏ hàng của bạn đang trống. </span><a href="/product-list" th:text="#{cart.shop.now}">Mua ngay</a>.
+                    <span th:text="#{cart.empty}">Giỏ hàng của bạn đang trống. </span><a href="/product-list"
+                                                                                         th:text="#{cart.shop.now}">Mua
+                    ngay</a>.
                 </div>
 
                 <!-- Cart Items Table -->
@@ -68,35 +70,61 @@
                                         <img th:src="@{${item.variationId.imageId.thumbnail}}" alt="Product Image">
                                     </a>
                                 </td>
+
                                 <td class="product-title">
                                     <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}"
-                                       th:text="${item.productId.productName}+' ('+${item.variationId.getSize().sizeName }+ ' - '+${item.variationId.getColor().colorName } +') '">Product Name</a>
+                                       th:text="${item.productId.productName}
+                    + ' ('
+                    + ${item.variationId.getSize().sizeName}
+                    + ' - '
+                    + ${item.variationId.getColor().colorName}
+                    + ') '">
+                                        Product Name
+                                    </a>
                                 </td>
+
                                 <td class="product-price" data-title="Price">
                                     <span th:text="${item.getPriceFormated()}">Price</span>
                                 </td>
+
+                                <!-- Only ONE td with the minus/plus buttons -->
                                 <td class="product-quantity" data-title="Qty">
-                                    <form action="/update_cart_quantity" method="post">
-                                        <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
-                                        <div class="pro-qty">
-                                        <input type="number" name="quantity" class="quantity-input"
-                                               th:value="${item.quantity}" min="1" max="50">
-                                        </div>
-                                        <button type="submit" th:text="#{cart.update}">Cập nhật</button>
-                                    </form>
+                                    <div class="pro-qty" style="display: flex; gap: 5px">
+                                        <button type="button"
+                                                class="dec-qty"
+                                                th:attr="data-cart-item-id=${item.cartItemId}">
+                                            -
+                                        </button>
+
+                                        <input type="text"
+                                               class="quantity-field"
+                                               th:value="${item.quantity}"
+                                               readonly />
+
+                                        <button type="button"
+                                                class="inc-qty"
+                                                th:attr="data-cart-item-id=${item.cartItemId}">
+                                            +
+                                        </button>
+                                    </div>
                                 </td>
+
                                 <td class="product-subtotal" data-title="Subtotal">
-                                    <span th:text="${item.getTotalPriceFormated()}">Tổng</span>
+                                    <span id="cartTotal" th:text="${totalOrderPrice}">0</span>
                                 </td>
                             </tr>
+
+
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="cart-update-btn-area" style="display: flex; justify-content: flex-end; margin-right: 10%" th:if="${!isCartEmpty}">
+                <div class="cart-update-btn-area" style="display: flex; justify-content: flex-end; margin-right: 10%"
+                     th:if="${!isCartEmpty}">
                     <div class="update-btn">
                         <form id="checkoutForm" action="/checkout" method="get">
-                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4; color: white" th:disabled="${isCartEmpty}" th:text="#{cart.checkout}">
+                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4; color: white"
+                                    th:disabled="${isCartEmpty}" th:text="#{cart.checkout}">
                                 Thanh toán
                             </button>
                             <input type="hidden" name="cartItemIds" id="cartItemIds">
@@ -108,128 +136,7 @@
         </div>
     </div>
 
-    <!-- Start Recently Viewed Product Area  -->
-<!--    <div class="axil-product-area bg-color-white axil-section-gap pb&#45;&#45;50 pb_sm&#45;&#45;30">-->
-<!--        <div class="container">-->
-<!--            <div class="section-title-wrapper">-->
-<!--                <span class="title-highlighter highlighter-primary"><i class="far fa-shopping-basket"></i> Your Recently</span>-->
-<!--                <h2 class="title">Viewed Items</h2>-->
-<!--            </div>-->
-<!--            <div class="recent-product-activation slick-layout-wrapper&#45;&#45;15 axil-slick-arrow arrow-top-slide">-->
-<!--                <div class="slick-single-layout">-->
-<!--                    <div class="axil-product">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="product-detail.html">-->
-<!--                                <img src="../static/images/product/electric/product-01.png" alt="Product Images">-->
-<!--                            </a>-->
-<!--                            <div class="label-block label-right">-->
-<!--                                <div class="product-badget">20% OFF</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="product-content">-->
-<!--                            <div class="inner">-->
-<!--                                <h5 class="title"><a href="product-detail.html">3D™ wireless headset</a></h5>-->
-<!--                                <div class="product-price-variant">-->
-<!--                                    <span class="price old-price">$30</span>-->
-<!--                                    <span class="price current-price">$30</span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
-<!--                <div class="slick-single-layout">-->
-<!--                    <div class="axil-product">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="product-detail.html">-->
-<!--                                <img src="../static/images/product/electric/product-02.png" alt="Product Images">-->
-<!--                            </a>-->
-<!--                            <div class="label-block label-right">-->
-<!--                                <div class="product-badget">40% OFF</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="product-content">-->
-<!--                            <div class="inner">-->
-<!--                                <h5 class="title"><a href="product-detail.html">Media remote</a></h5>-->
-<!--                                <div class="product-price-variant">-->
-<!--                                    <span class="price old-price">$80</span>-->
-<!--                                    <span class="price current-price">$50</span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
-<!--                <div class="slick-single-layout">-->
-<!--                    <div class="axil-product">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="product-detail.html">-->
-<!--                                <img src="../static/images/product/electric/product-03.png" alt="Product Images">-->
-<!--                            </a>-->
-<!--                            <div class="label-block label-right">-->
-<!--                                <div class="product-badget">30% OFF</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="product-content">-->
-<!--                            <div class="inner">-->
-<!--                                <h5 class="title"><a href="product-detail.html">HD camera</a></h5>-->
-<!--                                <div class="product-price-variant">-->
-<!--                                    <span class="price old-price">$60</span>-->
-<!--                                    <span class="price current-price">$45</span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
-<!--                <div class="slick-single-layout">-->
-<!--                    <div class="axil-product">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="product-detail.html">-->
-<!--                                <img src="../static/images/product/electric/product-04.png" alt="Product Images">-->
-<!--                            </a>-->
-<!--                            <div class="label-block label-right">-->
-<!--                                <div class="product-badget">50% OFF</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="product-content">-->
-<!--                            <div class="inner">-->
-<!--                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>-->
-<!--                                <div class="product-price-variant">-->
-<!--                                    <span class="price old-price">$70</span>-->
-<!--                                    <span class="price current-price">$35</span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
-<!--                <div class="slick-single-layout">-->
-<!--                    <div class="axil-product">-->
-<!--                        <div class="thumbnail">-->
-<!--                            <a href="product-detail.html">-->
-<!--                                <img src="../static/images/product/electric/product-05.png" alt="Product Images">-->
-<!--                            </a>-->
-<!--                            <div class="label-block label-right">-->
-<!--                                <div class="product-badget">25% OFF</div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="product-content">-->
-<!--                            <div class="inner">-->
-<!--                                <h5 class="title"><a href="product-detail.html">PS Remote Control</a></h5>-->
-<!--                                <div class="product-price-variant">-->
-<!--                                    <span class="price old-price">$50</span>-->
-<!--                                    <span class="price current-price">$38</span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; End .slick-single-layout &ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    &lt;!&ndash; End Recently Viewed Product Area  &ndash;&gt;-->
+
 </main>
 
 <!-- Include Footer Fragment -->
@@ -269,5 +176,88 @@
         document.getElementById('cartItemIds').value = cartItemIds.join(',');
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Query all the plus/minus buttons
+        const decButtons = document.querySelectorAll('.dec-qty');
+        const incButtons = document.querySelectorAll('.inc-qty');
+
+        // Decrement
+        decButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cartItemId = btn.getAttribute('data-cart-item-id');
+                // we rely on the <input> for the actual quantity
+                const quantityField = btn.parentElement.querySelector('.quantity-field');
+                let currentQty = parseInt(quantityField.value);
+
+                if (currentQty > 1) {
+                    const newQty = currentQty - 1;
+                    updateCartQuantity(cartItemId, newQty, quantityField);
+                }
+            });
+        });
+
+        // Increment
+        incButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cartItemId = btn.getAttribute('data-cart-item-id');
+                const quantityField = btn.parentElement.querySelector('.quantity-field');
+                let currentQty = parseInt(quantityField.value);
+
+                const newQty = currentQty + 1;
+                updateCartQuantity(cartItemId, newQty, quantityField);
+            });
+        });
+
+        // AJAX function
+        function updateCartQuantity(cartItemId, newQty, quantityField) {
+            // Adjust if you want a different URL or method
+            const url = `/api/cart/updateQuantity?cartItemId=${cartItemId}&quantity=${newQty}`;
+
+            fetch(url, {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update input field
+                        quantityField.value = newQty;
+
+                        // Update row subtotal if provided by the server
+                        const subtotalElement = quantityField.closest('tr')
+                            .querySelector('.product-subtotal span');
+                        if (subtotalElement && data.newSubtotal) {
+                            subtotalElement.innerText = data.newSubtotal;
+                        }
+
+                        // Update total cart price if returned from server
+                        const totalElement = document.getElementById('cartTotal');
+                        if (totalElement && data.newTotal) {
+                            totalElement.innerText = data.newTotal;
+                        }
+
+                        showNotification('success', data.message);
+                    } else {
+                        // Show error message from server (e.g., "over stock")
+                        showNotification('error', data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showNotification('error', 'Đã xảy ra lỗi server!');
+                });
+        }
+
+        // Very basic notification
+        function showNotification(type, message) {
+            if (type === 'success') {
+            } else {
+                alert("Lỗi: " + message);
+            }
+        }
+    });
+</script>
+
+
 </body>
 </html>

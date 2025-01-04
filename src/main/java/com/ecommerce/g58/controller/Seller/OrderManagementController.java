@@ -124,6 +124,29 @@ public class OrderManagementController {
 
         return "redirect:order-manager/";
     }
+    @PostMapping("/seller//reject")
+    public String rejectOrder(
+            @RequestParam("orderId") Integer orderId,
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
+
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("message", "Bạn cần đăng nhập để gửi yêu cầu.");
+            redirectAttributes.addFlashAttribute("messageType", "error");
+            return "redirect:/sign-in";
+        }
+
+        boolean isOrderUpdated = orderDetailService.rejectOrder(orderId, "Rejected", "Người bán từ chối nhận đơn");
+        if (isOrderUpdated) {
+            redirectAttributes.addFlashAttribute("message", "Từ chối đơn hàng thành công.");
+            redirectAttributes.addFlashAttribute("messageType", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Không thể xử lý yêu cầu. Vui lòng thử lại sau.");
+            redirectAttributes.addFlashAttribute("messageType", "error");
+        }
+
+        return "redirect:order-manager/";
+    }
     @PostMapping("/seller/bulk-update-status")
     public String bulkUpdateOrderStatus(
             @RequestParam("statusFilter") String statusFilter,

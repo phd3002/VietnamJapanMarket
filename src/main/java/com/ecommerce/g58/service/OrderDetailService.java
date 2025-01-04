@@ -21,6 +21,6 @@ public interface OrderDetailService {
     boolean refundOrder(Integer orderId);
     boolean changeStatus(Integer orderId, String status, String reason);
     boolean cancelOrder(Integer orderId, String status, String reason);
-
+    boolean rejectOrder(Integer orderId, String status, String reason);
 }
 

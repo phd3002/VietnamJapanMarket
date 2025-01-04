@@ -7,6 +7,7 @@ import com.ecommerce.g58.service.CartItemService;
 import com.ecommerce.g58.service.CartService;
 import com.ecommerce.g58.service.ProductService;
 import com.ecommerce.g58.service.UserService;
+import com.ecommerce.g58.utils.FormatVND;
 import com.ecommerce.g58.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -91,7 +94,7 @@ public class CartController {
                     Integer currentStoreId = cartItems.get(0).getProductId().getStoreId().getStoreId();
 
 
-                // Check if the stores are different
+                    // Check if the stores are different
                     if (!currentStoreId.equals(newProductStoreId)) {
 //                        System.out.println("Current store ID: " + currentStoreId);
 //                        System.out.println("New product store ID: " + newProductStoreId);
@@ -123,7 +126,6 @@ public class CartController {
     }
 
 
-    
     // View Cart Items
     @GetMapping("/cart-items")
     public String getCartItems(Model model) {
@@ -151,7 +153,8 @@ public class CartController {
         Integer totalOrderPrice = cartItems.stream()
                 .mapToInt(item -> item.getQuantity() * item.getProductId().getPrice())
                 .sum();
-        model.addAttribute("totalOrderPrice", totalOrderPrice);
+
+        model.addAttribute("totalOrderPrice", FormatVND.formatCurrency(BigDecimal.valueOf(totalOrderPrice)));
 
         return "cart-detail"; // Thymeleaf template for cart details
     }
@@ -197,6 +200,50 @@ public class CartController {
             return cartService.getCartItemCount(userId);
         }
         return 0;
+    }
+    @PostMapping("/api/cart/updateQuantity")
+    @ResponseBody
+    public Map<String, Object> updateCartQuantityAjax(@RequestParam("cartItemId") Integer cartItemId,
+                                                      @RequestParam("quantity") Integer quantity) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Fetch cart item
+            CartItem cartItem = cartItemRepository.findById(cartItemId)
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy mục giỏ hàng"));
+
+            int productStock = cartItem.getVariationId().getStock();
+            if (quantity <= productStock) {
+                // Update quantity
+                cartItemService.updateCartItemQuantity(cartItemId, quantity);
+
+                // newSubtotal as an integer
+                int newSubtotal = cartItem.getQuantity() * cartItem.getProductId().getPrice();
+
+                // newTotal as an integer
+                Integer userId = cartItem.getCart().getUser().getUserId();
+                List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
+                int newTotal = cartItems.stream()
+                        .mapToInt(ci -> ci.getQuantity() * ci.getProductId().getPrice())
+                        .sum();
+
+                // 1) Format them to a String using your FormatVND utility
+                String newSubtotalFormatted = FormatVND.formatCurrency(BigDecimal.valueOf(newSubtotal));
+                String newTotalFormatted = FormatVND.formatCurrency(BigDecimal.valueOf(newTotal));
+
+                // 2) Put those formatted strings in the JSON response
+                response.put("success", true);
+                response.put("newSubtotal", newSubtotalFormatted);
+                response.put("newTotal", newTotalFormatted);
+                response.put("message", "Đã cập nhật số lượng!");
+            } else {
+                response.put("success", false);
+                response.put("message", "Vượt quá số lượng tồn kho");
+            }
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Đã xảy ra lỗi khi cập nhật số lượng");
+        }
+        return response;
     }
 }
 
