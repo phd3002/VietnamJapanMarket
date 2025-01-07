@@ -10,19 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 
-    <!-- CSS
-    ============================================ -->
-    <link rel="stylesheet" th:href="@{/css/vendor/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/font-awesome.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/flaticon/flaticon.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/slick.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/slick-theme.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/jquery-ui.min.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/sal.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/magnific-popup.css}">
-    <link rel="stylesheet" th:href="@{/css/vendor/base.css}">
-    <link rel="stylesheet" th:href="@{/css/style.min.css}">
-    <link rel="stylesheet" th:href="@{/css/style-2.css}">
+    <!-- Including CSS Files from base.html -->
+    <th:block th:replace="~{base :: head}"></th:block>
 </head>
 
 <body class="sticky-header">
@@ -91,6 +80,121 @@
                 </div>
             </div>
             <!-- Products  -->
+            <br>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="axil-shop-top">
+                        <div class="filter-group">
+                            <div class="filter-container">
+                                <h4 class="filter-title">Mức giá:</h4>
+                                <div class="dropdown-filter">
+                                    <button class="dropdown-toggle-wrapper" onclick="toggleDropdown()">
+                                        <span class="selected-text">Chọn mức giá</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="dropdown-menu-wrapper" id="priceDropdown">
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="price-range" value="0-10">
+                                            <span>Dưới 10 triệu</span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="price-range" value="10-15">
+                                            <span>10 - 15 triệu</span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="price-range" value="15-20">
+                                            <span>15 - 20 triệu</span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="price-range" value="20-25">
+                                            <span>20 - 25 triệu</span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="price-range" value="25-30">
+                                            <span>25 - 30 triệu</span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="price-range" value="30+">
+                                            <span>Trên 30 triệu</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="axil-shop-top">
+                        <div class="filter-group">
+                            <div class="filter-container">
+                                <h4 class="filter-title">Đánh giá:</h4>
+                                <div class="dropdown-filter">
+                                    <button class="dropdown-toggle-wrapper" onclick="toggleRatingDropdown()">
+                                        <span class="selected-text-rating">Chọn đánh giá</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="dropdown-menu-wrapper" id="ratingDropdown">
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="rating-range" value="5">
+                                            <span class="rating-display">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="rating-range" value="4">
+                                            <span class="rating-display">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="rating-text">trở lên</span>
+                                </span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="rating-range" value="3">
+                                            <span class="rating-display">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="rating-text">trở lên</span>
+                                </span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="rating-range" value="2">
+                                            <span class="rating-display">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="rating-text">trở lên</span>
+                                </span>
+                                        </label>
+                                        <label class="dropdown-item-wrapper">
+                                            <input type="radio" name="rating-range" value="1">
+                                            <span class="rating-display">
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="rating-text">trở lên</span>
+                                </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row row--15">
                 <div th:each="product : ${productPage.content}" class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
@@ -174,6 +278,51 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
+<script>
+    function toggleDropdown() {
+        const dropdown = document.getElementById('priceDropdown');
+        dropdown.classList.toggle('show');
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown-filter')) {
+                dropdown.classList.remove('show');
+            }
+        });
+    }
+
+    // Update selected text when an option is chosen
+    document.querySelectorAll('#priceDropdown input[name="price-range"]').forEach(input => {
+        input.addEventListener('change', function() {
+            const selectedText = this.nextElementSibling.textContent;
+            document.querySelector('.dropdown-toggle-wrapper .selected-text').textContent = selectedText;
+            document.getElementById('priceDropdown').classList.remove('show');
+        });
+    });
+</script>
+<script>
+    function toggleRatingDropdown() {
+        const dropdown = document.getElementById('ratingDropdown');
+        dropdown.classList.toggle('show');
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInside = event.target.closest('.dropdown-filter');
+            if (!isClickInside) {
+                dropdown.classList.remove('show');
+            }
+        });
+    }
+
+    // Update selected text when an option is chosen
+    document.querySelectorAll('#ratingDropdown .dropdown-item-wrapper input').forEach(input => {
+        input.addEventListener('change', function() {
+            const stars = this.parentElement.querySelector('.rating-display').innerHTML;
+            document.querySelector('.dropdown-toggle-wrapper .selected-text-rating').innerHTML = stars;
+            document.getElementById('ratingDropdown').classList.remove('show');
+        });
+    });
+</script>
 </body>
 
 </html>
