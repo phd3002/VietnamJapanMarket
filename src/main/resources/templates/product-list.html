@@ -55,7 +55,7 @@
             </div>
             <br>
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="axil-shop-top">
                         <div class="filter-group">
                             <div class="filter-container">
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="axil-shop-top">
                         <div class="filter-group">
                             <div class="filter-container">
@@ -162,6 +162,22 @@
                                 </span>
                                         </label>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="axil-shop-top">
+                        <div class="filter-group">
+                            <!-- Search Box -->
+                            <div class="search-box">
+                                <div class="search-input">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                                    <button class="clear-button-wrapper" onclick="clearSearch(this)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -301,6 +317,20 @@
             document.querySelector('.dropdown-toggle-wrapper .selected-text-rating').innerHTML = stars;
             document.getElementById('ratingDropdown').classList.remove('show');
         });
+    });
+</script>
+<script>
+    function clearSearch(button) {
+        const input = button.parentElement.querySelector('input');
+        input.value = '';
+        button.style.display = 'none';
+        input.focus();
+    }
+
+    // Show/hide clear button based on input
+    document.querySelector('.search-input input').addEventListener('input', function(e) {
+        const clearButton = e.target.nextElementSibling;
+        clearButton.style.display = e.target.value ? 'block' : 'none';
     });
 </script>
 </body>
