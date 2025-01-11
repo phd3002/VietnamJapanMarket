@@ -139,7 +139,9 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "    iv.shipping_fee,\n" +
             "    iv.tax,\n" +
             "    o.payment_method,\n" +
-            "    ot.total_price AS total_order_price\n" +
+            "    ot.total_price AS total_order_price,\n" +
+            "    iv.deposit, \n" +
+            "    iv.remaining_balance \n" +
             "FROM orders o\n" +
             "LEFT JOIN users u ON o.user_id = u.user_id\n" +
             "LEFT JOIN order_details od ON o.order_id = od.order_id\n" +

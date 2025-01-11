@@ -3,6 +3,7 @@ package com.ecommerce.g58.controller;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.PaymentMethod;
 import com.ecommerce.g58.repository.InvoiceRepository;
+import com.ecommerce.g58.repository.OrderRepository;
 import com.ecommerce.g58.service.*;
 import com.ecommerce.g58.service.implementation.VNPayService;
 import com.ecommerce.g58.utils.FormatVND;
@@ -37,6 +38,8 @@ public class VNPayController {
     private ShippingUnitService shippingUnitService;
     @Autowired
     private InvoiceRepository invoiceRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Autowired
     private OrderService orderService;
@@ -113,8 +116,8 @@ public class VNPayController {
         PaymentMethod paymentMethod = (PaymentMethod) session.getAttribute("paymentMethodOrderOn");
         List<Integer> cartItemIds = (List<Integer>) session.getAttribute("cartItemIdsOrderOn");
         if (paymentStatus == 1) {
-            System.out.println("Payment successful");
-            Orders order = orderService.createOrder(user, shippingAddress, paymentMethod, cartItemIds);
+//            System.out.println("Payment successful");
+            Orders order = orderService.createOrder(user, shippingAddress, paymentMethod, cartItemIds, shippingUnitId);
             if (order == null) {
                 System.out.println("Order creation failed");
                 return "error/404";
@@ -124,6 +127,7 @@ public class VNPayController {
 
                 String orderCode = order.getOrderCode();
                 long totalPrice = order.getTotalPrice();
+                System.out.println("Order created with code: " + orderCode + ", total price: " + totalPrice);
                 model.addAttribute("orderCode", orderCode);
 
 
@@ -161,8 +165,13 @@ public class VNPayController {
                     invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
                     invoice.setRemainingBalance(BigDecimal.valueOf(0));
                 }
+
                 invoice.setOrderId(order);
                 Orders newOrder = orderService.getOrderByCode(orderCode);
+                newOrder.setTotalPrice(totalWithShipping);
+                orderRepository.save(newOrder);
+                System.out.println("Order Code Setting: " + newOrder.getOrderCode());
+                System.out.println("New Total price: " + totalWithShipping);
                 invoice.setOrderId(newOrder);
                 invoiceRepository.save(invoice);
                 cartItemService.removeCartItemsByIds(cartItemIds);

@@ -24,7 +24,7 @@ public interface OrderService {
 
     void updateOrderStatuss(Integer orderId, String status);
 
-    Orders createOrder(Users user, String address, PaymentMethod paymentMethod, List<Integer> cartItemIds);
+    Orders createOrder(Users user, String address, PaymentMethod paymentMethod, List<Integer> cartItemIds, Integer shippingUnitId);
 
     Orders getOrderByCode(String code);
 

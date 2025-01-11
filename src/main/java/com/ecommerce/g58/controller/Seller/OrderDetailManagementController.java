@@ -33,10 +33,12 @@ public class OrderDetailManagementController {
             model.addAttribute("customerAddress", firstDetail.getCustomerAddress());
             model.addAttribute("customerPhone", firstDetail.getCustomerPhone());
             model.addAttribute("orderDate", firstDetail.getOrderDate());
-            model.addAttribute("shippingFee", firstDetail.getShippingFee());
-            model.addAttribute("tax", firstDetail.getTax());
+            model.addAttribute("shippingFee", firstDetail.getFormattedShippingFee());
+            model.addAttribute("tax", firstDetail.getFormattedTax());
             model.addAttribute("paymentMethod", firstDetail.getPaymentMethod());
-            model.addAttribute("totalAmount", firstDetail.getTotalAmount());
+            model.addAttribute("totalAmount", firstDetail.getFormattedTotalAmount());
+            model.addAttribute("deposit", firstDetail.getFormattedDeposit());
+            model.addAttribute("remainingBalance", firstDetail.getFormattedRemainingBalance());
         }
         return "seller/order-detail";
     }

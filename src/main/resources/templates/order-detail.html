@@ -248,7 +248,7 @@
                                                 </div>
                                                 <div class="product-right">
                                                 <span class="product-price"
-                                                      th:text="${detail.productTotalPrice}"></span>
+                                                      th:text="${detail.getPriceFormated()}"></span>
                                                     <span class="shop-rating"
                                                           th:text="${detail.avgRating != null ? detail.avgRating + ' ★' : #messages.msg('order.havenotFeedback')}">
                                                     </span>

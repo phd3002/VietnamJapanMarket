@@ -50,6 +50,9 @@ public class OrderServiceImpl implements OrderService {
     private CartItemService cartItemService;
 
     @Autowired
+    private ShippingUnitService shippingUnitService;
+
+    @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private EmailService emailService;
@@ -536,7 +539,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public Orders createOrder(Users user, String address, PaymentMethod paymentMethod, List<Integer> cartItemIds) {
+    public Orders createOrder(Users user, String address, PaymentMethod paymentMethod, List<Integer> cartItemIds, Integer shippingUnitId) {
         Orders order = new Orders();
         order.setUserId(user);
         order.setOrderDate(LocalDateTime.now());
@@ -544,8 +547,25 @@ public class OrderServiceImpl implements OrderService {
         order.setPaymentMethod(paymentMethod);
         order.setOrderCode(RandomOrderCodeGenerator.generateOrderCode());
 
+        Integer userId = user.getUserId();
+        Cart userCart = cartService.getCartByUserId(userId);
+        List<CartItem> cartItems = userCart.getCartItems();
+        double totalWeight = cartItems.stream()
+                .mapToDouble(item -> item.getProductId().getWeight() * item.getQuantity())
+                .sum();
+
+        totalWeight = Math.max(totalWeight, 1.0);
         long totalOrderPrice = 0;
+        long totalOrderPriceFull = 0;
+        double tax = 0.08;
+        List<ShippingUnit> shippingUnits = shippingUnitService.getAllShippingUnits();
+        long shippingFee = (long) (shippingUnits.get(0).getUnitPrice().longValue() * totalWeight);
         List<OrderDetails> orderDetailsList = new ArrayList<>();
+        Optional<ShippingUnit> shippingUnitOpt = shippingUnitService.findById(shippingUnitId);
+        if (shippingUnitOpt.isPresent()) {
+            shippingFee = Math.round(shippingUnitOpt.get().getUnitPrice().longValue() * totalWeight);
+        }
+
 
         for (Integer cartItemId : cartItemIds) {
             CartItem cartItem = cartItemService.getCartItemById(cartItemId);
@@ -556,7 +576,10 @@ public class OrderServiceImpl implements OrderService {
                 orderDetail.setVariationId(cartItem.getVariationId());
                 orderDetail.setQuantity(cartItem.getQuantity());
                 orderDetail.setPrice(cartItem.getPrice());
-                totalOrderPrice += (long) cartItem.getPrice() * cartItem.getQuantity();
+                long orderWithTaxAndShippingFee = (long) (cartItem.getPrice() * cartItem.getQuantity() * (tax) + shippingFee);
+                totalOrderPrice = (long) cartItem.getPrice() * cartItem.getQuantity();
+                totalOrderPriceFull = totalOrderPrice + orderWithTaxAndShippingFee;
+//                System.out.println("Total Order Price: " + totalOrderPrice);
                 orderDetailsList.add(orderDetail);
 
                 // Update inventory
@@ -581,7 +604,7 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         // Save the order to generate the order ID
-        order.setTotalPrice(totalOrderPrice / 2);
+        order.setTotalPrice(totalOrderPrice);
         orderRepository.save(order);
 
         // Save order details

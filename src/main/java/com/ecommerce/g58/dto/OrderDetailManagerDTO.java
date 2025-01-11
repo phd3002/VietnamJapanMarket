@@ -30,6 +30,8 @@ public class OrderDetailManagerDTO {
     private Integer tax;
     private String paymentMethod;
     private Integer totalAmount;
+    private Integer deposit;
+    private Integer remainingBalance;
     public String getFormattedTotalPrice() {
         return formatCurrency(BigDecimal.valueOf(totalPrice));
     }
@@ -39,4 +41,18 @@ public class OrderDetailManagerDTO {
     public String getFormattedTax() {
         return formatCurrency(BigDecimal.valueOf(tax));
     }
+    public String getFormattedTotalAmount() {
+        return formatCurrency(BigDecimal.valueOf(totalAmount));
+    }
+    public String getFormattedShippingFee() {
+        return formatCurrency(BigDecimal.valueOf(shippingFee));
+    }
+    public String getFormattedDeposit() {
+        return formatCurrency(BigDecimal.valueOf(deposit));
+    }
+    public String getFormattedRemainingBalance() {
+        return formatCurrency(BigDecimal.valueOf(remainingBalance));
+    }
+
+
 }

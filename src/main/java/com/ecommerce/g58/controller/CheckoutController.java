@@ -295,7 +295,6 @@ public class CheckoutController {
 
         if ("deposit".equalsIgnoreCase(paymentType)) {
             totalWithShipping = (long) ((((double) totalPrice / 2) + shippingFee) + (totalPrice * tax)); // 50% of total price, full shipping fee
-
             invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
             invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
             invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
@@ -485,7 +484,9 @@ public class CheckoutController {
             session.setAttribute("addressOrderOn", formattedShippingAddress);
             session.setAttribute("paymentMethodOrderOn", paymentMethod);
             session.setAttribute("cartItemIdsOrderOn", cartItemIds);
+
             model.addAttribute("totalOrderPrice", totalWithShipping);
+            System.out.println("totalWithShipping: " + totalWithShipping);
             return "create-vnpay-order";
         } else {
             logger.info("Phương thức thanh toán không hợp lệ.");

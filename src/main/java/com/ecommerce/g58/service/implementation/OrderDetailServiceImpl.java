@@ -244,6 +244,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             } else if (result[18] instanceof Integer) {
                 dto.setTotalAmount((Integer) result[18]);
             }
+            dto.setDeposit((Integer) result[19]);
+            dto.setRemainingBalance((Integer) result[20]);
             orderDetailManager.add(dto);
         }
         return orderDetailManager;
@@ -373,7 +375,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 userTransactions.setPreviousBalance(totalAmount.longValue());
                 userTransactions.setToWalletId(userWallet.get());
                 userTransactions.setTransactionType("Hoàn tiền");
-                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " tiền từ đơn hàng do người bán từchooisi nhận đơn  " + order.getOrderCode());
+                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " tiền từ đơn hàng do người bán từ chối nhận đơn  " + order.getOrderCode());
                 userTransactions.setCreatedAt(LocalDateTime.now());
 
 
