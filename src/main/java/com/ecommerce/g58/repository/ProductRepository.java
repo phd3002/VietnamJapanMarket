@@ -7,6 +7,7 @@ import com.ecommerce.g58.entity.Products;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProductRepository extends PagingAndSortingRepository<Products, Integer> {
+public interface ProductRepository extends PagingAndSortingRepository<Products, Integer>, JpaSpecificationExecutor<Products> {
     void deleteByProductId(Integer productId);
 
     Products findTopByOrderByProductIdDesc();
@@ -24,10 +25,8 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
     @Query(value =
             "SELECT p.* " +
                     "FROM products p " +
-                    "LEFT JOIN stores s ON p.store_id = s.store_id " +
-                    "JOIN users u ON s.user_id = u.user_id " +
                     "LEFT JOIN order_details od ON p.product_id = od.product_id " +
-                    "WHERE u.status = 'active' " +
+                    "WHERE p.visible = 1 " +
                     "GROUP BY p.product_id " +
                     "ORDER BY SUM(od.quantity) DESC " +
                     "LIMIT 12",
@@ -139,9 +138,8 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
             "SELECT p.* " +
                     "FROM products p " +
                     "LEFT JOIN feedback f ON p.product_id = f.product_id " +
-                    "JOIN stores s ON p.store_id = s.store_id " +
-                    "JOIN users u ON s.user_id = u.user_id " +
-                    "WHERE u.status = 'active' " +
+
+                    "WHERE p.visible = 1 " +
                     "GROUP BY p.product_id " +
                     "ORDER BY AVG(f.rating) DESC " +
                     "LIMIT 12",

@@ -467,4 +467,6 @@ public interface StoreRepository extends JpaRepository<Stores, Integer> {
             "    AND o.order_date < DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL 4 MONTH))",
             nativeQuery = true)
     Integer totalRevenueLast5Months(@Param("userId") Integer userId);
+
+    List<Stores> findByMaintenanceFeeStatus(String status);
 }

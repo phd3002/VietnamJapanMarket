@@ -758,4 +758,18 @@ public class OrderServiceImpl implements OrderService {
             updateOrderStatuss(orderDTO.getOrderId(), newStatus);
         }
     }
+
+    @Override
+    public BigDecimal calculateRevenueForStore(Integer storeId, LocalDateTime startDate, LocalDateTime endDate) {
+        return orderRepository.calculateRevenueForStore(storeId, startDate, endDate);
+    }
+
+    /**
+     * Tìm các đơn hàng chưa hoàn thành của cửa hàng để hoàn trả khi khóa.
+     */
+    @Override
+    public List<Orders> findIncompleteOrdersByStore(Integer storeId) {
+        // Giả sử bạn có một phương thức trong OrderRepository để tìm các đơn hàng chưa hoàn thành
+        return orderRepository.findIncompleteOrdersByStore(storeId);
+    }
 }

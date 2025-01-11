@@ -20,172 +20,132 @@
 <main class="main-wrapper" th:fragment="content">
     <div class="axil-shop-area axil-section-gap bg-color-white">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="axil-shop-top">
-                        <div class="row">
-                            <div class="col-lg-9">
-                                <div class="category-select">
-                                    <!-- Start Single Select  -->
-                                    <select class="single-select">
-                                        <option>Categories</option>
-                                        <option>Fashion</option>
-                                        <option>Electronics</option>
-                                        <option>Furniture</option>
-                                        <option>Beauty</option>
-                                    </select>
-                                    <!-- End Single Select  -->
+            <form method="get" action="/products">
+                <!-- Giữ lại categoryId nếu có -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="axil-shop-top">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="category-select">
+                                        <!-- Start Single Select  -->
+                                        <select name="categoryId" class="single-select">
+                                            <option value="">Tất cả danh mục</option>
+                                            <option value="1" th:selected="${categoryId == 1}">Fashion</option>
+                                            <option value="2" th:selected="${categoryId == 2}">Electronics</option>
+                                            <option value="3" th:selected="${categoryId == 3}">Furniture</option>
+                                            <option value="4" th:selected="${categoryId == 4}">Beauty</option>
+                                        </select>
+                                        <!-- End Single Select  -->
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="category-select mt_md--10 mt_sm--10 justify-content-lg-end">
-                                    <!-- Start Single Select  -->
-                                    <select class="single-select">
-                                        <option>Sort by Latest</option>
-                                        <option>Sort by Name</option>
-                                        <option>Sort by Price</option>
-                                        <option>Sort by Viewed</option>
-                                    </select>
-                                    <!-- End Single Select  -->
+                                <div class="col-lg-3">
+                                    <div class="category-select mt_md--10 mt_sm--10 justify-content-lg-end">
+                                        <!-- Start Single Select  -->
+                                        <select name="sort" class="single-select">
+                                            <option value="latest" th:selected="${sort == 'latest'}">Mới nhất
+                                            </option>
+                                            <option value="name" th:selected="${sort == 'name'}">Theo tên</option>
+                                            <option value="priceAsc" th:selected="${sort == 'priceAsc'}">Theo giá tăng dần
+                                            </option>
+                                            <option value="priceDesc" th:selected="${sort == 'priceDesc'}">Theo giá giảm dần
+                                            </option>
+                                            <!-- Bỏ "Sort by Viewed" -->
+                                        </select>
+                                        <!-- End Single Select  -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <br>
+                <div class="row">
+                    <!-- Mức giá -->
+                    <div class="col-lg-4">
+                        <div class="axil-shop-top">
+                            <div class="filter-group">
+                                <div class="filter-container">
+                                    <h4 class="filter-title">Mức giá:</h4>
+                                    <div class="dropdown-filter">
+                                        <select name="priceRange" class="single-select">
+                                            <option value="">Chọn mức giá</option>
+                                            <option value="0-10" th:selected="${priceRange == '0-10'}">Dưới 10 triệu
+                                            </option>
+                                            <option value="10-15" th:selected="${priceRange == '10-15'}">10 - 15 triệu
+                                            </option>
+                                            <option value="15-20" th:selected="${priceRange == '15-20'}">15 - 20 triệu
+                                            </option>
+                                            <option value="20-25" th:selected="${priceRange == '20-25'}">20 - 25 triệu
+                                            </option>
+                                            <option value="25-30" th:selected="${priceRange == '25-30'}">25 - 30 triệu
+                                            </option>
+                                            <option value="30+" th:selected="${priceRange == '30+'}">Trên 30 triệu
+                                            </option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Đánh giá -->
+                    <div class="col-lg-4">
+                        <div class="axil-shop-top">
+                            <div class="filter-group">
+                                <div class="filter-container">
+                                    <h4 class="filter-title">Đánh giá:</h4>
+                                    <div class="dropdown-filter">
+                                        <select name="rating" class="single-select">
+                                            <option value="">Chọn đánh giá</option>
+                                            <option value="5" th:selected="${rating == 5}">5 sao</option>
+                                            <option value="4" th:selected="${rating == 4}">4 sao trở lên</option>
+                                            <option value="3" th:selected="${rating == 3}">3 sao trở lên</option>
+                                            <option value="2" th:selected="${rating == 2}">2 sao trở lên</option>
+                                            <option value="1" th:selected="${rating == 1}">1 sao trở lên</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tìm kiếm -->
+                    <div class="col-lg-4">
+                        <div class="axil-shop-top">
+                            <div class="filter-group">
+                                <!-- Search Box -->
+                                <div class="search-box">
+                                    <div class="search-input">
+                                        <i class="fas fa-search search-icon"></i>
+                                        <input type="text" name="search" placeholder="Tìm kiếm sản phẩm..."
+                                               th:value="${search}">
+                                        <button type="submit" class="clear-button-wrapper">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit Button -->
+                <div class="row">
+                    <div class="col-lg-10 text-center">
+                        <button type="submit" class="axil-btn btn-bg-primary">Áp dụng</button>
+                    </div>
+                    <div class="col-lg-2 text-center">
+                        <button type="button" onclick="window.location.href='products'" class="axil-btn btn-bg-primary">Bỏ lọc</button>
+                    </div>
+                </div>
+            </form>
             <br>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="axil-shop-top">
-                        <div class="filter-group">
-                            <div class="filter-container">
-                                <h4 class="filter-title">Mức giá:</h4>
-                                <div class="dropdown-filter">
-                                    <button class="dropdown-toggle-wrapper" onclick="toggleDropdown()">
-                                        <span class="selected-text">Chọn mức giá</span>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                    <div class="dropdown-menu-wrapper" id="priceDropdown">
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="price-range" value="0-10">
-                                            <span>Dưới 10 triệu</span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="price-range" value="10-15">
-                                            <span>10 - 15 triệu</span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="price-range" value="15-20">
-                                            <span>15 - 20 triệu</span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="price-range" value="20-25">
-                                            <span>20 - 25 triệu</span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="price-range" value="25-30">
-                                            <span>25 - 30 triệu</span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="price-range" value="30+">
-                                            <span>Trên 30 triệu</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="axil-shop-top">
-                        <div class="filter-group">
-                            <div class="filter-container">
-                                <h4 class="filter-title">Đánh giá:</h4>
-                                <div class="dropdown-filter">
-                                    <button class="dropdown-toggle-wrapper" onclick="toggleRatingDropdown()">
-                                        <span class="selected-text-rating">Chọn đánh giá</span>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                    <div class="dropdown-menu-wrapper" id="ratingDropdown">
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="rating-range" value="5">
-                                            <span class="rating-display">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="rating-range" value="4">
-                                            <span class="rating-display">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <span class="rating-text">trở lên</span>
-                                </span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="rating-range" value="3">
-                                            <span class="rating-display">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <span class="rating-text">trở lên</span>
-                                </span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="rating-range" value="2">
-                                            <span class="rating-display">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <span class="rating-text">trở lên</span>
-                                </span>
-                                        </label>
-                                        <label class="dropdown-item-wrapper">
-                                            <input type="radio" name="rating-range" value="1">
-                                            <span class="rating-display">
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <span class="rating-text">trở lên</span>
-                                </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="axil-shop-top">
-                        <div class="filter-group">
-                            <!-- Search Box -->
-                            <div class="search-box">
-                                <div class="search-input">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
-                                    <button class="clear-button-wrapper" onclick="clearSearch(this)">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="row row--15">
-                <div th:each="product : ${products}" class="col-xl-3 col-lg-4 col-sm-6">
+                <div th:if="${#lists.isEmpty(products)}" class="col-12 text-center">
+                    <p class="no-products-message">Không tìm thấy sản phẩm phù hợp.</p>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(products)}" th:each="product : ${products}"
+                     class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="axil-product product-style-one has-color-pick mt--40">
                         <div class="thumbnail">
                             <a th:href="@{/product-detail/{productId}(productId=${product.productId})}">
@@ -212,41 +172,39 @@
                 </div>
             </div>
             <!-- Pagination Controls -->
-            <div class="pagination-controls text-center pt--30">
-                <div class="d-flex justify-content-center">
-                    <nav>
-                        <ul class="pagination">
-                            <!-- Previous Button -->
-                            <li class="page-item" th:if="${currentPage != null && currentPage > 0}">
-                                <a class="page-link"
-                                   th:href="@{/products(categoryId=${categoryId}, page=${currentPage - 1})}">
-                                    &laquo;
-                                </a>
-                            </li>
+            <div th:unless="${#lists.isEmpty(products)}">
+                <div class="pagination-controls text-center pt--30">
+                    <div class="d-flex justify-content-center">
+                        <nav>
+                            <ul class="pagination">
+                                <!-- Previous Button -->
+                                <li class="page-item" th:if="${currentPage != null && currentPage > 0}">
+                                    <a class="page-link"
+                                       th:href="@{/products(categoryId=${categoryId}, search=${search}, priceRange=${priceRange}, rating=${rating}, sort=${sort}, page=${currentPage - 1}, size=${size})}">
+                                        &laquo;
+                                    </a>
+                                </li>
 
-                            <!-- Page Numbers -->
-                            <li class="page-item"
-                                th:each="i : ${#numbers.sequence(0, (totalPages != null ? totalPages - 1 : 0))}">
-                                <a class="page-link"
-                                   th:href="@{/products(categoryId=${categoryId}, page=${i})}"
-                                   th:text="${i + 1}"
-                                   th:classappend="${i == currentPage} ? 'active'"></a>
-                            </li>
+                                <!-- Page Numbers -->
+                                <li class="page-item"
+                                    th:each="i : ${#numbers.sequence(0, (totalPages != null ? totalPages - 1 : 0))}">
+                                    <a class="page-link"
+                                       th:href="@{/products(categoryId=${categoryId}, search=${search}, priceRange=${priceRange}, rating=${rating}, sort=${sort}, page=${i}, size=${size})}"
+                                       th:text="${i + 1}"
+                                       th:classappend="${i == currentPage} ? 'active'"></a>
+                                </li>
 
-                            <!-- Next Button -->
-                            <li class="page-item" th:if="${currentPage != null && currentPage < totalPages - 1}">
-                                <a class="page-link"
-                                   th:href="@{/products(categoryId=${categoryId}, page=${currentPage + 1})}">
-                                    &raquo;
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-
+                                <!-- Next Button -->
+                                <li class="page-item" th:if="${currentPage != null && currentPage < totalPages - 1}">
+                                    <a class="page-link"
+                                       th:href="@{/products(categoryId=${categoryId}, search=${search}, priceRange=${priceRange}, rating=${rating}, sort=${sort}, page=${currentPage + 1}, size=${size})}">
+                                        &raquo;
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
-                <!--            <div class="text-center pt&#45;&#45;30">-->
-                <!--                <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>-->
-                <!--            </div>-->
             </div>
         </div>
     </div>
@@ -280,7 +238,7 @@
         dropdown.classList.toggle('show');
 
         // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             if (!event.target.closest('.dropdown-filter')) {
                 dropdown.classList.remove('show');
             }
@@ -289,7 +247,7 @@
 
     // Update selected text when an option is chosen
     document.querySelectorAll('#priceDropdown input[name="price-range"]').forEach(input => {
-        input.addEventListener('change', function() {
+        input.addEventListener('change', function () {
             const selectedText = this.nextElementSibling.textContent;
             document.querySelector('.dropdown-toggle-wrapper .selected-text').textContent = selectedText;
             document.getElementById('priceDropdown').classList.remove('show');
@@ -302,7 +260,7 @@
         dropdown.classList.toggle('show');
 
         // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             const isClickInside = event.target.closest('.dropdown-filter');
             if (!isClickInside) {
                 dropdown.classList.remove('show');
@@ -312,7 +270,7 @@
 
     // Update selected text when an option is chosen
     document.querySelectorAll('#ratingDropdown .dropdown-item-wrapper input').forEach(input => {
-        input.addEventListener('change', function() {
+        input.addEventListener('change', function () {
             const stars = this.parentElement.querySelector('.rating-display').innerHTML;
             document.querySelector('.dropdown-toggle-wrapper .selected-text-rating').innerHTML = stars;
             document.getElementById('ratingDropdown').classList.remove('show');
@@ -328,7 +286,7 @@
     }
 
     // Show/hide clear button based on input
-    document.querySelector('.search-input input').addEventListener('input', function(e) {
+    document.querySelector('.search-input input').addEventListener('input', function (e) {
         const clearButton = e.target.nextElementSibling;
         clearButton.style.display = e.target.value ? 'block' : 'none';
     });

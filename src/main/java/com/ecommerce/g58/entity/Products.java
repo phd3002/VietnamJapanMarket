@@ -48,6 +48,8 @@ public class Products {
 
     @Column(name = "product_code", length = 10)
     private String productCode;
+    @Column(columnDefinition="boolean DEFAULT true")
+    private boolean visible;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

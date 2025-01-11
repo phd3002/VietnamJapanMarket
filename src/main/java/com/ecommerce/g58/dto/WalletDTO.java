@@ -16,4 +16,5 @@ public class WalletDTO {
     private String description;
     private String transactionParty;
     private BigDecimal previousBalance;
+    private int status;
 }

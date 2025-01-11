@@ -3,6 +3,8 @@ package com.ecommerce.g58.entity;
 import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -58,4 +60,14 @@ public class Stores {
 
     @OneToMany(mappedBy = "storeId")
     private List<Products> products;
+
+    // Các thuộc tính mới thêm vào để theo dõi phí duy trì
+    @Column(name = "last_maintenance_fee_date")
+    private LocalDate lastMaintenanceFeeDate;
+
+    @Column(name = "maintenance_fee_status")
+    private String maintenanceFeeStatus; // Ví dụ: "PAID", "PENDING", "LOCKED"
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
 }

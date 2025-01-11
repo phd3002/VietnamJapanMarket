@@ -8,6 +8,7 @@ import com.ecommerce.g58.enums.PaymentMethod;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,7 +37,11 @@ public interface OrderService {
 
     List<OrderManagerDTO> getOrdersByFilters(String status, LocalDate startDate, LocalDate endDate, Integer storeId);
 
-   void bulkUpdateOrderStatus(String currentStatus, String newStatus, LocalDate startDate, LocalDate endDate, Integer storeId) ;
-   void bulkUpdateOrderStatus(String currentStatus, String newStatus, LocalDate startDate, LocalDate endDate) ;
+    void bulkUpdateOrderStatus(String currentStatus, String newStatus, LocalDate startDate, LocalDate endDate, Integer storeId);
 
+    void bulkUpdateOrderStatus(String currentStatus, String newStatus, LocalDate startDate, LocalDate endDate);
+
+    BigDecimal calculateRevenueForStore(Integer storeId, LocalDateTime startDate, LocalDateTime endDate);
+
+    List<Orders> findIncompleteOrdersByStore(Integer storeId);
 }

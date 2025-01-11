@@ -288,7 +288,17 @@ public class WalletServiceImpl implements WalletService {
             } else if (result[6] instanceof BigDecimal) {
                 dto.setWalletBalance((BigDecimal) result[6]);
             }
-
+            if (result[8] != null) {
+                if (result[8] instanceof Integer) {
+                    dto.setStatus((Integer) result[8]);
+                } else if (result[8] instanceof Number) {
+                    dto.setStatus(((Number) result[8]).intValue());
+                } else {
+                    dto.setStatus(1); // hoặc một giá trị mặc định nào đó
+                }
+            } else {
+                dto.setStatus(1); // hoặc một giá trị mặc định nào đó
+            }
             return dto;
         });
 
@@ -345,7 +355,17 @@ public class WalletServiceImpl implements WalletService {
             } else if (result[6] instanceof BigDecimal) {
                 dto.setWalletBalance((BigDecimal) result[6]);
             }
-
+            if (result[8] != null) {
+                if (result[8] instanceof Integer) {
+                    dto.setStatus((Integer) result[8]);
+                } else if (result[8] instanceof Number) {
+                    dto.setStatus(((Number) result[8]).intValue());
+                } else {
+                    dto.setStatus(1); // hoặc một giá trị mặc định nào đó
+                }
+            } else {
+                dto.setStatus(1); // hoặc một giá trị mặc định nào đó
+            }
             return dto;
         }).collect(Collectors.toList()); // Use Collectors.toList() for Java 8 compatibility
 

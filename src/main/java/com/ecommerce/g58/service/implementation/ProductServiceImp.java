@@ -5,10 +5,12 @@ import com.ecommerce.g58.dto.ProductDetailDTO;
 import com.ecommerce.g58.dto.ProductWithVariationsDTO;
 import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.repository.*;
+import com.ecommerce.g58.repository.specification.ProductSpecification;
 import com.ecommerce.g58.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -284,6 +287,29 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<Products> getTop12ProductsByHighestRatingFromActiveStores() {
         return productRepository.findTop12ProductsByHighestRatingFromActiveStores();
+    }
+
+    @Override
+    public Page<Products> getProductsFiltered(String search, Long categoryId, Integer minPrice, Integer maxPrice, Double minRating, Pageable pageable) {
+        Specification<Products> spec = Specification.where(ProductSpecification.isVisible());
+
+        if (search != null && !search.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasProductNameLike(search));
+        }
+
+        if (categoryId != null) {
+            spec = spec.and(ProductSpecification.hasCategoryId(categoryId));
+        }
+
+        if (minPrice != null || maxPrice != null) {
+            spec = spec.and(ProductSpecification.hasPriceBetween(minPrice, maxPrice));
+        }
+
+        if (minRating != null) {
+            spec = spec.and(ProductSpecification.hasAverageRatingGreaterThanOrEqual(minRating));
+        }
+
+        return productRepository.findAll(spec, pageable);
     }
 
 }

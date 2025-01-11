@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -95,34 +96,78 @@ public class ProductController {
 //        return "seller/product-manager";
 //    }
 
+
     @GetMapping("/products")
     public String getProductsByCategory(
             @RequestParam(value = "categoryId", required = false) Long categoryId,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "priceRange", required = false) String priceRange,
+            @RequestParam(value = "rating", required = false) Double minRating,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
+            @RequestParam(value = "sort", defaultValue = "latest") String sort, // Thêm tham số sort
             Model model) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Products> productPage;
-
-        if (categoryId == null) {
-            logger.info("Fetching all products, page: {}, size: {}", page, size);
-            productPage = productService.getAllProducts(pageable);
-        } else {
-            logger.info("Fetching products for category ID: {}, page: {}, size: {}", categoryId, page, size);
-            productPage = productService.getProductsByCategory(categoryId, pageable);
+        // Xử lý mức giá từ priceRange
+        Integer minPrice = null;
+        Integer maxPrice = null;
+        if (priceRange != null && !priceRange.isEmpty()) {
+            if (priceRange.endsWith("+")) {
+                // Trường hợp "30+", chỉ đặt minPrice và bỏ qua maxPrice
+                minPrice = Integer.parseInt(priceRange.replace("+", "")) * 1000000; // Nhân với 1,000,000
+                maxPrice = null;
+            } else {
+                String[] prices = priceRange.split("-");
+                try {
+                    minPrice = Integer.parseInt(prices[0]) * 1000000; // Nhân với 1,000,000
+                    if (prices.length > 1 && !prices[1].isEmpty()) {
+                        maxPrice = Integer.parseInt(prices[1]) * 1000000; // Nhân với 1,000,000
+                    }
+                } catch (NumberFormatException e) {
+                    // Xử lý ngoại lệ nếu giá không hợp lệ
+                    minPrice = null;
+                    maxPrice = null;
+                }
+            }
         }
+
+        // Xử lý sắp xếp
+        Sort sortOrder;
+        switch (sort) {
+            case "name":
+                sortOrder = Sort.by("productName").ascending();
+                break;
+            case "priceAsc":
+                sortOrder = Sort.by("price").ascending();
+                break;
+            case "priceDesc":
+                sortOrder = Sort.by("price").descending();
+                break;
+            case "rating":
+                // Sắp xếp theo rating trung bình
+                sortOrder = Sort.by(Sort.Direction.DESC, "price"); // Thay thế bằng thuộc tính cần sắp xếp nếu có
+                break;
+            case "latest":
+            default:
+                sortOrder = Sort.by("createdAt").descending();
+                break;
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+        Page<Products> productPage = productService.getProductsFiltered(search, categoryId, minPrice, maxPrice, minRating, pageable);
 
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
+
         model.addAttribute("categoryId", categoryId);
+        model.addAttribute("search", search);
+        model.addAttribute("priceRange", priceRange);
+        model.addAttribute("rating", minRating);
+        model.addAttribute("sort", sort);
 
         return "product-list";
     }
-
-
-
 
     private Map<String, Integer> calculateStars(double averageRating) {
         Map<String, Integer> stars = new HashMap<>();

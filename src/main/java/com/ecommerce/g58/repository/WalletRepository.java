@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     void deleteByUserId_UserId(Integer userId);
     @Query(value = "SELECT \n" +
-            "    t.created_at as transactionDate,\n" +
+            "   t.created_at as transactionDate,\n" +
             "    t.transaction_type as transactionType,\n" +
             "    CASE \n" +
             "        WHEN w1.user_id = :userId THEN -t.amount\n" +
@@ -34,7 +34,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
             "        WHEN w1.user_id = :userId THEN w1.balance\n" +
             "        WHEN w2.user_id = :userId THEN w2.balance\n" +
             "    END as walletBalance,\n" +
-            "    t.payment_type as paymentType\n" +  // Add this line
+            "    t.payment_type as paymentType ,  t.status \n" +  // Add this line
             "FROM transactions t\n" +
             "LEFT JOIN wallet w1 ON t.from_wallet_id = w1.wallet_id\n" +
             "LEFT JOIN wallet w2 ON t.to_wallet_id = w2.wallet_id\n" +
@@ -75,7 +75,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
             "        WHEN w1.user_id = :userId THEN w1.balance\n" +
             "        WHEN w2.user_id = :userId THEN w2.balance\n" +
             "    END as walletBalance,\n" +
-            "    t.payment_type as paymentType\n" +  // Add this line
+            "    t.payment_type as paymentType ,  t.status \n" +  // Add this line
             "FROM transactions t\n" +
             "LEFT JOIN wallet w1 ON t.from_wallet_id = w1.wallet_id\n" +
             "LEFT JOIN wallet w2 ON t.to_wallet_id = w2.wallet_id\n" +

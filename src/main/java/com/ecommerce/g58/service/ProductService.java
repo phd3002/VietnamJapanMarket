@@ -67,4 +67,6 @@ public interface ProductService {
 
     List<Products> get12HighestOrderProducts();
     List<Products> getTop12ProductsByHighestRatingFromActiveStores();
+
+    Page<Products> getProductsFiltered(String search, Long categoryId, Integer minPrice, Integer maxPrice, Double minRating, Pageable pageable);
 }

@@ -14,7 +14,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -80,6 +82,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             String status,
             Pageable pageable
     );
+
     Page<Orders> findByUserId_UserId(
             Integer userId,
             Pageable pageable
@@ -202,9 +205,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "LEFT JOIN \n" +
             "    shipping_status ss ON ss.order_id = o.order_id \n" +
             "GROUP BY \n" +
-            "    o.order_id, u.first_name, u.last_name, o.total_price \n"+
+            "    o.order_id, u.first_name, u.last_name, o.total_price \n" +
             "ORDER BY \n" +
-                    "    o.order_id DESC",
+            "    o.order_id DESC",
             nativeQuery = true)
     List<Object[]> findOrders();
 
@@ -263,6 +266,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
 
 
     Orders findOrdersByOrderId(Integer orderId);
+
     Orders findFirstByOrderCode(String code);
 
 
@@ -359,4 +363,29 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
                                                @Param("startDate") LocalDate startDate,
                                                @Param("endDate") LocalDate endDate,
                                                @Param("storeId") Integer storeId);
+
+
+
+
+    @Query("SELECT SUM(o.totalPrice) FROM Orders o " +
+            "JOIN o.orderDetails od " +
+            "JOIN od.productId p " +
+            "WHERE p.storeId.storeId = :storeId " +
+            "AND o.orderDate BETWEEN :startDate AND :endDate " +
+            "AND EXISTS (" +
+            "   SELECT ss FROM o.shippingStatus ss WHERE ss.status = 'Completed'" +
+            ")")
+    BigDecimal calculateRevenueForStore(@Param("storeId") Integer storeId,
+                                        @Param("startDate") LocalDateTime startDate,
+                                        @Param("endDate") LocalDateTime endDate);
+
+
+    @Query("SELECT DISTINCT o FROM Orders o " +
+            "JOIN o.orderDetails od " +
+            "JOIN od.productId p " +
+            "JOIN o.shippingStatus ss " +
+            "WHERE p.storeId.storeId = :storeId " +
+            "AND ss.status NOT IN ('Completed', 'Cancelled', 'Refunded')")
+    List<Orders> findIncompleteOrdersByStore(@Param("storeId") Integer storeId);
+
 }

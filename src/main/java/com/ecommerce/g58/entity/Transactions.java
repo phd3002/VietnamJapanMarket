@@ -47,4 +47,7 @@ public class Transactions {
 
     @Column(name = "payment_type")
     private String paymentType;
+
+    @Column(name = "status", columnDefinition = "int default 1")
+    private String status;
 }
