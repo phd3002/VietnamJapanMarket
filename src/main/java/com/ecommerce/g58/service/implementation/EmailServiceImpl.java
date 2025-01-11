@@ -1,6 +1,9 @@
 package com.ecommerce.g58.service.implementation;
 
+import com.ecommerce.g58.entity.Invoice;
+import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.enums.PaymentMethod;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.EmailService;
 import com.ecommerce.g58.utils.FormatVND;
@@ -66,5 +69,27 @@ public class EmailServiceImpl implements EmailService {
                 logger.error("Lỗi khi gửi email giao dịch: ", e);
             }
         }).start();
+    }
+
+    @Override
+    public void sendCheckoutCompleteEmail(Users user, Stores store, Invoice invoice, PaymentMethod paymentMethod) {
+        String subject = "Hoàn tất thanh toán";
+        String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                + "<p>Quá trình thanh toán của bạn đã hoàn tất. Dưới đây là thông tin chi tiết của cửa hàng:</p>"
+                + "<p>Địa chỉ cửa hàng: " + store.getStoreAddress() + "</p>"
+                + "<p>Thành phố: " + store.getCity() + "</p>"
+                + "<p>Quận/Huyện: " + store.getDistrict() + "</p>"
+                + "<p>Mã bưu điện: " + store.getPostalCode() + "</p>"
+                + "<p>Số điện thoại cửa hàng: " + store.getStorePhone() + "</p>"
+                + "<p><b>Thông tin thanh toán:</b></p>"
+                + "<p>Số tiền đã thanh toán: " + FormatVND.formatCurrency(invoice.getDeposit()) + "</p>"
+                + "<p>Tổng số tiền: " + FormatVND.formatCurrency(invoice.getTotalAmount()) + "</p>"
+                + "<p>Phí vận chuyển: " + FormatVND.formatCurrency(invoice.getShippingFee()) + "</p>"
+                + "<p>Thuế: " + FormatVND.formatCurrency(invoice.getTax()) + "</p>"
+                + "<p>Số tiền còn lại cần thanh toán: " + FormatVND.formatCurrency(invoice.getRemainingBalance()) + "</p>"
+                + "<p>Phương thức thanh toán: " + paymentMethod + "</p>"
+                + "<p>Chúng tôi chân thành cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi. Sự hài lòng của bạn là niềm vinh hạnh của chúng tôi.</p>";
+
+        sendEmail(user.getEmail(), subject, body);
     }
 }

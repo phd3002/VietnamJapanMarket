@@ -9,6 +9,7 @@ import com.ecommerce.g58.service.implementation.VNPayService;
 import com.ecommerce.g58.utils.FormatVND;
 import com.ecommerce.g58.utils.RandomOrderCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -84,6 +85,8 @@ public class CheckoutController {
 
     @Autowired
     EmailService emailService;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal, HttpSession session,
@@ -258,6 +261,8 @@ public class CheckoutController {
         Integer userId = user.getUserId();
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
+        Optional<Products> productOpt = productService.findById(cartItems.get(0).getProductId().getProductId());
+        Stores storeOpt = storeService.findStoreById(productOpt.get().getStoreId().getStoreId());
         logger.info("User cart items retrieved for user ID {}. Total items: {}", userId, cartItems.size());
 
         // Tính tổng giá giỏ hàng
@@ -473,7 +478,7 @@ public class CheckoutController {
             invoiceRepository.save(invoice);
             model.addAttribute("paymentMethod", paymentMethod);
             logger.info("Order details added to model for display on checkout-complete page.");
-
+            emailService.sendCheckoutCompleteEmail(user, storeOpt, invoice, paymentMethod);
             // Chuyển hướng về trang checkout-complete
             return "checkout-complete";
         } else if (paymentMethod == PaymentMethod.VNPAY) {
@@ -484,7 +489,6 @@ public class CheckoutController {
             session.setAttribute("addressOrderOn", formattedShippingAddress);
             session.setAttribute("paymentMethodOrderOn", paymentMethod);
             session.setAttribute("cartItemIdsOrderOn", cartItemIds);
-
             model.addAttribute("totalOrderPrice", totalWithShipping);
             System.out.println("totalWithShipping: " + totalWithShipping);
             return "create-vnpay-order";
