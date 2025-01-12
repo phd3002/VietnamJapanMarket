@@ -109,6 +109,12 @@
                         </div>
                     </form>
                 </div>
+                <div class="alert alert-danger" style="color: red; text-align: center" th:if="${error}">
+                    <span th:text="${error}"></span>
+                </div>
+                <div class="alert alert-success" style="color: green; text-align: center" th:if="${success}">
+                    <span th:text="${success}"></span>
+                </div>
                 <table class="table table-hover table-bordered" id="sampleTable">
                     <thead>
                     <tr>
@@ -117,6 +123,8 @@
                         <th>Số dư</th>
                         <th>Nội dung</th>
                         <th>Ngay giao dịch</th>
+                        <th>Trạng thái</th>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -124,9 +132,17 @@
                         <td th:text="${transaction.transactionType}">Chuyển tiền</td>
                         <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 0, 'POINT')}">500.000 đ
                         </td>
-                        <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">100.500.000 đ</td>
+                        <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">
+                            100.500.000 đ
+                        </td>
                         <td th:text="${transaction.description}">Chuyển tiền bán hàng tới shop ABC</td>
                         <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy HH:mm')}">17/12/2024
+                        </td>
+                        <td th:switch="${transaction.status}">
+                            <span style="color: #0d8d2d" th:case="1">Hoàn thành</span>
+                            <span style="color: orange" th:case="2">Đang xử lý</span>
+                            <span style="color: red" th:case="3">Từ chối</span>
+                            <span th:case="*">Unknown</span>
                         </td>
                     </tr>
                     </tbody>
@@ -174,40 +190,73 @@
             </div>
         </div>
     </div>
+    <!-- Modal Rút tiền -->
     <div class="modal fade" id="rut-ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
          data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group  col-md-12">
-                              <span class="thong-tin-thanh-toan">
+                <!-- Thêm th:action trỏ vào /seller/wallet/withdraw,
+                     NHƯNG ta sẽ chặn submit mặc định và dùng AJAX để gửi OTP, verify OTP -->
+                <form id="withdrawForm" th:action="@{/seller/wallet/withdraw}" method="post">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group  col-md-12">
                                 <h5>Rút tiền</h5>
-                              </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Giữ lại các input cũ -->
+                            <div class="form-group col-md-12">
+                                <label for="bankName" class="control-label">Nhập tên ngân hàng</label>
+                                <input name="bankName" class="form-control" type="text" id="bankName"
+                                       th:value="${bankName != null ? bankName : ''}" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="accountNumber" class="control-label">Nhập số tài khoản</label>
+                                <input name="accountNumber" class="form-control" type="text" id="accountNumber"
+                                       th:value="${accountNumber != null ? accountNumber : ''}" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="withdrawalAmount" class="control-label">Nhập số tiền muốn rút</label>
+                                <input name="withdrawalAmount" class="form-control" type="number" id="withdrawalAmount"
+                                       max="100000000" min="100000"
+                                       th:value="${withdrawalAmount != null ? withdrawalAmount : ''}"
+                                       required>
+                            </div>
+
+                            <!-- Chỗ để nhập OTP sau khi đã gửi mã -->
+                            <div class="form-group col-md-12 mt-2">
+                                <label for="otp" class="control-label">Nhập mã OTP</label>
+                                <input name="otp" class="form-control" type="text" id="otp"
+                                       th:value="${otp != null ? otp : ''}"
+                                       placeholder="6 chữ số" maxlength="6">
+                            </div>
+
+                            <!-- Nút gửi OTP -->
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-info" id="sendOtpBtn">
+                                    Gửi mã OTP
+                                </button>
+                                <!-- Countdown hiển thị ở đây, mặc định ẩn -->
+                                <span id="countdown" style="margin-left: 10px; color: red; display: none;">
+                                120s
+                            </span>
+                                <!-- Vùng hiển thị message (mặc định ẩn) -->
+                                <div id="withdrawMessage" class="alert" style="display: none;">
+                                    <!-- Nội dung message sẽ được JS chèn vào -->
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Nhập tên ngân hàng</label>
-                            <input class="form-control" type="text" id="bank-name" required>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Nhập số tài khoản</label>
-                            <input class="form-control" type="text" id="account-number" required>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Nhập số tiền muốn rút</label>
-                            <input class="form-control" type="number" id="withdrawal-amount" max="100000000"
-                                   min="100000" required>
-                        </div>
+                    <div class="modal-footer">
+                        <!-- Nút Rút tiền, mặc định disable cho đến khi OTP đúng -->
+                        <button class="btn btn-save" type="submit" id="confirmWithdrawBtn">
+                            Rút tiền
+                        </button>
+                        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
                     </div>
-                    <BR>
-                    <button class="btn btn-save" type="submit" id="out-Button">Rút tiền</button>
-                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-                    <BR>
-                </div>
-                <div class="modal-footer">
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -416,5 +465,146 @@
         }
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sendOtpBtn = document.getElementById("sendOtpBtn");
+        const countdownSpan = document.getElementById("countdown");
+        const confirmWithdrawBtn = document.getElementById("confirmWithdrawBtn");
+        const withdrawForm = document.getElementById("withdrawForm");
+
+        // Hàm bắt đầu countdown 120s
+        function startCountdown(duration) {
+            let timer = duration;
+            countdownSpan.style.display = "inline";
+            sendOtpBtn.disabled = true;
+
+            const countdownInterval = setInterval(function () {
+                timer--;
+                countdownSpan.textContent = `${timer}s`;
+                if (timer <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownSpan.style.display = "none";
+                    sendOtpBtn.disabled = false;
+                    localStorage.removeItem("otpSentTime");
+                }
+            }, 1000);
+        }
+
+        // Kiểm tra xem localStorage có lưu thời điểm gửi OTP không
+        const storedTime = localStorage.getItem("otpSentTime");
+        if (storedTime) {
+            const elapsed = Math.floor((Date.now() - parseInt(storedTime)) / 1000);
+            if (elapsed < 120) {
+                startCountdown(120 - elapsed);
+            }
+        }
+
+        // Khi bấm nút Gửi OTP
+        sendOtpBtn.addEventListener("click", function () {
+            hideWithdrawMessage(); // Ẩn message cũ nếu có
+            const bankName = document.getElementById("bankName").value;
+            const accountNumber = document.getElementById("accountNumber").value;
+            const withdrawalAmount = document.getElementById("withdrawalAmount").value;
+
+            if (!bankName || !accountNumber || !withdrawalAmount) {
+                showWithdrawMessage("Vui lòng nhập đủ thông tin trước khi gửi OTP!", "error");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/seller/wallet/send-otp",
+                data: {
+                    bankName: bankName,
+                    accountNumber: accountNumber,
+                    withdrawalAmount: withdrawalAmount
+                },
+                success: function (response) {
+                    if (response.status === "OK") {
+                        showWithdrawMessage("Mã OTP đã được gửi đến email của bạn.", "success");
+                        localStorage.setItem("otpSentTime", Date.now().toString());
+                        startCountdown(120);
+                    } else {
+                        showWithdrawMessage("Gửi OTP thất bại: " + response.message, "error");
+                    }
+                },
+                error: function (xhr) {
+                    showWithdrawMessage("Lỗi khi gửi OTP: " + xhr.responseText, "error");
+                }
+            });
+        });
+
+        // Chặn submit form mặc định, verify OTP
+        withdrawForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            hideWithdrawMessage(); // Ẩn message cũ nếu có
+
+            const otpValue = document.getElementById("otp").value;
+            const bankName = document.getElementById("bankName").value;
+            const accountNumber = document.getElementById("accountNumber").value;
+            const withdrawalAmount = document.getElementById("withdrawalAmount").value;
+
+            if (!otpValue) {
+                showWithdrawMessage("Vui lòng nhập OTP!", "error");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/seller/wallet/verify-otp",
+                data: {
+                    otp: otpValue,
+                    bankName: bankName,
+                    accountNumber: accountNumber,
+                    withdrawalAmount: withdrawalAmount
+                },
+                success: function (response) {
+                    if (response.status === "OK") {
+                        showWithdrawMessage("Xác thực OTP thành công! Tiến hành rút tiền...", "success");
+                        // Chờ 1 chút cho user thấy message, rồi submit form thật
+                        setTimeout(function () {
+                            withdrawForm.submit();
+                        }, 1000);
+                    } else {
+                        // Sai OTP hoặc hết hạn
+                        showWithdrawMessage("Xác thực OTP thất bại: " + response.message, "error");
+                    }
+                },
+                error: function (xhr) {
+                    showWithdrawMessage("Lỗi verify OTP: " + xhr.responseText, "error");
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    // type = 'success' hoặc 'error'
+    function showWithdrawMessage(message, type) {
+        const msgEl = document.getElementById('withdrawMessage');
+
+        // Gỡ hết class alert cũ
+        msgEl.classList.remove('alert-success', 'alert-danger');
+
+        // Thêm class mới tuỳ theo kiểu
+        if (type === 'success') {
+            msgEl.classList.add('alert-success'); // màu xanh
+        } else {
+            msgEl.classList.add('alert-danger');  // màu đỏ
+        }
+
+        // Set nội dung và hiển thị
+        msgEl.textContent = message;
+        msgEl.style.display = 'block';
+    }
+
+    // Hàm ẩn message (nếu muốn)
+    function hideWithdrawMessage() {
+        const msgEl = document.getElementById('withdrawMessage');
+        msgEl.style.display = 'none';
+    }
+</script>
+
 </body>
 </html>

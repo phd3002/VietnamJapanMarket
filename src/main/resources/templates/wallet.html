@@ -106,7 +106,6 @@
 <!--                                                <th scope="col" th:text="#{transaction.source}">Nguồn</th>-->
                                                 <th scope="col" th:text="#{transaction.balance}">Số dư</th>
                                                 <th scope="col" th:text="#{transaction.content}">Nội dung</th>
-                                                <th scope="col">Trạng thái</th>
                                             </tr>
                                             </thead>
                                             <tbody id="transaction-history">
@@ -120,16 +119,8 @@
                                                 </td>
 <!--                                                <td th:text="${transaction.transactionParty}">Đã nhận từ người mua</td>-->
                                                 <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">150,000</td>
-                                                <td th:text="${transaction.description}">Description here</td>
-                                                <td th:switch="${transaction.status}">
-                                                    <span style="color: #0d8d2d" th:case="1">Hoàn thành</span>
-                                                    <span style="color: orange" th:case="2">Đang xử lý</span>
-                                                    <span style="color: red" th:case="3">Từ chối</span>
-                                                    <span th:case="*">Unknown</span>
-                                                </td>
-
-
-                                            </tr>
+                                                <td th:utext="${transaction.description}">Description here</td>
+                                                </tr>
                                             </tbody>
                                         </table>
 

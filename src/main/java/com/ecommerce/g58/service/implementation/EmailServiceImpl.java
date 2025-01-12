@@ -47,6 +47,27 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public void sendEmailAsync(String to, String subject, String body) {
+        new Thread(() -> {
+            Users user = userRepository.findByEmail(to);
+            if (user == null) {
+                throw new IllegalArgumentException("No user found with email: " + to);
+            }
+            try {
+                MimeMessage mimeMessage = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+                helper.setTo(to);
+                helper.setSubject(subject);
+                helper.setText(body, true);
+                mailSender.send(mimeMessage);
+            } catch (MessagingException e) {
+                throw new RuntimeException("Failed to send email", e);
+            }
+        }).start();
+    }
+
+    @Override
     public void sendTransactionMailAsync(Users user, Transactions transaction, Long amount) {
         // Tạo luồng riêng
         new Thread(() -> {

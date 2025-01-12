@@ -8,6 +8,7 @@ import com.ecommerce.g58.enums.PaymentMethod;
 
 public interface EmailService {
     void sendEmail(String to, String subject, String body);
+    void sendEmailAsync(String to, String subject, String body);
     void sendTransactionMailAsync(Users user, Transactions transaction, Long amount);
     void sendCheckoutCompleteEmail(Users user, Stores store, Invoice invoice, PaymentMethod paymentMethod);
 }

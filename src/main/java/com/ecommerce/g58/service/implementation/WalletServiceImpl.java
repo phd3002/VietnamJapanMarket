@@ -23,6 +23,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -172,6 +173,25 @@ public class WalletServiceImpl implements WalletService {
         transactionRepository.save(transaction);
     }
 
+    @Override
+    public void withdraw(Wallet wallet, String bankName, String bankAccount, BigDecimal amount) {
+        Transactions transactions = new Transactions();
+        transactions.setToWalletId(wallet);
+        transactions.setTransactionType("Rút tiền");
+        transactions.setAmount(amount.negate().longValue());
+        transactions.setPreviousBalance(wallet.getBalance());
+        transactions.setDescription("Yêu cầu rút tiền về tài khoản <strong> "+bankAccount+" </strong> - Ngân hàng <strong>" +bankName+" </strong>");
+        transactions.setStatus(String.valueOf(2)); // 2 là đang xử lý
+        transactions.setCreatedAt(LocalDateTime.now());
+        transactionRepository.save(transactions);
+        logger.info("Thêm transaction rút tiền thành công");
+        BigDecimal currentBalance = BigDecimal.valueOf(wallet.getBalance());
+        BigDecimal newBalance = currentBalance.subtract(amount);
+        wallet.setBalance(newBalance.longValue());
+        walletRepository.save(wallet);
+
+    }
+
 //    @Override
 //    public void addToWalletForLogistics(Long amount, int orderId) {
 //        Orders order = orderRepository.findOrdersByOrderId(orderId);
@@ -298,6 +318,83 @@ public class WalletServiceImpl implements WalletService {
                 }
             } else {
                 dto.setStatus(1); // hoặc một giá trị mặc định nào đó
+            }
+            return dto;
+        });
+
+        return walletPage;
+    }
+
+    @Override
+    public Page<WalletDTO> getWithdrawRequest(Integer userId, LocalDateTime startDate, LocalDateTime endDate, int page, int size) {
+        // Create a Pageable object
+        PageRequest pageable = PageRequest.of(page, size);
+
+        // Fetch transactions with pagination and date filtering
+        Page<Object[]> results = walletRepository.findWithdrawRequest(userId, startDate, endDate, pageable);
+
+        // Map the results to WalletDTO
+        Page<WalletDTO> walletPage = results.map(result -> {
+            WalletDTO dto = new WalletDTO();
+
+            // Set transaction date
+            Timestamp transactionDateTimestamp = (Timestamp) result[0];
+            dto.setTransactionDate(transactionDateTimestamp.toLocalDateTime());
+
+            // Set transaction type
+            String transactionType = (String) result[1];
+            dto.setTransactionType(transactionType);
+
+            // Set amount
+            if (result[2] instanceof BigInteger) {
+                dto.setAmount(new BigDecimal((BigInteger) result[2]));
+            } else if (result[2] instanceof BigDecimal) {
+                dto.setAmount((BigDecimal) result[2]);
+            }
+            if (result[3] instanceof BigInteger) {
+                dto.setPreviousBalance(new BigDecimal((BigInteger) result[3]));
+            } else if (result[3] instanceof BigDecimal) {
+                dto.setPreviousBalance((BigDecimal) result[3]);
+            }
+            dto.setDescription((String) result[4]); // Default description for other types
+
+
+            // Set transactionParty based on transaction type
+            if ("Trừ tiền".equals(transactionType)) {
+                dto.setTransactionParty("Đã gửi cho shop");
+            } else if ("Cộng tiền".equals(transactionType)) {
+                dto.setTransactionParty("Đã nhận từ người mua");
+            } else {
+                dto.setTransactionParty(" "); // Fallback, if needed
+            }
+
+            // Set wallet balance
+            if (result[6] instanceof BigInteger) {
+                dto.setWalletBalance(new BigDecimal((BigInteger) result[6]));
+            } else if (result[6] instanceof BigDecimal) {
+                dto.setWalletBalance((BigDecimal) result[6]);
+            }
+            if (result[8] != null) {
+                if (result[8] instanceof Integer) {
+                    dto.setStatus((Integer) result[8]);
+                } else if (result[8] instanceof Number) {
+                    dto.setStatus(((Number) result[8]).intValue());
+                } else {
+                    dto.setStatus(1); // hoặc một giá trị mặc định nào đó
+                }
+            } else {
+                dto.setStatus(1); // hoặc một giá trị mặc định nào đó
+            }
+            if (result[9] != null) {
+                if (result[9] instanceof Integer) {
+                    dto.setId((Integer) result[9]);
+                } else if (result[9] instanceof Number) {
+                    dto.setId(((Number) result[9]).intValue());
+                } else {
+                    dto.setId(1); // hoặc một giá trị mặc định nào đó
+                }
+            } else {
+                dto.setId(1); // hoặc một giá trị mặc định nào đó
             }
             return dto;
         });
