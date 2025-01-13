@@ -182,6 +182,7 @@ public class OrderServiceImpl implements OrderService {
         status.setStatus(newStatus);
         status.setUpdatedAt(LocalDateTime.now());
         shippingStatusRepository.save(status);
+
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.ecommerce.g58.entity.Countries;
 import com.ecommerce.g58.entity.Stores;
 import com.ecommerce.g58.entity.Users;
 import com.ecommerce.g58.service.CountryService;
+import com.ecommerce.g58.service.OrderService;
 import com.ecommerce.g58.service.StoreService;
 import com.ecommerce.g58.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ import java.util.Optional;
 public class SellerController {
     @Autowired
     private StoreService storeService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private UserService userService;
@@ -128,6 +132,7 @@ public class SellerController {
         User userDetails = (User) authentication.getPrincipal();
         Users user = userService.findByEmail(userDetails.getUsername());
         Integer userId = user.getUserId();
+        Optional<Stores> store = storeService.findByOwnerId(user);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
@@ -170,7 +175,7 @@ public class SellerController {
         model.addAttribute("totalRevenueLast4Months", totalRevenueLast4Months);
         model.addAttribute("totalRevenueLast5Months", totalRevenueLast5Months);
 
-        Optional<Stores> store = storeService.findByOwnerId(user);
+//        Optional<Stores> store = storeService.findByOwnerId(user);
         store.ifPresent(value -> model.addAttribute("storeId", value.getStoreId()));
         return "seller/dashboard";
     }

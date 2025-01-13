@@ -319,7 +319,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 userTransactions.setPreviousBalance(totalAmount.longValue());
                 userTransactions.setToWalletId(userWallet.get());
                 userTransactions.setTransactionType("Hoàn tiền");
-                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " tiền từ đơn hàng do bạn đã hủy đơn " + order.getOrderCode());
+                userTransactions.setDescription("Hoàn " + invoice.getFormatedDeposit() + " tiền từ đơn hàng do đơn " + order.getOrderCode() + "đã bị hủy");
                 userTransactions.setCreatedAt(LocalDateTime.now());
 
 

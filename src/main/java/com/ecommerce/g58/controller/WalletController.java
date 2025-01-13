@@ -2,6 +2,9 @@ package com.ecommerce.g58.controller;
 
 import com.ecommerce.g58.dto.WalletDTO;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.entity.Wallet;
+import com.ecommerce.g58.repository.WalletRepository;
+import com.ecommerce.g58.service.OtpService;
 import com.ecommerce.g58.service.UserService;
 import com.ecommerce.g58.service.WalletService;
 import com.ecommerce.g58.service.implementation.ProfileService;
@@ -13,16 +16,19 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/wallet")
@@ -30,6 +36,12 @@ public class WalletController {
 
     private final WalletService walletService;
     private final ProfileService profileService;
+
+    @Autowired
+    private WalletRepository walletRepository;
+
+    @Autowired
+    private OtpService otpService;
 
     @Autowired
     public WalletController(WalletService walletService, ProfileService profileService) {
@@ -95,5 +107,129 @@ public class WalletController {
         }
 
         return "wallet"; // Thymeleaf template name
+    }
+
+    @PostMapping("/withdraw")
+    public String withdraw(@RequestParam String bankName,
+                           @RequestParam String accountNumber,
+                           @RequestParam BigDecimal withdrawalAmount,
+                           RedirectAttributes redirectAttributes, Principal principal) {
+
+        // 1. Check bankName validity
+        if (bankName == null || bankName.isBlank() || bankName.length() > 20) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Tên ngân hàng không được để trống và không được vượt quá 20 ký tự.");
+            return "redirect:/wallet";
+        }
+        // Ensure bankName has only letters
+        if (!bankName.matches("^[a-zA-Z]+$")) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Tên ngân hàng chỉ được chứa chữ cái (A–Z, a–z).");
+            return "redirect:/wallet";
+        }
+
+        // 2. Check accountNumber validity
+        if (accountNumber == null || accountNumber.isBlank()) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Số tài khoản không được để trống.");
+            return "redirect:/wallet";
+        }
+        // Ensure accountNumber has only digits
+        if (!accountNumber.matches("^[0-9]+$")) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Số tài khoản chỉ được chứa chữ số (0–9).");
+            return "redirect:/wallet";
+        }
+
+        if (withdrawalAmount == null || withdrawalAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Số tiền rút phải lớn hơn 0.");
+            return "redirect:/wallet";
+        }
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Xin vui lòng đăng nhập để thực hiện");
+            return "redirect:/wallet";
+        }
+        Users user = profileService.getUserByEmail(principal.getName());
+        Optional<Wallet> wallet = walletRepository.findByUserId(user);
+        if (wallet.isPresent()) {
+            if (wallet.get().getBalance() < withdrawalAmount.doubleValue()) {
+                redirectAttributes.addFlashAttribute("error",
+                        "Số dư không đủ, bạn chỉ có thể rút tối đa " + wallet.get().getBalance());
+                return "redirect:/wallet";
+            }
+        }
+        if (wallet.isPresent()) {
+            walletService.withdraw(wallet.get(), bankName, accountNumber, withdrawalAmount);
+            redirectAttributes.addFlashAttribute("success",
+                    "Yêu cầu rút tiền thành công");
+        }
+        return "redirect:/wallet";
+    }
+    @PostMapping("/send-otp")
+    @ResponseBody
+    public Map<String, Object> sendOtp(@RequestParam String bankName,
+                                       @RequestParam String accountNumber,
+                                       @RequestParam BigDecimal withdrawalAmount,
+                                       Principal principal) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            if (principal == null) {
+                throw new RuntimeException("Chưa đăng nhập!");
+            }
+            Users user = profileService.getUserByEmail(principal.getName());
+            if (user == null) {
+                throw new RuntimeException("Không tìm thấy user!");
+            }
+
+            // Validate sơ bộ
+            if (bankName.isBlank() || accountNumber.isBlank() || withdrawalAmount.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new RuntimeException("Thông tin rút tiền không hợp lệ!");
+            }
+
+            // Gọi service sinh OTP, gửi email
+            otpService.generateAndSendOtp(user);
+
+            response.put("status", "OK");
+        } catch (Exception e) {
+            response.put("status", "FAIL");
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+
+    // ========== 3) Verify OTP ==========
+    @PostMapping("/verify-otp")
+    @ResponseBody
+    public Map<String, Object> verifyOtp(@RequestParam String otp,
+                                         @RequestParam String bankName,
+                                         @RequestParam String accountNumber,
+                                         @RequestParam BigDecimal withdrawalAmount,
+                                         Principal principal) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            if (principal == null) {
+                throw new RuntimeException("Chưa đăng nhập!");
+            }
+            Users user = profileService.getUserByEmail(principal.getName());
+            if (user == null) {
+                throw new RuntimeException("Không tìm thấy user!");
+            }
+
+            // Gọi service check OTP
+            boolean isValid = otpService.verifyOtp(user, otp);
+            if (!isValid) {
+                throw new RuntimeException("OTP không đúng hoặc đã hết hạn!");
+            }
+
+            response.put("status", "OK");
+        } catch (Exception e) {
+            response.put("status", "FAIL");
+            response.put("message", e.getMessage());
+        }
+        return response;
     }
 }

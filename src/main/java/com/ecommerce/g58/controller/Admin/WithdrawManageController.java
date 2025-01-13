@@ -3,7 +3,9 @@ package com.ecommerce.g58.controller.Admin;
 import com.ecommerce.g58.dto.WalletDTO;
 import com.ecommerce.g58.entity.Transactions;
 import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.entity.Wallet;
 import com.ecommerce.g58.repository.TransactionRepository;
+import com.ecommerce.g58.repository.WalletRepository;
 import com.ecommerce.g58.service.EmailService;
 import com.ecommerce.g58.service.WalletService;
 import com.ecommerce.g58.service.implementation.ProfileService;
@@ -35,17 +37,19 @@ public class WithdrawManageController {
 
     private final TransactionRepository transactionRepository;
     private final EmailService emailService;
+    private final WalletRepository walletRepository;
 
     @Autowired
     public WithdrawManageController(WalletService walletService,
                                     ProfileService profileService,
                                     TransactionRepository transactionRepository,
-                                    EmailService emailService
-    ) {
+                                    EmailService emailService,
+                                    WalletRepository walletRepository) {
         this.walletService = walletService;
         this.profileService = profileService;
         this.transactionRepository = transactionRepository;
         this.emailService = emailService;
+        this.walletRepository = walletRepository;
     }
 
     @GetMapping
@@ -122,15 +126,23 @@ public class WithdrawManageController {
             }
 
             // 3) Update status -> "1" (hoàn thành)
+            Wallet sellerWallet = tx.getToWalletId();
             tx.setStatus("1");
+            tx.setPreviousBalance(sellerWallet.getBalance() + tx.getAmount());
             transactionRepository.save(tx);
 
             // 4) Gửi email
             Users user = tx.getToWalletId().getUserId(); // tuỳ logic: có thể fromWalletId
             emailService.sendEmailAsync(user.getEmail(),
                     "[VJ-Market] Giao dịch rút tiền đã được xác nhận",
-                    "<p> Yêu cầu rút tiền  của bạn đã được xác nhận thành công!</p>"
+                    "<p> Yêu cầu rút " + tx.getAmount() + " VND của bạn đã được xác nhận thành công!</p>"
             );
+
+
+            sellerWallet.setBalance(sellerWallet.getBalance() + tx.getAmount());
+            walletRepository.save(sellerWallet);
+
+
 
             // 5) Dùng FlashAttribute để show message
             redirectAttributes.addFlashAttribute("successMessage", "Xác nhận rút tiền thành công!");
@@ -165,6 +177,12 @@ public class WithdrawManageController {
             transactionRepository.save(tx);
 
             // Gửi email kèm lý do
+//            Wallet sellerWallet = tx.getToWalletId();
+//            sellerWallet.setBalance(sellerWallet.getBalance() - tx.getAmount());
+//            walletRepository.save(sellerWallet);
+//            Transactions refundTx = new Transactions();
+
+
             Users user = tx.getToWalletId().getUserId();
             String subject = "[VJ-Market] Giao dịch rút tiền đã bị từ chối";
             String body = "<p>Giao dịch rút tiền của bạn đã bị từ chối.</p>"

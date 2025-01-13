@@ -367,7 +367,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
 
 
 
-    @Query("SELECT SUM(o.totalPrice) FROM Orders o " +
+    @Query("SELECT SUM(od.price * od.quantity) FROM Orders o " +
             "JOIN o.orderDetails od " +
             "JOIN od.productId p " +
             "WHERE p.storeId.storeId = :storeId " +

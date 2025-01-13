@@ -60,9 +60,11 @@ public class MaintenanceFeeService {
         for (Stores store : allStores) {
             // Tính doanh thu hàng tháng
             BigDecimal monthlyRevenue = calculateMonthlyRevenue(store.getStoreId());
+            System.out.println("monthlyRevenue: " + monthlyRevenue);
 
             // Tính phí duy trì (5% doanh thu)
             BigDecimal maintenanceFee = monthlyRevenue.multiply(MAINTENANCE_FEE_PERCENTAGE).setScale(2, BigDecimal.ROUND_HALF_UP);
+            System.out.println("maintenanceFee: " + maintenanceFee);
 
             // Lấy ví của người bán (owner)
             Users owner = store.getOwnerId();
@@ -89,9 +91,9 @@ public class MaintenanceFeeService {
                 Transactions transaction = new Transactions();
                 transaction.setFromWalletId(sellerWallet);
                 transaction.setAmount(maintenanceFee.longValue());
-                transaction.setPreviousBalance(walletBalance.longValue());
+                transaction.setPreviousBalance(walletBalance.subtract(maintenanceFee).longValue());
                 transaction.setTransactionType("Maintenance Fee");
-                transaction.setDescription("Trừ phí duy trì 5% doanh thu tháng " + LocalDate.now().getMonth());
+                transaction.setDescription("Trừ phí duy trì 5% doanh thu tháng " + LocalDate.now().minusMonths(1).getMonth());
                 transaction.setCreatedAt(LocalDateTime.now());
                 transactionRepository.save(transaction);
 
@@ -111,7 +113,7 @@ public class MaintenanceFeeService {
                 }
 
                 // Gửi email xác nhận thanh toán (nếu cần)
-                sendMaintenanceFeePaidEmail(store);
+                sendMaintenanceFeePaidEmail(store, maintenanceFee, walletBalance.subtract(maintenanceFee).longValue());
 
                 // Log thông báo thành công
                 logger.info("Trừ phí duy trì thành công cho storeId: {}", store.getStoreId());
@@ -164,7 +166,7 @@ public class MaintenanceFeeService {
                 Users owner = store.getOwnerId();
                 owner.setStatus("inactive");
                 userRepository.save(owner);
-                logger.info("Khóa tài khoảm thành công cho user: {}", owner.getUserId());
+                logger.info("Khóa tài khoản thành công cho user: {}", owner.getUserId());
                 // Log thông báo khóa
 
             }
@@ -191,6 +193,7 @@ public class MaintenanceFeeService {
 
         // Lấy doanh thu từ OrderService
         BigDecimal revenue = orderService.calculateRevenueForStore(storeId, startOfMonth, endOfMonth);
+        System.out.println("revenue: " + revenue);
         return revenue != null ? revenue : BigDecimal.ZERO;
     }
 
@@ -217,7 +220,7 @@ public class MaintenanceFeeService {
     /**
      * Gửi email xác nhận thanh toán phí duy trì.
      */
-    private void sendMaintenanceFeePaidEmail(Stores store) {
+    private void sendMaintenanceFeePaidEmail(Stores store, BigDecimal maintenanceFee, long walletBalance) {
         Users owner = store.getOwnerId();
         if (owner == null) return;
         String email = owner.getEmail();
@@ -225,6 +228,8 @@ public class MaintenanceFeeService {
         String subject = "[VJ-Market] Phí duy trì cửa hàng đã được thanh toán";
         String body = "<p>Xin chào " + owner.getFirstName() + ",</p>"
                 + "<p>Cửa hàng <b>" + store.getStoreName() + "</b> của bạn đã thanh toán phí duy trì thành công.</p>"
+                + "<p>Số tiền cần thanh toán: " + maintenanceFee.toString() + " VND</p>"
+                + "<p>Số dư: " + walletBalance + " VND</p>"
                 + "<p>Cửa hàng của bạn đã được mở khóa và sản phẩm sẽ hiển thị lại trên trang web.</p>"
                 + "<p>Trân trọng,</p>"
                 + "<p>Đội ngũ VJ-Market</p>";

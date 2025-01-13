@@ -135,7 +135,7 @@
                         <td th:text="${#numbers.formatDecimal(transaction.previousBalance, 1, 'COMMA', 0, 'POINT')}">
                             100.500.000 đ
                         </td>
-                        <td th:text="${transaction.description}">Chuyển tiền bán hàng tới shop ABC</td>
+                        <td th:utext="${transaction.description}">Chuyển tiền bán hàng tới shop ABC</td>
                         <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy HH:mm')}">17/12/2024
                         </td>
                         <td th:switch="${transaction.status}">
@@ -208,8 +208,17 @@
                             <!-- Giữ lại các input cũ -->
                             <div class="form-group col-md-12">
                                 <label for="bankName" class="control-label">Nhập tên ngân hàng</label>
-                                <input name="bankName" class="form-control" type="text" id="bankName"
+                                <select name="bankName" class="form-control" type="text" id="bankName"
                                        th:value="${bankName != null ? bankName : ''}" required>
+                                    <option value="" disabled selected>Chọn ngân hàng</option>
+                                    <option value="Vietcombank">Vietcombank</option>
+                                    <option value="Techcombank">Techcombank</option>
+                                    <option value="BIDV">BIDV</option>
+                                    <option value="Vietinbank">Vietinbank</option>
+                                    <option value="ACB">ACB</option>
+                                    <option value="Sacombank">Sacombank</option>
+                                    <option value="MBBank">MBBank</option>
+                                </select>
                             </div>
                             <div class="form-group col-md-12">
                                 <label for="accountNumber" class="control-label">Nhập số tài khoản</label>
@@ -272,16 +281,18 @@
                               </span>
                         </div>
                     </div>
+                    <form method="GET" action="/vnpay-recharge-seller">
                     <div class="row">
                         <div class="form-group col-md-12">
                             <label class="control-label">Nhập số tiền muốn nạp</label>
-                            <input class="form-control" type="number" max="100000000" min="100000" required>
+                            <input id="recharge-amount" name="recharge-amount" class="form-control" type="number" max="100000000" min="100000" required>
                         </div>
                     </div>
                     <BR>
                     <button class="btn btn-save" type="submit" id="in-Button">Nạp tiền</button>
                     <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
                     <BR>
+                    </form>
                 </div>
                 <div class="modal-footer">
                 </div>

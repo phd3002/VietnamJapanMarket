@@ -185,10 +185,10 @@ public class WalletServiceImpl implements WalletService {
         transactions.setCreatedAt(LocalDateTime.now());
         transactionRepository.save(transactions);
         logger.info("Thêm transaction rút tiền thành công");
-        BigDecimal currentBalance = BigDecimal.valueOf(wallet.getBalance());
-        BigDecimal newBalance = currentBalance.subtract(amount);
-        wallet.setBalance(newBalance.longValue());
-        walletRepository.save(wallet);
+//        BigDecimal currentBalance = BigDecimal.valueOf(wallet.getBalance());
+//        BigDecimal newBalance = currentBalance.subtract(amount);
+//        wallet.setBalance(newBalance.longValue());
+//        walletRepository.save(wallet);
 
     }
 
@@ -252,6 +252,7 @@ public class WalletServiceImpl implements WalletService {
 
             Transactions transactions = new Transactions();
             transactions.setAmount(amount);
+            transactions.setPreviousBalance(wallet.getBalance());
             transactions.setToWalletId(userWallet.get());
             transactions.setTransactionType("Nạp tiền");
             transactions.setDescription("Nạp thành công " + FormatVND.formatCurrency(BigDecimal.valueOf(amount)) + " vào tài khoản của bạn ");

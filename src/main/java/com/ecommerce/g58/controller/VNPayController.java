@@ -233,7 +233,160 @@ public class VNPayController {
             model.addAttribute("message", "Recharge successful!");
             return "recharge-complete";
         } else {
-            System.out.println("Nạp nok");
+            System.out.println("Nạp ok");
+            model.addAttribute("errorMessage", "Nạp tiền thất bại.");
+            return "redirect:/wallet";
+        }
+    }
+
+    @GetMapping("/vnpay-recharge-seller")
+    public String rechargeWalletSeller(@RequestParam("recharge-amount") int rechargeAmount,
+                                 HttpServletRequest request, HttpServletResponse httpServletResponse) {
+
+        String serverPath;
+        String serverHost = request.getHeader("X-Forwarded-Host");
+        if (!StringUtils.isEmpty(serverHost)) {
+            serverPath = "https://" + serverHost;
+            System.out.println("Using X-Forwarded-Host: " + serverHost);
+        } else {
+            String urlFixed = String.valueOf(request.getRequestURL());
+            serverPath = urlFixed.replace(request.getRequestURI(), "");
+            System.out.println("Using request URL: " + urlFixed);
+        }
+
+        String vnpayUrl = vnPayService.rechargeSeller(rechargeAmount, "orderInfo", serverPath);
+        System.out.println("VNPay URL created: " + vnpayUrl);
+
+        httpServletResponse.setHeader("Location", vnpayUrl);
+        httpServletResponse.setStatus(302);
+        System.out.println("Redirecting to VNPay URL");
+
+        return null;
+
+    }
+
+    @GetMapping("/vnpay-recharge-return-seller")
+    public String rechargeWalletReturnSeller(HttpServletRequest request,  Model model) {
+        int paymentStatus = vnPayService.orderReturn(request);
+
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+        String paymentTime = request.getParameter("vnp_PayDate");
+        String transactionId = request.getParameter("vnp_TransactionNo");
+        int rechargeAmount = Integer.parseInt(request.getParameter("vnp_Amount")) / 100;
+
+        model.addAttribute("orderId", orderInfo);
+        model.addAttribute("rechargeAmount", FormatVND.formatCurrency(BigDecimal.valueOf(rechargeAmount)));
+        model.addAttribute("paymentTime", paymentTime);
+        model.addAttribute("transactionId", transactionId);
+        System.out.println("ok");
+        if (paymentStatus == 1) {
+            walletService.recharge(rechargeAmount);
+            model.addAttribute("message", "Recharge successful!");
+            return "seller/recharge-complete-seller";
+        } else {
+            System.out.println("Nạp ok");
+            model.addAttribute("errorMessage", "Nạp tiền thất bại.");
+            return "redirect:/wallet";
+        }
+    }
+
+    @GetMapping("/vnpay-recharge-logistic")
+    public String rechargeWalletLogistic(@RequestParam("recharge-amount") int rechargeAmount,
+                                       HttpServletRequest request, HttpServletResponse httpServletResponse) {
+
+        String serverPath;
+        String serverHost = request.getHeader("X-Forwarded-Host");
+        if (!StringUtils.isEmpty(serverHost)) {
+            serverPath = "https://" + serverHost;
+            System.out.println("Using X-Forwarded-Host: " + serverHost);
+        } else {
+            String urlFixed = String.valueOf(request.getRequestURL());
+            serverPath = urlFixed.replace(request.getRequestURI(), "");
+            System.out.println("Using request URL: " + urlFixed);
+        }
+
+        String vnpayUrl = vnPayService.rechargeLogistic(rechargeAmount, "orderInfo", serverPath);
+        System.out.println("VNPay URL created: " + vnpayUrl);
+
+        httpServletResponse.setHeader("Location", vnpayUrl);
+        httpServletResponse.setStatus(302);
+        System.out.println("Redirecting to VNPay URL");
+
+        return null;
+
+    }
+
+    @GetMapping("/vnpay-recharge-return-logistic")
+    public String rechargeWalletReturnLogistic(HttpServletRequest request,  Model model) {
+        int paymentStatus = vnPayService.orderReturn(request);
+
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+        String paymentTime = request.getParameter("vnp_PayDate");
+        String transactionId = request.getParameter("vnp_TransactionNo");
+        int rechargeAmount = Integer.parseInt(request.getParameter("vnp_Amount")) / 100;
+
+        model.addAttribute("orderId", orderInfo);
+        model.addAttribute("rechargeAmount", FormatVND.formatCurrency(BigDecimal.valueOf(rechargeAmount)));
+        model.addAttribute("paymentTime", paymentTime);
+        model.addAttribute("transactionId", transactionId);
+        System.out.println("ok");
+        if (paymentStatus == 1) {
+            walletService.recharge(rechargeAmount);
+            model.addAttribute("message", "Recharge successful!");
+            return "logistic/recharge-complete-logistic";
+        } else {
+            System.out.println("Nạp ok");
+            model.addAttribute("errorMessage", "Nạp tiền thất bại.");
+            return "redirect:/wallet";
+        }
+    }
+
+    @GetMapping("/vnpay-recharge-admin")
+    public String rechargeWalletAdmin(@RequestParam("recharge-amount") int rechargeAmount,
+                                       HttpServletRequest request, HttpServletResponse httpServletResponse) {
+
+        String serverPath;
+        String serverHost = request.getHeader("X-Forwarded-Host");
+        if (!StringUtils.isEmpty(serverHost)) {
+            serverPath = "https://" + serverHost;
+            System.out.println("Using X-Forwarded-Host: " + serverHost);
+        } else {
+            String urlFixed = String.valueOf(request.getRequestURL());
+            serverPath = urlFixed.replace(request.getRequestURI(), "");
+            System.out.println("Using request URL: " + urlFixed);
+        }
+
+        String vnpayUrl = vnPayService.rechargeAdmin(rechargeAmount, "orderInfo", serverPath);
+        System.out.println("VNPay URL created: " + vnpayUrl);
+
+        httpServletResponse.setHeader("Location", vnpayUrl);
+        httpServletResponse.setStatus(302);
+        System.out.println("Redirecting to VNPay URL");
+
+        return null;
+
+    }
+
+    @GetMapping("/vnpay-recharge-return-admin")
+    public String rechargeWalletReturnAdmin(HttpServletRequest request,  Model model) {
+        int paymentStatus = vnPayService.orderReturn(request);
+
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+        String paymentTime = request.getParameter("vnp_PayDate");
+        String transactionId = request.getParameter("vnp_TransactionNo");
+        int rechargeAmount = Integer.parseInt(request.getParameter("vnp_Amount")) / 100;
+
+        model.addAttribute("orderId", orderInfo);
+        model.addAttribute("rechargeAmount", FormatVND.formatCurrency(BigDecimal.valueOf(rechargeAmount)));
+        model.addAttribute("paymentTime", paymentTime);
+        model.addAttribute("transactionId", transactionId);
+        System.out.println("ok");
+        if (paymentStatus == 1) {
+            walletService.recharge(rechargeAmount);
+            model.addAttribute("message", "Recharge successful!");
+            return "admin/recharge-complete-admin";
+        } else {
+            System.out.println("Nạp ok");
             model.addAttribute("errorMessage", "Nạp tiền thất bại.");
             return "redirect:/wallet";
         }
