@@ -201,6 +201,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
 //        System.out.println("Admin Wallet: " + adminWallet);
         Optional<Wallet> logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5);
+//        emailService.sendOrderStatusChangeEmail(order.getUserId(), invoice, order, status);
 //        System.out.println("Logistic Wallet: " + logisticWallet);
 
         // Xử lý theo trạng thái đơn hàng
@@ -255,12 +256,18 @@ public class OrderServiceImpl implements OrderService {
                 shippingStatus.setStatus("Shipping");
                 shippingStatus.setUpdatedAt(LocalDateTime.now());
                 shippingStatusRepository.save(shippingStatus);
+                createNotification(order.getUserId(), "Đơn hàng thất bại do không liên lạc được",
+                        "Đơn hàng " + order.getOrderCode() + " giao thất bại do shipper không liên lạc được",
+                        "/order-detail/" + orderId
+                );
+                emailService.sendWarningEmail(order.getUserId(), order, shippingStatus);
             } else {
                 shippingStatus.setStatus("Cancelled");
                 shippingStatus.setPrevious_status("Failed");
                 shippingStatus.setReason("Shipping failed");
                 shippingStatus.setUpdatedAt(LocalDateTime.now());
                 shippingStatusRepository.save(shippingStatus);
+                emailService.sendOrderCancellationEmail(order.getUserId(), order);
 
                 Wallet userWallet = walletRepository.findByUserId(order.getUserId())
                         .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ví của khách hàng"));
@@ -283,7 +290,7 @@ public class OrderServiceImpl implements OrderService {
                         String.valueOf(TransactionType.SHIPPING_FEE));
 
                 // Tạo thông báo
-                createNotification(order.getUserId(), "Đơn hàng thất bại",
+                createNotification(order.getUserId(), "Đơn hàng bị hủy",
                         "Đơn hàng " + order.getOrderCode() + " giao thất bại. Số tiền đã hoàn: " + invoice.getDeposit().subtract(invoice.getShippingFee()),
                         "/order-detail/" + orderId
                 );
@@ -292,6 +299,7 @@ public class OrderServiceImpl implements OrderService {
 //                        "/order-detail/" + orderId);
             }
         } else if (status.equalsIgnoreCase("Completed")) {
+            emailService.sendOrderStatusChangeEmail(order.getUserId(), invoice, order, status);
             if (sellWallet.isPresent() && adminWallet.isPresent()) {
                 if (invoice.getRemainingBalance().compareTo(BigDecimal.ZERO) != 0) {
                     // Cập nhật ví admin chưa trừ ship, nhận tiền từ người mua mà ship đã thu
@@ -400,6 +408,7 @@ public class OrderServiceImpl implements OrderService {
                     createNotification(sellWallet.get().getUserId(), "Đơn hàng giao thành công",
                             "Đơn hàng " + order.getOrderCode() + " đã giao thành công. Số tiền nhận: " + invoice.getFormatedRemainingBalance(),
                             "/order-detail/" + orderId);
+
                     createNotification(order.getUserId(), "Đơn hàng giao thành công",
                             "Đơn hàng " + order.getOrderCode() + " của bạn đã được giao thành công.",
                             "/order-detail/" + orderId);
@@ -481,6 +490,9 @@ public class OrderServiceImpl implements OrderService {
             }
             shippingStatusRepository.updateOrderStatus(orderId, status);
             System.out.println("Order status updated to " + status);
+        } else if (status.equalsIgnoreCase("Confirmed")) {
+            emailService.sendOrderConfirmationEmail(order.getUserId(), order);
+            shippingStatusRepository.updateOrderStatus(orderId, status);
         } else {
             shippingStatusRepository.updateOrderStatus(orderId, status);
         }
@@ -545,6 +557,7 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId(user);
         order.setOrderDate(LocalDateTime.now());
         order.setShippingAddress(address);
+        order.setPhoneNumber(user.getPhoneNumber());
         order.setPaymentMethod(paymentMethod);
         order.setOrderCode(RandomOrderCodeGenerator.generateOrderCode());
 

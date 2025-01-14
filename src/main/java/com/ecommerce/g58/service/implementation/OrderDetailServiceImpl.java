@@ -381,6 +381,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
                 transactionRepository.save(userTransactions);
                 emailService.sendTransactionMailAsync(userWallet.get().getUserId(), userTransactions, invoice.getDeposit().longValue());
+                emailService.sendOrderDenialEmail(userWallet.get().getUserId(), order);
                 cartService.restoreItemQuantitiesToStock(order.getUserId().getUserId(), orderId);
             }
             return true;
@@ -425,6 +426,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         shippingStatus.setStatus("Returned");
         shippingStatus.setPrevious_status("Returned");
         shippingStatusRepository.save(shippingStatus);
+
         return true;
     }
 
@@ -473,7 +475,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         updateWalletBalance(
                 logisticWallet.get(),
                 invoice.getShippingFee().abs(),
-                "Nhận  " + invoice.getFormattedShippingFee() + " ship lượt về từ người bán do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
+                "Nhận  " + invoice.getFormattedShippingFee() + " ship lượt về do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
                 String.valueOf(TransactionType.REFUND));
 
         //Thong bao cho user

@@ -1,8 +1,6 @@
 package com.ecommerce.g58.service.implementation;
 
-import com.ecommerce.g58.entity.Invoice;
-import com.ecommerce.g58.entity.Stores;
-import com.ecommerce.g58.entity.Users;
+import com.ecommerce.g58.entity.*;
 import com.ecommerce.g58.enums.PaymentMethod;
 import com.ecommerce.g58.repository.UserRepository;
 import com.ecommerce.g58.service.EmailService;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import com.ecommerce.g58.entity.Transactions;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -111,6 +108,66 @@ public class EmailServiceImpl implements EmailService {
                 + "<p>Phương thức thanh toán: " + paymentMethod + "</p>"
                 + "<p>Chúng tôi chân thành cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi. Sự hài lòng của bạn là niềm vinh hạnh của chúng tôi.</p>";
 
+        sendEmail(user.getEmail(), subject, body);
+    }
+
+    @Override
+    public void sendOrderStatusChangeEmail(Users user, Invoice invoice, Orders order, String status) {
+        String subject = "Thay đổi trạng thái đơn hàng";
+        String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                + "<p>Đơn hàng của bạn đã thay đổi trạng thái. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
+                + "<p>Trạng thái mới: " + status + "</p>"
+                + "<p>Chúng tôi sẽ thông báo cho bạn khi đơn hàng được xác nhận và giao hàng thành công.</p>"
+                + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
+        sendEmail(user.getEmail(), subject, body);
+    }
+
+    @Override
+    public void sendWarningEmail(Users user, Orders order, ShippingStatus status) {
+        String subject = "Cảnh báo đơn hàng";
+        String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                + "<p>Đơn hàng của bạn đã giao hàng thất bại. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
+                + "<p>Trạng thái hiện tại: " + status.getStatus() + "</p>"
+                + "<p>Vui lòng để ý email và điên thoại để quá trình vận chuyển diễn ra suôn sẻ.</p>"
+                + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
+
+        sendEmail(user.getEmail(), subject, body);
+    }
+
+    @Override
+    public void sendOrderCancellationEmail(Users user, Orders order) {
+        String subject = "Hủy đơn hàng";
+        String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                + "<p>Đơn hàng của bạn đã bị hủy do không giao được liên lạc được với người dùng. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
+                + "<p>Do đó, đơn hàng đã bị hủy.</p>"
+                + "<p>Chúng tôi sẽ hoàn lại số tiền cho bạn trong thời gian sớm nhất.</p>"
+                + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
+        sendEmail(user.getEmail(), subject, body);
+    }
+
+    @Override
+    public void sendOrderConfirmationEmail(Users user, Orders order) {
+        String subject = "Xác nhận đơn hàng";
+        String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                + "<p>Đơn hàng của bạn đã được xác nhận. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
+                + "<p>Chúng tôi sẽ thông báo cho bạn khi đơn hàng được giao hàng thành công.</p>"
+                + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
+        sendEmail(user.getEmail(), subject, body);
+    }
+
+    @Override
+    public void sendOrderDenialEmail(Users user, Orders order) {
+        String subject = "Từ chối đơn hàng";
+        String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                + "<p>Đơn hàng của bạn đã bị từ chối. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
+                + "<p>Số tiền hoàn: " + order.getPriceFormated() + "</p>"
+                + "<p>Chúng tôi sẽ hoàn lại số tiền cho bạn trong thời gian sớm nhất.</p>"
+                + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
         sendEmail(user.getEmail(), subject, body);
     }
 }

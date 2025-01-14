@@ -34,7 +34,7 @@
                         <div class="tab-content">
                             <!-- Orders Tab -->
                             <div class="tab-pane fade show active" id="nav-orders" role="tabpanel">
-                                <div class="axil-dashboard-order" th:if="orders != null">
+                                <div class="axil-dashboard-order" >
                                     <div class="table-responsive" th:if="${message == null}">
                                         <table class="table table-bordered" id="sampleTable">
                                             <thead>
@@ -50,7 +50,7 @@
                                                 th:each="notification : ${notifications}">
                                                 <td th:text="${notification.title}">Notification Title</td>
                                                 <td th:text="${notification.content}">Notification Content</td>
-                                                <td th:text="${#temporals.format(notification.created, 'MMM dd, yyyy HH:mm')}">
+                                                <td th:text="${#temporals.format(notification.created, 'MM/dd/yyyy HH:mm')}">
                                                     Created Date
                                                 </td>
                                                 <td>
