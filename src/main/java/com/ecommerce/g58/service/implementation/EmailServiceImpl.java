@@ -154,7 +154,7 @@ public class EmailServiceImpl implements EmailService {
         String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
                 + "<p>Đơn hàng của bạn đã được xác nhận. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
-                + "<p>Số tiền: </p>" + order.getPriceFormated() + "</p>"
+                + "<p>Số tiền: " + order.getPriceFormated() + "</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
         sendEmail(user.getEmail(), subject, body);
     }
