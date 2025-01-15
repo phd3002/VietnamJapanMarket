@@ -201,11 +201,12 @@ public class OrderServiceImpl implements OrderService {
         Optional<Wallet> adminWallet = walletRepository.findByUserId(adminUser);
 //        System.out.println("Admin Wallet: " + adminWallet);
         Optional<Wallet> logisticWallet = walletRepository.findFirstByUserId_RoleId_RoleId(5);
-//        emailService.sendOrderStatusChangeEmail(order.getUserId(), invoice, order, status);
+        emailService.sendOrderStatusChangeEmail(order.getUserId(), invoice, order, status);
 //        System.out.println("Logistic Wallet: " + logisticWallet);
 
         // Xử lý theo trạng thái đơn hàng
         if (status.equalsIgnoreCase("Delivered")) {
+            emailService.sendOrderStatusChangeEmail(order.getUserId(), invoice, order, status);
             if (sellWallet.isPresent() && adminWallet.isPresent()) {
                 if (invoice.getRemainingBalance().compareTo(BigDecimal.ZERO) != 0) {
 //                    // Cập nhật ví admin
@@ -299,7 +300,6 @@ public class OrderServiceImpl implements OrderService {
 //                        "/order-detail/" + orderId);
             }
         } else if (status.equalsIgnoreCase("Completed")) {
-            emailService.sendOrderStatusChangeEmail(order.getUserId(), invoice, order, status);
             if (sellWallet.isPresent() && adminWallet.isPresent()) {
                 if (invoice.getRemainingBalance().compareTo(BigDecimal.ZERO) != 0) {
                     // Cập nhật ví admin chưa trừ ship, nhận tiền từ người mua mà ship đã thu
@@ -489,6 +489,7 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
             shippingStatusRepository.updateOrderStatus(orderId, status);
+            emailService.sendOrderStatusChangeEmail(order.getUserId(), invoice, order, status);
             System.out.println("Order status updated to " + status);
         } else if (status.equalsIgnoreCase("Confirmed")) {
             emailService.sendOrderConfirmationEmail(order.getUserId(), order);

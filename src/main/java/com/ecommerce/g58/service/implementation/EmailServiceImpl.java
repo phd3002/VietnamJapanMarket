@@ -118,7 +118,6 @@ public class EmailServiceImpl implements EmailService {
                 + "<p>Đơn hàng của bạn đã thay đổi trạng thái. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
                 + "<p>Trạng thái mới: " + status + "</p>"
-                + "<p>Chúng tôi sẽ thông báo cho bạn khi đơn hàng được xác nhận và giao hàng thành công.</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
         sendEmail(user.getEmail(), subject, body);
     }
@@ -151,9 +150,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendOrderConfirmationEmail(Users user, Orders order) {
-        String subject = "Hoàn tất đơn hàng";
+        String subject = "Xác nhận đơn hàng";
         String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
-                + "<p>Đơn hàng của bạn đã hoàn tất. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Đơn hàng của bạn đã được xác nhận. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
                 + "<p>Số tiền: </p>" + order.getPriceFormated() + "</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
