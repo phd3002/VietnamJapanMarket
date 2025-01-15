@@ -491,6 +491,7 @@ public class CheckoutController {
             session.setAttribute("cartItemIdsOrderOn", cartItemIds);
             model.addAttribute("totalOrderPrice", totalWithShipping);
             System.out.println("totalWithShipping: " + totalWithShipping);
+//            walletService.addToWalletForAdmin(totalWithShipping, paymentType, order);
             return "create-vnpay-order";
         } else {
             logger.info("Phương thức thanh toán không hợp lệ.");

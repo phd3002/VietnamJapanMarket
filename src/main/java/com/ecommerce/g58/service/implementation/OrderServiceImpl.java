@@ -733,12 +733,15 @@ public class OrderServiceImpl implements OrderService {
         List<OrderManagerDTO> orders = new ArrayList<>();
         for (Object[] result : results) {
             OrderManagerDTO order = new OrderManagerDTO();
+
             order.setOrderId((Integer) result[0]);
             order.setCustomerName((String) result[1]);
             order.setProductNames((String) result[2]);
             order.setTotalProducts(((Number) result[3]).intValue());
             order.setTotalPrice(((Number) result[4]).intValue());
-            order.setLatestStatus((String) result[5]);
+            order.setPrevious_status((String) result[7]);
+            System.out.println("Previous: " + order.getPrevious_status());
+            order.setLatestStatus("Returned".equals(result[7]) ? "Đã hoàn trả" : (String) result[5]);
             if (result[6] != null) {
                 if (result[6] instanceof java.sql.Date) {
                     order.setOrderDate(((java.sql.Date) result[6]).toLocalDate());
@@ -750,6 +753,8 @@ public class OrderServiceImpl implements OrderService {
             } else {
                 order.setOrderDate(null);
             }
+
+
             orders.add(order);
         }
         return orders;

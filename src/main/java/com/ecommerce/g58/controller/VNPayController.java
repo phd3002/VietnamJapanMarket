@@ -164,6 +164,7 @@ public class VNPayController {
                     invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
                     invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
                     invoice.setRemainingBalance(BigDecimal.valueOf(0));
+
                 }
 
                 invoice.setOrderId(order);
@@ -175,6 +176,7 @@ public class VNPayController {
                 invoice.setOrderId(newOrder);
                 invoiceRepository.save(invoice);
                 cartItemService.removeCartItemsByIds(cartItemIds);
+                walletService.addToWalletForAdmin(totalWithShipping, paymentType, order);
                 model.addAttribute("totalPrice", FormatVND.formatCurrency(invoice.getDeposit()));
                 return "checkout-complete-vnpay";
             } catch (Exception e) {

@@ -94,7 +94,7 @@
                                 <div class="form-group mr-3">
                                     <label for="statusFilter" class="mr-2" th:text="#{order.seller.filterbyStatus}">Lọc
                                         theo trạng thái:</label>
-                                    <select id="statusFilter" name="status" class="form-control"
+                                    <select  id="statusFilter" name="status" class="form-control"
                                             onchange="this.form.submit()">
                                         <option value="" th:selected="${status == null || status.isEmpty()}" selected
                                                 th:text="#{filter.status.all}">

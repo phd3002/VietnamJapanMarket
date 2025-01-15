@@ -127,7 +127,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendWarningEmail(Users user, Orders order, ShippingStatus status) {
         String subject = "Cảnh báo đơn hàng";
         String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
-                + "<p>Đơn hàng của bạn đã giao hàng thất bại. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Đơn hàng của bạn đã giao hàng thất bại do shipper không liên lạc được với người dùng. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
                 + "<p>Trạng thái hiện tại: " + status.getStatus() + "</p>"
                 + "<p>Vui lòng để ý email và điên thoại để quá trình vận chuyển diễn ra suôn sẻ.</p>"

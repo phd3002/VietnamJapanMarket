@@ -100,7 +100,7 @@ public class OrderManagementController {
         return "redirect:" + referer;  // Redirects to the same URL
     }
 
-    @PostMapping("/seller//return")
+    @PostMapping("/seller/return")
     public String returnOrder(
             @RequestParam("orderId") Integer orderId,
             Integer storeId,
@@ -124,7 +124,7 @@ public class OrderManagementController {
 
         return "redirect:order-manager/";
     }
-    @PostMapping("/seller//reject")
+    @PostMapping("/seller/reject")
     public String rejectOrder(
             @RequestParam("orderId") Integer orderId,
             Principal principal,

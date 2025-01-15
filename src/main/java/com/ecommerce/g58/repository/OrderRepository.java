@@ -314,7 +314,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "    COALESCE(SUM(od.quantity), 0) AS totalProducts, \n" +
             "    COALESCE(o.total_price, 0) AS totalPrice, \n" +
             "    latest_status.status AS latestStatus, \n" +
-            "    CAST(o.order_date AS DATE) AS orderDate \n" +
+            "    CAST(o.order_date AS DATE) AS orderDate, \n" +
+            "    previous_status.previous_status AS previousStatus \n" +
             "FROM \n" +
             "    orders o \n" +
             "JOIN \n" +
@@ -334,12 +335,21 @@ public interface OrderRepository extends JpaRepository<Orders, Long>, JpaSpecifi
             "        GROUP BY order_id\n" +
             "    ) latest ON ss.order_id = latest.order_id AND ss.updated_at = latest.latest_update\n" +
             ") latest_status ON o.order_id = latest_status.order_id \n" +
+            "LEFT JOIN (\n" +
+            "    SELECT ss.order_id, ss.previous_status\n" +
+            "    FROM shipping_status ss\n" +
+            "    INNER JOIN (\n" +
+            "        SELECT order_id, MAX(updated_at) AS latest_update\n" +
+            "        FROM shipping_status\n" +
+            "        GROUP BY order_id\n" +
+            "    ) previous ON ss.order_id = previous.order_id AND ss.updated_at = previous.latest_update\n" +
+            ") previous_status ON o.order_id = previous_status.order_id \n" +
             "WHERE p.store_id = :storeId " + // Filter by storeId via products
             "AND (COALESCE(:status, '') = '' OR latest_status.status = :status)\n" +
             "AND (:startDate IS NULL OR o.order_date >= :startDate) \n" +
             "AND (:endDate IS NULL OR o.order_date <= :endDate) \n" +
             "GROUP BY \n" +
-            "    o.order_id, u.first_name, u.last_name, o.order_date, latest_status.status, o.total_price, i.shipping_fee \n" +
+            "    o.order_id, u.first_name, u.last_name, o.order_date, latest_status.status, o.total_price, i.shipping_fee, previous_status.previous_status \n" +
             "ORDER BY \n" +
             "    o.order_id DESC",
             countQuery = "SELECT COUNT(DISTINCT o.order_id) " +
