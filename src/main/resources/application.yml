@@ -11,9 +11,9 @@ spring:
       proxy-target-class: true
 
   datasource:
-    url: jdbc:mysql://localhost:3306/vietnam_japan_market
-    username: root
-    password: 12345
+    url: jdbc:mysql://vjmarket.c1cyq4camtju.ap-southeast-1.rds.amazonaws.com:3306/vietnam_japan_market
+    username: admin
+    password: quyet18092002
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
@@ -43,8 +43,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: doantrongthaik47a2@gmail.com
-    password: dykeshnjtvluelxh
+    username: phd30029001@gmail.com
+    password: kvmccpyzsztikzho
     properties:
       mail:
         smtp:
