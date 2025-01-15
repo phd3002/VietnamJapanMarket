@@ -113,6 +113,7 @@
                                                 <!--                                                <th scope="col" th:text="#{transaction.source}">Nguồn</th>-->
                                                 <th scope="col" th:text="#{transaction.balance}">Số dư</th>
                                                 <th scope="col" th:text="#{transaction.content}">Nội dung</th>
+                                                <th scope="col">Trạng Thái</th>
                                             </tr>
                                             </thead>
                                             <tbody id="transaction-history">
@@ -129,6 +130,12 @@
                                                     150,000
                                                 </td>
                                                 <td th:utext="${transaction.description}">Description here</td>
+                                                <td th:switch="${transaction.status}">
+                                                    <span style="color: #0d8d2d" th:case="1">Hoàn thành</span>
+                                                    <span style="color: orange" th:case="2">Đang xử lý</span>
+                                                    <span style="color: red" th:case="3">Từ chối</span>
+                                                    <span th:case="*">Unknown</span>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -549,7 +556,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/seller/wallet/verify-otp",
+                url: "/wallet/verify-otp",
                 data: {
                     otp: otpValue,
                     bankName: bankName,
@@ -601,6 +608,30 @@
         const msgEl = document.getElementById('withdrawMessage');
         msgEl.style.display = 'none';
     }
+    document.addEventListener('DOMContentLoaded', function () {
+        const rutButton = document.getElementById('rut');
+        const rutModal = document.getElementById('rut-ModalUP');
+
+        // Show the modal when the "Rút Tiền" button is clicked
+        rutButton.addEventListener('click', function () {
+            rutModal.style.display = 'block';
+        });
+
+        // Close the modal when clicking the close button
+        const closeButton = rutModal.querySelector('.close');
+        closeButton.addEventListener('click', function () {
+            rutModal.style.display = 'none';
+        });
+
+        // Close the modal when clicking outside of it
+        window.addEventListener('click', function (event) {
+            if (event.target === rutModal) {
+                rutModal.style.display = 'none';
+            }
+        });
+    });
+
 </script>
+
 </body>
 </html>

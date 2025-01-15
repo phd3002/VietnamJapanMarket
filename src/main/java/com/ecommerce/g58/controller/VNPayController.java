@@ -339,7 +339,7 @@ public class VNPayController {
         } else {
             System.out.println("Nạp ok");
             model.addAttribute("errorMessage", "Nạp tiền thất bại.");
-            return "redirect:/wallet";
+            return "redirect:/logistic/wallet";
         }
     }
 

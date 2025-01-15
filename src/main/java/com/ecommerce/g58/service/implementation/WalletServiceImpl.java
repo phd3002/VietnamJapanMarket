@@ -252,7 +252,7 @@ public class WalletServiceImpl implements WalletService {
 
             Transactions transactions = new Transactions();
             transactions.setAmount(amount);
-            transactions.setPreviousBalance(wallet.getBalance());
+            transactions.setPreviousBalance(wallet.getBalance() - amount);
             transactions.setToWalletId(userWallet.get());
             transactions.setTransactionType("Nạp tiền");
             transactions.setDescription("Nạp thành công " + FormatVND.formatCurrency(BigDecimal.valueOf(amount)) + " vào tài khoản của bạn ");
