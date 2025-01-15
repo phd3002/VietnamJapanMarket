@@ -129,8 +129,8 @@ public class ProductManagementController {
             redirectAttributes.addFlashAttribute("error", "Giá sản phẩm phải lớn hơn hoặc bằng 20,000 và không được vượt quá 50,000,000 và không được để trống.");
             return "redirect:/edit-product/" + productId;
         }
-        if (weight < 0.1 || weight > 20.0) {
-            redirectAttributes.addFlashAttribute("error", "Khối lượng sản phẩm phải trong khoảng từ 0.1kg đến 20kg.");
+        if (weight < 0.1 || weight > 50.0) {
+            redirectAttributes.addFlashAttribute("error", "Khối lượng sản phẩm phải trong khoảng từ 0.1kg đến 50kg.");
             return "redirect:/edit-product/" + productId;
         }
 
