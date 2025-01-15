@@ -143,6 +143,7 @@ public class EmailServiceImpl implements EmailService {
                 + "<p>Đơn hàng của bạn đã bị hủy do không giao được liên lạc được với người dùng. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
                 + "<p>Do đó, đơn hàng đã bị hủy.</p>"
+                + "<p>Số tiền hoàn: " + order.getPriceFormated() + "</p>"
                 + "<p>Chúng tôi sẽ hoàn lại số tiền cho bạn trong thời gian sớm nhất.</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
         sendEmail(user.getEmail(), subject, body);
@@ -150,11 +151,11 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendOrderConfirmationEmail(Users user, Orders order) {
-        String subject = "Xác nhận đơn hàng";
+        String subject = "Hoàn tất đơn hàng";
         String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
-                + "<p>Đơn hàng của bạn đã được xác nhận. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Đơn hàng của bạn đã hoàn tất. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
-                + "<p>Chúng tôi sẽ thông báo cho bạn khi đơn hàng được giao hàng thành công.</p>"
+                + "<p>Số tiền: </p>" + order.getPriceFormated() + "</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
         sendEmail(user.getEmail(), subject, body);
     }
@@ -167,6 +168,30 @@ public class EmailServiceImpl implements EmailService {
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
                 + "<p>Số tiền hoàn: " + order.getPriceFormated() + "</p>"
                 + "<p>Chúng tôi sẽ hoàn lại số tiền cho bạn trong thời gian sớm nhất.</p>"
+                + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
+        sendEmail(user.getEmail(), subject, body);
+    }
+
+    @Override
+    public void sendNotAsDescribedRefundEmail(Users user, Orders order) {
+        String subject = "Hoàn tiền vì hàng không đúng mô tả";
+        String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                + "<p>Chúng tôi xin thông báo rằng đơn hàng của bạn đã được hoàn tiền do hàng không đúng mô tả. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
+                + "<p>Số tiền hoàn: " + order.getPriceFormated() + "</p>"
+                + "<p>Chúng tôi sẽ hoàn lại tiền cho bạn trong thời gian sớm nhất.</p>"
+                + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
+        sendEmail(user.getEmail(), subject, body);
+    }
+
+    @Override
+    public void sendDamagedRefundEmail(Users user, Orders order) {
+        String subject = "Hoàn tiền vì hàng bị hỏng";
+        String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
+                + "<p>Chúng tôi xin thông báo rằng đơn hàng của bạn đã được hoàn tiền do hàng bị hỏng. Dưới đây là thông tin chi tiết:</p>"
+                + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
+                + "<p>Số tiền hoàn: " + order.getPriceFormated() + "</p>"
+                + "<p>Chúng tôi sẽ hoàn lại tiền cho bạn trong thời gian sớm nhất.</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
         sendEmail(user.getEmail(), subject, body);
     }

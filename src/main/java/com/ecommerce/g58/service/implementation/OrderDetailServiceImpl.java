@@ -477,7 +477,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 invoice.getShippingFee().abs(),
                 "Nhận  " + invoice.getFormattedShippingFee() + " ship lượt về do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
                 String.valueOf(TransactionType.REFUND));
-
+        emailService.sendNotAsDescribedRefundEmail(order.getUserId(), order);
         //Thong bao cho user
 //        Notification sellerNotification1 = new Notification();
 //        sellerNotification1.setTitle("Nhận tiền: " + invoice.getDeposit());
@@ -555,7 +555,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         sellerNotification1.setUserId(order.getUserId());
 
         notificationService.updateNotification(sellerNotification1);
-
+        emailService.sendDamagedRefundEmail(order.getUserId(), order);
     }
 
     private void updateWalletBalance(Wallet wallet, BigDecimal amount, String description, String transactionType) {
