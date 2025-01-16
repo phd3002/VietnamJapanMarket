@@ -113,22 +113,82 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendOrderStatusChangeEmail(Users user, Invoice invoice, Orders order, String status) {
+        String vietnameseStatus = "";
+        switch (status) {
+            case "Pending":
+                vietnameseStatus = "Đang chờ xử lý";
+                break;
+            case "Processing":
+                vietnameseStatus = "Đang đóng gói";
+                break;
+            case "Confirmed":
+                vietnameseStatus = "Đã xác nhận";
+                break;
+            case "Delivered":
+                vietnameseStatus = "Đã giao hàng";
+                break;
+            case "Dispatched":
+                vietnameseStatus = "Đã giao cho vận chuyển";
+                break;
+            case "Cancelled":
+                vietnameseStatus = "Đã hủy";
+                break;
+            case "Rejected":
+                vietnameseStatus = "Đã từ chối";
+                break;
+            case "Returned":
+                vietnameseStatus = "Đã hoàn tiền";
+                break;
+            default:
+                vietnameseStatus = status;
+                break;
+        }
         String subject = "Thay đổi trạng thái đơn hàng";
         String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
                 + "<p>Đơn hàng của bạn đã thay đổi trạng thái. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
-                + "<p>Trạng thái mới: " + status + "</p>"
+                + "<p>Trạng thái đơn hàng: " + vietnameseStatus + "</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
         sendEmail(user.getEmail(), subject, body);
     }
 
     @Override
     public void sendWarningEmail(Users user, Orders order, ShippingStatus status) {
+        String vietnameseStatus = "";
+        switch (String.valueOf(status)) {
+            case "Pending":
+                vietnameseStatus = "Đang chờ xử lý";
+                break;
+            case "Processing":
+                vietnameseStatus = "Đang đóng gói";
+                break;
+            case "Confirmed":
+                vietnameseStatus = "Đã xác nhận";
+                break;
+            case "Delivered":
+                vietnameseStatus = "Đã giao hàng";
+                break;
+            case "Dispatched":
+                vietnameseStatus = "Đã giao cho vận chuyển";
+                break;
+            case "Cancelled":
+                vietnameseStatus = "Đã hủy";
+                break;
+            case "Rejected":
+                vietnameseStatus = "Đã từ chối";
+                break;
+            case "Returned":
+                vietnameseStatus = "Đã hoàn tiền";
+                break;
+            default:
+                vietnameseStatus = String.valueOf(status);
+                break;
+        }
         String subject = "Cảnh báo đơn hàng";
         String body = "<p>Xin chào " + user.getFirstName() + ",</p>"
                 + "<p>Đơn hàng của bạn đã giao hàng thất bại do shipper không liên lạc được với người dùng. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
-                + "<p>Trạng thái hiện tại: " + status.getStatus() + "</p>"
+                + "<p>Trạng thái hiện tại: " + vietnameseStatus + "</p>"
                 + "<p>Vui lòng để ý email và điên thoại để quá trình vận chuyển diễn ra suôn sẻ.</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
 

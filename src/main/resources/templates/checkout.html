@@ -149,7 +149,7 @@
             <form action="/checkout" method="post">
                 <div id="timeoutWarning" style="display: none;" class="alert alert-warning">Sắp hết thời gian thanh toán
                 </div>
-                <div id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}"
+                <div style="text-align: center" id="insufficient-balance-alert" th:if="${errorMessage} or ${errorMessage1}"
                      class="alert alert-danger">
                     <p th:text="${errorMessage}"></p>
                     <p th:if="${errorMessage1!=null}">Bạn không đủ số dư để thực hiện giao dịch. Vui lòng nạp thêm tiền
@@ -371,7 +371,7 @@
                                                 </button>
 
                                                 <!-- Khu vực hiển thị countdown -->
-                                                <span id="countdownDisplay" style="margin-left: 10px; color: red; font-weight: bold;"></span>
+                                                <span id="countdownDisplay" style="margin-left: 10px; color: forestgreen; font-weight: bold;"></span>
                                             </div>
 
                                         </div>

@@ -137,11 +137,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Products, 
     @Query(value =
             "SELECT p.* " +
                     "FROM products p " +
-                    "LEFT JOIN feedback f ON p.product_id = f.product_id " +
-
-                    "WHERE p.visible = 1 " +
-                    "GROUP BY p.product_id " +
-                    "ORDER BY AVG(f.rating) DESC " +
+                    "ORDER BY p.created_at DESC " +
                     "LIMIT 12",
             nativeQuery = true)
     List<Products> findTop12ProductsByHighestRatingFromActiveStores();

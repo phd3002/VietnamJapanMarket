@@ -146,11 +146,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function startCountdown(seconds) {
         isCountingDown = true;
         let remaining = seconds;
-        countdownDisplay.textContent = "Vui lòng chờ " + remaining + "s...";
+        countdownDisplay.textContent = "Thời gian hiệu lực: " + remaining + "s...";
 
         const intervalId = setInterval(() => {
             remaining--;
-            countdownDisplay.textContent = "Vui lòng chờ " + remaining + "s...";
+            countdownDisplay.textContent = "Thời gian hiệu lực: " + remaining + "s...";
 
             if (remaining <= 0) {
                 clearInterval(intervalId);
