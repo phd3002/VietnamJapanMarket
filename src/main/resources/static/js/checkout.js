@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const remain = 120 - elapsedSec;
             // Đổi text, màu, disable
             requestOtpBtn.innerText = "Đã gửi mã";
-            requestOtpBtn.style.backgroundColor = "red";
+            requestOtpBtn.style.backgroundColor = "forestgreen";
             requestOtpBtn.disabled = true;
 
             // Bắt đầu countdown phần còn lại

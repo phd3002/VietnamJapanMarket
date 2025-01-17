@@ -299,7 +299,7 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
                             </form>
-                            <form th:if="${order.latestStatus == 'Pending'}"
+                            <form th:if="${order.latestStatus == 'Pending'} or ${order.latestStatus == 'Confirmed'} or ${order.latestStatus == 'Processing'}"
                                   th:attr="data-order-id=${order.orderId}" th:action="@{/seller/reject}"
                                   method="post">
                                 <input type="hidden" name="storeId" th:value="${storeId}">
@@ -307,7 +307,7 @@
                                 <button
                                         class="btn btn-danger btn-sm btn-save"
                                         type="button"
-                                        th:title="#{order.seller.acceptOrder}"
+                                        title="Từ chối"
                                         th:data-order-id="${order.orderId}"
                                         onclick="openRejectModal(this)">
                                     <i class="fa fa-close" aria-hidden="true"></i>

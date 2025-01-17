@@ -139,6 +139,12 @@ public class EmailServiceImpl implements EmailService {
             case "Returned":
                 vietnameseStatus = "Đã hoàn tiền";
                 break;
+            case "Failed":
+                vietnameseStatus = "Thất bại";
+                break;
+            case "Shipping":
+                vietnameseStatus = "Đang vận chuyển";
+                break;
             default:
                 vietnameseStatus = status;
                 break;
@@ -202,7 +208,6 @@ public class EmailServiceImpl implements EmailService {
                 + "<p>Đơn hàng của bạn đã bị hủy do không giao được liên lạc được với người dùng. Dưới đây là thông tin chi tiết:</p>"
                 + "<p>Mã đơn hàng: " + order.getOrderCode() + "</p>"
                 + "<p>Do đó, đơn hàng đã bị hủy.</p>"
-                + "<p>Số tiền hoàn: " + order.getPriceFormated() + "</p>"
                 + "<p>Chúng tôi sẽ hoàn lại số tiền cho bạn trong thời gian sớm nhất.</p>"
                 + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>";
         sendEmail(user.getEmail(), subject, body);
