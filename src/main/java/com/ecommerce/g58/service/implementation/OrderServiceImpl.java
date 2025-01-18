@@ -491,9 +491,6 @@ public class OrderServiceImpl implements OrderService {
             shippingStatusRepository.updateOrderStatus(orderId, status);
 //            emailService.sendOrderStatusChangeEmail(order.getUserId(), invoice, order, status);
             System.out.println("Order status updated to " + status);
-        } else if (status.equalsIgnoreCase("Confirmed")) {
-            emailService.sendOrderConfirmationEmail(order.getUserId(), order);
-            shippingStatusRepository.updateOrderStatus(orderId, status);
         } else {
             shippingStatusRepository.updateOrderStatus(orderId, status);
         }
@@ -741,7 +738,7 @@ public class OrderServiceImpl implements OrderService {
             order.setTotalProducts(((Number) result[3]).intValue());
             order.setTotalPrice(((Number) result[4]).intValue());
             order.setPrevious_status((String) result[7]);
-            System.out.println("Previous: " + order.getPrevious_status());
+//            System.out.println("Previous: " + order.getPrevious_status());
             order.setLatestStatus("Returned".equals(result[7]) ? "Đã hoàn trả" : (String) result[5]);
             if (result[6] != null) {
                 if (result[6] instanceof java.sql.Date) {
