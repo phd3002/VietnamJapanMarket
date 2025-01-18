@@ -478,13 +478,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 "Nhận  " + invoice.getFormattedShippingFee() + " ship lượt về do đơn hàng " + order.getOrderCode() + " không giống mô tả!",
                 String.valueOf(TransactionType.REFUND));
         emailService.sendNotAsDescribedRefundEmail(order.getUserId(), order);
-        //Thong bao cho user
-//        Notification sellerNotification1 = new Notification();
-//        sellerNotification1.setTitle("Nhận tiền: " + invoice.getDeposit());
-//        sellerNotification1.setContent("Nhận  " + invoice.getDeposit() + " do đơn hàng " + order.getOrderCode() + " không giống mô tả!");
-//        sellerNotification1.setUrl("/wallet");
-//        sellerNotification1.setUserId(userWallet.getUserId());
-//        notificationService.updateNotification(sellerNotification1);
 
     }
 

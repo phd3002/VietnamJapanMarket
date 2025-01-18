@@ -57,4 +57,33 @@ public class ShippingStatusServiceImp implements ShippingStatusService {
             logger.info("Successfully updated {} statuses.", statusesToUpdate.size());
         }
     }
+
+    @Scheduled(cron = "0 0 0 * * ?") // Run at 12:00 AM every day
+    @Override
+    public void autoRefundOrders() {
+        logger.info("Executing updateShippingStatus scheduled task.");
+
+        LocalDateTime threeDaysAgo = LocalDateTime.now().minusDays(3);
+
+        // Find all records where status is 'Returned' and updated_at is 3 days or older
+        List<ShippingStatus> statusesToUpdate = shippingStatusRepository.findByStatusAndUpdatedAtBefore("Returned", threeDaysAgo);
+
+        if (statusesToUpdate.isEmpty()) {
+            logger.info("No statuses to update at this time.");
+        } else {
+            statusesToUpdate.forEach(status -> {
+                logger.info("Updating status for order ID: {}", status.getOrderId().getOrderId());
+                status.setStatus("Completed");
+                status.setUpdatedAt(LocalDateTime.now());
+                shippingStatusRepository.save(status);
+                orderService.updateOrderStatuss(status.getOrderId().getOrderId(), "Complete");
+
+                // Check if reason is not null and previous status is null, then run refundOrder method
+                if (status.getReason() != null && status.getPrevious_status() == null) {
+                    orderDetailService.refundOrder(status.getOrderId().getOrderId());
+                }
+            });
+            logger.info("Successfully updated {} statuses.", statusesToUpdate.size());
+        }
+    }
 }
