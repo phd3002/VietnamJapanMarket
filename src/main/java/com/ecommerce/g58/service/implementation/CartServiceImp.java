@@ -148,7 +148,7 @@ public class CartServiceImp implements CartService {
             ProductVariation variation = productVariationRepository.findById(item.getVariationId().getVariationId())
                     .orElseThrow(() -> new EntityNotFoundException("Product variation not found"));
             // Kiểm tra xem có đủ hàng tồn kho không
-            if (variation.getStock() <= item.getQuantity()) {
+            if (variation.getStock() < item.getQuantity()) {
                 throw new IllegalArgumentException("Not enough stock available for product: " + variation.getVariationId());
             }
             // Trừ số lượng hàng

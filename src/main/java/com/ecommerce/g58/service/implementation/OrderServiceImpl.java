@@ -603,6 +603,9 @@ public class OrderServiceImpl implements OrderService {
                 // Cập nhật kho hàng
                 ProductVariation variation = productVariationRepository.findById(cartItem.getVariationId().getVariationId()).orElse(null);
                 if (variation != null) {
+                    System.out.println("Stock before: " + variation.getStock());
+                    System.out.println("Quantity: " + cartItem.getQuantity());
+                    System.out.println("Stock after: " + (variation.getStock() - cartItem.getQuantity()));
                     variation.setStock(variation.getStock() - cartItem.getQuantity());
                     productVariationRepository.save(variation);
                 }
@@ -610,7 +613,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
 //        System.out.println(user.getUserId());
-        cartService.subtractItemQuantitiesFromStock(user.getUserId());
+//        cartService.subtractItemQuantitiesFromStock(user.getUserId());
 
         ShippingStatus initialShippingStatus = ShippingStatus.builder()
                 .orderId(order)

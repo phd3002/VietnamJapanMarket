@@ -151,7 +151,6 @@ public class VNPayController {
 
                 if ("deposit".equalsIgnoreCase(paymentType)) {
                     totalWithShipping = (long) ((((double) totalPrice / 2) + shippingFee) + (totalPrice * tax)); // 50% of total price, full shipping fee
-
                     invoice.setDeposit(BigDecimal.valueOf(totalWithShipping));
                     invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
                     invoice.setTotalAmount(BigDecimal.valueOf(totalPrice));
@@ -165,7 +164,6 @@ public class VNPayController {
                     invoice.setShippingFee(BigDecimal.valueOf(shippingFee));
                     invoice.setTax(BigDecimal.valueOf(totalPrice * tax));
                     invoice.setRemainingBalance(BigDecimal.valueOf(0));
-
                 }
 
                 invoice.setOrderId(order);

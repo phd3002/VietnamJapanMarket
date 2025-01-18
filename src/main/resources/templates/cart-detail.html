@@ -131,7 +131,7 @@
                     </div>
 
                     <!-- Show the grand total for the entire cart (summed up) -->
-                    <div class="cart-total-area" style="text-align: right; margin-top: 20px; font-size: 1.2rem;">
+                    <div class="cart-total-area" style="text-align: right; margin-top: 20px; font-size: 2.6rem;">
                         <strong>Tổng cộng: </strong>
                         <span id="cartTotal" th:text="${totalOrderPrice}">0</span>
                     </div>
@@ -141,7 +141,7 @@
                          style="display: flex; justify-content: flex-end; margin-top: 20px;">
                         <div class="update-btn">
                             <form action="/checkout" id="checkoutForm" method="get">
-                                <input id="cartItemIds" name="cartItemIds" >
+                                <input id="cartItemIds" name="cartItemIds" type="hidden">
                                 <button class="axil-btn btn-outline" style="background: #0c63e4; color: white"
                                         type="submit">
                                     <span th:text="#{cart.checkout}">Thanh toán</span>

@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.success) {
                         // Đổi text + màu
                         requestOtpBtn.innerText = "Đã gửi mã";
-                        requestOtpBtn.style.backgroundColor = "red";
+                        requestOtpBtn.style.backgroundColor = "forestgreen";
 
                         // Bắt đầu 2 phút
                         startCountdown(120);
