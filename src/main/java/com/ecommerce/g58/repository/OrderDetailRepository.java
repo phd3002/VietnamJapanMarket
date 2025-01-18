@@ -113,7 +113,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetails, Long>
             "        SUM(od.quantity * od.price) as subtotal,\n" +
             "        iv.shipping_fee,\n" +
             "        iv.tax,\n" +
-            "        SUM(od.quantity * od.price + (iv.tax)) + iv.shipping_fee as total_price\n" +
+            "        SUM(od.quantity * od.price ) + iv.shipping_fee + iv.tax as total_price\n" +
             "    FROM orders o\n" +
             "    LEFT JOIN order_details od ON o.order_id = od.order_id\n" +
             "    LEFT JOIN invoice iv ON iv.order_id = o.order_id\n" +

@@ -39,6 +39,8 @@ public class OrderDetailManagementControllerr {
             model.addAttribute("tax", firstDetail.getFormattedTax());
             model.addAttribute("paymentMethod", firstDetail.getPaymentMethod());
             model.addAttribute("totalAmount", FormatVND.formatCurrency(BigDecimal.valueOf(firstDetail.getTotalAmount())));
+            model.addAttribute("deposit", firstDetail.getFormattedDeposit());
+            model.addAttribute("remainingBalance", firstDetail.getFormattedRemainingBalance());
         }
         return "logistic/order-detail";
     }
