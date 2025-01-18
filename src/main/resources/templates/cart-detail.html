@@ -1,6 +1,5 @@
 <!doctype html>
 <html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -19,118 +18,139 @@
 <!-- Main Content Section -->
 <main class="main-wrapper" th:fragment="content">
 
-    <!-- Start Cart Area  -->
+
     <div class="axil-product-cart-area axil-section-gap">
         <div class="container">
             <div class="axil-product-cart-wrap">
+
+                <!-- Heading -->
                 <div class="product-table-heading">
                     <h4 class="title" th:text="#{cart.title}">Your Cart</h4>
                 </div>
+
+                <!-- Error/Success Messages -->
                 <div th:if="${error}" class="alert alert-danger" role="alert">
                     <span th:text="${error}"></span>
                 </div>
+                <div th:if="${message}" class="alert alert-success" role="alert">
+                    <span th:text="${message}"></span>
+                </div>
+                <div id="ajaxCartMessage"   class="alert alert-info" role="alert" style="display: none; text-align: center"></div>
+
                 <!-- Display empty cart message -->
                 <div th:if="${isCartEmpty}" class="alert alert-warning" role="alert">
-                    <span th:text="#{cart.empty}">Giỏ hàng của bạn đang trống. </span><a href="/product-list"
-                                                                                         th:text="#{cart.shop.now}">Mua
-                    ngay</a>.
+                    <span th:text="#{cart.empty}">Giỏ hàng của bạn đang trống. </span>
+                    <a href="/product-list" th:text="#{cart.shop.now}">Mua ngay</a>.
                 </div>
 
-                <!-- Cart Items Table -->
-                <div th:each="storeEntry : ${cartItemGroupedByStore}">
-                    <div class="store-name">
-                        Cửa hàng: <h5 th:text="${storeEntry.key.storeName}"></h5>
+                <!-- If cart is not empty, show grouped items by store -->
+                <div th:if="${!isCartEmpty}">
+                    <div th:each="storeEntry : ${cartItemGroupedByStore}">
+                        <div class="store-name" style="margin-bottom: 10px;">
+                            <strong>Cửa hàng:</strong>
+                            <h5 style="display: inline-block;" th:text="${storeEntry.key.storeName}"></h5>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table axil-product-table">
+                                <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col" th:text="#{cart.product}">Sản phẩm</th>
+                                    <th scope="col" th:text="#{cart.product.name}">Tên sản phẩm</th>
+                                    <th scope="col" th:text="#{cart.price}">Giá</th>
+                                    <th scope="col" th:text="#{cart.quantity}">Số lượng</th>
+                                    <th scope="col" th:text="#{cart.total}">Tổng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Iterate through each cart item -->
+                                <tr th:each="item : ${storeEntry.value}">
+                                    <td class="product-remove">
+                                        <form th:action="@{/remove_cart_item}" method="post">
+                                            <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
+                                            <button type="submit" class="remove-wishlist">
+                                                <i class="fal fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                    <td class="product-thumbnail">
+                                        <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}">
+                                            <img th:src="@{${item.variationId.imageId.thumbnail}}" alt="Product Image">
+                                        </a>
+                                    </td>
+
+                                    <td class="product-title">
+                                        <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}"
+                                           th:text="${item.productId.productName}
+                                                    + ' ('
+                                                    + ${item.variationId.getSize().sizeName}
+                                                    + ' - '
+                                                    + ${item.variationId.getColor().colorName}
+                                                    + ')'">
+                                            Product Name
+                                        </a>
+                                    </td>
+
+                                    <td class="product-price" data-title="Price">
+                                        <!-- Single item price formatted -->
+                                        <span th:text="${item.getPriceFormated()}">Price</span>
+                                    </td>
+
+                                    <!-- Quantity controls (minus/plus) -->
+                                    <td class="product-quantity" data-title="Qty">
+                                        <div class="pro-qty" style="display: flex; gap: 5px">
+                                            <button type="button" class="dec-qty"
+                                                    th:attr="data-cart-item-id=${item.cartItemId}">
+                                                -
+                                            </button>
+                                            <input type="text" class="quantity-field"
+                                                   th:value="${item.quantity}"
+                                                   readonly/>
+                                            <button type="button" class="inc-qty"
+                                                    th:attr="data-cart-item-id=${item.cartItemId}">
+                                                +
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                    <!-- Per-item Subtotal -->
+                                    <td class="product-subtotal" data-title="Subtotal">
+    <span class="item-subtotal"
+          th:attr="data-value=${item.quantity * item.productId.price}"
+          th:text="${item.quantity * item.productId.price}">
+        0
+    </span>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table axil-product-table">
-                            <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col" th:text="#{cart.product}">Sản phẩm</th>
-                                <th scope="col" th:text="#{cart.product.name}">Tên sản phẩm</th>
-                                <th scope="col" th:text="#{cart.price}">Giá</th>
-                                <th scope="col" th:text="#{cart.quantity}">Số lượng</th>
-                                <th scope="col" th:text="#{cart.total}">Tổng</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- Iterate through each cart item -->
-                            <tr th:each="item : ${storeEntry.value}">
-                                <td class="product-remove">
-                                    <form th:action="@{/remove_cart_item}" method="post">
-                                        <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
-                                        <button type="submit" class="remove-wishlist">
-                                            <i class="fal fa-times"></i>
-                                        </button>
-                                    </form>
-                                </td>
 
-                                <td class="product-thumbnail">
-                                    <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}">
-                                        <img th:src="@{${item.variationId.imageId.thumbnail}}" alt="Product Image">
-                                    </a>
-                                </td>
+                    <!-- Show the grand total for the entire cart (summed up) -->
+                    <div class="cart-total-area" style="text-align: right; margin-top: 20px; font-size: 1.2rem;">
+                        <strong>Tổng cộng: </strong>
+                        <span id="cartTotal" th:text="${totalOrderPrice}">0</span>
+                    </div>
 
-                                <td class="product-title">
-                                    <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}"
-                                       th:text="${item.productId.productName}
-                    + ' ('
-                    + ${item.variationId.getSize().sizeName}
-                    + ' - '
-                    + ${item.variationId.getColor().colorName}
-                    + ') '">
-                                        Product Name
-                                    </a>
-                                </td>
-
-                                <td class="product-price" data-title="Price">
-                                    <span th:text="${item.getPriceFormated()}">Price</span>
-                                </td>
-
-                                <!-- Only ONE td with the minus/plus buttons -->
-                                <td class="product-quantity" data-title="Qty">
-                                    <div class="pro-qty" style="display: flex; gap: 5px">
-                                        <button type="button"
-                                                class="dec-qty"
-                                                th:attr="data-cart-item-id=${item.cartItemId}">
-                                            -
-                                        </button>
-
-                                        <input type="text"
-                                               class="quantity-field"
-                                               th:value="${item.quantity}"
-                                               readonly />
-
-                                        <button type="button"
-                                                class="inc-qty"
-                                                th:attr="data-cart-item-id=${item.cartItemId}">
-                                            +
-                                        </button>
-                                    </div>
-                                </td>
-
-                                <td class="product-subtotal" data-title="Subtotal">
-                                    <span id="cartTotal" th:text="${totalOrderPrice}">0</span>
-                                </td>
-                            </tr>
-
-
-                            </tbody>
-                        </table>
+                    <!-- Checkout Button -->
+                    <div class="cart-update-btn-area"
+                         style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                        <div class="update-btn">
+                            <form id="checkoutForm" action="/checkout" method="get">
+                                <input type="hidden" name="cartItemIds" id="cartItemIds">
+                                <button type="submit" class="axil-btn btn-outline"
+                                        style="background: #0c63e4; color: white">
+                                    <span th:text="#{cart.checkout}">Thanh toán</span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <div class="cart-update-btn-area" style="display: flex; justify-content: flex-end; margin-right: 10%"
-                     th:if="${!isCartEmpty}">
-                    <div class="update-btn">
-                        <form id="checkoutForm" action="/checkout" method="get">
-                            <button type="submit" class="axil-btn btn-outline" style="background: #0c63e4; color: white"
-                                    th:disabled="${isCartEmpty}" th:text="#{cart.checkout}">
-                                Thanh toán
-                            </button>
-                            <input type="hidden" name="cartItemIds" id="cartItemIds">
-                        </form>
-                    </div>
-                </div>
+                <!-- End if not empty -->
 
             </div>
         </div>
@@ -161,24 +181,9 @@
 <script th:src="@{/js/vendor/waypoints.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/script.js}"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Get all cart item elements that have a hidden input with their ID
-        const cartItemElements = document.querySelectorAll('input[name="cartItemId"]');
-        const cartItemIds = [];
 
-        // Extract the IDs and add them to the cartItemIds array
-        cartItemElements.forEach(item => {
-            cartItemIds.push(item.value);
-        });
-
-        // Set the value of the hidden input field to the list of IDs, joined by commas
-        document.getElementById('cartItemIds').value = cartItemIds.join(',');
-    });
-</script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Query all the plus/minus buttons
         const decButtons = document.querySelectorAll('.dec-qty');
         const incButtons = document.querySelectorAll('.inc-qty');
 
@@ -186,13 +191,11 @@
         decButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const cartItemId = btn.getAttribute('data-cart-item-id');
-                // we rely on the <input> for the actual quantity
                 const quantityField = btn.parentElement.querySelector('.quantity-field');
-                let currentQty = parseInt(quantityField.value);
+                let currentQty = parseInt(quantityField.value, 10);
 
                 if (currentQty > 1) {
-                    const newQty = currentQty - 1;
-                    updateCartQuantity(cartItemId, newQty, quantityField);
+                    updateCartQuantity(cartItemId, currentQty - 1, quantityField);
                 }
             });
         });
@@ -202,62 +205,98 @@
             btn.addEventListener('click', () => {
                 const cartItemId = btn.getAttribute('data-cart-item-id');
                 const quantityField = btn.parentElement.querySelector('.quantity-field');
-                let currentQty = parseInt(quantityField.value);
+                let currentQty = parseInt(quantityField.value, 10);
 
-                const newQty = currentQty + 1;
-                updateCartQuantity(cartItemId, newQty, quantityField);
+                updateCartQuantity(cartItemId, currentQty + 1, quantityField);
             });
         });
 
-        // AJAX function
+        /**
+         * AJAX function to update cart quantity
+         */
         function updateCartQuantity(cartItemId, newQty, quantityField) {
-            // Adjust if you want a different URL or method
             const url = `/api/cart/updateQuantity?cartItemId=${cartItemId}&quantity=${newQty}`;
-
-            fetch(url, {
-                method: 'POST'
-            })
+            fetch(url, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update input field
+                        // 1) Update the input field
                         quantityField.value = newQty;
 
-                        // Update row subtotal if provided by the server
+                        // 2) Update this row's subtotal with the server-provided formatted string
                         const subtotalElement = quantityField.closest('tr')
-                            .querySelector('.product-subtotal span');
+                            .querySelector('.product-subtotal .item-subtotal');
                         if (subtotalElement && data.newSubtotal) {
                             subtotalElement.innerText = data.newSubtotal;
                         }
 
-                        // Update total cart price if returned from server
+                        // 3) Update the cart’s grand total with the server-provided formatted string
                         const totalElement = document.getElementById('cartTotal');
                         if (totalElement && data.newTotal) {
                             totalElement.innerText = data.newTotal;
                         }
 
-                        showNotification('success', data.message);
+                        // 4) Show success message in the new div
+                        showAjaxMessage('success', data.message);
                     } else {
-                        // Show error message from server (e.g., "over stock")
-                        showNotification('error', data.message);
+                        // Show error message (instead of alert)
+                        showAjaxMessage('error', data.message);
                     }
                 })
                 .catch(err => {
                     console.error(err);
-                    showNotification('error', 'Đã xảy ra lỗi server!');
+                    showAjaxMessage('error', 'Đã xảy ra lỗi server!');
                 });
         }
 
-        // Very basic notification
-        function showNotification(type, message) {
+        // Helper to show a message in our "ajaxCartMessage" div
+        function showAjaxMessage(type, message) {
+            const msgDiv = document.getElementById('ajaxCartMessage');
+            if (!msgDiv) return; // If the div doesn't exist, do nothing
+
+            msgDiv.style.display = 'block';   // Make it visible
+            msgDiv.textContent = message;     // Set the message text
+
+            // Optionally change the class depending on "type"
+            // E.g. if you want red for errors, green for success, etc.
             if (type === 'success') {
+                msgDiv.className = 'alert alert-success';
             } else {
-                alert("Lỗi: " + message);
+                msgDiv.className = 'alert alert-danger';
             }
         }
     });
+
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Select all elements that have the raw subtotal
+        const subtotalElems = document.querySelectorAll('.item-subtotal');
+
+        subtotalElems.forEach(elem => {
+            // 2. Read the raw numeric value from data-value
+            const rawValue = elem.getAttribute('data-value');
+            if (!rawValue) return; // If somehow missing, skip
+
+            // 3. Convert to Number
+            const numberValue = parseFloat(rawValue);
+            if (isNaN(numberValue)) return; // If invalid, skip
+
+            // 4. Format the number (for example, VND locale)
+            // toLocaleString with style: 'currency', currency: 'VND'
+            const formatted = numberValue.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                currencyDisplay: 'code' // <-- shows "VND" instead of the "₫" symbol
+            });
+
+
+            // 5. Replace the element's text with the formatted string
+            elem.textContent = formatted;
+        });
+    });
+</script>
 
 </body>
 </html>
