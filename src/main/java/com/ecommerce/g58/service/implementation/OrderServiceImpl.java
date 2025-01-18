@@ -588,24 +588,27 @@ public class OrderServiceImpl implements OrderService {
                 orderDetail.setVariationId(cartItem.getVariationId());
                 orderDetail.setQuantity(cartItem.getQuantity());
                 orderDetail.setPrice(cartItem.getPrice());
-                long orderWithTaxAndShippingFee = (long) (cartItem.getPrice() * cartItem.getQuantity() * (tax) + shippingFee);
-                totalOrderPrice = (long) cartItem.getPrice() * cartItem.getQuantity();
-                totalOrderPriceFull = totalOrderPrice + orderWithTaxAndShippingFee;
-//                System.out.println("Total Order Price: " + totalOrderPrice);
+
+                // Tính giá trị cho từng mục và cộng dồn vào tổng
+                long itemTotalPrice = (long) cartItem.getPrice() * cartItem.getQuantity();
+                totalOrderPrice += itemTotalPrice;
+
+                // (Optional) Nếu cần tính cả thuế và phí giao hàng trong tổng giá
+                long orderWithTaxAndShippingFee = (long) (itemTotalPrice * (1 + tax)) + shippingFee;
+                totalOrderPriceFull += orderWithTaxAndShippingFee;
+
+                // Thêm vào danh sách chi tiết đơn hàng
                 orderDetailsList.add(orderDetail);
 
-                // Update inventory
-
-//                ProductVariation variation = productVariationRepository.findById(cartItem.getVariationId().getVariationId()).orElse(null);
-//                if (variation != null) {
-//                    variation.setStock(variation.getStock() - cartItem.getQuantity());
-//                    System.out.println("Stock Before: " + variation.getStock());
-//                    System.out.println("Cart Item Quantity: " + cartItem.getQuantity());
-//                    System.out.println("Stock After: " + (variation.getStock() - cartItem.getQuantity()));
-//                    productVariationRepository.save(variation);
-//                }
+                // Cập nhật kho hàng
+                ProductVariation variation = productVariationRepository.findById(cartItem.getVariationId().getVariationId()).orElse(null);
+                if (variation != null) {
+                    variation.setStock(variation.getStock() - cartItem.getQuantity());
+                    productVariationRepository.save(variation);
+                }
             }
         }
+
 //        System.out.println(user.getUserId());
         cartService.subtractItemQuantitiesFromStock(user.getUserId());
 
@@ -626,14 +629,14 @@ public class OrderServiceImpl implements OrderService {
         shippingStatusRepository.save(initialShippingStatus);
 
         // Check for duplicate order details and remove them
-        List<OrderDetails> savedOrderDetails = orderDetailRepository.findByOrderId(order.getOrderId());
-        Set<String> uniqueOrderDetails = new HashSet<>();
-        for (OrderDetails orderDetail : savedOrderDetails) {
-            String uniqueKey = orderDetail.getProductId().getProductId() + "-" + orderDetail.getVariationId().getVariationId();
-            if (!uniqueOrderDetails.add(uniqueKey)) {
-                orderDetailRepository.delete(orderDetail);
-            }
-        }
+//        List<OrderDetails> savedOrderDetails = orderDetailRepository.findByOrderId(order.getOrderId());
+//        Set<String> uniqueOrderDetails = new HashSet<>();
+//        for (OrderDetails orderDetail : savedOrderDetails) {
+//            String uniqueKey = orderDetail.getProductId().getProductId() + "-" + orderDetail.getVariationId().getVariationId();
+//            if (!uniqueOrderDetails.add(uniqueKey)) {
+//                orderDetailRepository.delete(orderDetail);
+//            }
+//        }
 
         return order;
     }

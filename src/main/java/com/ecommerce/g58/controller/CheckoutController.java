@@ -88,6 +88,9 @@ public class CheckoutController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, Principal principal, HttpSession session,
                                    @AuthenticationPrincipal UserDetails userDetails,
@@ -240,11 +243,8 @@ public class CheckoutController {
                                     @RequestParam(value = "paymentMethod", defaultValue = "WALLET") PaymentMethod paymentMethod,
                                     @RequestParam(value = "paymentType", defaultValue = "full") String paymentType,
                                     RedirectAttributes redirectAttributes) {
-        List<Integer> cartItemIds = Arrays.stream(cartItemIdsString.replaceAll("\\[|\\]", "").split(","))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())  // Filter out empty strings
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        System.out.println("cartItemIdsString: " + cartItemIdsString);
+
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (principal == null) {
             logger.warn("User not authenticated. Redirecting to sign-in.");
@@ -261,6 +261,7 @@ public class CheckoutController {
         Integer userId = user.getUserId();
         Cart userCart = cartService.getCartByUserId(userId);
         List<CartItem> cartItems = userCart.getCartItems();
+        List<Integer> cartItemIds = cartItemRepository.findCartItemIdByUser(userId);
         Optional<Products> productOpt = productService.findById(cartItems.get(0).getProductId().getProductId());
         Stores storeOpt = storeService.findStoreById(productOpt.get().getStoreId().getStoreId());
         logger.info("User cart items retrieved for user ID {}. Total items: {}", userId, cartItems.size());
@@ -489,6 +490,7 @@ public class CheckoutController {
             session.setAttribute("addressOrderOn", formattedShippingAddress);
             session.setAttribute("paymentMethodOrderOn", paymentMethod);
             session.setAttribute("cartItemIdsOrderOn", cartItemIds);
+            System.out.println("CartItemIds checkout: " + cartItemIds);
             model.addAttribute("totalOrderPrice", totalWithShipping);
             System.out.println("totalWithShipping: " + totalWithShipping);
 //            walletService.addToWalletForAdmin(totalWithShipping, paymentType, order);

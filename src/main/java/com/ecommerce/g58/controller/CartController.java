@@ -67,6 +67,7 @@ public class CartController {
         Integer userId = user.getUserId();
         Cart cart = cartService.getOrCreateCart(user);
 
+
         try {
             ProductDetailDTO productDetail = productService.getProductDetailByProductIdAndVariationId(productId, variationId);
 
@@ -77,6 +78,19 @@ public class CartController {
             }
 
             List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
+            for (CartItem item : cartItems) {
+                ProductVariation variation = item.getVariationId(); // Retrieve the selected ProductVariation
+                int cartQuantity = item.getQuantity();
+                int availableStock = variation.getStock(); // Stock is now validated at the variation level
+
+                if (cartQuantity > availableStock) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Sản phẩm \"" + variation.getProductId().getProductName() +
+                            "\" (Màu: " + variation.getColor().getColorName() + ", Kích thước: " + variation.getSize().getSizeName() +
+                            ") không đủ hàng trong kho. Vui lòng giảm số lượng hoặc xóa sản phẩm này khỏi giỏ hàng.");
+                    redirectAttributes.addFlashAttribute("cartItems", cartItems);
+                    return "redirect:" + request.getHeader("Referer");
+                }
+            }
 
             // 2) Check store mismatch
             if (!cartItems.isEmpty()) {

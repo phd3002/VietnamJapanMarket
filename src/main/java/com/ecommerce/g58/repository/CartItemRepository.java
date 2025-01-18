@@ -21,6 +21,9 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     @Query("SELECT ci FROM CartItem ci WHERE ci.cart.user.userId = :userId")
     List<CartItem> findByUserId(@Param("userId") Integer userId);
 
+    @Query("SELECT ci.cartItemId FROM CartItem ci WHERE ci.cart.user.userId = :userId")
+    List<Integer> findCartItemIdByUser(@Param("userId") Integer userId);
+
     // Find a cart item by its cart ID and product ID
     @Query("SELECT ci FROM CartItem ci WHERE ci.cart.cartId = :cartId AND ci.productId = :productId")
     CartItem findByCartIdAndProductId(@Param("cartId") Integer cartId, @Param("productId") Products productId);

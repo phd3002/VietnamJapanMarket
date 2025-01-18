@@ -2,9 +2,9 @@
 <html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
     <title th:text="${pageTitle} ?: 'Your Cart'"></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 
     <!-- Including CSS Files from base.html -->
     <th:block th:replace="~{base :: head}"></th:block>
@@ -29,16 +29,17 @@
                 </div>
 
                 <!-- Error/Success Messages -->
-                <div th:if="${error}" class="alert alert-danger" role="alert">
+                <div class="alert alert-danger" role="alert" th:if="${error}">
                     <span th:text="${error}"></span>
                 </div>
-                <div th:if="${message}" class="alert alert-success" role="alert">
+                <div class="alert alert-success" role="alert" th:if="${message}">
                     <span th:text="${message}"></span>
                 </div>
-                <div id="ajaxCartMessage"   class="alert alert-info" role="alert" style="display: none; text-align: center"></div>
+                <div class="alert alert-info" id="ajaxCartMessage" role="alert"
+                     style="display: none; text-align: center"></div>
 
                 <!-- Display empty cart message -->
-                <div th:if="${isCartEmpty}" class="alert alert-warning" role="alert">
+                <div class="alert alert-warning" role="alert" th:if="${isCartEmpty}">
                     <span th:text="#{cart.empty}">Giỏ hàng của bạn đang trống. </span>
                     <a href="/product-list" th:text="#{cart.shop.now}">Mua ngay</a>.
                 </div>
@@ -67,9 +68,9 @@
                                 <!-- Iterate through each cart item -->
                                 <tr th:each="item : ${storeEntry.value}">
                                     <td class="product-remove">
-                                        <form th:action="@{/remove_cart_item}" method="post">
-                                            <input type="hidden" name="cartItemId" th:value="${item.cartItemId}">
-                                            <button type="submit" class="remove-wishlist">
+                                        <form method="post" th:action="@{/remove_cart_item}">
+                                            <input name="cartItemId" th:value="${item.cartItemId}" type="hidden">
+                                            <button class="remove-wishlist" type="submit">
                                                 <i class="fal fa-times"></i>
                                             </button>
                                         </form>
@@ -77,7 +78,7 @@
 
                                     <td class="product-thumbnail">
                                         <a th:href="@{/product-detail/{productId}(productId=${item.productId.productId})}">
-                                            <img th:src="@{${item.variationId.imageId.thumbnail}}" alt="Product Image">
+                                            <img alt="Product Image" th:src="@{${item.variationId.imageId.thumbnail}}">
                                         </a>
                                     </td>
 
@@ -101,15 +102,15 @@
                                     <!-- Quantity controls (minus/plus) -->
                                     <td class="product-quantity" data-title="Qty">
                                         <div class="pro-qty" style="display: flex; gap: 5px">
-                                            <button type="button" class="dec-qty"
-                                                    th:attr="data-cart-item-id=${item.cartItemId}">
+                                            <button class="dec-qty" th:attr="data-cart-item-id=${item.cartItemId}"
+                                                    type="button">
                                                 -
                                             </button>
-                                            <input type="text" class="quantity-field"
+                                            <input class="quantity-field" readonly
                                                    th:value="${item.quantity}"
-                                                   readonly/>
-                                            <button type="button" class="inc-qty"
-                                                    th:attr="data-cart-item-id=${item.cartItemId}">
+                                                   type="text"/>
+                                            <button class="inc-qty" th:attr="data-cart-item-id=${item.cartItemId}"
+                                                    type="button">
                                                 +
                                             </button>
                                         </div>
@@ -123,7 +124,6 @@
         0
     </span>
                                     </td>
-
                                 </tr>
                                 </tbody>
                             </table>
@@ -140,10 +140,10 @@
                     <div class="cart-update-btn-area"
                          style="display: flex; justify-content: flex-end; margin-top: 20px;">
                         <div class="update-btn">
-                            <form id="checkoutForm" action="/checkout" method="get">
-                                <input type="hidden" name="cartItemIds" id="cartItemIds">
-                                <button type="submit" class="axil-btn btn-outline"
-                                        style="background: #0c63e4; color: white">
+                            <form action="/checkout" id="checkoutForm" method="get">
+                                <input id="cartItemIds" name="cartItemIds" >
+                                <button class="axil-btn btn-outline" style="background: #0c63e4; color: white"
+                                        type="submit">
                                     <span th:text="#{cart.checkout}">Thanh toán</span>
                                 </button>
                             </form>
@@ -216,7 +216,7 @@
          */
         function updateCartQuantity(cartItemId, newQty, quantityField) {
             const url = `/api/cart/updateQuantity?cartItemId=${cartItemId}&quantity=${newQty}`;
-            fetch(url, { method: 'POST' })
+            fetch(url, {method: 'POST'})
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {

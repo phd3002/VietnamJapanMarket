@@ -115,6 +115,7 @@ public class VNPayController {
         Double totalWeight = (Double) session.getAttribute("totalWeight");
         PaymentMethod paymentMethod = (PaymentMethod) session.getAttribute("paymentMethodOrderOn");
         List<Integer> cartItemIds = (List<Integer>) session.getAttribute("cartItemIdsOrderOn");
+        System.out.println("Cart item ids: " + cartItemIds);
         if (paymentStatus == 1) {
 //            System.out.println("Payment successful");
             Orders order = orderService.createOrder(user, shippingAddress, paymentMethod, cartItemIds, shippingUnitId);
